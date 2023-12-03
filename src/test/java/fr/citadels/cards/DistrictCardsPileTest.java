@@ -10,24 +10,28 @@ import static org.junit.jupiter.api.Assertions.*;
 class DistrictCardsPileTest
 {
     DistrictCardsPile districtCardsPile = new DistrictCardsPile();
-    DistrictCard[] allCards = {
-            new DistrictCard("Manoir"),
+    DistrictCard[] allCards =
+            { new DistrictCard("Manoir"),
             new DistrictCard("Château"),
             new DistrictCard("Palais"),
+
             new DistrictCard("Temple"),
             new DistrictCard("Église"),
             new DistrictCard("Monastère"),
             new DistrictCard("Cathédrale"),
+
             new DistrictCard("Taverne"),
             new DistrictCard("Échoppe"),
             new DistrictCard("Marché"),
             new DistrictCard("Comptoir"),
             new DistrictCard("Port"),
             new DistrictCard("Hôtel de ville"),
+
             new DistrictCard("Tour de garde"),
             new DistrictCard("Prison"),
             new DistrictCard("Caserne"),
             new DistrictCard("Forteresse"),
+
             new DistrictCard("Cour des miracles"),
             new DistrictCard("Donjon"),
             new DistrictCard("Observatoire"),
@@ -37,8 +41,7 @@ class DistrictCardsPileTest
             new DistrictCard("École de magie"),
             new DistrictCard("Bibliothèque"),
             new DistrictCard("Université"),
-            new DistrictCard("Dracoport")
-    };
+            new DistrictCard("Dracoport") };
 
     @BeforeEach
     void setUp() {
@@ -46,25 +49,25 @@ class DistrictCardsPileTest
     }
 
     @org.junit.jupiter.api.Test
-    void initializePile()
+    void testInitializePile() { assertEquals(Arrays.asList(allCards), new ArrayList<>(districtCardsPile.getPile())); }
+
+    @org.junit.jupiter.api.Test
+    void testShufflePile()
     {
-        assertEquals(Arrays.asList(allCards), new ArrayList<>(districtCardsPile.pile));
-    }
-
-    @org.junit.jupiter.api.Test
-    void shufflePile() {
         districtCardsPile.shufflePile();
-        assertNotEquals(Arrays.asList(allCards), new ArrayList<>(districtCardsPile.pile));
+        assertNotEquals(Arrays.asList(allCards), new ArrayList<>(districtCardsPile.getPile()));
     }
 
     @org.junit.jupiter.api.Test
-    void draw() {
+    void testDraw()
+    {
         DistrictCard[] cardsDrawn = new DistrictCard[]{new DistrictCard("Manoir"), new DistrictCard("Château")};
         assertEquals(Arrays.asList(cardsDrawn), Arrays.asList(districtCardsPile.draw(2)));
     }
 
     @org.junit.jupiter.api.Test
-    void placeBelowPile() {
+    void testPlaceBelowPile()
+    {
         districtCardsPile.shufflePile();
         districtCardsPile.placeBelowPile(new DistrictCard("Manoir"));
         districtCardsPile.draw(allCards.length);

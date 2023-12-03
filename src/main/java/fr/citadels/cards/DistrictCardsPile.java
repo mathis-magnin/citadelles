@@ -4,11 +4,32 @@ import java.util.*;
 
 public class DistrictCardsPile
 {
-    Queue<DistrictCard> pile;
+    /*
+     * Attribute
+     */
+    private Queue<DistrictCard> pile;
 
+    /*
+     * Constructor
+     */
     public DistrictCardsPile() { this.pile = new LinkedList<>(); }
 
-    public void initializePile() {
+    /*
+     * Methods
+     */
+
+    /***
+     * get the pile of district cards
+     * @return the pile of district cards
+     */
+    public Queue<DistrictCard> getPile() { return this.pile; }
+
+    /***
+     * initialize the pile of district cards with
+     * those that will be used during the game
+     */
+    public void initializePile()
+    {
         this.pile.add(new DistrictCard("Manoir"));
         this.pile.add(new DistrictCard("Château"));
         this.pile.add(new DistrictCard("Palais"));
@@ -42,6 +63,9 @@ public class DistrictCardsPile
         this.pile.add(new DistrictCard("Dracoport"));
     }
 
+    /***
+     * shuffle the pile of district cards
+     */
     public void shufflePile()
     {
         ArrayList<DistrictCard> listOfPileElements = new ArrayList<>(this.pile);
@@ -49,6 +73,11 @@ public class DistrictCardsPile
         this.pile = new LinkedList<>(listOfPileElements);
     }
 
+    /***
+     * draw cards from the district card pile
+     * @param nbCardToDraw the number of cards to draw
+     * @return the cards that have been drawn
+     */
     public DistrictCard[] draw(int nbCardToDraw)
     {
         DistrictCard[] cardsDrawn = new DistrictCard[nbCardToDraw];
@@ -56,5 +85,9 @@ public class DistrictCardsPile
         return cardsDrawn;
     }
 
+    /***
+     * place a district card below the district card pile
+     * @param districtCard the district card to place below the district card pile
+     */
     public void placeBelowPile(DistrictCard districtCard) { this.pile.add(districtCard); }
 }
