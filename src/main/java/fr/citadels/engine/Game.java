@@ -35,16 +35,20 @@ public class Game {
         this.scoreboard = new Scoreboard(this.playerList);
     }
 
-    /* Basic methods */
-
     /* Methods */
 
+    /**
+     * Give the crown to a random player
+     */
     public void giveCrown() {
         int randomIndex = (int) (Math.random() * NB_PLAYERS);
         this.crown.setPlayerWithCrown(this.playerList[randomIndex]);
         this.crown.setPlayerIndexWithCrown(randomIndex);
     }
 
+    /**
+     * Play a turn for each player
+     */
     public void playTurn() {
         for (int i = 0; i < NB_PLAYERS; i++) {
             int nextPlayerIndex = (i + this.crown.getPlayerIndexWithCrown()) % NB_PLAYERS;
@@ -58,6 +62,9 @@ public class Game {
         }
     }
 
+    /**
+     * Play the game until a player has a complete city and determine the ranking
+     */
     public void playGame() {
         this.districtCardsPile.initializePile();
         this.districtCardsPile.shufflePile();
