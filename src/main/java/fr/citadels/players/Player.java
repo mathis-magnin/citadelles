@@ -53,6 +53,16 @@ public abstract class Player {
         return new ArrayList<>(this.cardsFaceUp);
     }
 
+
+    /**
+     * Check if the player has a complete city
+     * @return A boolean value.
+     */
+    public boolean hasCompleteCity() {
+        return (this.cardsFaceUp.size() >= 7);
+    }
+
+
     /***
      * put back the cards drawn except the one played
      * @param drawnCards cards drawn

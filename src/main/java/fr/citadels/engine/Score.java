@@ -1,0 +1,105 @@
+package fr.citadels.engine;
+
+import fr.citadels.cards.DistrictCard;
+import fr.citadels.players.Player;
+
+public class Score implements Comparable<Score> {
+
+    /* Static contents */
+
+    private static Player firstPlayerWithCompleteCity = null;
+
+
+    /**
+     * Set the static variable firstToHaveCompleteCity;
+     *
+     * @param player The first player who has completed his city.
+     */
+    public static void setFirstPlayerWithCompleteCity(Player player) {
+        Score.firstPlayerWithCompleteCity = player;
+    }
+
+
+    /* Attributes */
+
+    private int points;
+    private final Player player;
+
+
+    /* Constructor */
+
+    public Score(Player player) {
+        this.points = 0;
+        this.player = player;
+    }
+
+
+    /* Basic methods */
+
+    public int getPoints() {
+        return this.points;
+    }
+
+
+    public Player getPlayer() {
+        return this.player;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Score du joueur " + this.player.getName() + " : " + this.points;
+    }
+
+
+    /**
+     * Player's score comparison is based on their points (natural ordering of integer).
+     * If there is a tie, the comparison would be based on the rank of their last character (natural ordering of integer).
+     * Note : this class has a natural ordering that is inconsistent with equals.
+     *
+     * @param other the other score to be compared.
+     * @return 1 if this score is greater than the other.
+     * 0 if there is a tie.
+     * -1 if the other score is greater than this.
+     */
+    @Override
+    public int compareTo(Score other) {
+        if (this.points > other.getPoints()) {
+            return 1;
+        } else if (this.points < other.getPoints()) {
+            return -1;
+        } else {
+            return 0;   // Milestone 1 : no character. Comparison only based on the points.
+        }
+    }
+
+
+    /* Method */
+
+    /**
+     * Determine the score of a player.
+     * Player scores points as follows :
+     * 1. Score points equal to the building cost of each of his districts.
+     * 2. Player scores any extra points from his unique districts.
+     * 3. If the player's city has at least one district of each type, player scores 3 points.
+     * 4. The player who first completed his city scores 4 points.
+     * 5. Any other player who completed his city scores 2 points.
+     *
+     * @precondition The static procedure Score.setFirstPlayerWithCompleteCity(Player player) must have been called to
+     * be able to follow rule 4.
+     */
+    public void determinePoints() {
+        for (DistrictCard district : this.player.getCardsFaceUp()) {
+            this.points += 1;   // 1 (Milestone 1 : Buildings have no cost. Only counting the number of district)
+        }
+
+        if (this.player.hasCompleteCity()) {
+            if (this.player == Score.firstPlayerWithCompleteCity) {
+                this.points += 4;   // 4
+            } else {
+                this.points += 2;   // 5
+            }
+        }
+    }
+
+}
