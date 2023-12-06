@@ -3,12 +3,13 @@ package fr.citadels.engine;
 import fr.citadels.cards.DistrictCard;
 import fr.citadels.cards.DistrictCardsPile;
 import fr.citadels.players.Player;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ScoreboardTest {
 
@@ -65,9 +66,8 @@ class ScoreboardTest {
         }
 
         @Override
-        public int play(DistrictCardsPile pile) {
-            this.cardsFaceUp.addAll(this.cardsInHand);
-            return this.cardsFaceUp.size();
+        public void play(DistrictCardsPile pile) {
+            this.cityCards.addAll(this.cardsInHand);
         }
     };
 
@@ -78,9 +78,8 @@ class ScoreboardTest {
         }
 
         @Override
-        public int play(DistrictCardsPile pile) {
-            this.cardsFaceUp.addAll(this.cardsInHand);
-            return this.cardsFaceUp.size();
+        public void play(DistrictCardsPile pile) {
+            this.cityCards.addAll(this.cardsInHand);
         }
     };
 
@@ -91,38 +90,36 @@ class ScoreboardTest {
         }
 
         @Override
-        public int play(DistrictCardsPile pile) {
-            this.cardsFaceUp.addAll(this.cardsInHand);
-            return this.cardsFaceUp.size();
+        public void play(DistrictCardsPile pile) {
+            this.cityCards.addAll(this.cardsInHand);
         }
     };
 
-    Player player4= new Player("Luk", cardsPlayer4) {
+    Player player4 = new Player("Luk", cardsPlayer4) {
         @Override
         public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
             return null;
         }
 
         @Override
-        public int play(DistrictCardsPile pile) {
-            this.cardsFaceUp.addAll(this.cardsInHand);
-            return this.cardsFaceUp.size();
+        public void play(DistrictCardsPile pile) {
+            this.cityCards.addAll(this.cardsInHand);
         }
     };
+    Scoreboard scoreboard = new Scoreboard(new Player[]{player1, player2, player3, player4});
 
-
-    /* Simulate an entire game (Only for this test class, the method play has been changed) */
-
-    int tmp1 = player1.play(pile);
-    int tmp2 = player2.play(pile);
-    int tmp3 = player3.play(pile);
-    int tmp4 = player4.play(pile);
 
 
     /* Create the scoreboard */
 
-    Scoreboard scoreboard = new Scoreboard(new Player[]{player1, player2, player3, player4});
-
+    /* Simulate an entire game (Only for this test class, the method play has been changed) */
+    @BeforeEach
+    void setUp() {
+        player1.play(pile);
+        player2.play(pile);
+        player3.play(pile);
+        player4.play(pile);
+    }
 
     @Test
     void testToString() {

@@ -3,54 +3,55 @@ package fr.citadels.engine;
 import fr.citadels.cards.DistrictCard;
 import fr.citadels.cards.DistrictCardsPile;
 import fr.citadels.players.Player;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ScoreTest {
 
     /* Initialize cards */
 
     List<DistrictCard> cardsPlayer1 = Arrays.asList(
-        new DistrictCard("Manoir"),
-        new DistrictCard("Château"),
-        new DistrictCard("Palais"),
-        new DistrictCard("Temple"),
-        new DistrictCard("Église"),
-        new DistrictCard("Monastère"),
-        new DistrictCard("Cathédrale"),
-        new DistrictCard("Taverne")
+            new DistrictCard("Manoir"),
+            new DistrictCard("Château"),
+            new DistrictCard("Palais"),
+            new DistrictCard("Temple"),
+            new DistrictCard("Église"),
+            new DistrictCard("Monastère"),
+            new DistrictCard("Cathédrale"),
+            new DistrictCard("Taverne")
     );
 
     List<DistrictCard> cardsPlayer2 = Arrays.asList(
-        new DistrictCard("Échoppe"),
-        new DistrictCard("Marché"),
-        new DistrictCard("Comptoir"),
-        new DistrictCard("Port"),
-        new DistrictCard("Hôtel de ville"),
-        new DistrictCard("Tour de garde"),
-        new DistrictCard("Prison")
+            new DistrictCard("Échoppe"),
+            new DistrictCard("Marché"),
+            new DistrictCard("Comptoir"),
+            new DistrictCard("Port"),
+            new DistrictCard("Hôtel de ville"),
+            new DistrictCard("Tour de garde"),
+            new DistrictCard("Prison")
     );
 
     List<DistrictCard> cardsPlayer3 = Arrays.asList(
-        new DistrictCard("Caserne"),
-        new DistrictCard("Fortetmpse"),
-        new DistrictCard("Cour des miracles"),
-        new DistrictCard("Donjon"),
-        new DistrictCard("Observatoire")
+            new DistrictCard("Caserne"),
+            new DistrictCard("Fortetmpse"),
+            new DistrictCard("Cour des miracles"),
+            new DistrictCard("Donjon"),
+            new DistrictCard("Observatoire")
     );
 
     List<DistrictCard> cardsPlayer4 = Arrays.asList(
-        new DistrictCard("Laboratoire"),
-        new DistrictCard("Manufacture"),
-        new DistrictCard("Cimetière"),
-        new DistrictCard("École de magie"),
-        new DistrictCard("Bibliothèque"),
-        new DistrictCard("Université"),
-        new DistrictCard("Dracoport")
+            new DistrictCard("Laboratoire"),
+            new DistrictCard("Manufacture"),
+            new DistrictCard("Cimetière"),
+            new DistrictCard("École de magie"),
+            new DistrictCard("Bibliothèque"),
+            new DistrictCard("Université"),
+            new DistrictCard("Dracoport")
     );
 
 
@@ -65,12 +66,11 @@ class ScoreTest {
         }
 
         @Override
-        public int play(DistrictCardsPile pile) {
-            this.cardsFaceUp.addAll(this.cardsInHand);
-            return this.cardsFaceUp.size();
+        public void play(DistrictCardsPile pile) {
+            this.cityCards.addAll(this.cardsInHand);
         }
     };
-
+    Score score1 = new Score(player1);
     Player player2 = new Player("Bob", cardsPlayer2) {
         @Override
         public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
@@ -78,12 +78,14 @@ class ScoreTest {
         }
 
         @Override
-        public int play(DistrictCardsPile pile) {
-            this.cardsFaceUp.addAll(this.cardsInHand);
-            return this.cardsFaceUp.size();
+        public void play(DistrictCardsPile pile) {
+            this.cityCards.addAll(this.cardsInHand);
         }
     };
+    Score score2 = new Score(player2);
 
+
+    /* Simulate an entire game (Only for this test class, the method play has been changed) */
     Player player3 = new Player("Noa", cardsPlayer3) {
         @Override
         public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
@@ -91,41 +93,34 @@ class ScoreTest {
         }
 
         @Override
-        public int play(DistrictCardsPile pile) {
-            this.cardsFaceUp.addAll(this.cardsInHand);
-            return this.cardsFaceUp.size();
+        public void play(DistrictCardsPile pile) {
+            this.cityCards.addAll(this.cardsInHand);
         }
     };
 
-    Player player4= new Player("Luk", cardsPlayer4) {
+
+    /* Create the score */
+    Score score3 = new Score(player3);
+    Player player4 = new Player("Luk", cardsPlayer4) {
         @Override
         public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
             return null;
         }
 
         @Override
-        public int play(DistrictCardsPile pile) {
-            this.cardsFaceUp.addAll(this.cardsInHand);
-            return this.cardsFaceUp.size();
+        public void play(DistrictCardsPile pile) {
+            this.cityCards.addAll(this.cardsInHand);
         }
     };
-
-
-    /* Simulate an entire game (Only for this test class, the method play has been changed) */
-
-    int tmp1 = player1.play(pile);
-    int tmp2 = player2.play(pile);
-    int tmp3 = player3.play(pile);
-    int tmp4 = player4.play(pile);
-
-
-    /* Create the score */
-
-    Score score1 = new Score(player1);
-    Score score2 = new Score(player2);
-    Score score3 = new Score(player3);
     Score score4 = new Score(player4);
 
+    @BeforeEach
+    void setUp() {
+        player1.play(pile);
+        player2.play(pile);
+        player3.play(pile);
+        player4.play(pile);
+    }
 
     @Test
     void getPoints() {
@@ -190,7 +185,7 @@ class ScoreTest {
 
         assertEquals(8 + 2, score1.getPoints());
         assertEquals(7 + 2, score2.getPoints());
-        assertEquals(5 , score3.getPoints());
+        assertEquals(5, score3.getPoints());
         assertEquals(7 + 4, score4.getPoints());
     }
 }

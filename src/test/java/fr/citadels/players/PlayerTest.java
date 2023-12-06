@@ -16,8 +16,21 @@ class PlayerTest {
 
     @BeforeEach
     void setUp() {
-        List<DistrictCard> districts = new ArrayList<>(List.of(new DistrictCard("Temple"), new DistrictCard("Manoir"), new DistrictCard("Cathédrale")));
-        player = new BotFirstStrategy("Hello",districts);
+        List<DistrictCard> districts = new ArrayList<>(List.of(new DistrictCard("Temple"), new DistrictCard("Manoir"), new DistrictCard("Cathédrale"), new DistrictCard("Église"), new DistrictCard("Monastère"), new DistrictCard("École de magie"), new DistrictCard("Cimetière")));
+        player = new Player("Hello",districts) {
+            @Override
+            public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+                return null;
+            }
+
+            @Override
+            public void play(DistrictCardsPile pile) {
+                if(!cardsInHand.isEmpty()){
+                    cityCards.add(cardsInHand.get(0));
+                    cardsInHand.remove(0);
+                }
+            }
+        };
     }
 
     @Test
@@ -28,13 +41,31 @@ class PlayerTest {
 
     @Test
     void getCardsInHand() {
-        assertEquals(3, player.getCardsInHand().size());
+        assertEquals(7, player.getCardsInHand().size());
         /*check if the elements are in the list*/
         assertEquals("Temple", player.getCardsInHand().get(0).getCardName());
         assertEquals("Manoir", player.getCardsInHand().get(1).getCardName());
         assertEquals("Cathédrale", player.getCardsInHand().get(2).getCardName());
     }
 
+    @Test
+    void getCityCards(){
+        DistrictCardsPile pile = new DistrictCardsPile();
+        assertTrue(player.getCityCards().isEmpty());
+
+        player.play(pile);
+        assertEquals(1, player.getCityCards().size());
+        assertEquals("Temple", player.getCityCards().get(0).getCardName());
+
+        player.play(pile);
+        assertEquals(2, player.getCityCards().size());
+        assertEquals("Manoir", player.getCityCards().get(1).getCardName());
+
+        player.play(pile);
+        assertEquals(3, player.getCityCards().size());
+        assertEquals("Cathédrale", player.getCityCards().get(2).getCardName());
+
+    }
 
     @Test
     void putBack() {
@@ -44,16 +75,25 @@ class PlayerTest {
         drawnCards[2] = new DistrictCard("Cathédrale");
         DistrictCardsPile pile = new DistrictCardsPile();
         player.putBack(drawnCards, pile, 1);
-        for(int i = 0; i<drawnCards.length; i++) {
-            if(i==1) {
+        for (int i = 0; i < drawnCards.length; i++) {
+            if (i == 1) {
                 assertEquals("Manoir", drawnCards[i].getCardName());
-            }
-            else {
+            } else {
                 assertNull(drawnCards[i]);
             }
         }
 
 
+    }
+
+    @Test
+    void hasCompleteCity() {
+        DistrictCardsPile pile = new DistrictCardsPile();
+        while (player.getCityCards().size() < 7) {
+            assertFalse(player.hasCompleteCity());
+            player.play(pile);
+        }
+        assertTrue(player.hasCompleteCity());
     }
 
 }
