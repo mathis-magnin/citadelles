@@ -13,15 +13,15 @@ public abstract class Player {
      */
     protected String name;
     protected List<DistrictCard> cardsInHand;
-    protected List<DistrictCard> cardsFaceUp;
+    protected List<DistrictCard> cityCards;
 
     /*
      * Constructor
      */
-    protected Player(String name,List<DistrictCard> cards){
-        this.name=name;
-        this.cardsInHand=new ArrayList<>();
-        this.cardsFaceUp=new ArrayList<>();
+    protected Player(String name, List<DistrictCard> cards) {
+        this.name = name;
+        this.cardsInHand = new ArrayList<>();
+        this.cityCards = new ArrayList<>();
         this.cardsInHand.addAll(cards); /*avoid modification from outside*/
     }
 
@@ -29,11 +29,11 @@ public abstract class Player {
      * Methods
      */
 
-     /***
+    /***
      * get the name of the player
      * @return the name of the player
      */
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
@@ -41,25 +41,26 @@ public abstract class Player {
      * get a copy of the cards in hand
      * @return the cards in hand
      */
-    public List<DistrictCard> getCardsInHand(){
+    public List<DistrictCard> getCardsInHand() {
         return new ArrayList<>(this.cardsInHand);
     }
 
     /***
-     * get a copy of the cards face up
+     * get a copy of the cards face up (of the player's city)
      * @return the cards face up
      */
-    public List<DistrictCard> getCardsFaceUp(){
-        return new ArrayList<>(this.cardsFaceUp);
+    public List<DistrictCard> getCityCards() {
+        return new ArrayList<>(this.cityCards);
     }
 
 
     /**
      * Check if the player has a complete city
+     *
      * @return A boolean value.
      */
     public boolean hasCompleteCity() {
-        return (this.cardsFaceUp.size() >= 7);
+        return cityCards.size() >= 7;
     }
 
 
@@ -69,11 +70,11 @@ public abstract class Player {
      * @param pile pile of cards
      * @param randomIndex index of the card played
      */
-    public void putBack(DistrictCard[] drawnCards, DistrictCardsPile pile, int randomIndex){
-        for (int i=0;i<drawnCards.length;i++){
-            if (i!=randomIndex){
+    public void putBack(DistrictCard[] drawnCards, DistrictCardsPile pile, int randomIndex) {
+        for (int i = 0; i < drawnCards.length; i++) {
+            if (i != randomIndex) {
                 pile.placeBelowPile(drawnCards[i]);
-                drawnCards[i]=null;
+                drawnCards[i] = null;
             }
         }
     }
@@ -84,14 +85,13 @@ public abstract class Player {
      * @param drawnCards cards drawn
      * @return the card to play
      */
-    public abstract DistrictCard chooseCard(DistrictCardsPile pile,DistrictCard[] drawnCards);
+    public abstract DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards);
 
     /***
      * play a round for the linked player
      * @param pile of cards
-     * @return the number of cards face up
      */
-    public abstract int play(DistrictCardsPile pile);
+    public abstract void play(DistrictCardsPile pile);
 
 
 }

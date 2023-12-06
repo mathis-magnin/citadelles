@@ -6,16 +6,19 @@ import fr.citadels.cards.DistrictCardsPile;
 import java.util.List;
 import java.util.Random;
 
-public class BotFirstStrategy extends Player{
+public class BotFirstStrategy extends Player {
+
     /*
      * constants
      */
-    private final Random RAND = new Random();
+
+    private static final Random RAND = new Random();
+
     /*
      * Constructor
      */
-    public BotFirstStrategy(String name, List<DistrictCard> cards){
-        super(name,cards);
+    public BotFirstStrategy(String name, List<DistrictCard> cards) {
+        super(name, cards);
     }
 
 
@@ -29,28 +32,26 @@ public class BotFirstStrategy extends Player{
      * @param drawnCards cards drawn
      * @return the card to play
      */
-    public DistrictCard chooseCard(DistrictCardsPile pile,DistrictCard[] drawnCards){
+    public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
         int randomIndex = RAND.nextInt(drawnCards.length);
-        DistrictCard cardToPlay=drawnCards[randomIndex];
-        putBack(drawnCards,pile,randomIndex);
+        DistrictCard cardToPlay = drawnCards[randomIndex];
+        putBack(drawnCards, pile, randomIndex);
         return cardToPlay;
     }
 
     /***
      * play a round for the linked player
      * @param  pile of cards
-     * @return the number of cards face up
      */
     @Override
-    public int play(DistrictCardsPile pile) {
+    public void play(DistrictCardsPile pile) {
 
-        DistrictCard[] drawnCards=pile.draw(2);
-        DistrictCard cardToPlay=chooseCard(pile,drawnCards);
+        DistrictCard[] drawnCards = pile.draw(2);
+        DistrictCard cardToPlay = chooseCard(pile, drawnCards);
         cardsInHand.add(cardToPlay);
-        if(RAND.nextBoolean()){
-            cardsFaceUp.add(cardsInHand.remove(RAND.nextInt(cardsInHand.size())));
+        if (RAND.nextBoolean()) {
+            cityCards.add(cardsInHand.remove(RAND.nextInt(cardsInHand.size())));
         }
-        return cardsFaceUp.size();
     }
 
 

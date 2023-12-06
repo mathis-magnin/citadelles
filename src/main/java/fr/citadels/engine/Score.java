@@ -8,7 +8,18 @@ public class Score implements Comparable<Score> {
     /* Static contents */
 
     private static Player firstPlayerWithCompleteCity = null;
+    private final Player player;
 
+
+    /* Attributes */
+    private int points;
+    public Score(Player player) {
+        this.points = 0;
+        this.player = player;
+    }
+
+
+    /* Constructor */
 
     /**
      * Set the static variable firstToHaveCompleteCity;
@@ -17,20 +28,6 @@ public class Score implements Comparable<Score> {
      */
     public static void setFirstPlayerWithCompleteCity(Player player) {
         Score.firstPlayerWithCompleteCity = player;
-    }
-
-
-    /* Attributes */
-
-    private int points;
-    private final Player player;
-
-
-    /* Constructor */
-
-    public Score(Player player) {
-        this.points = 0;
-        this.player = player;
     }
 
 
@@ -89,7 +86,7 @@ public class Score implements Comparable<Score> {
      * be able to follow rule 4.
      */
     public void determinePoints() {
-        for (DistrictCard district : this.player.getCardsFaceUp()) {
+        for (DistrictCard district : this.player.getCityCards()) {
             this.points += 1;   // 1 (Milestone 1 : Buildings have no cost. Only counting the number of district)
         }
 
