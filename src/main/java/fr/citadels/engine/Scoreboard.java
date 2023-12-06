@@ -55,11 +55,10 @@ public class Scoreboard {
      * Determine the winner of the game.
      *
      * @return The winner of the game.
-     * @precondition The static Score's procedure Score.setFirstPlayerWithCompleteCity(Player player) must have been
-     * called to be able to correctly call the procedure determineRanking().
+     * @precondition The Scoreboard's procedure determineRanking() must have been
+     * called to be able to get the winner of the game.
      */
     public Player getWinner() {
-        this.determineRanking();
         return this.scores[0].getPlayer();
     }
 
