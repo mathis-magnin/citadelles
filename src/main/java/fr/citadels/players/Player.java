@@ -90,8 +90,9 @@ public abstract class Player {
     /***
      * play a round for the linked player
      * @param pile of cards
+     * @return the actions of the player
      */
-    public abstract void play(DistrictCardsPile pile);
+    public abstract String play(DistrictCardsPile pile);
 
 
 }

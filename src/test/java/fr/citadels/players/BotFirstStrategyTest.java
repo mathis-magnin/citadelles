@@ -47,12 +47,18 @@ class BotFirstStrategyTest {
     @Test
     void play() {
         DistrictCardsPile pile = new DistrictCardsPile();
-        player.play(pile);
+        String turn=player.play(pile);
         assertTrue(player.getCityCards().isEmpty() || player.getCityCards().size() == 1);
-        if (player.getCityCards().size() == 1)
+        if (player.getCityCards().size() == 1) {
             assertEquals(3, player.getCardsInHand().size());
-        else
+            assertTrue(turn.equals(player.getName() + " a ajouté a sa ville : Temple")
+                    || turn.equals(player.getName() + " a ajouté a sa ville : Manoir")
+                    || turn.equals(player.getName() + " a ajouté a sa ville : Cathédrale"));
+        }
+        else{
             assertEquals(4, player.getCardsInHand().size());
+            assertEquals(turn, player.getName() + " n'a pas construit ce tour-ci");
+        }
     }
 
 

@@ -42,16 +42,23 @@ public class BotFirstStrategy extends Player {
     /***
      * play a round for the linked player
      * @param  pile of cards
+     * @return the actions of the player
      */
     @Override
-    public void play(DistrictCardsPile pile) {
+    public String play(DistrictCardsPile pile) {
+        StringBuilder actions = new StringBuilder();
+        actions.append(this.getName());
 
         DistrictCard[] drawnCards = pile.draw(2);
         DistrictCard cardToPlay = chooseCard(pile, drawnCards);
         cardsInHand.add(cardToPlay);
         if (RAND.nextBoolean()) {
-            cityCards.add(cardsInHand.remove(RAND.nextInt(cardsInHand.size())));
-        }
+            DistrictCard cardPlaced = cardsInHand.remove(RAND.nextInt(cardsInHand.size()));
+            cityCards.add(cardPlaced);
+            actions.append(" a ajouté a sa ville : ").append(cardPlaced.getCardName());
+        } else actions.append(" n'a pas construit ce tour-ci");
+
+        return actions.toString();
     }
 
 

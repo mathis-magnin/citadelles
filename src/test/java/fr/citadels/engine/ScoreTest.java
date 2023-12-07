@@ -66,8 +66,9 @@ class ScoreTest {
         }
 
         @Override
-        public void play(DistrictCardsPile pile) {
+        public String play(DistrictCardsPile pile) {
             this.cityCards.addAll(this.cardsInHand);
+            return null;
         }
     };
     Score score1 = new Score(player1);
@@ -78,8 +79,9 @@ class ScoreTest {
         }
 
         @Override
-        public void play(DistrictCardsPile pile) {
+        public String play(DistrictCardsPile pile) {
             this.cityCards.addAll(this.cardsInHand);
+            return null;
         }
     };
     Score score2 = new Score(player2);
@@ -93,8 +95,9 @@ class ScoreTest {
         }
 
         @Override
-        public void play(DistrictCardsPile pile) {
+        public String play(DistrictCardsPile pile) {
             this.cityCards.addAll(this.cardsInHand);
+            return null;
         }
     };
 
@@ -108,8 +111,9 @@ class ScoreTest {
         }
 
         @Override
-        public void play(DistrictCardsPile pile) {
+        public String play(DistrictCardsPile pile) {
             this.cityCards.addAll(this.cardsInHand);
+            return null;
         }
     };
     Score score4 = new Score(player4);
