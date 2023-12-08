@@ -36,6 +36,28 @@ public class Game {
         this.isFinished = false;
     }
 
+    /* Getters */
+
+    public Player[] getPlayerList() {
+        return this.playerList;
+    }
+
+    public DistrictCardsPile getDistrictCardsPile(){
+        return this.districtCardsPile;
+    }
+
+    public Crown getCrown(){
+        return this.crown;
+    }
+
+    public boolean isFinished(){
+        return this.isFinished;
+    }
+
+    public Scoreboard getScoreboard(){
+        return this.scoreboard;
+    }
+
     /* Methods */
 
     /**
@@ -81,10 +103,14 @@ public class Game {
      */
     public void playGame() {
         this.initializeGame();
+        int round = 1;
 
         while (!this.isFinished) {
+            System.out.println("Tour " + round++);
             this.giveCrown();
+            System.out.print("Le joueur " + this.crown.getPlayerWithCrown().getName() + " a la couronne.\n");
             this.playTurn();
+            System.out.println();
         }
         this.scoreboard.determineRanking();
 
