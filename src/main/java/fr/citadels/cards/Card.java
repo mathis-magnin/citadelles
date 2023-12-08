@@ -3,21 +3,16 @@ package fr.citadels.cards;
 import java.util.Objects;
 
 public class Card {
-    /*
-     * Attribute
-     */
+
+    /* Attribute */
     private String cardName;
 
-    /*
-     * Constructor
-     */
+     /* Constructor */
     public Card(String cardName) {
         this.cardName = cardName;
     }
 
-    /*
-     * Methods
-     */
+    /* Methods */
 
     /***
      * get the name of the card

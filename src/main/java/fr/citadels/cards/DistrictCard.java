@@ -1,16 +1,14 @@
 package fr.citadels.cards;
 
 public class DistrictCard extends Card {
-    /*
-     * Constructor
-     */
+
+    /* Constructor */
+
     public DistrictCard(String cardName) {
         super(cardName);
     }
 
-    /*
-     * Methods
-     */
+    /* Methods */
 
     /***
      * @return a string representation of a district card

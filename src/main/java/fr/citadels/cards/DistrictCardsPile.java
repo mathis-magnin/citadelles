@@ -3,26 +3,17 @@ package fr.citadels.cards;
 import java.util.*;
 
 public class DistrictCardsPile {
-    /*
-     * Attribute
-     */
+
+    /* Attribute */
     private Queue<DistrictCard> pile;
 
-    /*
-     * Constructor
-     */
+    /* Constructor */
     public DistrictCardsPile() {
         this.pile = new LinkedList<>();
     }
 
-    /*
-     * Methods
-     */
+    /* Methods */
 
-    /***
-     * get the pile of district cards
-     * @return the pile of district cards
-     */
     public Queue<DistrictCard> getPile() {
         return this.pile;
     }
@@ -33,24 +24,64 @@ public class DistrictCardsPile {
      */
     public void initializePile() {
         this.pile.add(new DistrictCard("Manoir"));
+        this.pile.add(new DistrictCard("Manoir"));
+        this.pile.add(new DistrictCard("Manoir"));
+        this.pile.add(new DistrictCard("Manoir"));
+        this.pile.add(new DistrictCard("Manoir"));
         this.pile.add(new DistrictCard("Château"));
+        this.pile.add(new DistrictCard("Château"));
+        this.pile.add(new DistrictCard("Château"));
+        this.pile.add(new DistrictCard("Château"));
+        this.pile.add(new DistrictCard("Château"));
+        this.pile.add(new DistrictCard("Palais"));
         this.pile.add(new DistrictCard("Palais"));
 
         this.pile.add(new DistrictCard("Temple"));
+        this.pile.add(new DistrictCard("Temple"));
+        this.pile.add(new DistrictCard("Temple"));
+        this.pile.add(new DistrictCard("Église"));
+        this.pile.add(new DistrictCard("Église"));
         this.pile.add(new DistrictCard("Église"));
         this.pile.add(new DistrictCard("Monastère"));
+        this.pile.add(new DistrictCard("Monastère"));
+        this.pile.add(new DistrictCard("Monastère"));
+        this.pile.add(new DistrictCard("Monastère"));
+        this.pile.add(new DistrictCard("Cathédrale"));
         this.pile.add(new DistrictCard("Cathédrale"));
 
         this.pile.add(new DistrictCard("Taverne"));
+        this.pile.add(new DistrictCard("Taverne"));
+        this.pile.add(new DistrictCard("Taverne"));
+        this.pile.add(new DistrictCard("Taverne"));
+        this.pile.add(new DistrictCard("Taverne"));
+        this.pile.add(new DistrictCard("Échoppe"));
+        this.pile.add(new DistrictCard("Échoppe"));
+        this.pile.add(new DistrictCard("Échoppe"));
         this.pile.add(new DistrictCard("Échoppe"));
         this.pile.add(new DistrictCard("Marché"));
+        this.pile.add(new DistrictCard("Marché"));
+        this.pile.add(new DistrictCard("Marché"));
+        this.pile.add(new DistrictCard("Marché"));
+        this.pile.add(new DistrictCard("Comptoir"));
+        this.pile.add(new DistrictCard("Comptoir"));
         this.pile.add(new DistrictCard("Comptoir"));
         this.pile.add(new DistrictCard("Port"));
+        this.pile.add(new DistrictCard("Port"));
+        this.pile.add(new DistrictCard("Port"));
+        this.pile.add(new DistrictCard("Hôtel de ville"));
         this.pile.add(new DistrictCard("Hôtel de ville"));
 
         this.pile.add(new DistrictCard("Tour de garde"));
+        this.pile.add(new DistrictCard("Tour de garde"));
+        this.pile.add(new DistrictCard("Tour de garde"));
+        this.pile.add(new DistrictCard("Prison"));
+        this.pile.add(new DistrictCard("Prison"));
         this.pile.add(new DistrictCard("Prison"));
         this.pile.add(new DistrictCard("Caserne"));
+        this.pile.add(new DistrictCard("Caserne"));
+        this.pile.add(new DistrictCard("Caserne"));
+        this.pile.add(new DistrictCard("Forteresse"));
+        this.pile.add(new DistrictCard("Forteresse"));
         this.pile.add(new DistrictCard("Forteresse"));
 
         this.pile.add(new DistrictCard("Cour des miracles"));
