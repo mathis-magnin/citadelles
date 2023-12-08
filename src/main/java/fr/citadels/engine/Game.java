@@ -42,19 +42,19 @@ public class Game {
         return this.playerList;
     }
 
-    public DistrictCardsPile getDistrictCardsPile(){
+    public DistrictCardsPile getDistrictCardsPile() {
         return this.districtCardsPile;
     }
 
-    public Crown getCrown(){
+    public Crown getCrown() {
         return this.crown;
     }
 
-    public boolean isFinished(){
+    public boolean isFinished() {
         return this.isFinished;
     }
 
-    public Scoreboard getScoreboard(){
+    public Scoreboard getScoreboard() {
         return this.scoreboard;
     }
 
