@@ -17,7 +17,7 @@ class PlayerTest {
     @BeforeEach
     void setUp() {
         List<DistrictCard> districts = new ArrayList<>(List.of(new DistrictCard("Temple"), new DistrictCard("Manoir"), new DistrictCard("Cathédrale"), new DistrictCard("Église"), new DistrictCard("Monastère"), new DistrictCard("École de magie"), new DistrictCard("Cimetière")));
-        player = new Player("Hello",districts) {
+        player = new Player("Hello", districts) {
             @Override
             public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
                 return null;
@@ -25,13 +25,10 @@ class PlayerTest {
 
             @Override
             public String play(DistrictCardsPile pile) {
-                DistrictCard card=cardsInHand.get(0);
-                if(!cardsInHand.isEmpty()){
-
-                    cityCards.add(cardsInHand.get(0));
-                    cardsInHand.remove(0);
-                }
-                return player.getName()+" played "+card.getCardName();
+                DistrictCard card = cardsInHand.get(0);
+                cityCards.add(cardsInHand.get(0));
+                cardsInHand.remove(0);
+                return player.getName() + " played " + card.getCardName();
             }
         };
     }
@@ -52,7 +49,7 @@ class PlayerTest {
     }
 
     @Test
-    void getCityCards(){
+    void getCityCards() {
         DistrictCardsPile pile = new DistrictCardsPile();
         assertTrue(player.getCityCards().isEmpty());
 
@@ -99,4 +96,30 @@ class PlayerTest {
         assertTrue(player.hasCompleteCity());
     }
 
+    @Test
+    void getGold() {
+        assertEquals(0, player.getGold());
+    }
+
+    @Test
+    void addGold() {
+        player.addGold(2);
+        assertEquals(2, player.getGold());
+        player.addGold(7);
+        assertEquals(9, player.getGold());
+    }
+
+    @Test
+    void pay() {
+        player.addGold(10);
+        player.pay(2);
+        assertEquals(8, player.getGold());
+        player.pay(5);
+        assertEquals(3, player.getGold());
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            player.pay(4);
+        });
+
+        assertEquals("Not enough money\n" + "expected : " + 4 + "actual : " + 3, thrown.getMessage());
+    }
 }

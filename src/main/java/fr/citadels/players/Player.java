@@ -14,6 +14,7 @@ public abstract class Player {
     protected String name;
     protected List<DistrictCard> cardsInHand;
     protected List<DistrictCard> cityCards;
+    protected int gold;
 
     /*
      * Constructor
@@ -23,6 +24,7 @@ public abstract class Player {
         this.cardsInHand = new ArrayList<>();
         this.cityCards = new ArrayList<>();
         this.cardsInHand.addAll(cards); /*avoid modification from outside*/
+
     }
 
     /*
@@ -35,6 +37,14 @@ public abstract class Player {
      */
     public String getName() {
         return this.name;
+    }
+
+    /***
+     * get the amount of gold of the player
+     * @return the amount specified
+     */
+    public int getGold() {
+        return gold;
     }
 
     /***
@@ -77,6 +87,27 @@ public abstract class Player {
                 drawnCards[i] = null;
             }
         }
+    }
+
+    /***
+     * add amount to the gold of the player
+     * @param amount that represents the amount to add
+     */
+    public void addGold(int amount) {
+        gold += amount;
+    }
+
+    /***
+     * decrease the gold of "amount"
+     * @precondition amount must be less or equal to the gold amount of the player
+     * @param amount the amount to remove from the player's wallet
+     * amount must be less or equal to money
+     * @throws IllegalArgumentException if the amount exceeds the money owned
+     */
+    public void pay(int amount) throws IllegalArgumentException {
+        if (amount > gold)
+            throw new IllegalArgumentException("Not enough money\n" + "expected : " + amount + "actual : " + gold);
+        gold -= amount;
     }
 
     /***
