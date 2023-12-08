@@ -37,6 +37,7 @@ class BotFirstStrategyTest {
     @Test
     void chooseCard() {
         DistrictCardsPile pile = new DistrictCardsPile();
+        pile.initializePile();
         DistrictCard[] drawnCards = pile.draw(2);
         DistrictCard cardToPlay = player.chooseCard(pile, drawnCards);
         for (Card card : drawnCards)
@@ -47,15 +48,15 @@ class BotFirstStrategyTest {
     @Test
     void play() {
         DistrictCardsPile pile = new DistrictCardsPile();
-        String turn=player.play(pile);
+        pile.initializePile();
+        String turn = player.play(pile);
         assertTrue(player.getCityCards().isEmpty() || player.getCityCards().size() == 1);
         if (player.getCityCards().size() == 1) {
             assertEquals(3, player.getCardsInHand().size());
             assertTrue(turn.equals(player.getName() + " a ajouté a sa ville : Temple")
                     || turn.equals(player.getName() + " a ajouté a sa ville : Manoir")
                     || turn.equals(player.getName() + " a ajouté a sa ville : Cathédrale"));
-        }
-        else{
+        } else {
             assertEquals(4, player.getCardsInHand().size());
             assertEquals(turn, player.getName() + " n'a pas construit ce tour-ci");
         }

@@ -4,10 +4,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DistrictCardTest
-{
+class DistrictCardTest {
     DistrictCard[] allCards =
-            { new DistrictCard("Manoir"),
+            {new DistrictCard("Manoir"),
                     new DistrictCard("Château"),
                     new DistrictCard("Palais"),
 
@@ -37,21 +36,23 @@ class DistrictCardTest
                     new DistrictCard("École de magie"),
                     new DistrictCard("Bibliothèque"),
                     new DistrictCard("Université"),
-                    new DistrictCard("Dracoport") };
+                    new DistrictCard("Dracoport")};
 
     @Test
-    void testGetCardName()
-    {
+    void testGetCardName() {
         assertEquals("Manoir", allCards[0].getCardName());
         assertNotEquals("Manoir", allCards[1].getCardName());
     }
 
     @Test
-    void testToString() { for(DistrictCard d : allCards) { assertEquals("Carte quartier " + d.getCardName(), d.toString()); } }
+    void testToString() {
+        for (DistrictCard d : allCards) {
+            assertEquals("Carte quartier " + d.getCardName(), d.toString());
+        }
+    }
 
     @Test
-    void testEquals()
-    {
+    void testEquals() {
         assertTrue(allCards[0].equals(allCards[0]));
         assertFalse(allCards[0].equals(allCards[1]));
         assertTrue(allCards[0].equals(new DistrictCard("Manoir")));

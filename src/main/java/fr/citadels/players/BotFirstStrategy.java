@@ -28,6 +28,7 @@ public class BotFirstStrategy extends Player {
 
     /***
      * choose a card to play among the cards drawn
+     * drawnCards must contain at least 1 card
      * @param pile pile of cards
      * @param drawnCards cards drawn
      * @return the card to play
@@ -50,9 +51,11 @@ public class BotFirstStrategy extends Player {
         actions.append(this.getName());
 
         DistrictCard[] drawnCards = pile.draw(2);
-        DistrictCard cardToPlay = chooseCard(pile, drawnCards);
-        cardsInHand.add(cardToPlay);
-        if (RAND.nextBoolean()) {
+        if (drawnCards.length != 0) {
+            DistrictCard cardToPlay = chooseCard(pile, drawnCards);
+            cardsInHand.add(cardToPlay);
+        }
+        if (RAND.nextBoolean() && !cardsInHand.isEmpty()) {
             DistrictCard cardPlaced = cardsInHand.remove(RAND.nextInt(cardsInHand.size()));
             cityCards.add(cardPlaced);
             actions.append(" a ajouté a sa ville : ").append(cardPlaced.getCardName());

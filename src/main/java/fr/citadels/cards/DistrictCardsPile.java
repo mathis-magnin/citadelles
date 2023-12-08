@@ -2,8 +2,7 @@ package fr.citadels.cards;
 
 import java.util.*;
 
-public class DistrictCardsPile
-{
+public class DistrictCardsPile {
     /*
      * Attribute
      */
@@ -12,7 +11,9 @@ public class DistrictCardsPile
     /*
      * Constructor
      */
-    public DistrictCardsPile() { this.pile = new LinkedList<>(); }
+    public DistrictCardsPile() {
+        this.pile = new LinkedList<>();
+    }
 
     /*
      * Methods
@@ -22,14 +23,15 @@ public class DistrictCardsPile
      * get the pile of district cards
      * @return the pile of district cards
      */
-    public Queue<DistrictCard> getPile() { return this.pile; }
+    public Queue<DistrictCard> getPile() {
+        return this.pile;
+    }
 
     /***
      * initialize the pile of district cards with
      * those that will be used during the game
      */
-    public void initializePile()
-    {
+    public void initializePile() {
         this.pile.add(new DistrictCard("Manoir"));
         this.pile.add(new DistrictCard("Château"));
         this.pile.add(new DistrictCard("Palais"));
@@ -66,8 +68,7 @@ public class DistrictCardsPile
     /***
      * shuffle the pile of district cards
      */
-    public void shufflePile()
-    {
+    public void shufflePile() {
         ArrayList<DistrictCard> listOfPileElements = new ArrayList<>(this.pile);
         Collections.shuffle(listOfPileElements);
         this.pile = new LinkedList<>(listOfPileElements);
@@ -78,16 +79,26 @@ public class DistrictCardsPile
      * @param nbCardToDraw the number of cards to draw
      * @return the cards that have been drawn
      */
-    public DistrictCard[] draw(int nbCardToDraw)
-    {
-        DistrictCard[] cardsDrawn = new DistrictCard[nbCardToDraw];
-        for(int i = 0; i<nbCardToDraw; i++) { cardsDrawn[i] = this.pile.poll(); }
-        return cardsDrawn;
+    public DistrictCard[] draw(int nbCardToDraw) {
+        if (this.pile.isEmpty()) {
+            return new DistrictCard[]{};
+        } else {
+            int nbCardsDrawn = Math.min(nbCardToDraw, this.pile.size());
+            DistrictCard[] cardsDrawn = new DistrictCard[nbCardsDrawn];
+            for (int i = 0; i < nbCardsDrawn; i++) {
+                cardsDrawn[i] = this.pile.poll();
+            }
+            return cardsDrawn;
+        }
     }
 
     /***
      * place a district card below the district card pile
      * @param districtCard the district card to place below the district card pile
      */
-    public void placeBelowPile(DistrictCard districtCard) { this.pile.add(districtCard); }
+    public void placeBelowPile(DistrictCard districtCard) {
+        this.pile.add(districtCard);
+    }
+
+
 }

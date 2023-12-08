@@ -1,11 +1,12 @@
 package fr.citadels.cards;
 
-public class DistrictCard extends Card
-{
+public class DistrictCard extends Card {
     /*
      * Constructor
      */
-    public DistrictCard(String cardName) { super(cardName); }
+    public DistrictCard(String cardName) {
+        super(cardName);
+    }
 
     /*
      * Methods
@@ -15,5 +16,7 @@ public class DistrictCard extends Card
      * @return a string representation of a district card
      */
     @Override
-    public String toString() { return "Carte quartier " + this.getCardName(); }
+    public String toString() {
+        return "Carte quartier " + this.getCardName();
+    }
 }

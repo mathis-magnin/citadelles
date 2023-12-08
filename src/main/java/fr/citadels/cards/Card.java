@@ -2,8 +2,7 @@ package fr.citadels.cards;
 
 import java.util.Objects;
 
-public class Card
-{
+public class Card {
     /*
      * Attribute
      */
@@ -12,7 +11,9 @@ public class Card
     /*
      * Constructor
      */
-    public Card(String cardName) { this.cardName = cardName; }
+    public Card(String cardName) {
+        this.cardName = cardName;
+    }
 
     /*
      * Methods
@@ -22,17 +23,22 @@ public class Card
      * get the name of the card
      * @return the name of the card
      */
-    public String getCardName() { return this.cardName; }
+    public String getCardName() {
+        return this.cardName;
+    }
 
     /***
      * judge if 2 card objects are equals
      * @return true if the 2 cards are equals and false otherwise
      */
     @Override
-    public boolean equals(Object o)
-    {
-        if (this == o) { return true; }
-        if (o == null || this.getClass() != o.getClass()) { return false; }
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
         Card card = (Card) o;
         return this.getCardName().equals(card.getCardName());
     }
@@ -42,5 +48,7 @@ public class Card
      * @return a hash value
      */
     @Override
-    public int hashCode() { return Objects.hash(this.cardName); }
+    public int hashCode() {
+        return Objects.hash(this.cardName);
+    }
 }
