@@ -18,15 +18,17 @@ class GameTest {
         Player player1 = new BotFirstStrategy("Player 1", new ArrayList<DistrictCard>());
         Player player2 = new BotFirstStrategy("Player 2", new ArrayList<DistrictCard>());
 
-        Game game = new Game(player1, player2);
+        Game game = new Game();
     }
+
+
 
     @Test
     void playGameTest() {
         Player player1 = new BotFirstStrategy("Player 1", new ArrayList<DistrictCard>());
         Player player2 = new BotFirstStrategy("Player 2", new ArrayList<DistrictCard>());
 
-        Game game = new Game(player1, player2);
+        Game game = new Game();
         game.playGame();
     }
 
