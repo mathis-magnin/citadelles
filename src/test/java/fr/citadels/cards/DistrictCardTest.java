@@ -81,7 +81,7 @@ class DistrictCardTest {
     @Test
     void testGetCardName() {
         assertEquals("Manoir", allCards[0].getCardName());
-        assertNotEquals("Manoir", allCards[1].getCardName());
+        assertNotEquals("Manoir", allCards[allCards.length-1].getCardName());
     }
 
     @Test
@@ -94,7 +94,7 @@ class DistrictCardTest {
     @Test
     void testEquals() {
         assertTrue(allCards[0].equals(allCards[0]));
-        assertFalse(allCards[0].equals(allCards[1]));
+        assertFalse(allCards[0].equals(allCards.length-1));
         assertTrue(allCards[0].equals(new DistrictCard("Manoir")));
     }
 }
