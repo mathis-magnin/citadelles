@@ -13,23 +13,32 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
 
+    Game game = new Game();
+
     @BeforeEach
     void setUp() {
-        Player player1 = new BotFirstStrategy("Player 1", new ArrayList<DistrictCard>());
-        Player player2 = new BotFirstStrategy("Player 2", new ArrayList<DistrictCard>());
-
-        Game game = new Game();
+        game.initializeGame();
     }
 
+    @Test
+    void giveCrownTest() {
+        game.giveCrown();
+        assertNotNull(game.getCrown().getPlayerWithCrown());
+        assertNotEquals(-1, game.getCrown().getPlayerIndexWithCrown());
+    }
 
+    @Test
+    void initializeGameTest() {
+        assertEquals(19, game.getDistrictCardsPile().getPile().size());
+        for (Player player : game.getPlayerList()) {
+            assertEquals(4, player.getCardsInHand().size());
+        }
+    }
 
     @Test
     void playGameTest() {
-        Player player1 = new BotFirstStrategy("Player 1", new ArrayList<DistrictCard>());
-        Player player2 = new BotFirstStrategy("Player 2", new ArrayList<DistrictCard>());
-
-        Game game = new Game();
-        game.playGame();
+        Game game1 = new Game();
+        game1.playGame();
     }
 
 }
