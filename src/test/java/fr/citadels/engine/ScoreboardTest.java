@@ -16,43 +16,39 @@ class ScoreboardTest {
     /* Initialize cards */
 
     List<DistrictCard> cardsPlayer1 = Arrays.asList(
-            new DistrictCard("Manoir"),
-            new DistrictCard("Château"),
-            new DistrictCard("Palais"),
-            new DistrictCard("Temple"),
-            new DistrictCard("Église"),
-            new DistrictCard("Monastère"),
-            new DistrictCard("Cathédrale"),
-            new DistrictCard("Taverne")
-    );
+            DistrictCardsPile.allDistrictCards[0], //cost 3
+            DistrictCardsPile.allDistrictCards[5], //cost 4
+            DistrictCardsPile.allDistrictCards[10], //cost 5
+            DistrictCardsPile.allDistrictCards[12], //cost 1
+            DistrictCardsPile.allDistrictCards[15], //cost 2
+            DistrictCardsPile.allDistrictCards[18], //cost 3
+            DistrictCardsPile.allDistrictCards[22], //cost 5
+            DistrictCardsPile.allDistrictCards[24]); //cost 1
 
     List<DistrictCard> cardsPlayer2 = Arrays.asList(
-            new DistrictCard("Échoppe"),
-            new DistrictCard("Marché"),
-            new DistrictCard("Comptoir"),
-            new DistrictCard("Port"),
-            new DistrictCard("Hôtel de ville"),
-            new DistrictCard("Tour de garde"),
-            new DistrictCard("Prison")
-    );
+            DistrictCardsPile.allDistrictCards[29], //cost 2
+            DistrictCardsPile.allDistrictCards[33], //cost 2
+            DistrictCardsPile.allDistrictCards[37], //cost 3
+            DistrictCardsPile.allDistrictCards[40], //cost 4
+            DistrictCardsPile.allDistrictCards[43], //cost 5
+            DistrictCardsPile.allDistrictCards[45], //cost 1
+            DistrictCardsPile.allDistrictCards[48]); //cost 2
 
     List<DistrictCard> cardsPlayer3 = Arrays.asList(
-            new DistrictCard("Caserne"),
-            new DistrictCard("Fortetmpse"),
-            new DistrictCard("Cour des miracles"),
-            new DistrictCard("Donjon"),
-            new DistrictCard("Observatoire")
-    );
+            DistrictCardsPile.allDistrictCards[51], //cost 3
+            DistrictCardsPile.allDistrictCards[54], //cost 5
+            DistrictCardsPile.allDistrictCards[57], //cost 2
+            DistrictCardsPile.allDistrictCards[58], //cost 3
+            DistrictCardsPile.allDistrictCards[59]); //cost 5
 
     List<DistrictCard> cardsPlayer4 = Arrays.asList(
-            new DistrictCard("Laboratoire"),
-            new DistrictCard("Manufacture"),
-            new DistrictCard("Cimetière"),
-            new DistrictCard("École de magie"),
-            new DistrictCard("Bibliothèque"),
-            new DistrictCard("Université"),
-            new DistrictCard("Dracoport")
-    );
+            DistrictCardsPile.allDistrictCards[60], //cost 5
+            DistrictCardsPile.allDistrictCards[61], //cost 5
+            DistrictCardsPile.allDistrictCards[62], //cost 5
+            DistrictCardsPile.allDistrictCards[63], //cost 6
+            DistrictCardsPile.allDistrictCards[64], //cost 6
+            DistrictCardsPile.allDistrictCards[65], //cost 6
+            DistrictCardsPile.allDistrictCards[66]); //cost 6
 
 
     /* Initialize players */
@@ -127,20 +123,20 @@ class ScoreboardTest {
 
     @Test
     void testToString() {
-        assertEquals("Score du joueur Tom : 0\nScore du joueur Bob : 0\nScore du joueur Noa : 0\nScore du joueur Luk : 0\n", scoreboard.toString());
+        assertEquals("Score de Tom : 0\nScore de Bob : 0\nScore de Noa : 0\nScore de Luk : 0\n", scoreboard.toString());
     }
 
     @Test
     void determineRanking() {
         Score.setFirstPlayerWithCompleteCity(player1);
         scoreboard.determineRanking();
-        assertEquals("Score du joueur Tom : 12\nScore du joueur Bob : 9\nScore du joueur Luk : 9\nScore du joueur Noa : 5\n", scoreboard.toString());
+        assertEquals("Score de Luk : 41\nScore de Tom : 28\nScore de Bob : 21\nScore de Noa : 18\n", scoreboard.toString());
     }
 
     @Test
     void getWinner() {
         Score.setFirstPlayerWithCompleteCity(player2);
         scoreboard.determineRanking();
-        assertEquals(player2, scoreboard.getWinner());
+        assertEquals(player4, scoreboard.getWinner());
     }
 }

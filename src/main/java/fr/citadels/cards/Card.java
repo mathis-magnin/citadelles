@@ -5,19 +5,17 @@ import java.util.Objects;
 public class Card {
 
     /* Attribute */
+
     private String cardName;
 
-     /* Constructor */
+    /* Constructor */
+
     public Card(String cardName) {
         this.cardName = cardName;
     }
 
     /* Methods */
 
-    /***
-     * get the name of the card
-     * @return the name of the card
-     */
     public String getCardName() {
         return this.cardName;
     }
