@@ -61,10 +61,14 @@ class ScoreboardTest {
 
     Player player1 = new Player("Tom", cardsPlayer1) {
         @Override
-        public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+        public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
             return null;
         }
 
+        @Override
+        public DistrictCard chooseCardInHand() {
+            return null;
+        }
         @Override
         public String play(DistrictCardsPile pile) {
             this.cityCards.addAll(this.cardsInHand);
@@ -74,10 +78,14 @@ class ScoreboardTest {
 
     Player player2 = new Player("Bob", cardsPlayer2) {
         @Override
-        public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+        public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
             return null;
         }
 
+        @Override
+        public DistrictCard chooseCardInHand() {
+            return null;
+        }
         @Override
         public String play(DistrictCardsPile pile) {
             this.cityCards.addAll(this.cardsInHand);
@@ -87,10 +95,14 @@ class ScoreboardTest {
 
     Player player3 = new Player("Noa", cardsPlayer3) {
         @Override
-        public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+        public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
             return null;
         }
 
+        @Override
+        public DistrictCard chooseCardInHand() {
+            return null;
+        }
         @Override
         public String play(DistrictCardsPile pile) {
             this.cityCards.addAll(this.cardsInHand);
@@ -100,10 +112,14 @@ class ScoreboardTest {
 
     Player player4 = new Player("Luk", cardsPlayer4) {
         @Override
-        public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+        public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
             return null;
         }
 
+        @Override
+        public DistrictCard chooseCardInHand() {
+            return null;
+        }
         @Override
         public String play(DistrictCardsPile pile) {
             this.cityCards.addAll(this.cardsInHand);
