@@ -19,7 +19,12 @@ class PlayerTest {
         List<DistrictCard> districts = new ArrayList<>(List.of(new DistrictCard("Temple"), new DistrictCard("Manoir"), new DistrictCard("Cathédrale"), new DistrictCard("Église"), new DistrictCard("Monastère"), new DistrictCard("École de magie"), new DistrictCard("Cimetière")));
         player = new Player("Hello", districts) {
             @Override
-            public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+            public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+                return null;
+            }
+
+            @Override
+            public DistrictCard chooseCardInHand() {
                 return null;
             }
 
@@ -94,6 +99,13 @@ class PlayerTest {
             player.play(pile);
         }
         assertTrue(player.hasCompleteCity());
+    }
+
+    @Test
+    void hasCardInHand(){
+        player.play(new DistrictCardsPile());
+        assertTrue(player.hasCardInCity(new DistrictCard("Temple")));
+        assertFalse(player.hasCardInCity(new DistrictCard("Donjon")));
     }
 
     @Test

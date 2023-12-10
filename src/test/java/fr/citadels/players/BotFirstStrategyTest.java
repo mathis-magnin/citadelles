@@ -9,8 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class BotFirstStrategyTest {
 
@@ -35,11 +34,27 @@ class BotFirstStrategyTest {
     }
 
     @Test
-    void chooseCard() {
+    void chooseCardInHand() {
+        List<DistrictCard> copy=player.getCardsInHand();
+        DistrictCard card = player.chooseCardInHand();
+        assertEquals(2, player.getCardsInHand().size());
+        assertTrue(copy.contains(card));
+
+        copy=player.getCardsInHand();
+        card = player.chooseCardInHand();
+        assertTrue(player.getCardsInHand().size()==1 || player.getCardsInHand().size()==2);
+        if(player.getCardsInHand().size()==1)
+            assertTrue(copy.contains(card));
+        else
+            assertNull(card);
+    }
+
+    @Test
+    void chooseCardAmongDrawn() {
         DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
         DistrictCard[] drawnCards = pile.draw(2);
-        DistrictCard cardToPlay = player.chooseCard(pile, drawnCards);
+        DistrictCard cardToPlay = player.chooseCardAmongDrawn(pile, drawnCards);
         for (Card card : drawnCards)
             if (card != null) assertEquals(cardToPlay, card);
 
@@ -57,7 +72,10 @@ class BotFirstStrategyTest {
                     || turn.equals(player.getName() + " a ajouté a sa ville : Manoir")
                     || turn.equals(player.getName() + " a ajouté a sa ville : Cathédrale"));
         } else {
-            assertEquals(4, player.getCardsInHand().size());
+            if(player.getGold()==0)
+                assertEquals(4, player.getCardsInHand().size());
+            else
+                assertEquals(3, player.getCardsInHand().size());
             assertEquals(turn, player.getName() + " n'a pas construit ce tour-ci");
         }
     }
