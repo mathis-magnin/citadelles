@@ -2,11 +2,27 @@ package fr.citadels.players;
 
 import fr.citadels.cards.DistrictCard;
 import fr.citadels.cards.DistrictCardsPile;
+import fr.citadels.engine.Bank;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Player {
+
+    /* Static content */
+
+    protected static Bank bank;
+
+
+    /**
+     * Set the static variable bank.
+     *
+     * @param bank The bank of the game.
+     */
+    public static void setBank(Bank bank) {
+        Player.bank = bank;
+    }
+
 
     /*
      * Attributes

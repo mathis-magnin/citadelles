@@ -18,9 +18,10 @@ public class Game {
 
     /* Attributes */
 
-    private Player[] playerList;
-    private DistrictCardsPile districtCardsPile;
-    private Crown crown;
+    private final Player[] playerList;
+    private final DistrictCardsPile districtCardsPile;
+    private final Crown crown;
+    private final Bank bank;
     private boolean isFinished;
     private Scoreboard scoreboard;
 
@@ -31,8 +32,9 @@ public class Game {
 
     public Game() {
         this.playerList = new Player[NB_PLAYERS];
-        this.crown = new Crown();
         this.districtCardsPile = new DistrictCardsPile();
+        this.crown = new Crown();
+        this.bank = new Bank();
         this.isFinished = false;
     }
 
@@ -46,6 +48,16 @@ public class Game {
 
     public DistrictCardsPile getDistrictCardsPile() {
         return this.districtCardsPile;
+    }
+
+
+    public Crown getCrown() {
+        return crown;
+    }
+
+
+    public Bank getBank() {
+        return this.bank;
     }
 
 
@@ -68,6 +80,7 @@ public class Game {
         this.districtCardsPile.initializePile();
         this.districtCardsPile.shufflePile();
         this.crown.initializeCrown();
+        Player.setBank(this.bank);
         for (int i = 0; i < NB_PLAYERS; i++) {
             List<DistrictCard> cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
             this.playerList[i] = new BotFirstStrategy("Joueur " + (i + 1), cards);

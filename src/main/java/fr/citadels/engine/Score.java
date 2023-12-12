@@ -8,26 +8,29 @@ public class Score implements Comparable<Score> {
     /* Static contents */
 
     private static Player firstPlayerWithCompleteCity = null;
-    private final Player player;
 
-
-    /* Attributes */
-    private int points;
-    public Score(Player player) {
-        this.points = 0;
-        this.player = player;
-    }
-
-
-    /* Constructor */
 
     /**
-     * Set the static variable firstToHaveCompleteCity;
+     * Set the static variable firstToHaveCompleteCity.
      *
      * @param player The first player who has completed his city.
      */
     public static void setFirstPlayerWithCompleteCity(Player player) {
         Score.firstPlayerWithCompleteCity = player;
+    }
+
+
+    /* Attributes */
+
+    private final Player player;
+    private int points;
+
+
+    /* Constructor */
+
+    public Score(Player player) {
+        this.points = 0;
+        this.player = player;
     }
 
 
