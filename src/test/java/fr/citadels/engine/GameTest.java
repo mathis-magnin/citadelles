@@ -23,7 +23,7 @@ class GameTest {
 
     @Test
     void initializeGameTest() {
-        assertEquals(19, game.getDistrictCardsPile().getPile().size());
+        assertEquals(59, game.getDistrictCardsPile().getPile().size());
         for (Player player : game.getPlayerList()) {
             assertEquals(4, player.getCardsInHand().size());
         }

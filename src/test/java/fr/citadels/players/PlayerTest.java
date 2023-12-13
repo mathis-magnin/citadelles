@@ -16,7 +16,7 @@ class PlayerTest {
 
     @BeforeEach
     void setUp() {
-        List<DistrictCard> districts = new ArrayList<>(List.of(new DistrictCard("Temple"), new DistrictCard("Manoir"), new DistrictCard("Cathédrale"), new DistrictCard("Église"), new DistrictCard("Monastère"), new DistrictCard("École de magie"), new DistrictCard("Cimetière")));
+        List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[62]));
         player = new Player("Hello",districts) {
             @Override
             public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
@@ -73,9 +73,9 @@ class PlayerTest {
     @Test
     void putBack() {
         DistrictCard[] drawnCards = new DistrictCard[3];
-        drawnCards[0] = new DistrictCard("Temple");
-        drawnCards[1] = new DistrictCard("Manoir");
-        drawnCards[2] = new DistrictCard("Cathédrale");
+        drawnCards[0] = DistrictCardsPile.allDistrictCards[12];
+        drawnCards[1] = DistrictCardsPile.allDistrictCards[0];
+        drawnCards[2] = DistrictCardsPile.allDistrictCards[22];
         DistrictCardsPile pile = new DistrictCardsPile();
         player.putBack(drawnCards, pile, 1);
         for (int i = 0; i < drawnCards.length; i++) {
