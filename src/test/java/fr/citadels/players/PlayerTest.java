@@ -2,7 +2,6 @@ package fr.citadels.players;
 
 import fr.citadels.cards.DistrictCard;
 import fr.citadels.cards.DistrictCardsPile;
-import fr.citadels.engine.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +17,7 @@ class PlayerTest {
     @BeforeEach
     void setUp() {
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[62]));
-        player = new Player("Hello",districts) {
+        player = new Player("Hello", districts) {
             @Override
             public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
                 return null;
@@ -103,10 +102,10 @@ class PlayerTest {
     }
 
     @Test
-    void hasCardInHand(){
+    void hasCardInHand() {
         player.play(new DistrictCardsPile());
-        assertTrue(player.hasCardInCity(new DistrictCard("Temple",1)));
-        assertFalse(player.hasCardInCity(new DistrictCard("Donjon",3)));
+        assertTrue(player.hasCardInCity(new DistrictCard("Temple", 1)));
+        assertFalse(player.hasCardInCity(new DistrictCard("Donjon", 3)));
     }
 
     @Test
@@ -120,7 +119,9 @@ class PlayerTest {
         assertEquals(2, player.getGold());
         player.addGold(7);
         assertEquals(9, player.getGold());
-        assertThrows(IllegalArgumentException.class,()->{ player.addGold(17);});
+        assertThrows(IllegalArgumentException.class, () -> {
+            player.addGold(17);
+        });
     }
 
     @Test
@@ -130,8 +131,12 @@ class PlayerTest {
         assertEquals(8, player.getGold());
         player.pay(5);
         assertEquals(3, player.getGold());
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {player.pay(4);});
-        assertEquals("Not enough money\n" + "expected : " + 4 + "actual : " + 3, thrown.getMessage());
-        assertThrows(IllegalArgumentException.class, () -> {player.pay(-1);});
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            player.pay(4);
+        });
+        assertEquals("Not enough money\n" + "expected : " + 4 + "\nactual : " + 3, thrown.getMessage());
+        assertThrows(IllegalArgumentException.class, () -> {
+            player.pay(-1);
+        });
     }
 }

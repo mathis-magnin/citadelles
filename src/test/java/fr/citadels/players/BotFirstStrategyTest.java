@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fr.citadels.engine.Game.BANK;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BotFirstStrategyTest {
@@ -17,6 +18,7 @@ class BotFirstStrategyTest {
 
     @BeforeEach
     void setUp() {
+        BANK.reset();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
         player = new BotFirstStrategy("Hello", districts);
     }
@@ -35,18 +37,20 @@ class BotFirstStrategyTest {
 
     @Test
     void chooseCardInHand() {
-        List<DistrictCard> copy=player.getCardsInHand();
+        player.addGold(5);
+        List<DistrictCard> copy = player.getCardsInHand();
         DistrictCard card = player.chooseCardInHand();
         assertEquals(2, player.getCardsInHand().size());
         assertTrue(copy.contains(card));
 
-        copy=player.getCardsInHand();
+        copy = player.getCardsInHand();
         card = player.chooseCardInHand();
-        assertTrue(player.getCardsInHand().size()==1 || player.getCardsInHand().size()==2);
-        if(player.getCardsInHand().size()==1)
+        assertTrue(player.getCardsInHand().size() == 1 || player.getCardsInHand().size() == 2);
+        if (player.getCardsInHand().size() == 1)
             assertTrue(copy.contains(card));
         else
             assertNull(card);
+
     }
 
     @Test
@@ -61,22 +65,61 @@ class BotFirstStrategyTest {
     }
 
     @Test
-    void play() {
+    void playWithNoMoney() {
         DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
         String turn = player.play(pile);
-        assertTrue(player.getCityCards().isEmpty() || player.getCityCards().size() == 1);
-        if (player.getCityCards().size() == 1) {
-            assertEquals(3, player.getCardsInHand().size());
-            assertTrue(turn.equals(player.getName() + " a ajouté a sa ville : Temple")
-                    || turn.equals(player.getName() + " a ajouté a sa ville : Manoir")
-                    || turn.equals(player.getName() + " a ajouté a sa ville : Cathédrale"));
+        assertTrue(player.getCityCards().isEmpty() || player.getCityCards().get(0).equals(new DistrictCard("Temple", 1)));
+        if (player.getCityCards().isEmpty()) {
+            assertTrue(player.getCardsInHand().size() == 3 || player.getCardsInHand().size() == 4);
+            assertTrue(player.getGold() == 2 || player.getGold() == 0);
+            assertEquals("Hello n'a pas construit ce tour-ci", turn);
         } else {
-            if(player.getGold()==0)
-                assertEquals(4, player.getCardsInHand().size());
-            else
-                assertEquals(3, player.getCardsInHand().size());
-            assertEquals(turn, player.getName() + " n'a pas construit ce tour-ci");
+            assertEquals(2, player.getCardsInHand().size());
+            assertEquals(1, player.getGold());
+            assertEquals("Hello a ajouté a sa ville : Temple", turn);
+        }
+    }
+
+    @Test
+    void playWith2GoldsTemple() {
+        DistrictCardsPile pile = new DistrictCardsPile();
+        pile.initializePile();
+        player.addGold(2);
+        List<DistrictCard> copy = player.getCardsInHand();
+        String turn = player.play(pile);
+        assertTrue(player.getCityCards().isEmpty() || copy.contains(player.getCityCards().get(0)));
+        if (player.getCityCards().isEmpty()) {
+            assertTrue(player.getCardsInHand().size() == 3 || player.getCardsInHand().size() == 4);
+            assertTrue(player.getGold() == 2 || player.getGold() == 4);
+            assertEquals("Hello n'a pas construit ce tour-ci", turn);
+        } else {
+            assertTrue(1 == player.getGold() || 3 == player.getGold());
+            assertTrue(2 == player.getCardsInHand().size() || 3 == player.getCardsInHand().size());
+            assertEquals("Hello a ajouté a sa ville : Temple", turn);
+
+        }
+    }
+
+    @Test
+    void playWith2GoldsManoir() {
+        List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
+        player = new BotFirstStrategy("Hello", districts);
+
+        DistrictCardsPile pile = new DistrictCardsPile();
+        pile.initializePile();
+        player.addGold(2);
+        List<DistrictCard> copy = player.getCardsInHand();
+        String turn = player.play(pile);
+        assertTrue(player.getCityCards().isEmpty() || copy.contains(player.getCityCards().get(0)));
+        if (player.getCityCards().isEmpty()) {
+            assertTrue(player.getCardsInHand().size() == 2 || player.getCardsInHand().size() == 3);
+            assertTrue(player.getGold() == 2 || player.getGold() == 4);
+        } else {
+            assertEquals(1, player.getGold());
+            assertTrue(player.getCardsInHand().size() == 1 || player.getCardsInHand().size() == 2);
+            assertEquals("Hello a ajouté a sa ville : Manoir", turn);
+
         }
     }
 
