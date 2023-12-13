@@ -2,7 +2,7 @@ package fr.citadels.players;
 
 import fr.citadels.cards.DistrictCard;
 import fr.citadels.cards.DistrictCardsPile;
-import fr.citadels.engine.Bank;
+import fr.citadels.engine.Game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,20 +10,6 @@ import java.util.List;
 public abstract class Player {
 
     /* Static content */
-
-    protected static Bank bank;
-
-
-    /**
-     * Set the static variable bank.
-     *
-     * @param bank The bank of the game.
-     */
-    public static void setBank(Bank bank) {
-        Player.bank = bank;
-    }
-
-
     /*
      * Attributes
      */
@@ -119,7 +105,9 @@ public abstract class Player {
      * @param amount that represents the amount to add
      */
     public void addGold(int amount) {
-        gold += amount;
+        if (Game.BANK.getGold() >= amount)
+            gold += Game.BANK.take(amount);
+        else throw new IllegalArgumentException("Not enough money in bank");
     }
 
     /***
@@ -129,9 +117,10 @@ public abstract class Player {
      * @throws IllegalArgumentException if the amount exceeds the money owned
      */
     public void pay(int amount) throws IllegalArgumentException {
-        if (amount > gold)
-            throw new IllegalArgumentException("Not enough money\n" + "expected : " + amount + "actual : " + gold);
+        if (amount > gold || amount < 0)
+            throw new IllegalArgumentException("Not enough money\n" + "expected : " + amount + "\nactual : " + gold);
         gold -= amount;
+        Game.BANK.give(amount);
     }
 
     /***
