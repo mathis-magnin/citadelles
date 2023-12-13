@@ -2,6 +2,7 @@ package fr.citadels.players;
 
 import fr.citadels.cards.DistrictCard;
 import fr.citadels.cards.DistrictCardsPile;
+import fr.citadels.engine.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,8 +17,8 @@ class PlayerTest {
 
     @BeforeEach
     void setUp() {
-        List<DistrictCard> districts = new ArrayList<>(List.of(new DistrictCard("Temple"), new DistrictCard("Manoir"), new DistrictCard("Cathédrale"), new DistrictCard("Église"), new DistrictCard("Monastère"), new DistrictCard("École de magie"), new DistrictCard("Cimetière")));
-        player = new Player("Hello", districts) {
+        List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[62]));
+        player = new Player("Hello",districts) {
             @Override
             public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
                 return null;
@@ -75,9 +76,9 @@ class PlayerTest {
     @Test
     void putBack() {
         DistrictCard[] drawnCards = new DistrictCard[3];
-        drawnCards[0] = new DistrictCard("Temple");
-        drawnCards[1] = new DistrictCard("Manoir");
-        drawnCards[2] = new DistrictCard("Cathédrale");
+        drawnCards[0] = DistrictCardsPile.allDistrictCards[12];
+        drawnCards[1] = DistrictCardsPile.allDistrictCards[0];
+        drawnCards[2] = DistrictCardsPile.allDistrictCards[22];
         DistrictCardsPile pile = new DistrictCardsPile();
         player.putBack(drawnCards, pile, 1);
         for (int i = 0; i < drawnCards.length; i++) {
@@ -104,8 +105,8 @@ class PlayerTest {
     @Test
     void hasCardInHand(){
         player.play(new DistrictCardsPile());
-        assertTrue(player.hasCardInCity(new DistrictCard("Temple")));
-        assertFalse(player.hasCardInCity(new DistrictCard("Donjon")));
+        assertTrue(player.hasCardInCity(new DistrictCard("Temple",1)));
+        assertFalse(player.hasCardInCity(new DistrictCard("Donjon",3)));
     }
 
     @Test
@@ -119,6 +120,7 @@ class PlayerTest {
         assertEquals(2, player.getGold());
         player.addGold(7);
         assertEquals(9, player.getGold());
+        assertThrows(IllegalArgumentException.class,()->{ player.addGold(17);});
     }
 
     @Test
@@ -128,10 +130,8 @@ class PlayerTest {
         assertEquals(8, player.getGold());
         player.pay(5);
         assertEquals(3, player.getGold());
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            player.pay(4);
-        });
-
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {player.pay(4);});
         assertEquals("Not enough money\n" + "expected : " + 4 + "actual : " + 3, thrown.getMessage());
+        assertThrows(IllegalArgumentException.class, () -> {player.pay(-1);});
     }
 }

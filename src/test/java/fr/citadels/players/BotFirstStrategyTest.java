@@ -17,7 +17,7 @@ class BotFirstStrategyTest {
 
     @BeforeEach
     void setUp() {
-        List<DistrictCard> districts = new ArrayList<>(List.of(new DistrictCard("Temple"), new DistrictCard("Manoir"), new DistrictCard("Cathédrale")));
+        List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
         player = new BotFirstStrategy("Hello", districts);
     }
 

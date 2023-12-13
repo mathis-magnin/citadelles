@@ -5,56 +5,30 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DistrictCardTest {
-    DistrictCard[] allCards =
-            {new DistrictCard("Manoir"),
-                    new DistrictCard("Château"),
-                    new DistrictCard("Palais"),
-
-                    new DistrictCard("Temple"),
-                    new DistrictCard("Église"),
-                    new DistrictCard("Monastère"),
-                    new DistrictCard("Cathédrale"),
-
-                    new DistrictCard("Taverne"),
-                    new DistrictCard("Échoppe"),
-                    new DistrictCard("Marché"),
-                    new DistrictCard("Comptoir"),
-                    new DistrictCard("Port"),
-                    new DistrictCard("Hôtel de ville"),
-
-                    new DistrictCard("Tour de garde"),
-                    new DistrictCard("Prison"),
-                    new DistrictCard("Caserne"),
-                    new DistrictCard("Forteresse"),
-
-                    new DistrictCard("Cour des miracles"),
-                    new DistrictCard("Donjon"),
-                    new DistrictCard("Observatoire"),
-                    new DistrictCard("Laboratoire"),
-                    new DistrictCard("Manufacture"),
-                    new DistrictCard("Cimetière"),
-                    new DistrictCard("École de magie"),
-                    new DistrictCard("Bibliothèque"),
-                    new DistrictCard("Université"),
-                    new DistrictCard("Dracoport")};
 
     @Test
     void testGetCardName() {
-        assertEquals("Manoir", allCards[0].getCardName());
-        assertNotEquals("Manoir", allCards[1].getCardName());
+        assertEquals("Manoir", DistrictCardsPile.allDistrictCards[0].getCardName());
+        assertNotEquals("Manoir", DistrictCardsPile.allDistrictCards[DistrictCardsPile.allDistrictCards.length - 1].getCardName());
+    }
+
+    @Test
+    void testGetGoldCost() {
+        assertEquals(3, DistrictCardsPile.allDistrictCards[0].getGoldCost());
+        assertEquals(6, DistrictCardsPile.allDistrictCards[DistrictCardsPile.allDistrictCards.length - 1].getGoldCost());
     }
 
     @Test
     void testToString() {
-        for (DistrictCard d : allCards) {
+        for (DistrictCard d : DistrictCardsPile.allDistrictCards) {
             assertEquals("Carte quartier " + d.getCardName(), d.toString());
         }
     }
 
     @Test
     void testEquals() {
-        assertTrue(allCards[0].equals(allCards[0]));
-        assertFalse(allCards[0].equals(allCards[1]));
-        assertTrue(allCards[0].equals(new DistrictCard("Manoir")));
+        assertTrue(DistrictCardsPile.allDistrictCards[0].equals(DistrictCardsPile.allDistrictCards[0]));
+        assertFalse(DistrictCardsPile.allDistrictCards[0].equals(DistrictCardsPile.allDistrictCards.length - 1));
+        assertTrue(DistrictCardsPile.allDistrictCards[0].equals(new DistrictCard("Manoir", 3)));
     }
 }
