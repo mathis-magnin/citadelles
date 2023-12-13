@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fr.citadels.engine.Game.BANK;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
@@ -17,6 +18,7 @@ class GameTest {
 
     @BeforeEach
     void setUp() {
+        BANK.reset();
         game.initializeGame();
     }
 

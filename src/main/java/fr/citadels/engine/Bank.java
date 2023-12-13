@@ -21,11 +21,15 @@ public class Bank {
         return this.gold;
     }
 
-
+    public void reset() {
+        //Only used for tests
+        this.gold = Bank.CAPACITY;
+    }
     /* Methods */
 
     /**
      * Check if the bank is empty.
+     *
      * @return a boolean value.
      */
     public boolean isEmpty() {
@@ -35,6 +39,7 @@ public class Bank {
 
     /**
      * Take the starting amount of gold from the bank.
+     *
      * @return 2 golds if it can be taken from the bank.
      * O if not.
      */
@@ -65,6 +70,7 @@ public class Bank {
 
     /**
      * Give golds to the bank.
+     *
      * @param amount a positive value that will be given to the bank if it is possible.
      */
     public void give(int amount) {
