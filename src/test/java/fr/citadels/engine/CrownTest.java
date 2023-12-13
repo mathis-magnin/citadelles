@@ -16,14 +16,10 @@ class CrownTest {
         Player player = new BotFirstStrategy("player", new ArrayList<DistrictCard>());
         Player player2 = new BotFirstStrategy("player2", new ArrayList<DistrictCard>());
 
-        crown.setPlayerWithCrown(player);
-        assertEquals(player, crown.getPlayerWithCrown());
-        crown.setPlayerIndexWithCrown(1);
-        assertEquals(1, crown.getPlayerIndexWithCrown());
+        crown.initializeCrown();
+        assertNotEquals(-1, crown.getCrownedPlayerIndex());
 
-        crown.setPlayerWithCrown(player2);
-        assertEquals(player2, crown.getPlayerWithCrown());
-        crown.setPlayerIndexWithCrown(2);
-        assertEquals(2, crown.getPlayerIndexWithCrown());
+        crown.setCrownedPlayerIndex(1);
+        assertEquals(1, crown.getCrownedPlayerIndex());
     }
 }

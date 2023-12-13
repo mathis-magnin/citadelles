@@ -14,27 +14,30 @@ public class Game {
 
     /*
     const nbDistrict to win
-    affichage des scores
      */
 
     /* Attributes */
 
-    private Player[] playerList;
-    private DistrictCardsPile districtCardsPile;
-    private Crown crown;
+    private final Player[] playerList;
+    private final DistrictCardsPile districtCardsPile;
+    private final Crown crown;
+    private final Bank bank;
     private boolean isFinished;
     private Scoreboard scoreboard;
 
-    private static final int NB_PLAYERS = 2;
+    public static final int NB_PLAYERS = 2;
+
 
     /* Constructor */
 
     public Game() {
         this.playerList = new Player[NB_PLAYERS];
-        this.crown = new Crown();
         this.districtCardsPile = new DistrictCardsPile();
+        this.crown = new Crown();
+        this.bank = new Bank();
         this.isFinished = false;
     }
+
 
     /* Getters */
 
@@ -42,32 +45,33 @@ public class Game {
         return this.playerList;
     }
 
-    public DistrictCardsPile getDistrictCardsPile(){
+
+    public DistrictCardsPile getDistrictCardsPile() {
         return this.districtCardsPile;
     }
 
-    public Crown getCrown(){
-        return this.crown;
+
+    public Crown getCrown() {
+        return crown;
     }
 
-    public boolean isFinished(){
+
+    public Bank getBank() {
+        return this.bank;
+    }
+
+
+    public boolean isFinished() {
         return this.isFinished;
     }
 
-    public Scoreboard getScoreboard(){
+
+    public Scoreboard getScoreboard() {
         return this.scoreboard;
     }
 
-    /* Methods */
 
-    /**
-     * Give the crown to a random player
-     */
-    public void giveCrown() {
-        int randomIndex = (int) (Math.random() * NB_PLAYERS);
-        this.crown.setPlayerWithCrown(this.playerList[randomIndex]);
-        this.crown.setPlayerIndexWithCrown(randomIndex);
-    }
+    /* Methods */
 
     /**
      * Initialize the game
@@ -75,6 +79,8 @@ public class Game {
     void initializeGame() {
         this.districtCardsPile.initializePile();
         this.districtCardsPile.shufflePile();
+        this.crown.initializeCrown();
+        Player.setBank(this.bank);
         for (int i = 0; i < NB_PLAYERS; i++) {
             List<DistrictCard> cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
             this.playerList[i] = new BotFirstStrategy("Joueur " + (i + 1), cards);
@@ -82,12 +88,13 @@ public class Game {
         this.scoreboard = new Scoreboard(this.playerList);
     }
 
+
     /**
      * Play a turn for each player
      */
     public void playTurn() {
         for (int i = 0; i < NB_PLAYERS; i++) {
-            int nextPlayerIndex = (i + this.crown.getPlayerIndexWithCrown()) % NB_PLAYERS;
+            int nextPlayerIndex = (i + this.crown.getCrownedPlayerIndex()) % NB_PLAYERS;
             System.out.println(playerList[nextPlayerIndex].play(this.districtCardsPile));
             if (this.playerList[nextPlayerIndex].hasCompleteCity()) {
                 if (!this.isFinished) {
@@ -98,6 +105,7 @@ public class Game {
         }
     }
 
+
     /**
      * Play the game until a player has a complete city and determine the ranking
      */
@@ -107,14 +115,14 @@ public class Game {
 
         while (!this.isFinished) {
             System.out.println("Tour " + round++);
-            this.giveCrown();
-            System.out.print("Le joueur " + this.crown.getPlayerWithCrown().getName() + " a la couronne.\n");
+            this.crown.defineNextCrownedPlayer(this.playerList);
+            System.out.print("Le joueur " + this.playerList[this.crown.getCrownedPlayerIndex()].getName() + " a la couronne.\n");
             this.playTurn();
-            System.out.println();
         }
-        this.scoreboard.determineRanking();
 
+        this.scoreboard.determineRanking();
         System.out.println("Le gagnant est " + this.scoreboard.getWinner().getName() + " !\n");
         System.out.println(this.scoreboard);
     }
+
 }

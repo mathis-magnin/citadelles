@@ -2,51 +2,57 @@ package fr.citadels.engine;
 
 import fr.citadels.players.Player;
 
+import java.util.Random;
+
 public class Crown {
 
     /* Attribute */
 
-    private Player player;
     private int playerIndex;
+
 
     /* Constructor */
 
     public Crown() {
-        this.player = null;
         this.playerIndex = -1;
     }
+
+
+    /* Basic methods */
+
+    public int getCrownedPlayerIndex() {
+        return this.playerIndex;
+    }
+
+
+    /**
+     * Note : This procedure may be deleted of we choose to define the next crowned owner at the beginning of each game turn.
+     */
+    public void setCrownedPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
+    }
+
 
     /* Methods */
 
     /**
-     * Get the player who has the crown
-     * @return the player who has the crown
+     * Give the crown to a random player.
      */
-    public Player getPlayerWithCrown() {
-        return this.player;
+    public void initializeCrown() {
+        Random randomIndex = new Random();
+        this.playerIndex = randomIndex.nextInt(Game.NB_PLAYERS);
     }
 
-    /**
-     *Set the player who has the crown
-     * @param player the player who has the crown
-     */
-    public void setPlayerWithCrown(Player player) {
-        this.player = player;
-    }
 
     /**
-     * Get the index of the player who has the crown
-     * @return the index of the player who has the crown
+     * Define the next player who will have the crown.
+     * Note : This procedure may be deleted if we choose to give the crown during the king's turn.
+     *
+     * @param players the list of the player of the game.
+     * @precondition The procedure initializeCrown() must have been called once.
      */
-    public int getPlayerIndexWithCrown() {
-        return this.playerIndex;
+    public void defineNextCrownedPlayer(Player[] players) {
+        this.initializeCrown(); // Milestone 2 : No character, no king to check.
     }
 
-    /**
-     * Set the index of the player who has the crown
-     * @param playerIndex the index of the player who has the crown
-     */
-    public void setPlayerIndexWithCrown(int playerIndex) {
-        this.playerIndex = playerIndex;
-    }
 }

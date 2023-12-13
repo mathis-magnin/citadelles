@@ -20,12 +20,6 @@ class GameTest {
         game.initializeGame();
     }
 
-    @Test
-    void giveCrownTest() {
-        game.giveCrown();
-        assertNotNull(game.getCrown().getPlayerWithCrown());
-        assertNotEquals(-1, game.getCrown().getPlayerIndexWithCrown());
-    }
 
     @Test
     void initializeGameTest() {
@@ -34,6 +28,7 @@ class GameTest {
             assertEquals(4, player.getCardsInHand().size());
         }
     }
+
 
     @Test
     void playGameTest() {
