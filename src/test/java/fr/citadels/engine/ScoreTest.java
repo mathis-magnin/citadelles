@@ -57,7 +57,12 @@ class ScoreTest {
 
     Player player1 = new Player("Tom", cardsPlayer1) {
         @Override
-        public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+        public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+            return null;
+        }
+
+        @Override
+        public DistrictCard chooseCardInHand() {
             return null;
         }
 
@@ -70,7 +75,12 @@ class ScoreTest {
     Score score1 = new Score(player1);
     Player player2 = new Player("Bob", cardsPlayer2) {
         @Override
-        public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+        public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+            return null;
+        }
+
+        @Override
+        public DistrictCard chooseCardInHand() {
             return null;
         }
 
@@ -86,7 +96,12 @@ class ScoreTest {
     /* Simulate an entire game (Only for this test class, the method play has been changed) */
     Player player3 = new Player("Noa", cardsPlayer3) {
         @Override
-        public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+        public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+            return null;
+        }
+
+        @Override
+        public DistrictCard chooseCardInHand() {
             return null;
         }
 
@@ -102,7 +117,12 @@ class ScoreTest {
     Score score3 = new Score(player3);
     Player player4 = new Player("Luk", cardsPlayer4) {
         @Override
-        public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+        public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+            return null;
+        }
+
+        @Override
+        public DistrictCard chooseCardInHand() {
             return null;
         }
 
