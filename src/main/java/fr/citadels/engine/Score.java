@@ -8,26 +8,29 @@ public class Score implements Comparable<Score> {
     /* Static contents */
 
     private static Player firstPlayerWithCompleteCity = null;
-    private final Player player;
 
-
-    /* Attributes */
-    private int points;
-    public Score(Player player) {
-        this.points = 0;
-        this.player = player;
-    }
-
-
-    /* Constructor */
 
     /**
-     * Set the static variable firstToHaveCompleteCity;
+     * Set the static variable firstToHaveCompleteCity.
      *
      * @param player The first player who has completed his city.
      */
     public static void setFirstPlayerWithCompleteCity(Player player) {
         Score.firstPlayerWithCompleteCity = player;
+    }
+
+
+    /* Attributes */
+
+    private final Player player;
+    private int points;
+
+
+    /* Constructor */
+
+    public Score(Player player) {
+        this.points = 0;
+        this.player = player;
     }
 
 
@@ -45,9 +48,10 @@ public class Score implements Comparable<Score> {
 
     @Override
     public String toString() {
-        return "Score du joueur " + this.player.getName() + " : " + this.points;
+        return "Score de " + this.player.getName() + " : " + this.points;
     }
 
+    /* Method */
 
     /**
      * Player's score comparison is based on their points (natural ordering of integer).
@@ -55,9 +59,9 @@ public class Score implements Comparable<Score> {
      * Note : this class has a natural ordering that is inconsistent with equals.
      *
      * @param other the other score to be compared.
-     * @return 1 if this score is greater than the other.
+     * @return 1 if this score is greater than other score.
      * 0 if there is a tie.
-     * -1 if the other score is greater than this.
+     * -1 if other score is greater than this score.
      */
     @Override
     public int compareTo(Score other) {
@@ -70,8 +74,6 @@ public class Score implements Comparable<Score> {
         }
     }
 
-
-    /* Method */
 
     /**
      * Determine the score of a player.
@@ -87,7 +89,7 @@ public class Score implements Comparable<Score> {
      */
     public void determinePoints() {
         for (DistrictCard district : this.player.getCityCards()) {
-            this.points += 1;   // 1 (Milestone 1 : Buildings have no cost. Only counting the number of district)
+            this.points += district.getGoldCost();   // 1
         }
 
         if (this.player.hasCompleteCity()) {

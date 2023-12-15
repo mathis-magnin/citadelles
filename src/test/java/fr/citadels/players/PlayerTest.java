@@ -2,6 +2,8 @@ package fr.citadels.players;
 
 import fr.citadels.cards.DistrictCard;
 import fr.citadels.cards.DistrictCardsPile;
+import fr.citadels.engine.Bank;
+import fr.citadels.engine.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -16,22 +18,25 @@ class PlayerTest {
 
     @BeforeEach
     void setUp() {
-        List<DistrictCard> districts = new ArrayList<>(List.of(new DistrictCard("Temple"), new DistrictCard("Manoir"), new DistrictCard("Cathédrale"), new DistrictCard("Église"), new DistrictCard("Monastère"), new DistrictCard("École de magie"), new DistrictCard("Cimetière")));
-        player = new Player("Hello",districts) {
+        List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[62]));
+        Game.BANK.reset();
+        player = new Player("Hello", districts) {
             @Override
-            public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+            public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+                return null;
+            }
+
+            @Override
+            public DistrictCard chooseCardInHand() {
                 return null;
             }
 
             @Override
             public String play(DistrictCardsPile pile) {
-                DistrictCard card=cardsInHand.get(0);
-                if(!cardsInHand.isEmpty()){
-
-                    cityCards.add(cardsInHand.get(0));
-                    cardsInHand.remove(0);
-                }
-                return player.getName()+" played "+card.getCardName();
+                DistrictCard card = cardsInHand.get(0);
+                cityCards.add(cardsInHand.get(0));
+                cardsInHand.remove(0);
+                return player.getName() + " played " + card.getCardName();
             }
         };
     }
@@ -52,7 +57,7 @@ class PlayerTest {
     }
 
     @Test
-    void getCityCards(){
+    void getCityCards() {
         DistrictCardsPile pile = new DistrictCardsPile();
         assertTrue(player.getCityCards().isEmpty());
 
@@ -73,9 +78,9 @@ class PlayerTest {
     @Test
     void putBack() {
         DistrictCard[] drawnCards = new DistrictCard[3];
-        drawnCards[0] = new DistrictCard("Temple");
-        drawnCards[1] = new DistrictCard("Manoir");
-        drawnCards[2] = new DistrictCard("Cathédrale");
+        drawnCards[0] = DistrictCardsPile.allDistrictCards[12];
+        drawnCards[1] = DistrictCardsPile.allDistrictCards[0];
+        drawnCards[2] = DistrictCardsPile.allDistrictCards[22];
         DistrictCardsPile pile = new DistrictCardsPile();
         player.putBack(drawnCards, pile, 1);
         for (int i = 0; i < drawnCards.length; i++) {
@@ -99,4 +104,42 @@ class PlayerTest {
         assertTrue(player.hasCompleteCity());
     }
 
+    @Test
+    void hasCardInHand() {
+        player.play(new DistrictCardsPile());
+        assertTrue(player.hasCardInCity(new DistrictCard("Temple", 1)));
+        assertFalse(player.hasCardInCity(new DistrictCard("Donjon", 3)));
+    }
+
+    @Test
+    void getGold() {
+        assertEquals(0, player.getGold());
+    }
+
+    @Test
+    void addGold() {
+        player.addGold(2);
+        assertEquals(2, player.getGold());
+        player.addGold(7);
+        assertEquals(9, player.getGold());
+        assertThrows(IllegalArgumentException.class, () -> {
+            player.addGold(17);
+        });
+    }
+
+    @Test
+    void pay() {
+        player.addGold(10);
+        player.pay(2);
+        assertEquals(8, player.getGold());
+        player.pay(5);
+        assertEquals(3, player.getGold());
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            player.pay(4);
+        });
+        assertEquals("Not enough money\n" + "expected : " + 4 + "\nactual : " + 3, thrown.getMessage());
+        assertThrows(IllegalArgumentException.class, () -> {
+            player.pay(-1);
+        });
+    }
 }

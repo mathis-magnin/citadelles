@@ -2,18 +2,21 @@ package fr.citadels.players;
 
 import fr.citadels.cards.DistrictCard;
 import fr.citadels.cards.DistrictCardsPile;
+import fr.citadels.engine.Game;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Player {
 
+    /* Static content */
     /*
      * Attributes
      */
     protected String name;
     protected List<DistrictCard> cardsInHand;
     protected List<DistrictCard> cityCards;
+    protected int gold;
 
     /*
      * Constructor
@@ -23,6 +26,7 @@ public abstract class Player {
         this.cardsInHand = new ArrayList<>();
         this.cityCards = new ArrayList<>();
         this.cardsInHand.addAll(cards); /*avoid modification from outside*/
+
     }
 
     /*
@@ -35,6 +39,14 @@ public abstract class Player {
      */
     public String getName() {
         return this.name;
+    }
+
+    /***
+     * get the amount of gold of the player
+     * @return the amount specified
+     */
+    public int getGold() {
+        return gold;
     }
 
     /***
@@ -80,12 +92,51 @@ public abstract class Player {
     }
 
     /***
+     * check if the player has the card in hand
+     * @param card the card to check
+     * @return true if the player has the card in hand
+     */
+    public boolean hasCardInCity(DistrictCard card) {
+        return cityCards.contains(card);
+    }
+
+    /***
+     * add amount to the gold of the player
+     * @param amount that represents the amount to add
+     */
+    public void addGold(int amount) {
+        if (Game.BANK.getGold() >= amount)
+            gold += Game.BANK.take(amount);
+        else throw new IllegalArgumentException("Not enough money in bank");
+    }
+
+    /***
+     * decrease the gold of "amount"
+     * @param amount the amount to remove from the player's wallet
+     * @precondition amount must be less or equal to the gold amount of the player
+     * @throws IllegalArgumentException if the amount exceeds the money owned
+     */
+    public void pay(int amount) throws IllegalArgumentException {
+        if (amount > gold || amount < 0)
+            throw new IllegalArgumentException("Not enough money\n" + "expected : " + amount + "\nactual : " + gold);
+        gold -= amount;
+        Game.BANK.give(amount);
+    }
+
+    /***
      * choose a card to play among the cards drawn
      * @param pile pile of cards
      * @param drawnCards cards drawn
      * @return the card to play
      */
-    public abstract DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards);
+    public abstract DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards);
+
+
+    /***
+     * choose a card in hand
+     * @return the card chosen or null if no card can be chosen
+     */
+    public abstract DistrictCard chooseCardInHand();
 
     /***
      * play a round for the linked player

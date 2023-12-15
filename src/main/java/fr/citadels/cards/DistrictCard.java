@@ -1,16 +1,23 @@
 package fr.citadels.cards;
 
 public class DistrictCard extends Card {
-    /*
-     * Constructor
-     */
-    public DistrictCard(String cardName) {
+
+    /* Attribute */
+
+    private int goldCost;
+
+    /* Constructor */
+
+    public DistrictCard(String cardName, int goldCost) {
         super(cardName);
+        this.goldCost = goldCost;
     }
 
-    /*
-     * Methods
-     */
+    /* Methods */
+
+    public int getGoldCost() {
+        return this.goldCost;
+    }
 
     /***
      * @return a string representation of a district card

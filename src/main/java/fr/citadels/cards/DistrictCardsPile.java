@@ -3,26 +3,94 @@ package fr.citadels.cards;
 import java.util.*;
 
 public class DistrictCardsPile {
-    /*
-     * Attribute
-     */
+
+    /* Static contents */
+
+    public static final DistrictCard[] allDistrictCards = {
+            new DistrictCard("Manoir", 3), //0
+            new DistrictCard("Manoir", 3),
+            new DistrictCard("Manoir", 3),
+            new DistrictCard("Manoir", 3),
+            new DistrictCard("Manoir", 3),
+            new DistrictCard("Château", 4), //5
+            new DistrictCard("Château", 4),
+            new DistrictCard("Château", 4),
+            new DistrictCard("Château", 4),
+            new DistrictCard("Château", 4),
+            new DistrictCard("Palais", 5), //10
+            new DistrictCard("Palais", 5),
+
+            new DistrictCard("Temple", 1),
+            new DistrictCard("Temple", 1),
+            new DistrictCard("Temple", 1),
+            new DistrictCard("Église", 2), //15
+            new DistrictCard("Église", 2),
+            new DistrictCard("Église", 2),
+            new DistrictCard("Monastère", 3),
+            new DistrictCard("Monastère", 3),
+            new DistrictCard("Monastère", 3), //20
+            new DistrictCard("Monastère", 3),
+            new DistrictCard("Cathédrale", 5),
+            new DistrictCard("Cathédrale", 5),
+
+            new DistrictCard("Taverne", 1),
+            new DistrictCard("Taverne", 1), //25
+            new DistrictCard("Taverne", 1),
+            new DistrictCard("Taverne", 1),
+            new DistrictCard("Taverne", 1),
+            new DistrictCard("Échoppe", 2),
+            new DistrictCard("Échoppe", 2), //30
+            new DistrictCard("Échoppe", 2),
+            new DistrictCard("Échoppe", 2),
+            new DistrictCard("Marché", 2),
+            new DistrictCard("Marché", 2),
+            new DistrictCard("Marché", 2), //35
+            new DistrictCard("Marché", 2),
+            new DistrictCard("Comptoir", 3),
+            new DistrictCard("Comptoir", 3),
+            new DistrictCard("Comptoir", 3),
+            new DistrictCard("Port", 4), //40
+            new DistrictCard("Port", 4),
+            new DistrictCard("Port", 4),
+            new DistrictCard("Hôtel de ville", 5),
+            new DistrictCard("Hôtel de ville", 5),
+
+            new DistrictCard("Tour de garde", 1), //45
+            new DistrictCard("Tour de garde", 1),
+            new DistrictCard("Tour de garde", 1),
+            new DistrictCard("Prison", 2),
+            new DistrictCard("Prison", 2),
+            new DistrictCard("Prison", 2), //50
+            new DistrictCard("Caserne", 3),
+            new DistrictCard("Caserne", 3),
+            new DistrictCard("Caserne", 3),
+            new DistrictCard("Forteresse", 5),
+            new DistrictCard("Forteresse", 5), //55
+            new DistrictCard("Forteresse", 5),
+
+            new DistrictCard("Cour des miracles", 2),
+            new DistrictCard("Donjon", 3),
+            new DistrictCard("Observatoire", 5),
+            new DistrictCard("Laboratoire", 5), //60
+            new DistrictCard("Manufacture", 5),
+            new DistrictCard("Cimetière", 5),
+            new DistrictCard("École de magie", 6),
+            new DistrictCard("Bibliothèque", 6),
+            new DistrictCard("Université", 6), //65
+            new DistrictCard("Dracoport", 6) };
+
+    /* Attribute */
+
     private Queue<DistrictCard> pile;
 
-    /*
-     * Constructor
-     */
+    /* Constructor */
+
     public DistrictCardsPile() {
         this.pile = new LinkedList<>();
     }
 
-    /*
-     * Methods
-     */
+    /* Methods */
 
-    /***
-     * get the pile of district cards
-     * @return the pile of district cards
-     */
     public Queue<DistrictCard> getPile() {
         return this.pile;
     }
@@ -32,37 +100,9 @@ public class DistrictCardsPile {
      * those that will be used during the game
      */
     public void initializePile() {
-        this.pile.add(new DistrictCard("Manoir"));
-        this.pile.add(new DistrictCard("Château"));
-        this.pile.add(new DistrictCard("Palais"));
-
-        this.pile.add(new DistrictCard("Temple"));
-        this.pile.add(new DistrictCard("Église"));
-        this.pile.add(new DistrictCard("Monastère"));
-        this.pile.add(new DistrictCard("Cathédrale"));
-
-        this.pile.add(new DistrictCard("Taverne"));
-        this.pile.add(new DistrictCard("Échoppe"));
-        this.pile.add(new DistrictCard("Marché"));
-        this.pile.add(new DistrictCard("Comptoir"));
-        this.pile.add(new DistrictCard("Port"));
-        this.pile.add(new DistrictCard("Hôtel de ville"));
-
-        this.pile.add(new DistrictCard("Tour de garde"));
-        this.pile.add(new DistrictCard("Prison"));
-        this.pile.add(new DistrictCard("Caserne"));
-        this.pile.add(new DistrictCard("Forteresse"));
-
-        this.pile.add(new DistrictCard("Cour des miracles"));
-        this.pile.add(new DistrictCard("Donjon"));
-        this.pile.add(new DistrictCard("Observatoire"));
-        this.pile.add(new DistrictCard("Laboratoire"));
-        this.pile.add(new DistrictCard("Manufacture"));
-        this.pile.add(new DistrictCard("Cimetière"));
-        this.pile.add(new DistrictCard("École de magie"));
-        this.pile.add(new DistrictCard("Bibliothèque"));
-        this.pile.add(new DistrictCard("Université"));
-        this.pile.add(new DistrictCard("Dracoport"));
+        DistrictCard[] inGameDistrictCards = new DistrictCard[DistrictCardsPile.allDistrictCards.length];
+        System.arraycopy(DistrictCardsPile.allDistrictCards, 0, inGameDistrictCards, 0, DistrictCardsPile.allDistrictCards.length);
+        this.pile.addAll(List.of(inGameDistrictCards));
     }
 
     /***

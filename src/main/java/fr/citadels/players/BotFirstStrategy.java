@@ -33,11 +33,23 @@ public class BotFirstStrategy extends Player {
      * @param drawnCards cards drawn
      * @return the card to play
      */
-    public DistrictCard chooseCard(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+    public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
         int randomIndex = RAND.nextInt(drawnCards.length);
         DistrictCard cardToPlay = drawnCards[randomIndex];
         putBack(drawnCards, pile, randomIndex);
         return cardToPlay;
+    }
+
+    /***
+     * choose a card in hand
+     * @return the card chosen or null if no card can be chosen
+     */
+    public DistrictCard chooseCardInHand() {
+        for (int i = 0; i < cardsInHand.size(); i++) {
+            if (cardsInHand.get(i).getGoldCost() <= gold && !hasCardInCity(cardsInHand.get(i)))
+                return cardsInHand.remove(i);
+        }
+        return null;
     }
 
     /***
@@ -47,18 +59,35 @@ public class BotFirstStrategy extends Player {
      */
     @Override
     public String play(DistrictCardsPile pile) {
+        boolean draw = true;
         StringBuilder actions = new StringBuilder();
         actions.append(this.getName());
 
-        DistrictCard[] drawnCards = pile.draw(2);
-        if (drawnCards.length != 0) {
-            DistrictCard cardToPlay = chooseCard(pile, drawnCards);
-            cardsInHand.add(cardToPlay);
+        if (RAND.nextBoolean()) {
+            draw = false;
+            try {
+                addGold(2);
+            } catch (IllegalArgumentException e) {
+                draw = true;
+            }
         }
+        if (draw) {
+            DistrictCard[] drawnCards = pile.draw(2);
+            if (drawnCards.length != 0) {//if there is at least 1 card
+                DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
+                cardsInHand.add(cardToPlay);
+            }
+        }
+
         if (RAND.nextBoolean() && !cardsInHand.isEmpty()) {
-            DistrictCard cardPlaced = cardsInHand.remove(RAND.nextInt(cardsInHand.size()));
-            cityCards.add(cardPlaced);
-            actions.append(" a ajouté a sa ville : ").append(cardPlaced.getCardName());
+            DistrictCard cardToPlace = chooseCardInHand();
+            if (cardToPlace != null) {
+                cityCards.add(cardToPlace);
+                pay(cardToPlace.getGoldCost());
+                actions.append(" a ajouté a sa ville : ").append(cardToPlace.getCardName());
+            } else {
+                actions.append(" n'a pas construit ce tour-ci");
+            }
         } else actions.append(" n'a pas construit ce tour-ci");
 
         return actions.toString();

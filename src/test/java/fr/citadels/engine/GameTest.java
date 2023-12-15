@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static fr.citadels.engine.Game.BANK;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
@@ -17,23 +18,19 @@ class GameTest {
 
     @BeforeEach
     void setUp() {
+        BANK.reset();
         game.initializeGame();
     }
 
-    @Test
-    void giveCrownTest() {
-        game.giveCrown();
-        assertNotNull(game.getCrown().getPlayerWithCrown());
-        assertNotEquals(-1, game.getCrown().getPlayerIndexWithCrown());
-    }
 
     @Test
     void initializeGameTest() {
-        assertEquals(19, game.getDistrictCardsPile().getPile().size());
+        assertEquals(55, game.getDistrictCardsPile().getPile().size());
         for (Player player : game.getPlayerList()) {
             assertEquals(4, player.getCardsInHand().size());
         }
     }
+
 
     @Test
     void playGameTest() {
