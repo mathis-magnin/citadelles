@@ -1,6 +1,6 @@
 package fr.citadels.engine;
 
-import fr.citadels.cards.DistrictCard;
+import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.players.BotFirstStrategy;
 import fr.citadels.players.Player;
 import org.junit.jupiter.api.Test;

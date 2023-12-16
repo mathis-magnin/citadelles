@@ -1,7 +1,7 @@
 package fr.citadels.players;
 
-import fr.citadels.cards.DistrictCard;
-import fr.citadels.cards.DistrictCardsPile;
+import fr.citadels.cards.districts.DistrictCard;
+import fr.citadels.cards.districts.DistrictCardsPile;
 
 import java.util.List;
 import java.util.Random;

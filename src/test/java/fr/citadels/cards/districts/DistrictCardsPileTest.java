@@ -1,5 +1,7 @@
-package fr.citadels.cards;
+package fr.citadels.cards.districts;
 
+import fr.citadels.cards.districts.DistrictCard;
+import fr.citadels.cards.districts.DistrictCardsPile;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.util.ArrayList;
