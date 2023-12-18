@@ -1,8 +1,7 @@
 package fr.citadels.players;
 
-import fr.citadels.cards.DistrictCard;
-import fr.citadels.cards.DistrictCardsPile;
-import fr.citadels.engine.Bank;
+import fr.citadels.cards.districts.DistrictCard;
+import fr.citadels.cards.districts.DistrictCardsPile;
 import fr.citadels.engine.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

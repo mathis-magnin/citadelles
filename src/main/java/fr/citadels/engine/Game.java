@@ -1,7 +1,7 @@
 package fr.citadels.engine;
 
-import fr.citadels.cards.DistrictCard;
-import fr.citadels.cards.DistrictCardsPile;
+import fr.citadels.cards.districts.DistrictCard;
+import fr.citadels.cards.districts.DistrictCardsPile;
 import fr.citadels.players.BotFirstStrategy;
 import fr.citadels.players.BotSecondStrategy;
 import fr.citadels.players.BotThirdStrategy;
@@ -10,7 +10,6 @@ import fr.citadels.players.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class Game {
 

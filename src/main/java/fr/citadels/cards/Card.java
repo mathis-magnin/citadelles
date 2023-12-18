@@ -2,15 +2,15 @@ package fr.citadels.cards;
 
 import java.util.Objects;
 
-public class Card {
+public abstract class Card {
 
     /* Attribute */
 
-    private String cardName;
+    private final String cardName;
 
     /* Constructor */
 
-    public Card(String cardName) {
+    protected Card(String cardName) {
         this.cardName = cardName;
     }
 
@@ -20,8 +20,9 @@ public class Card {
         return this.cardName;
     }
 
-    /***
+    /**
      * judge if 2 card objects are equals
+     *
      * @return true if the 2 cards are equals and false otherwise
      */
     @Override
@@ -36,8 +37,9 @@ public class Card {
         return this.getCardName().equals(card.getCardName());
     }
 
-    /***
+    /**
      * generates a hash code for a district card
+     *
      * @return a hash value
      */
     @Override

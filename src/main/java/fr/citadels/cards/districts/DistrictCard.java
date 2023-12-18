@@ -1,10 +1,12 @@
-package fr.citadels.cards;
+package fr.citadels.cards.districts;
+
+import fr.citadels.cards.Card;
 
 public class DistrictCard extends Card {
 
     /* Attribute */
 
-    private int goldCost;
+    private final int goldCost;
 
     /* Constructor */
 
@@ -24,6 +26,7 @@ public class DistrictCard extends Card {
      */
     @Override
     public String toString() {
-        return "Carte quartier " + this.getCardName();
+        return "Carte quartier " + this.getCardName() + " (" + this.getGoldCost() + ")";
     }
+
 }
