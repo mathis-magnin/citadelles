@@ -1,14 +1,15 @@
 package fr.citadels.engine;
 
-import fr.citadels.cards.DistrictCard;
-import fr.citadels.cards.DistrictCardsPile;
+import fr.citadels.cards.districts.DistrictCard;
+import fr.citadels.cards.districts.DistrictCardsPile;
 import fr.citadels.players.BotFirstStrategy;
+import fr.citadels.players.BotSecondStrategy;
+import fr.citadels.players.BotThirdStrategy;
 import fr.citadels.players.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class Game {
 
@@ -24,7 +25,7 @@ public class Game {
     private boolean isFinished;
     private Scoreboard scoreboard;
 
-    public static final int NB_PLAYERS = 2;
+    public static final int NB_PLAYERS = 3;
     public static final Bank BANK=new Bank();
 
     /* Constructor */
@@ -72,10 +73,17 @@ public class Game {
         this.districtCardsPile.initializePile();
         this.districtCardsPile.shufflePile();
         this.crown.initializeCrown();
-        for (int i = 0; i < NB_PLAYERS; i++) {
-            List<DistrictCard> cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
-            this.playerList[i] = new BotFirstStrategy("Joueur " + (i + 1), cards);
-        }
+
+        //Initialize the players
+        List<DistrictCard> cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
+        this.playerList[0] = new BotFirstStrategy("Joueur 1", cards);
+
+        cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
+        this.playerList[1] = new BotSecondStrategy("Joueur 2", cards);
+
+        cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
+        this.playerList[2] = new BotThirdStrategy("Joueur 3", cards);
+
         this.scoreboard = new Scoreboard(this.playerList);
     }
 

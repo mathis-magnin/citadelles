@@ -1,4 +1,4 @@
-package fr.citadels.cards;
+package fr.citadels.cards.districts;
 
 import java.util.*;
 
@@ -120,16 +120,12 @@ public class DistrictCardsPile {
      * @return the cards that have been drawn
      */
     public DistrictCard[] draw(int nbCardToDraw) {
-        if (this.pile.isEmpty()) {
-            return new DistrictCard[]{};
-        } else {
-            int nbCardsDrawn = Math.min(nbCardToDraw, this.pile.size());
-            DistrictCard[] cardsDrawn = new DistrictCard[nbCardsDrawn];
-            for (int i = 0; i < nbCardsDrawn; i++) {
-                cardsDrawn[i] = this.pile.poll();
-            }
-            return cardsDrawn;
+        int nbCardsDrawn = Math.min(nbCardToDraw, this.pile.size());
+        DistrictCard[] cardsDrawn = new DistrictCard[nbCardsDrawn];
+        for (int i = 0; i < nbCardsDrawn; i++) {
+            cardsDrawn[i] = this.pile.poll();
         }
+        return cardsDrawn;
     }
 
     /***
