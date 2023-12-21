@@ -19,13 +19,13 @@ class DistrictCardsPileTest {
 
     @org.junit.jupiter.api.Test
     void testInitializePile() {
-        assertEquals(Arrays.asList(DistrictCardsPile.allDistrictCards), new ArrayList<>(districtCardsPile.getPile()));
+        assertEquals(Arrays.asList(DistrictCardsPile.allDistrictCards), new ArrayList<>(districtCardsPile));
     }
 
     @org.junit.jupiter.api.Test
     void testShufflePile() {
         districtCardsPile.shufflePile();
-        assertNotEquals(Arrays.asList(DistrictCardsPile.allDistrictCards), new ArrayList<>(districtCardsPile.getPile()));
+        assertNotEquals(Arrays.asList(DistrictCardsPile.allDistrictCards), new ArrayList<>(districtCardsPile));
     }
 
     @org.junit.jupiter.api.Test

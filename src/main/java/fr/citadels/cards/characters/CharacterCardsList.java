@@ -38,6 +38,7 @@ public class CharacterCardsList extends ArrayList<CharacterCard> {
     /**
      * remove face up a certain amount of character cards from the character cards
      * deck according to the number of players in the game
+     *
      * @return the character cards that were removed face up from the character cards deck
      */
     public CharacterCard[] removeCharactersFaceUp() {
@@ -45,7 +46,11 @@ public class CharacterCardsList extends ArrayList<CharacterCard> {
         CharacterCard[] removedCharacters = new CharacterCard[nbCardsToRemove];
         Collections.shuffle(this);
         for (int i = 0; i < nbCardsToRemove; i++) {
-            removedCharacters[i] = this.remove(0);
+            if (this.get(0).equals(new KingCard())) {
+                removedCharacters[i] = this.remove(1);
+            } else {
+                removedCharacters[i] = this.remove(0);
+            }
         }
         return removedCharacters;
     }
@@ -53,6 +58,7 @@ public class CharacterCardsList extends ArrayList<CharacterCard> {
     /**
      * remove face down a certain amount of character cards from the character cards
      * deck according to the number of players in the game
+     *
      * @return the character cards that were removed face down from the character cards deck
      */
     public CharacterCard[] removeCharactersFaceDown() {
