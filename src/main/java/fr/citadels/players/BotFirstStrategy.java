@@ -12,13 +12,14 @@ public class BotFirstStrategy extends Player {
      * constants
      */
 
-    private static final Random RAND = new Random();
+    private final Random RAND;
 
     /*
      * Constructor
      */
-    public BotFirstStrategy(String name, List<DistrictCard> cards) {
+    public BotFirstStrategy(String name, List<DistrictCard> cards,Random random) {
         super(name, cards);
+        RAND=random;
     }
 
 
