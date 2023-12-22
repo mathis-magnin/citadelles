@@ -1,5 +1,7 @@
 package fr.citadels.players;
 
+import fr.citadels.cards.characters.CharacterCard;
+import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
 import fr.citadels.engine.Game;
@@ -9,62 +11,70 @@ import java.util.List;
 
 public abstract class Player {
 
-    /* Static content */
-    /*
-     * Attributes
-     */
-    protected String name;
+    /* Attributes */
+
+    protected final String name;
     protected List<DistrictCard> cardsInHand;
     protected List<DistrictCard> cityCards;
     protected int gold;
+    protected CharacterCard character;
 
-    /*
-     * Constructor
-     */
+
+    /* Constructor */
+
     protected Player(String name, List<DistrictCard> cards) {
         this.name = name;
         this.cardsInHand = new ArrayList<>();
+        this.cardsInHand.addAll(cards); /* Avoid modification from outside */
         this.cityCards = new ArrayList<>();
-        this.cardsInHand.addAll(cards); /*avoid modification from outside*/
-
+        this.character = null;
     }
 
-    /*
-     * Methods
-     */
 
-    /***
-     * get the name of the player
+    /* Basic methods */
+
+    /**
+     * Get the name of the player
      * @return the name of the player
      */
     public String getName() {
         return this.name;
     }
 
-    /***
-     * get the amount of gold of the player
-     * @return the amount specified
-     */
-    public int getGold() {
-        return gold;
-    }
 
-    /***
-     * get a copy of the cards in hand
+    /**
+     * Get a copy of the cards in hand
      * @return the cards in hand
      */
     public List<DistrictCard> getCardsInHand() {
         return new ArrayList<>(this.cardsInHand);
     }
 
-    /***
-     * get a copy of the cards face up (of the player's city)
+
+    /**
+     * Get a copy of the cards face up (of the player's city)
      * @return the cards face up
      */
     public List<DistrictCard> getCityCards() {
         return new ArrayList<>(this.cityCards);
     }
 
+
+    /**
+     * get the amount of gold of the player
+     * @return the amount specified
+     */
+    public int getGold() {
+        return this.gold;
+    }
+
+
+    public CharacterCard getCharacter() {
+        return this.character;
+    }
+
+
+    /* Methods */
 
     /**
      * Check if the player has a complete city
@@ -91,7 +101,8 @@ public abstract class Player {
         }
     }
 
-    /***
+
+    /**
      * check if the player has the card in hand
      * @param card the card to check
      * @return true if the player has the card in hand
@@ -100,7 +111,8 @@ public abstract class Player {
         return cityCards.contains(card);
     }
 
-    /***
+
+    /**
      * add amount to the gold of the player
      * @param amount that represents the amount to add
      */
@@ -110,7 +122,8 @@ public abstract class Player {
         else throw new IllegalArgumentException("Not enough money in bank");
     }
 
-    /***
+
+    /**
      * decrease the gold of "amount"
      * @param amount the amount to remove from the player's wallet
      * @precondition amount must be less or equal to the gold amount of the player
@@ -123,7 +136,8 @@ public abstract class Player {
         Game.BANK.give(amount);
     }
 
-    /***
+
+    /**
      * choose a card to play among the cards drawn
      * @param pile pile of cards
      * @param drawnCards cards drawn
@@ -132,18 +146,25 @@ public abstract class Player {
     public abstract DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards);
 
 
-    /***
+    /**
      * choose a card in hand
      * @return the card chosen or null if no card can be chosen
      */
     public abstract DistrictCard chooseCardInHand();
 
-    /***
+
+    /**
      * play a round for the linked player
      * @param pile of cards
      * @return the actions of the player
      */
     public abstract String play(DistrictCardsPile pile);
 
+
+    /**
+     * Choose and take a characterCard from the list of character.
+     * @param characters the list of characterCard.
+     */
+    public abstract void chooseCharacter(CharacterCardsList characters);
 
 }

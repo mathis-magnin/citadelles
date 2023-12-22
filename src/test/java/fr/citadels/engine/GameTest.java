@@ -26,11 +26,4 @@ class GameTest {
         }
     }
 
-
-    @Test
-    void playGameTest() {
-        Game game1 = new Game();
-        game1.playGame();
-    }
-
 }

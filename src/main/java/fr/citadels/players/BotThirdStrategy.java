@@ -1,9 +1,11 @@
 package fr.citadels.players;
 
+import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
 
 import java.util.List;
+import java.util.Random;
 
 /*
  * This bot will try to by expensive cards to obtain the most points
@@ -104,4 +106,16 @@ public BotThirdStrategy(String name, List<DistrictCard> cards) {
 
         return actions.toString();
     }
+
+
+    /**
+     * Choose randomly a characterCard from the list of character.
+     *
+     * @param characters the list of characterCard.
+     */
+    public void chooseCharacter(CharacterCardsList characters) {
+        Random RAND = new Random(); // Milestone 3 : no characters' power -> no utility in strategy.
+        this.character = characters.remove(RAND.nextInt(characters.size()));
+    }
+
 }

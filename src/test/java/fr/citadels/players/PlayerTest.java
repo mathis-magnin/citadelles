@@ -1,5 +1,6 @@
 package fr.citadels.players;
 
+import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
 import fr.citadels.engine.Game;
@@ -36,6 +37,11 @@ class PlayerTest {
                 cityCards.add(cardsInHand.get(0));
                 cardsInHand.remove(0);
                 return player.getName() + " played " + card.getCardName();
+            }
+
+            @Override
+            public void chooseCharacter(CharacterCardsList characters) {
+                return;
             }
         };
     }
