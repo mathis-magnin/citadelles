@@ -7,6 +7,7 @@ import fr.citadels.players.BotSecondStrategy;
 import fr.citadels.players.BotThirdStrategy;
 import fr.citadels.players.Player;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -96,12 +97,16 @@ public class Game {
      * Play a turn for each player
      */
     public void playTurn() {
-        for (int i = 0; i < NB_PLAYERS; i++) {
-            int nextPlayerIndex = (i + this.crown.getCrownedPlayerIndex()) % NB_PLAYERS;
-            System.out.println(playerList[nextPlayerIndex].play(this.districtCardsPile));
-            if (this.playerList[nextPlayerIndex].hasCompleteCity()) {
+        // this.playSelectionPhase(); DORIAN A TOI !
+        Player[] orderedPlayers = new Player[playerList.length];
+        System.arraycopy(this.playerList, 0, orderedPlayers, 0, this.playerList.length);
+        Arrays.sort(this.playerList);   // Sort the player based on their character's rank.
+
+        for (Player player : orderedPlayers) {
+            System.out.println(player.play(this.districtCardsPile));
+            if (player.hasCompleteCity()) {
                 if (!this.isFinished) {
-                    Score.setFirstPlayerWithCompleteCity(this.playerList[nextPlayerIndex]);
+                    Score.setFirstPlayerWithCompleteCity(player);
                 }
                 this.isFinished = true;
             }

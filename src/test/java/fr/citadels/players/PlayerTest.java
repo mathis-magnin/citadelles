@@ -33,6 +33,7 @@ class PlayerTest {
 
             @Override
             public String play(DistrictCardsPile pile) {
+                this.chooseCharacter(new CharacterCardsList());
                 DistrictCard card = cardsInHand.get(0);
                 cityCards.add(cardsInHand.get(0));
                 cardsInHand.remove(0);
@@ -41,7 +42,7 @@ class PlayerTest {
 
             @Override
             public void chooseCharacter(CharacterCardsList characters) {
-                return;
+                this.character = characters.get(1);
             }
         };
     }
@@ -146,5 +147,41 @@ class PlayerTest {
         assertThrows(IllegalArgumentException.class, () -> {
             player.pay(-1);
         });
+    }
+
+
+    @Test
+    void compareToTest() {
+        List<DistrictCard> districts2 = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[62]));
+        Player player2 = new Player("Hello", districts2) {
+            @Override
+            public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+                return null;
+            }
+
+            @Override
+            public DistrictCard chooseCardInHand() {
+                return null;
+            }
+
+            @Override
+            public String play(DistrictCardsPile pile) {
+                this.chooseCharacter(new CharacterCardsList());
+                DistrictCard card = cardsInHand.get(0);
+                cityCards.add(cardsInHand.get(0));
+                cardsInHand.remove(0);
+                return player.getName() + " played " + card.getCardName();
+            }
+
+            @Override
+            public void chooseCharacter(CharacterCardsList characters) {
+                this.character = characters.get(2);
+            }
+        };
+        player.play(new DistrictCardsPile());
+        player2.play(new DistrictCardsPile());
+
+        assertTrue(player.compareTo(player2) < 0);
+        assertTrue(player2.compareTo(player) > 0);
     }
 }

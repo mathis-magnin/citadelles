@@ -9,7 +9,7 @@ import fr.citadels.engine.Game;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Player {
+public abstract class Player implements Comparable<Player> {
 
     /* Attributes */
 
@@ -74,6 +74,21 @@ public abstract class Player {
     }
 
 
+    /**
+     * Player comparison is based on their characterCard's rank (natural ordering of integer).
+     * Note : this class has a natural ordering that is inconsistent with equals.
+     *
+     * @param other the other player to be compared.
+     * @return a positive value if this rank is greater than other rank.
+     * 0 if there is a tie.
+     * a negative value if other rank is greater than this rank.
+     */
+    @Override
+    public int compareTo(Player other) {
+        return this.getCharacter().compareTo(other.getCharacter());
+    }
+
+
     /* Methods */
 
     /**
@@ -86,7 +101,7 @@ public abstract class Player {
     }
 
 
-    /***
+    /**
      * put back the cards drawn except the one played
      * @param drawnCards cards drawn
      * @param pile pile of cards
