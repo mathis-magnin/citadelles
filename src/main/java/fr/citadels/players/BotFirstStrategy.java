@@ -1,5 +1,6 @@
 package fr.citadels.players;
 
+import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
 
@@ -17,9 +18,9 @@ public class BotFirstStrategy extends Player {
     /*
      * Constructor
      */
-    public BotFirstStrategy(String name, List<DistrictCard> cards,Random random) {
+    public BotFirstStrategy(String name, List<DistrictCard> cards, Random random) {
         super(name, cards);
-        RAND=random;
+        RAND = random;
     }
 
 
@@ -94,5 +95,14 @@ public class BotFirstStrategy extends Player {
         return actions.toString();
     }
 
+
+    /**
+     * Choose randomly a characterCard from the list of character.
+     *
+     * @param characters the list of characterCard.
+     */
+    public void chooseCharacter(CharacterCardsList characters) {
+        this.character = characters.remove(this.RAND.nextInt(characters.size()));
+    }
 
 }

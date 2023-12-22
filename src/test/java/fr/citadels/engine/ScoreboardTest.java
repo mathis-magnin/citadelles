@@ -1,5 +1,6 @@
 package fr.citadels.engine;
 
+import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
 import fr.citadels.players.Player;
@@ -12,6 +13,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ScoreboardTest {
+
+    CharacterCardsList characters = new CharacterCardsList();
 
     /* Initialize cards */
 
@@ -70,6 +73,10 @@ class ScoreboardTest {
             this.cityCards.addAll(this.cardsInHand);
             return null;
         }
+        @Override
+        public void chooseCharacter(CharacterCardsList characters) {
+            this.character = characters.get(1);
+        }
     };
 
     Player player2 = new Player("Bob", cardsPlayer2) {
@@ -86,6 +93,10 @@ class ScoreboardTest {
         public String play(DistrictCardsPile pile) {
             this.cityCards.addAll(this.cardsInHand);
             return null;
+        }
+        @Override
+        public void chooseCharacter(CharacterCardsList characters) {
+            this.character = characters.get(2);
         }
     };
 
@@ -104,6 +115,10 @@ class ScoreboardTest {
             this.cityCards.addAll(this.cardsInHand);
             return null;
         }
+        @Override
+        public void chooseCharacter(CharacterCardsList characters) {
+            this.character = characters.get(3);
+        }
     };
 
     Player player4 = new Player("Luk", cardsPlayer4) {
@@ -121,6 +136,10 @@ class ScoreboardTest {
             this.cityCards.addAll(this.cardsInHand);
             return null;
         }
+        @Override
+        public void chooseCharacter(CharacterCardsList characters) {
+            this.character = characters.get(4);
+        }
     };
     Scoreboard scoreboard = new Scoreboard(new Player[]{player1, player2, player3, player4});
 
@@ -132,9 +151,13 @@ class ScoreboardTest {
     @BeforeEach
     void setUp() {
         player1.play(pile);
+        player1.chooseCharacter(characters);
         player2.play(pile);
+        player2.chooseCharacter(characters);
         player3.play(pile);
+        player3.chooseCharacter(characters);
         player4.play(pile);
+        player4.chooseCharacter(characters);
     }
 
     @Test

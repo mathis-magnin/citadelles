@@ -1,6 +1,8 @@
 package fr.citadels.players;
 
 import fr.citadels.cards.Card;
+import fr.citadels.cards.characters.CharacterCardsList;
+import fr.citadels.cards.characters.KingCard;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
 import org.junit.jupiter.api.BeforeEach;
@@ -179,11 +181,17 @@ class BotFirstStrategyTest {
         assertEquals(1, player.getCardsInHand().size());
         assertEquals(1, player.getCityCards().size());
         assertEquals(5, player.getGold());
-
-
-
     }
 
 
+    @Test
+    void chooseCharacterTest() {
+        CharacterCardsList characters = new CharacterCardsList();
+        when(random.nextInt(anyInt())).thenReturn(3); // king
+        player.chooseCharacter(characters);
+        assertEquals(new KingCard(), player.getCharacter());
+        assertFalse(characters.contains(new KingCard()));
+
+    }
 
 }

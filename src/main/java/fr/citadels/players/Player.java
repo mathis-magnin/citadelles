@@ -167,15 +167,4 @@ public abstract class Player {
      */
     public abstract void chooseCharacter(CharacterCardsList characters);
 
-
-    /**
-     * Give back the character of the player.
-     * @return the character of the player.
-     */
-    public CharacterCard returnCharacter() {
-        CharacterCard res = this.character;
-        this.character = null;
-        return res;
-    }
-
 }
