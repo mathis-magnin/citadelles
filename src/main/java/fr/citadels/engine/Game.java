@@ -10,6 +10,7 @@ import fr.citadels.players.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class Game {
 
@@ -17,9 +18,12 @@ public class Game {
     const nbDistrict to win
      */
 
+    private static final Random RAND = new Random();
+
     /* Attributes */
 
     private final Player[] playerList;
+
     private final DistrictCardsPile districtCardsPile;
     private final Crown crown;
     private boolean isFinished;
@@ -76,7 +80,7 @@ public class Game {
 
         //Initialize the players
         List<DistrictCard> cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
-        this.playerList[0] = new BotFirstStrategy("Joueur 1", cards);
+        this.playerList[0] = new BotFirstStrategy("Joueur 1", cards, RAND);
 
         cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
         this.playerList[1] = new BotSecondStrategy("Joueur 2", cards);
