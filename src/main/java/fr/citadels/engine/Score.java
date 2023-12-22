@@ -65,9 +65,7 @@ public class Score implements Comparable<Score> {
      */
     @Override
     public int compareTo(Score other) {
-        int pointsComparison = this.points - other.getPoints();
-        int charactersRankComparison = this.player.getCharacter().getRank() - other.getPlayer().getCharacter().getRank();
-        return (pointsComparison != 0) ? pointsComparison : charactersRankComparison;
+        return (this.points - other.getPoints() != 0) ? this.points - other.getPoints() : this.player.compareTo(other.getPlayer());
     }
 
 
