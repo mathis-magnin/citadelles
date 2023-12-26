@@ -84,10 +84,10 @@ public class Game {
         this.playerList[0] = new BotFirstStrategy("Joueur 1", cards, RAND);
 
         cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
-        this.playerList[1] = new BotSecondStrategy("Joueur 2", cards);
+        this.playerList[1] = new BotSecondStrategy("Joueur 2", cards,RAND);
 
         cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
-        this.playerList[2] = new BotThirdStrategy("Joueur 3", cards);
+        this.playerList[2] = new BotThirdStrategy("Joueur 3", cards,RAND);
 
         this.scoreboard = new Scoreboard(this.playerList);
     }

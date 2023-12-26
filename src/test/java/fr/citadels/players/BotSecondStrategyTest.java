@@ -4,21 +4,25 @@ import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static fr.citadels.engine.Game.BANK;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 class BotSecondStrategyTest {
     BotSecondStrategy player;
-
+    @Mock
+    Random random=mock(Random.class);
     @BeforeEach
     void setUp() {
         BANK.reset();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
-        player = new BotSecondStrategy("Hello", districts);
+        player = new BotSecondStrategy("Hello", districts,random);
     }
 
     @Test

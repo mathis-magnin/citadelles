@@ -13,10 +13,12 @@ import java.util.Random;
  */
 public class BotSecondStrategy extends Player{
 
+    private final Random RAND;
     /* Constructor */
 
-    public BotSecondStrategy(String name, List<DistrictCard> cards) {
+    public BotSecondStrategy(String name, List<DistrictCard> cards, Random random) {
         super(name, cards);
+        this.RAND = random;
     }
 
     /* Methods */
@@ -119,7 +121,7 @@ public class BotSecondStrategy extends Player{
      * @param characters the list of characterCard.
      */
     public void chooseCharacter(CharacterCardsList characters) {
-        Random  RAND = new Random(); // Milestone 3 : no characters' power -> no utility in strategy.
+        // Milestone 3 : no characters' power -> no utility in strategy.
         this.character = characters.remove(RAND.nextInt(characters.size()));
     }
 
