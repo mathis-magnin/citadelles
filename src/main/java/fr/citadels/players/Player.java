@@ -151,6 +151,27 @@ public abstract class Player implements Comparable<Player> {
         Game.BANK.give(amount);
     }
 
+    /**
+     * takes 2 cards or 2 golds from the bank and add them to the player
+     * @param pile pile of cards
+     * @param draw true if the player has to draw cards
+     */
+    public void takeCardsOrGold(DistrictCardsPile pile,boolean draw){
+        if (!draw) {
+            try {
+                addGold(2);
+            } catch (IllegalArgumentException e) {
+                draw = true;
+            }
+        }
+        if (draw) {
+            DistrictCard[] drawnCards = pile.draw(2);
+            if (drawnCards.length != 0) {//if there is at least 1 card
+                DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
+                cardsInHand.add(cardToPlay);
+            }
+        }
+    }
 
     /**
      * choose a card to play among the cards drawn

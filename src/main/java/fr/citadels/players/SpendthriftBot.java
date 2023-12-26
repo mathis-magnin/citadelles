@@ -77,20 +77,7 @@ public SpendthriftBot(String name, List<DistrictCard> cards, Random random) {
 
         // Draw 2 cards or take 2 golds
         boolean draw = ((gold > 15) || (cardsInHand.isEmpty()) || ((gold > 5) && (getMostExpensiveCardInHand()[1] < 4)));
-        if (!draw) {
-            try {
-                addGold(2);
-            } catch (IllegalArgumentException e) {
-                draw = true;
-            }
-        }
-        if (draw) {
-            DistrictCard[] drawnCards = pile.draw(2);
-            if (drawnCards.length != 0) {//if there is at least 1 card
-                DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
-                cardsInHand.add(cardToPlay);
-            }
-        }
+        takeCardsOrGold(pile,draw);
 
         // Buy the most expensive card with a cost > 1 if possible
         if (!this.cardsInHand.isEmpty()) {

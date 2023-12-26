@@ -61,25 +61,11 @@ public class RandomBot extends Player {
      */
     @Override
     public String play(DistrictCardsPile pile) {
-        boolean draw = true;
+        boolean draw = !RAND.nextBoolean();
         StringBuilder actions = new StringBuilder();
         actions.append(this.getName());
 
-        if (RAND.nextBoolean()) {
-            draw = false;
-            try {
-                addGold(2);
-            } catch (IllegalArgumentException e) {
-                draw = true;
-            }
-        }
-        if (draw) {
-            DistrictCard[] drawnCards = pile.draw(2);
-            if (drawnCards.length != 0) {//if there is at least 1 card
-                DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
-                cardsInHand.add(cardToPlay);
-            }
-        }
+        takeCardsOrGold(pile,draw);
 
         if (RAND.nextBoolean() && !cardsInHand.isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();

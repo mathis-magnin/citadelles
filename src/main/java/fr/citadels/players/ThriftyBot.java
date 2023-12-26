@@ -82,20 +82,8 @@ public class ThriftyBot extends Player{
         // Draw if the player has less than 5 golds, if he has no cards in hand or if the cheapest card in hand costs more than 3
         // Else pick 2 golds
         boolean draw = ((gold > 5) || this.cardsInHand.isEmpty() || (getCheapestCardInHand()[1] > 3));
-        if (!draw) {
-            try {
-                addGold(2);
-            } catch (IllegalArgumentException e) {
-                draw = true;
-            }
-        }
-        if (draw) {
-            DistrictCard[] drawnCards = pile.draw(2);
-            if (drawnCards.length != 0) {//if there is at least 1 card
-                DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
-                cardsInHand.add(cardToPlay);
-            }
-        }
+
+        takeCardsOrGold(pile,draw);
 
         // Buy the cheapest card if possible
         if (!this.cardsInHand.isEmpty()) {
