@@ -2,12 +2,11 @@ package fr.citadels.engine;
 
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
-import fr.citadels.players.BotFirstStrategy;
-import fr.citadels.players.BotSecondStrategy;
-import fr.citadels.players.BotThirdStrategy;
+import fr.citadels.players.RandomBot;
+import fr.citadels.players.ThriftyBot;
+import fr.citadels.players.SpendthriftBot;
 import fr.citadels.players.Player;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -81,13 +80,13 @@ public class Game {
 
         //Initialize the players
         List<DistrictCard> cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
-        this.playerList[0] = new BotFirstStrategy("Joueur 1", cards, RAND);
+        this.playerList[0] = new RandomBot("Joueur 1", cards, RAND);
 
         cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
-        this.playerList[1] = new BotSecondStrategy("Joueur 2", cards,RAND);
+        this.playerList[1] = new ThriftyBot("Joueur 2", cards,RAND);
 
         cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
-        this.playerList[2] = new BotThirdStrategy("Joueur 3", cards,RAND);
+        this.playerList[2] = new SpendthriftBot("Joueur 3", cards,RAND);
 
         this.scoreboard = new Scoreboard(this.playerList);
     }

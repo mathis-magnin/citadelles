@@ -11,12 +11,12 @@ import java.util.Random;
  * This bot has a more spending strategy
  * It will choose cheaper cards and buy cards as soon as it can to fill its city
  */
-public class BotSecondStrategy extends Player{
+public class ThriftyBot extends Player{
 
     private final Random RAND;
     /* Constructor */
 
-    public BotSecondStrategy(String name, List<DistrictCard> cards, Random random) {
+    public ThriftyBot(String name, List<DistrictCard> cards, Random random) {
         super(name, cards);
         this.RAND = random;
     }

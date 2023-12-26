@@ -17,7 +17,7 @@ import static fr.citadels.engine.Game.BANK;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class BotFirstStrategyTest {
+class RandomBotTest {
 
     @Mock Random random=mock(Random.class);
     Player player;

@@ -14,15 +14,15 @@ import static fr.citadels.engine.Game.BANK;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
-class BotSecondStrategyTest {
-    BotSecondStrategy player;
+class ThriftyBotTest {
+    ThriftyBot player;
     @Mock
     Random random=mock(Random.class);
     @BeforeEach
     void setUp() {
         BANK.reset();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
-        player = new BotSecondStrategy("Hello", districts,random);
+        player = new ThriftyBot("Hello", districts,random);
     }
 
     @Test

@@ -8,14 +8,14 @@ import java.util.List;
 import java.util.Random;
 
 /*
- * This bot will try to by expensive cards to obtain the most points
+ * This bot will try to buy expensive cards to obtain the most points
  */
-public class BotThirdStrategy extends Player {
+public class SpendthriftBot extends Player {
 
     private final Random RAND;
     /* Constructor */
 
-public BotThirdStrategy(String name, List<DistrictCard> cards,Random random) {
+public SpendthriftBot(String name, List<DistrictCard> cards, Random random) {
         super(name, cards);
         this.RAND = random;
     }
