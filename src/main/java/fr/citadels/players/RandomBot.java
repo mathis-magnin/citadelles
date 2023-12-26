@@ -64,7 +64,7 @@ public class RandomBot extends Player {
         boolean draw;
         try {
             draw = !RAND.nextBoolean();
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             draw = false; //take money (if possible) when exception raised
         }
         StringBuilder actions = new StringBuilder();
@@ -75,7 +75,7 @@ public class RandomBot extends Player {
         boolean play;
         try {
             play = RAND.nextBoolean();
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             play = false; //don't play when exception raised
         }
 
@@ -100,9 +100,16 @@ public class RandomBot extends Player {
      * @param characters the list of characterCard.
      */
     public void chooseCharacter(CharacterCardsList characters) {
-        int randomIndex = RAND.nextInt(characters.size());
-        while (randomIndex >= characters.size())
-            randomIndex = RAND.nextInt(characters.size());
+
+        int randomIndex = -1;
+
+        while (randomIndex >= characters.size() || randomIndex < 0) {
+            try {
+                randomIndex = RAND.nextInt(characters.size());
+            } catch (Exception e) {
+                randomIndex = -1;
+            }
+        }
         this.character = characters.remove(randomIndex);
     }
 

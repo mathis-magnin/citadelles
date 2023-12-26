@@ -216,6 +216,11 @@ class RandomBotTest {
         player.chooseCharacter(characters);
         verify(random, times(3)).nextInt(anyInt());
 
+        //throw exception
+        when(random.nextInt(anyInt())).thenThrow(IllegalStateException.class).thenReturn(3);
+        player.chooseCharacter(characters);
+        verify(random, times(5)).nextInt(anyInt());
+
     }
 
 }

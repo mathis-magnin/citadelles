@@ -105,9 +105,16 @@ public class SpendthriftBot extends Player {
      * @param characters the list of characterCard.
      */
     public void chooseCharacter(CharacterCardsList characters) {
-        int randomIndex = RAND.nextInt(characters.size());
-        while (randomIndex >= characters.size())
-            randomIndex = RAND.nextInt(characters.size());
+
+        int randomIndex = -1;
+
+        while (randomIndex >= characters.size() || randomIndex < 0) {
+            try {
+                randomIndex = RAND.nextInt(characters.size());
+            } catch (Exception e) {
+                randomIndex = -1;
+            }
+        }
         this.character = characters.remove(randomIndex);
     }
 
