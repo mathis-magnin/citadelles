@@ -61,13 +61,25 @@ public class RandomBot extends Player {
      */
     @Override
     public String play(DistrictCardsPile pile) {
-        boolean draw = !RAND.nextBoolean();
+        boolean draw;
+        try {
+            draw = !RAND.nextBoolean();
+        } catch (IllegalArgumentException e) {
+            draw = false; //take money (if possible) when exception raised
+        }
         StringBuilder actions = new StringBuilder();
         actions.append(this.getName());
 
         takeCardsOrGold(pile, draw);
 
-        if (RAND.nextBoolean() && !cardsInHand.isEmpty()) {
+        boolean play;
+        try {
+            play = RAND.nextBoolean();
+        } catch (IllegalArgumentException e) {
+            play = false; //don't play when exception raised
+        }
+
+        if (play && !cardsInHand.isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
@@ -88,7 +100,10 @@ public class RandomBot extends Player {
      * @param characters the list of characterCard.
      */
     public void chooseCharacter(CharacterCardsList characters) {
-        this.character = characters.remove(this.RAND.nextInt(characters.size()));
+        int randomIndex = RAND.nextInt(characters.size());
+        while (randomIndex >= characters.size())
+            randomIndex = RAND.nextInt(characters.size());
+        this.character = characters.remove(randomIndex);
     }
 
 }

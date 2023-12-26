@@ -184,14 +184,37 @@ class RandomBotTest {
         assertEquals(5, player.getGold());
     }
 
+    @Test
+    void playWithWrongBooleanGenerated() {
+        DistrictCardsPile pile = new DistrictCardsPile();
+        pile.initializePile();
+        when(random.nextBoolean()).thenThrow(IllegalArgumentException.class);
+        String turn = player.play(pile);
+        assertEquals(3, player.getCardsInHand().size());
+        assertEquals(0, player.getCityCards().size());
+        assertEquals(2, player.getGold()); //took money
+        assertEquals("Hello n'a pas construit ce tour-ci", turn);
+
+        player.addGold(23); //no money in bank anymore
+        turn = player.play(pile);
+        assertEquals(4, player.getCardsInHand().size());
+        assertEquals(0, player.getCityCards().size());
+        assertEquals(25, player.getGold()); //took money
+        assertEquals("Hello n'a pas construit ce tour-ci", turn);
+    }
 
     @Test
     void chooseCharacterTest() {
         CharacterCardsList characters = new CharacterCardsList();
         when(random.nextInt(anyInt())).thenReturn(3); // king
         player.chooseCharacter(characters);
+        verify(random, times(1)).nextInt(anyInt());
         assertEquals(new KingCard(), player.getCharacter());
         assertFalse(characters.contains(new KingCard()));
+
+        when(random.nextInt(anyInt())).thenReturn(20, 3);
+        player.chooseCharacter(characters);
+        verify(random, times(3)).nextInt(anyInt());
 
     }
 

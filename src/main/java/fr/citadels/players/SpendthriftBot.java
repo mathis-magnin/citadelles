@@ -105,8 +105,10 @@ public class SpendthriftBot extends Player {
      * @param characters the list of characterCard.
      */
     public void chooseCharacter(CharacterCardsList characters) {
-        // Milestone 3 : no characters' power -> no utility in strategy.
-        this.character = characters.remove(RAND.nextInt(characters.size()));
+        int randomIndex = RAND.nextInt(characters.size());
+        while (randomIndex >= characters.size())
+            randomIndex = RAND.nextInt(characters.size());
+        this.character = characters.remove(randomIndex);
     }
 
 }
