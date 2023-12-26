@@ -37,12 +37,13 @@ public class Crown {
 
     /**
      * return the player index of the one who is currently the king.
+     *
      * @param players the list of the player of the game.
      * @return the player index of the one who is currently the king.
      */
     public int getKingPlayer(Player[] players) {
-        for(int i = 0; i < players.length; i++) {
-            if(players[i].getCharacter()!=null && players[i].getCharacter().getCardName().equals("Roi")) {
+        for (int i = 0; i < players.length; i++) {
+            if (players[i].getCharacter() != null && players[i].getCharacter().getCardName().equals("Roi")) {
                 return i;
             }
         }
@@ -52,9 +53,8 @@ public class Crown {
     /**
      * Give the crown to a random player.
      */
-    public void initializeCrown() {
-        Random randomIndex = new Random();
-        this.playerIndex = randomIndex.nextInt(Game.NB_PLAYERS);
+    public void initializeCrown(Random rand) {
+        this.playerIndex = rand.nextInt(Game.NB_PLAYERS);
     }
 
 
@@ -65,13 +65,12 @@ public class Crown {
      * @param players the list of the player of the game.
      * @precondition The procedure initializeCrown() must have been called once.
      */
-    public void defineNextCrownedPlayer(Player[] players) {
-        int index=getKingPlayer(players);
-        if(index!=-1) {
+    public void defineNextCrownedPlayer(Player[] players, Random rand) {
+        int index = getKingPlayer(players);
+        if (index != -1) {
             this.playerIndex = index;
-        }
-        else
-            initializeCrown();
+        } else
+            initializeCrown(rand);
     }
 
 }

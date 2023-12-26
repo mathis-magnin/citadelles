@@ -76,7 +76,7 @@ public class Game {
     void initializeGame() {
         this.districtCardsPile.initializePile();
         this.districtCardsPile.shufflePile();
-        this.crown.initializeCrown();
+        this.crown.initializeCrown(RAND);
 
         //Initialize the players
         List<DistrictCard> cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
@@ -122,7 +122,7 @@ public class Game {
 
         while (!this.isFinished) {
             System.out.println("Tour " + round++);
-            this.crown.defineNextCrownedPlayer(this.playerList);
+            this.crown.defineNextCrownedPlayer(this.playerList,RAND);
             System.out.print("Le joueur " + this.playerList[this.crown.getCrownedPlayerIndex()].getName() + " a la couronne.\n");
             this.playTurn();
         }
