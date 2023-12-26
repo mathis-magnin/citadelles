@@ -7,7 +7,7 @@ import fr.citadels.cards.districts.DistrictCardsPile;
 import java.util.List;
 import java.util.Random;
 
-public class BotFirstStrategy extends Player {
+public class RandomBot extends Player {
 
     /*
      * constants
@@ -18,7 +18,7 @@ public class BotFirstStrategy extends Player {
     /*
      * Constructor
      */
-    public BotFirstStrategy(String name, List<DistrictCard> cards, Random random) {
+    public RandomBot(String name, List<DistrictCard> cards, Random random) {
         super(name, cards);
         RAND = random;
     }

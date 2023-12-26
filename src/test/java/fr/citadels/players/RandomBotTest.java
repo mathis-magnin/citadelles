@@ -26,7 +26,7 @@ class BotFirstStrategyTest {
     void setUp() {
         BANK.reset();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
-        player = new BotFirstStrategy("Hello", districts,random);
+        player = new RandomBot("Hello", districts,random);
     }
 
     @Test
@@ -165,7 +165,7 @@ class BotFirstStrategyTest {
     @Test
     void playWith2GoldsCardAlreadyIn() {
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[13]));
-        player = new BotFirstStrategy("Hello", districts,random);
+        player = new RandomBot("Hello", districts,random);
 
         DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
