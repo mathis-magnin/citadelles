@@ -11,7 +11,7 @@ import java.util.Random;
  * This bot has a more spending strategy
  * It will choose cheaper cards and buy cards as soon as it can to fill its city
  */
-public class ThriftyBot extends Player{
+public class ThriftyBot extends Player {
 
     private final Random RAND;
     /* Constructor */
@@ -25,6 +25,7 @@ public class ThriftyBot extends Player{
 
     /**
      * Get the index and the cost of the cheapest card in the hand that can be built
+     *
      * @precondition cardsInHand must contain at least 1 card
      */
     public int[] getCheapestCardInHand() {
@@ -41,10 +42,11 @@ public class ThriftyBot extends Player{
 
     /**
      * Choose the cheapest card among the cards drawn
-     * @precondition drawnCards must contain at least 1 card
-     * @param pile pile of cards
+     *
+     * @param pile       pile of cards
      * @param drawnCards cards drawn
      * @return the card to play
+     * @precondition drawnCards must contain at least 1 card
      */
     public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
         int minIndex = 0;
@@ -59,19 +61,21 @@ public class ThriftyBot extends Player{
 
     /**
      * Choose the cheapest card in hand that can be bought
+     *
      * @return the card chosen or null if no card can be chosen
      * @precondition cardsInHand must contain at least 1 card
      */
     public DistrictCard chooseCardInHand() {
         int minIndex = getCheapestCardInHand()[0];
-        if (cardsInHand.get(minIndex).getGoldCost() <= gold )
+        if (cardsInHand.get(minIndex).getGoldCost() <= gold)
             return cardsInHand.remove(minIndex);
         return null;
     }
 
     /**
      * Play a round for the linked player
-     * @param  pile of cards
+     *
+     * @param pile of cards
      * @return the actions of the player
      */
     public String play(DistrictCardsPile pile) {
@@ -83,7 +87,7 @@ public class ThriftyBot extends Player{
         // Else pick 2 golds
         boolean draw = ((gold > 5) || this.cardsInHand.isEmpty() || (getCheapestCardInHand()[1] > 3));
 
-        takeCardsOrGold(pile,draw);
+        takeCardsOrGold(pile, draw);
 
         // Buy the cheapest card if possible
         if (!this.cardsInHand.isEmpty()) {

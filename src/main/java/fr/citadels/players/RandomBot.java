@@ -65,7 +65,7 @@ public class RandomBot extends Player {
         StringBuilder actions = new StringBuilder();
         actions.append(this.getName());
 
-        takeCardsOrGold(pile,draw);
+        takeCardsOrGold(pile, draw);
 
         if (RAND.nextBoolean() && !cardsInHand.isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();

@@ -15,7 +15,7 @@ public class SpendthriftBot extends Player {
     private final Random RAND;
     /* Constructor */
 
-public SpendthriftBot(String name, List<DistrictCard> cards, Random random) {
+    public SpendthriftBot(String name, List<DistrictCard> cards, Random random) {
         super(name, cards);
         this.RAND = random;
     }
@@ -39,10 +39,11 @@ public SpendthriftBot(String name, List<DistrictCard> cards, Random random) {
 
     /**
      * Choose the most expensive card among the cards drawn
-     * @precondition drawnCards must contain at least 1 card
-     * @param pile pile of cards
+     *
+     * @param pile       pile of cards
      * @param drawnCards cards drawn
      * @return the card to play
+     * @precondition drawnCards must contain at least 1 card
      */
     public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
         int maxIndex = 0;
@@ -57,6 +58,7 @@ public SpendthriftBot(String name, List<DistrictCard> cards, Random random) {
 
     /**
      * Choose the most expensive card in hand with a cost > 1 that can be bought
+     *
      * @return the card chosen or null if no card can be chosen
      * @precondition cardsInHand must contain at least 1 card
      */
@@ -71,13 +73,13 @@ public SpendthriftBot(String name, List<DistrictCard> cards, Random random) {
         return null;
     }
 
-    public String play(DistrictCardsPile pile){
+    public String play(DistrictCardsPile pile) {
         StringBuilder actions = new StringBuilder();
         actions.append(this.getName());
 
         // Draw 2 cards or take 2 golds
         boolean draw = ((gold > 15) || (cardsInHand.isEmpty()) || ((gold > 5) && (getMostExpensiveCardInHand()[1] < 4)));
-        takeCardsOrGold(pile,draw);
+        takeCardsOrGold(pile, draw);
 
         // Buy the most expensive card with a cost > 1 if possible
         if (!this.cardsInHand.isEmpty()) {

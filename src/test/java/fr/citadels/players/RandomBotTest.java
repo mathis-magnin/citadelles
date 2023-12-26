@@ -19,14 +19,15 @@ import static org.mockito.Mockito.*;
 
 class RandomBotTest {
 
-    @Mock Random random=mock(Random.class);
+    @Mock
+    Random random = mock(Random.class);
     Player player;
 
     @BeforeEach
     void setUp() {
         BANK.reset();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
-        player = new RandomBot("Hello", districts,random);
+        player = new RandomBot("Hello", districts, random);
     }
 
     @Test
@@ -47,11 +48,11 @@ class RandomBotTest {
         player.addGold(4);
         DistrictCard card = player.chooseCardInHand();
         assertEquals(2, player.getCardsInHand().size());
-        assertEquals(DistrictCardsPile.allDistrictCards[12],card);
+        assertEquals(DistrictCardsPile.allDistrictCards[12], card);
 
         card = player.chooseCardInHand();
         assertEquals(1, player.getCardsInHand().size());
-        assertEquals(DistrictCardsPile.allDistrictCards[0],card);
+        assertEquals(DistrictCardsPile.allDistrictCards[0], card);
 
         card = player.chooseCardInHand();
         assertEquals(1, player.getCardsInHand().size());
@@ -59,7 +60,7 @@ class RandomBotTest {
 
         /*test if the player has the card he wants in his city*/
         player.addGold(1);
-        Player playerSpy=spy(player);
+        Player playerSpy = spy(player);
         when(playerSpy.hasCardInCity(any())).thenReturn(true);
         card = playerSpy.chooseCardInHand();
         assertEquals(1, playerSpy.getCardsInHand().size());
@@ -97,7 +98,7 @@ class RandomBotTest {
         assertEquals(0, player.getGold());
 
         /*case 2 : takes gold and don't place*/
-        when(random.nextBoolean()).thenReturn(true,false);
+        when(random.nextBoolean()).thenReturn(true, false);
         turn = player.play(pile);
 
         assertEquals("Hello n'a pas construit ce tour-ci", turn);
@@ -106,7 +107,7 @@ class RandomBotTest {
         assertEquals(2, player.getGold());
 
         /*case 3 : takes gold and place*/
-        when(random.nextBoolean()).thenReturn(true,true);
+        when(random.nextBoolean()).thenReturn(true, true);
         turn = player.play(pile);
 
         assertEquals("Hello a ajouté a sa ville : Temple", turn);
@@ -123,7 +124,7 @@ class RandomBotTest {
         player.addGold(2);
 
         /*case 1 : take card and don't place*/
-        when(random.nextBoolean()).thenReturn(false,false);
+        when(random.nextBoolean()).thenReturn(false, false);
         String turn = player.play(pile);
 
         assertEquals("Hello n'a pas construit ce tour-ci", turn);
@@ -133,7 +134,7 @@ class RandomBotTest {
 
         /*case 2 : doesn't take gold and place*/
 
-        when(random.nextBoolean()).thenReturn(false,true);
+        when(random.nextBoolean()).thenReturn(false, true);
         turn = player.play(pile);
 
         assertEquals("Hello a ajouté a sa ville : Temple", turn);
@@ -142,7 +143,7 @@ class RandomBotTest {
         assertEquals(1, player.getGold());
 
         /*case 3 : takes gold and don't place*/
-        when(random.nextBoolean()).thenReturn(true,false);
+        when(random.nextBoolean()).thenReturn(true, false);
         turn = player.play(pile);
 
         assertEquals("Hello n'a pas construit ce tour-ci", turn);
@@ -151,7 +152,7 @@ class RandomBotTest {
         assertEquals(3, player.getGold());
 
         /*case 4 : takes gold and place*/
-        when(random.nextBoolean()).thenReturn(true,true);
+        when(random.nextBoolean()).thenReturn(true, true);
         turn = player.play(pile);
 
         assertEquals("Hello a ajouté a sa ville : Manoir", turn);
@@ -165,12 +166,12 @@ class RandomBotTest {
     @Test
     void playWith2GoldsCardAlreadyIn() {
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[13]));
-        player = new RandomBot("Hello", districts,random);
+        player = new RandomBot("Hello", districts, random);
 
         DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
         player.addGold(2);
-        when(random.nextBoolean()).thenReturn(true,true);
+        when(random.nextBoolean()).thenReturn(true, true);
         player.play(pile);
         assertEquals(1, player.getCardsInHand().size());
         assertEquals(1, player.getCityCards().size());
