@@ -23,7 +23,7 @@ class PlayerTest {
         player = new Player("Hello", districts) {
             @Override
             public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
-                return null;
+                return drawnCards[0];
             }
 
             @Override
@@ -149,6 +149,25 @@ class PlayerTest {
         });
     }
 
+    @Test
+    void takeCardsOrGold() {
+        DistrictCardsPile pile = new DistrictCardsPile();
+        pile.initializePile();
+
+        player.takeCardsOrGold(pile, false);
+        assertEquals(7, player.getCardsInHand().size());
+        assertEquals(2, player.getGold());
+
+        player.takeCardsOrGold(pile, true);
+        assertEquals(8, player.getCardsInHand().size());
+        assertEquals(2, player.getGold());
+
+        player.addGold(23);
+        player.takeCardsOrGold(pile, false);
+        assertEquals(9, player.getCardsInHand().size());
+        assertEquals(25, player.getGold());
+
+    }
 
     @Test
     void compareToTest() {
@@ -184,4 +203,70 @@ class PlayerTest {
         assertTrue(player.compareTo(player2) < 0);
         assertTrue(player2.compareTo(player) > 0);
     }
+
+
+    @Test
+    void equals() {
+        List<DistrictCard> districts2 = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[62]));
+        Player player2 = new Player("Hello", districts2) {
+            @Override
+            public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+                return null;
+            }
+
+            @Override
+            public DistrictCard chooseCardInHand() {
+                return null;
+            }
+
+            @Override
+            public String play(DistrictCardsPile pile) {
+                this.chooseCharacter(new CharacterCardsList());
+                DistrictCard card = cardsInHand.get(0);
+                cityCards.add(cardsInHand.get(0));
+                cardsInHand.remove(0);
+                return player.getName() + " played " + card.getCardName();
+            }
+
+            @Override
+            public void chooseCharacter(CharacterCardsList characters) {
+                this.character = characters.get(2);
+            }
+        };
+        player.play(new DistrictCardsPile());
+        player2.play(new DistrictCardsPile());
+        assertEquals(player, player2);
+        assertEquals(player2, player);
+
+        //test with different name
+        player2 = new Player("Hello2", districts2) {
+            @Override
+            public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+                return null;
+            }
+
+            @Override
+            public DistrictCard chooseCardInHand() {
+                return null;
+            }
+
+            @Override
+            public String play(DistrictCardsPile pile) {
+                this.chooseCharacter(new CharacterCardsList());
+                DistrictCard card = cardsInHand.get(0);
+                cityCards.add(cardsInHand.get(0));
+                cardsInHand.remove(0);
+                return player.getName() + " played " + card.getCardName();
+            }
+
+            @Override
+            public void chooseCharacter(CharacterCardsList characters) {
+                this.character = characters.get(2);
+            }
+        };
+        assertNotEquals(player, player2);
+        assertNotEquals(player2, player);
+
+    }
+
 }

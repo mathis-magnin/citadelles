@@ -7,7 +7,7 @@ import fr.citadels.cards.districts.DistrictCardsPile;
 import java.util.List;
 import java.util.Random;
 
-public class BotFirstStrategy extends Player {
+public class RandomBot extends Player {
 
     /*
      * constants
@@ -18,7 +18,7 @@ public class BotFirstStrategy extends Player {
     /*
      * Constructor
      */
-    public BotFirstStrategy(String name, List<DistrictCard> cards, Random random) {
+    public RandomBot(String name, List<DistrictCard> cards, Random random) {
         super(name, cards);
         RAND = random;
     }
@@ -61,27 +61,25 @@ public class BotFirstStrategy extends Player {
      */
     @Override
     public String play(DistrictCardsPile pile) {
-        boolean draw = true;
+        boolean draw;
+        try {
+            draw = !RAND.nextBoolean();
+        } catch (Exception e) {
+            draw = false; //take money (if possible) when exception raised
+        }
         StringBuilder actions = new StringBuilder();
         actions.append(this.getName());
 
-        if (RAND.nextBoolean()) {
-            draw = false;
-            try {
-                addGold(2);
-            } catch (IllegalArgumentException e) {
-                draw = true;
-            }
-        }
-        if (draw) {
-            DistrictCard[] drawnCards = pile.draw(2);
-            if (drawnCards.length != 0) {//if there is at least 1 card
-                DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
-                cardsInHand.add(cardToPlay);
-            }
+        takeCardsOrGold(pile, draw);
+
+        boolean play;
+        try {
+            play = RAND.nextBoolean();
+        } catch (Exception e) {
+            play = false; //don't play when exception raised
         }
 
-        if (RAND.nextBoolean() && !cardsInHand.isEmpty()) {
+        if (play && !cardsInHand.isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
@@ -102,7 +100,17 @@ public class BotFirstStrategy extends Player {
      * @param characters the list of characterCard.
      */
     public void chooseCharacter(CharacterCardsList characters) {
-        this.character = characters.remove(this.RAND.nextInt(characters.size()));
+
+        int randomIndex = -1;
+
+        while (randomIndex >= characters.size() || randomIndex < 0) {
+            try {
+                randomIndex = RAND.nextInt(characters.size());
+            } catch (Exception e) {
+                randomIndex = -1;
+            }
+        }
+        this.character = characters.remove(randomIndex);
     }
 
 }

@@ -8,14 +8,16 @@ import java.util.List;
 import java.util.Random;
 
 /*
- * This bot will try to by expensive cards to obtain the most points
+ * This bot will try to buy expensive cards to obtain the most points
  */
-public class BotThirdStrategy extends Player {
+public class SpendthriftBot extends Player {
 
+    private final Random RAND;
     /* Constructor */
 
-public BotThirdStrategy(String name, List<DistrictCard> cards) {
+    public SpendthriftBot(String name, List<DistrictCard> cards, Random random) {
         super(name, cards);
+        this.RAND = random;
     }
 
     /* Methods */
@@ -37,10 +39,11 @@ public BotThirdStrategy(String name, List<DistrictCard> cards) {
 
     /**
      * Choose the most expensive card among the cards drawn
-     * @precondition drawnCards must contain at least 1 card
-     * @param pile pile of cards
+     *
+     * @param pile       pile of cards
      * @param drawnCards cards drawn
      * @return the card to play
+     * @precondition drawnCards must contain at least 1 card
      */
     public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
         int maxIndex = 0;
@@ -55,6 +58,7 @@ public BotThirdStrategy(String name, List<DistrictCard> cards) {
 
     /**
      * Choose the most expensive card in hand with a cost > 1 that can be bought
+     *
      * @return the card chosen or null if no card can be chosen
      * @precondition cardsInHand must contain at least 1 card
      */
@@ -69,26 +73,13 @@ public BotThirdStrategy(String name, List<DistrictCard> cards) {
         return null;
     }
 
-    public String play(DistrictCardsPile pile){
+    public String play(DistrictCardsPile pile) {
         StringBuilder actions = new StringBuilder();
         actions.append(this.getName());
 
         // Draw 2 cards or take 2 golds
         boolean draw = ((gold > 15) || (cardsInHand.isEmpty()) || ((gold > 5) && (getMostExpensiveCardInHand()[1] < 4)));
-        if (!draw) {
-            try {
-                addGold(2);
-            } catch (IllegalArgumentException e) {
-                draw = true;
-            }
-        }
-        if (draw) {
-            DistrictCard[] drawnCards = pile.draw(2);
-            if (drawnCards.length != 0) {//if there is at least 1 card
-                DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
-                cardsInHand.add(cardToPlay);
-            }
-        }
+        takeCardsOrGold(pile, draw);
 
         // Buy the most expensive card with a cost > 1 if possible
         if (!this.cardsInHand.isEmpty()) {
@@ -114,8 +105,17 @@ public BotThirdStrategy(String name, List<DistrictCard> cards) {
      * @param characters the list of characterCard.
      */
     public void chooseCharacter(CharacterCardsList characters) {
-        Random RAND = new Random(); // Milestone 3 : no characters' power -> no utility in strategy.
-        this.character = characters.remove(RAND.nextInt(characters.size()));
+
+        int randomIndex = -1;
+
+        while (randomIndex >= characters.size() || randomIndex < 0) {
+            try {
+                randomIndex = RAND.nextInt(characters.size());
+            } catch (Exception e) {
+                randomIndex = -1;
+            }
+        }
+        this.character = characters.remove(randomIndex);
     }
 
 }

@@ -17,6 +17,7 @@ public abstract class Player implements Comparable<Player> {
     protected List<DistrictCard> cardsInHand;
     protected List<DistrictCard> cityCards;
     protected int gold;
+
     protected CharacterCard character;
 
 
@@ -35,6 +36,7 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * Get the name of the player
+     *
      * @return the name of the player
      */
     public String getName() {
@@ -44,6 +46,7 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * Get a copy of the cards in hand
+     *
      * @return the cards in hand
      */
     public List<DistrictCard> getCardsInHand() {
@@ -53,6 +56,7 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * Get a copy of the cards face up (of the player's city)
+     *
      * @return the cards face up
      */
     public List<DistrictCard> getCityCards() {
@@ -62,6 +66,7 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * get the amount of gold of the player
+     *
      * @return the amount specified
      */
     public int getGold() {
@@ -88,6 +93,18 @@ public abstract class Player implements Comparable<Player> {
         return this.getCharacter().compareTo(other.getCharacter());
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other == null) return false;
+        if (!(other instanceof Player otherPlayer)) return false;
+        return this.name.equals(otherPlayer.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.name.hashCode();
+    }
+
 
     /* Methods */
 
@@ -103,8 +120,9 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * put back the cards drawn except the one played
-     * @param drawnCards cards drawn
-     * @param pile pile of cards
+     *
+     * @param drawnCards  cards drawn
+     * @param pile        pile of cards
      * @param randomIndex index of the card played
      */
     public void putBack(DistrictCard[] drawnCards, DistrictCardsPile pile, int randomIndex) {
@@ -119,6 +137,7 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * check if the player has the card in hand
+     *
      * @param card the card to check
      * @return true if the player has the card in hand
      */
@@ -129,6 +148,7 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * add amount to the gold of the player
+     *
      * @param amount that represents the amount to add
      */
     public void addGold(int amount) {
@@ -140,9 +160,10 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * decrease the gold of "amount"
+     *
      * @param amount the amount to remove from the player's wallet
-     * @precondition amount must be less or equal to the gold amount of the player
      * @throws IllegalArgumentException if the amount exceeds the money owned
+     * @precondition amount must be less or equal to the gold amount of the player
      */
     public void pay(int amount) throws IllegalArgumentException {
         if (amount > gold || amount < 0)
@@ -151,10 +172,33 @@ public abstract class Player implements Comparable<Player> {
         Game.BANK.give(amount);
     }
 
+    /**
+     * takes 2 cards or 2 golds from the bank and add them to the player
+     *
+     * @param pile pile of cards
+     * @param draw true if the player has to draw cards
+     */
+    public void takeCardsOrGold(DistrictCardsPile pile, boolean draw) {
+        if (!draw) {
+            try {
+                addGold(2);
+            } catch (IllegalArgumentException e) {
+                draw = true;
+            }
+        }
+        if (draw) {
+            DistrictCard[] drawnCards = pile.draw(2);
+            if (drawnCards.length != 0) {//if there is at least 1 card
+                DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
+                cardsInHand.add(cardToPlay);
+            }
+        }
+    }
 
     /**
      * choose a card to play among the cards drawn
-     * @param pile pile of cards
+     *
+     * @param pile       pile of cards
      * @param drawnCards cards drawn
      * @return the card to play
      */
@@ -163,6 +207,7 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * choose a card in hand
+     *
      * @return the card chosen or null if no card can be chosen
      */
     public abstract DistrictCard chooseCardInHand();
@@ -170,6 +215,7 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * play a round for the linked player
+     *
      * @param pile of cards
      * @return the actions of the player
      */
@@ -178,6 +224,7 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * Choose and take a characterCard from the list of character.
+     *
      * @param characters the list of characterCard.
      */
     public abstract void chooseCharacter(CharacterCardsList characters);

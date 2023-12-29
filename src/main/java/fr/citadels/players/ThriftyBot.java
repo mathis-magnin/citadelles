@@ -11,18 +11,21 @@ import java.util.Random;
  * This bot has a more spending strategy
  * It will choose cheaper cards and buy cards as soon as it can to fill its city
  */
-public class BotSecondStrategy extends Player{
+public class ThriftyBot extends Player {
 
+    private final Random RAND;
     /* Constructor */
 
-    public BotSecondStrategy(String name, List<DistrictCard> cards) {
+    public ThriftyBot(String name, List<DistrictCard> cards, Random random) {
         super(name, cards);
+        this.RAND = random;
     }
 
     /* Methods */
 
     /**
      * Get the index and the cost of the cheapest card in the hand that can be built
+     *
      * @precondition cardsInHand must contain at least 1 card
      */
     public int[] getCheapestCardInHand() {
@@ -39,10 +42,11 @@ public class BotSecondStrategy extends Player{
 
     /**
      * Choose the cheapest card among the cards drawn
-     * @precondition drawnCards must contain at least 1 card
-     * @param pile pile of cards
+     *
+     * @param pile       pile of cards
      * @param drawnCards cards drawn
      * @return the card to play
+     * @precondition drawnCards must contain at least 1 card
      */
     public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
         int minIndex = 0;
@@ -57,19 +61,21 @@ public class BotSecondStrategy extends Player{
 
     /**
      * Choose the cheapest card in hand that can be bought
+     *
      * @return the card chosen or null if no card can be chosen
      * @precondition cardsInHand must contain at least 1 card
      */
     public DistrictCard chooseCardInHand() {
         int minIndex = getCheapestCardInHand()[0];
-        if (cardsInHand.get(minIndex).getGoldCost() <= gold )
+        if (cardsInHand.get(minIndex).getGoldCost() <= gold)
             return cardsInHand.remove(minIndex);
         return null;
     }
 
     /**
      * Play a round for the linked player
-     * @param  pile of cards
+     *
+     * @param pile of cards
      * @return the actions of the player
      */
     public String play(DistrictCardsPile pile) {
@@ -80,20 +86,8 @@ public class BotSecondStrategy extends Player{
         // Draw if the player has less than 5 golds, if he has no cards in hand or if the cheapest card in hand costs more than 3
         // Else pick 2 golds
         boolean draw = ((gold > 5) || this.cardsInHand.isEmpty() || (getCheapestCardInHand()[1] > 3));
-        if (!draw) {
-            try {
-                addGold(2);
-            } catch (IllegalArgumentException e) {
-                draw = true;
-            }
-        }
-        if (draw) {
-            DistrictCard[] drawnCards = pile.draw(2);
-            if (drawnCards.length != 0) {//if there is at least 1 card
-                DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
-                cardsInHand.add(cardToPlay);
-            }
-        }
+
+        takeCardsOrGold(pile, draw);
 
         // Buy the cheapest card if possible
         if (!this.cardsInHand.isEmpty()) {
@@ -119,8 +113,17 @@ public class BotSecondStrategy extends Player{
      * @param characters the list of characterCard.
      */
     public void chooseCharacter(CharacterCardsList characters) {
-        Random  RAND = new Random(); // Milestone 3 : no characters' power -> no utility in strategy.
-        this.character = characters.remove(RAND.nextInt(characters.size()));
+
+        int randomIndex = -1;
+
+        while (randomIndex >= characters.size() || randomIndex < 0) {
+            try {
+                randomIndex = RAND.nextInt(characters.size());
+            } catch (Exception e) {
+                randomIndex = -1;
+            }
+        }
+        this.character = characters.remove(randomIndex);
     }
 
 }

@@ -17,16 +17,17 @@ import static fr.citadels.engine.Game.BANK;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class BotFirstStrategyTest {
+class RandomBotTest {
 
-    @Mock Random random=mock(Random.class);
+    @Mock
+    Random random = mock(Random.class);
     Player player;
 
     @BeforeEach
     void setUp() {
         BANK.reset();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
-        player = new BotFirstStrategy("Hello", districts,random);
+        player = new RandomBot("Hello", districts, random);
     }
 
     @Test
@@ -47,11 +48,11 @@ class BotFirstStrategyTest {
         player.addGold(4);
         DistrictCard card = player.chooseCardInHand();
         assertEquals(2, player.getCardsInHand().size());
-        assertEquals(DistrictCardsPile.allDistrictCards[12],card);
+        assertEquals(DistrictCardsPile.allDistrictCards[12], card);
 
         card = player.chooseCardInHand();
         assertEquals(1, player.getCardsInHand().size());
-        assertEquals(DistrictCardsPile.allDistrictCards[0],card);
+        assertEquals(DistrictCardsPile.allDistrictCards[0], card);
 
         card = player.chooseCardInHand();
         assertEquals(1, player.getCardsInHand().size());
@@ -59,7 +60,7 @@ class BotFirstStrategyTest {
 
         /*test if the player has the card he wants in his city*/
         player.addGold(1);
-        Player playerSpy=spy(player);
+        Player playerSpy = spy(player);
         when(playerSpy.hasCardInCity(any())).thenReturn(true);
         card = playerSpy.chooseCardInHand();
         assertEquals(1, playerSpy.getCardsInHand().size());
@@ -97,7 +98,7 @@ class BotFirstStrategyTest {
         assertEquals(0, player.getGold());
 
         /*case 2 : takes gold and don't place*/
-        when(random.nextBoolean()).thenReturn(true,false);
+        when(random.nextBoolean()).thenReturn(true, false);
         turn = player.play(pile);
 
         assertEquals("Hello n'a pas construit ce tour-ci", turn);
@@ -106,7 +107,7 @@ class BotFirstStrategyTest {
         assertEquals(2, player.getGold());
 
         /*case 3 : takes gold and place*/
-        when(random.nextBoolean()).thenReturn(true,true);
+        when(random.nextBoolean()).thenReturn(true, true);
         turn = player.play(pile);
 
         assertEquals("Hello a ajouté a sa ville : Temple", turn);
@@ -123,7 +124,7 @@ class BotFirstStrategyTest {
         player.addGold(2);
 
         /*case 1 : take card and don't place*/
-        when(random.nextBoolean()).thenReturn(false,false);
+        when(random.nextBoolean()).thenReturn(false, false);
         String turn = player.play(pile);
 
         assertEquals("Hello n'a pas construit ce tour-ci", turn);
@@ -133,7 +134,7 @@ class BotFirstStrategyTest {
 
         /*case 2 : doesn't take gold and place*/
 
-        when(random.nextBoolean()).thenReturn(false,true);
+        when(random.nextBoolean()).thenReturn(false, true);
         turn = player.play(pile);
 
         assertEquals("Hello a ajouté a sa ville : Temple", turn);
@@ -142,7 +143,7 @@ class BotFirstStrategyTest {
         assertEquals(1, player.getGold());
 
         /*case 3 : takes gold and don't place*/
-        when(random.nextBoolean()).thenReturn(true,false);
+        when(random.nextBoolean()).thenReturn(true, false);
         turn = player.play(pile);
 
         assertEquals("Hello n'a pas construit ce tour-ci", turn);
@@ -151,7 +152,7 @@ class BotFirstStrategyTest {
         assertEquals(3, player.getGold());
 
         /*case 4 : takes gold and place*/
-        when(random.nextBoolean()).thenReturn(true,true);
+        when(random.nextBoolean()).thenReturn(true, true);
         turn = player.play(pile);
 
         assertEquals("Hello a ajouté a sa ville : Manoir", turn);
@@ -165,12 +166,12 @@ class BotFirstStrategyTest {
     @Test
     void playWith2GoldsCardAlreadyIn() {
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[13]));
-        player = new BotFirstStrategy("Hello", districts,random);
+        player = new RandomBot("Hello", districts, random);
 
         DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
         player.addGold(2);
-        when(random.nextBoolean()).thenReturn(true,true);
+        when(random.nextBoolean()).thenReturn(true, true);
         player.play(pile);
         assertEquals(1, player.getCardsInHand().size());
         assertEquals(1, player.getCityCards().size());
@@ -183,14 +184,42 @@ class BotFirstStrategyTest {
         assertEquals(5, player.getGold());
     }
 
+    @Test
+    void playWithWrongBooleanGenerated() {
+        DistrictCardsPile pile = new DistrictCardsPile();
+        pile.initializePile();
+        when(random.nextBoolean()).thenThrow(IllegalArgumentException.class);
+        String turn = player.play(pile);
+        assertEquals(3, player.getCardsInHand().size());
+        assertEquals(0, player.getCityCards().size());
+        assertEquals(2, player.getGold()); //took money
+        assertEquals("Hello n'a pas construit ce tour-ci", turn);
+
+        player.addGold(23); //no money in bank anymore
+        turn = player.play(pile);
+        assertEquals(4, player.getCardsInHand().size());
+        assertEquals(0, player.getCityCards().size());
+        assertEquals(25, player.getGold()); //took money
+        assertEquals("Hello n'a pas construit ce tour-ci", turn);
+    }
 
     @Test
     void chooseCharacterTest() {
         CharacterCardsList characters = new CharacterCardsList();
         when(random.nextInt(anyInt())).thenReturn(3); // king
         player.chooseCharacter(characters);
+        verify(random, times(1)).nextInt(anyInt());
         assertEquals(new KingCard(), player.getCharacter());
         assertFalse(characters.contains(new KingCard()));
+
+        when(random.nextInt(anyInt())).thenReturn(20, 3);
+        player.chooseCharacter(characters);
+        verify(random, times(3)).nextInt(anyInt());
+
+        //throw exception
+        when(random.nextInt(anyInt())).thenThrow(IllegalStateException.class).thenReturn(3);
+        player.chooseCharacter(characters);
+        verify(random, times(5)).nextInt(anyInt());
 
     }
 
