@@ -26,4 +26,11 @@ class GameTest {
         }
     }
 
+    @Test
+    void playSelectionPhaseTest() {
+        game.playSelectionPhase();
+        for (Player player : game.getPlayerList()) {
+            assertNotNull(player.getCharacter());
+        }
+    }
 }
