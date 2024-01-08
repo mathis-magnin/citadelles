@@ -5,6 +5,7 @@ import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.characters.KingCard;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
+import fr.citadels.engine.Display;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -22,12 +23,14 @@ class RandomBotTest {
     @Mock
     Random random = mock(Random.class);
     Player player;
+    Display events = new Display();
 
     @BeforeEach
     void setUp() {
         BANK.reset();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
         player = new RandomBot("Hello", districts, random);
+        events.resetDisplay();
     }
 
     @Test
@@ -90,30 +93,32 @@ class RandomBotTest {
         DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
         when(random.nextBoolean()).thenReturn(false);
-        String turn = player.play(pile);
-
-        assertEquals("Hello n'a pas construit ce tour-ci", turn);
+        player.play(pile, events);
+        assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
         assertEquals(4, player.getCardsInHand().size());
         assertEquals(0, player.getCityCards().size());
         assertEquals(0, player.getGold());
+        events.resetDisplay();
 
         /*case 2 : takes gold and don't place*/
         when(random.nextBoolean()).thenReturn(true, false);
-        turn = player.play(pile);
+        player.play(pile, events);
 
-        assertEquals("Hello n'a pas construit ce tour-ci", turn);
+        assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
         assertEquals(4, player.getCardsInHand().size());
         assertEquals(0, player.getCityCards().size());
         assertEquals(2, player.getGold());
+        events.resetDisplay();
 
         /*case 3 : takes gold and place*/
         when(random.nextBoolean()).thenReturn(true, true);
-        turn = player.play(pile);
+        player.play(pile, events);
 
-        assertEquals("Hello a ajouté a sa ville : Temple", turn);
+        assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Temple\n"));
         assertEquals(3, player.getCardsInHand().size());
         assertEquals(1, player.getCityCards().size());
         assertEquals(3, player.getGold());
+        events.resetDisplay();
 
     }
 
@@ -125,40 +130,44 @@ class RandomBotTest {
 
         /*case 1 : take card and don't place*/
         when(random.nextBoolean()).thenReturn(false, false);
-        String turn = player.play(pile);
+        player.play(pile, events);
 
-        assertEquals("Hello n'a pas construit ce tour-ci", turn);
+        assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
         assertEquals(4, player.getCardsInHand().size());
         assertEquals(0, player.getCityCards().size());
         assertEquals(2, player.getGold());
+        events.resetDisplay();
 
         /*case 2 : doesn't take gold and place*/
 
         when(random.nextBoolean()).thenReturn(false, true);
-        turn = player.play(pile);
+        player.play(pile, events);
 
-        assertEquals("Hello a ajouté a sa ville : Temple", turn);
+        assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Temple\n"));
         assertEquals(4, player.getCardsInHand().size());
         assertEquals(1, player.getCityCards().size());
         assertEquals(1, player.getGold());
+        events.resetDisplay();
 
         /*case 3 : takes gold and don't place*/
         when(random.nextBoolean()).thenReturn(true, false);
-        turn = player.play(pile);
+        player.play(pile, events);
 
-        assertEquals("Hello n'a pas construit ce tour-ci", turn);
+        assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
         assertEquals(4, player.getCardsInHand().size());
         assertEquals(1, player.getCityCards().size());
         assertEquals(3, player.getGold());
+        events.resetDisplay();
 
         /*case 4 : takes gold and place*/
         when(random.nextBoolean()).thenReturn(true, true);
-        turn = player.play(pile);
+        player.play(pile, events);
 
-        assertEquals("Hello a ajouté a sa ville : Manoir", turn);
+        assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Manoir\n"));
         assertEquals(3, player.getCardsInHand().size());
         assertEquals(2, player.getCityCards().size());
         assertEquals(2, player.getGold());
+        events.resetDisplay();
 
 
     }
@@ -172,13 +181,14 @@ class RandomBotTest {
         pile.initializePile();
         player.addGold(2);
         when(random.nextBoolean()).thenReturn(true, true);
-        player.play(pile);
+        player.play(pile, events);
         assertEquals(1, player.getCardsInHand().size());
         assertEquals(1, player.getCityCards().size());
         assertEquals(3, player.getGold());
+        events.resetDisplay();
 
-        String turn = player.play(pile);
-        assertEquals("Hello n'a pas construit ce tour-ci", turn);
+        player.play(pile, events);
+        assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
         assertEquals(1, player.getCardsInHand().size());
         assertEquals(1, player.getCityCards().size());
         assertEquals(5, player.getGold());
@@ -189,36 +199,40 @@ class RandomBotTest {
         DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
         when(random.nextBoolean()).thenThrow(IllegalArgumentException.class);
-        String turn = player.play(pile);
+        player.play(pile, events);
         assertEquals(3, player.getCardsInHand().size());
         assertEquals(0, player.getCityCards().size());
         assertEquals(2, player.getGold()); //took money
-        assertEquals("Hello n'a pas construit ce tour-ci", turn);
+        assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
+        events.resetDisplay();
 
         player.addGold(23); //no money in bank anymore
-        turn = player.play(pile);
+        player.play(pile, events);
         assertEquals(4, player.getCardsInHand().size());
         assertEquals(0, player.getCityCards().size());
         assertEquals(25, player.getGold()); //took money
-        assertEquals("Hello n'a pas construit ce tour-ci", turn);
+        assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
     }
 
     @Test
     void chooseCharacterTest() {
         CharacterCardsList characters = new CharacterCardsList();
         when(random.nextInt(anyInt())).thenReturn(3); // king
-        player.chooseCharacter(characters);
+        player.chooseCharacter(characters, events);
         verify(random, times(1)).nextInt(anyInt());
         assertEquals(new KingCard(), player.getCharacter());
         assertFalse(characters.contains(new KingCard()));
+        assertEquals("Hello a choisi le personnage : Roi\n", events.getEvents());
+        events.resetDisplay();
 
         when(random.nextInt(anyInt())).thenReturn(20, 3);
-        player.chooseCharacter(characters);
+        player.chooseCharacter(characters, events);
         verify(random, times(3)).nextInt(anyInt());
+
 
         //throw exception
         when(random.nextInt(anyInt())).thenThrow(IllegalStateException.class).thenReturn(3);
-        player.chooseCharacter(characters);
+        player.chooseCharacter(characters, events);
         verify(random, times(5)).nextInt(anyInt());
 
     }

@@ -1,8 +1,10 @@
 package fr.citadels.players;
 
+import fr.citadels.cards.characters.CharacterCard;
 import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
+import fr.citadels.engine.Display;
 
 import java.util.List;
 import java.util.Random;
@@ -60,17 +62,15 @@ public class RandomBot extends Player {
      * @return the actions of the player
      */
     @Override
-    public String play(DistrictCardsPile pile) {
+    public void play(DistrictCardsPile pile, Display events) {
         boolean draw;
         try {
             draw = !RAND.nextBoolean();
         } catch (Exception e) {
             draw = false; //take money (if possible) when exception raised
         }
-        StringBuilder actions = new StringBuilder();
-        actions.append(this.getName());
 
-        takeCardsOrGold(pile, draw);
+        takeCardsOrGold(pile, draw, events);
 
         boolean play;
         try {
@@ -84,13 +84,11 @@ public class RandomBot extends Player {
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
                 pay(cardToPlace.getGoldCost());
-                actions.append(" a ajouté a sa ville : ").append(cardToPlace.getCardName());
+                events.displayDistrictBuilt(this, cardToPlace);
             } else {
-                actions.append(" n'a pas construit ce tour-ci");
+                events.displayNoDistrictBuilt(this);
             }
-        } else actions.append(" n'a pas construit ce tour-ci");
-
-        return actions.toString();
+        } else events.displayNoDistrictBuilt(this);
     }
 
 
@@ -99,7 +97,7 @@ public class RandomBot extends Player {
      *
      * @param characters the list of characterCard.
      */
-    public void chooseCharacter(CharacterCardsList characters) {
+    public void chooseCharacter(CharacterCardsList characters, Display events) {
 
         int randomIndex = -1;
 
@@ -111,6 +109,7 @@ public class RandomBot extends Player {
             }
         }
         this.character = characters.remove(randomIndex);
+        events.displayCharacterChosen(this, this.character);
     }
 
 }

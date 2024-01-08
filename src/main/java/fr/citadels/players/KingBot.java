@@ -1,8 +1,10 @@
 package fr.citadels.players;
 
+import fr.citadels.cards.characters.CharacterCard;
 import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
+import fr.citadels.engine.Display;
 
 import java.util.List;
 import java.util.Random;
@@ -63,17 +65,15 @@ public class KingBot extends Player {
      * @return the actions of the player
      */
     @Override
-    public String play(DistrictCardsPile pile) {
+    public void play(DistrictCardsPile pile, Display events) {
         boolean draw;
         try {
             draw = !RAND.nextBoolean();
         } catch (Exception e) {
             draw = false; //take money (if possible) when exception raised
         }
-        StringBuilder actions = new StringBuilder();
-        actions.append(this.getName());
 
-        takeCardsOrGold(pile, draw);
+        takeCardsOrGold(pile, draw, events);
 
         boolean play;
         try {
@@ -87,13 +87,11 @@ public class KingBot extends Player {
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
                 pay(cardToPlace.getGoldCost());
-                actions.append(" a ajouté a sa ville : ").append(cardToPlace.getCardName());
+                events.displayDistrictBuilt(this, cardToPlace);
             } else {
-                actions.append(" n'a pas construit ce tour-ci");
+                events.displayNoDistrictBuilt(this);
             }
-        } else actions.append(" n'a pas construit ce tour-ci");
-
-        return actions.toString();
+        } else events.displayNoDistrictBuilt(this);
     }
 
 
@@ -102,18 +100,20 @@ public class KingBot extends Player {
      *
      * @param characters the list of characterCard.
      */
-    public void chooseCharacter(CharacterCardsList characters) {
-        for(int i = 0; i < characters.size(); i++) {
-            if(characters.get(i).getCardName().equals("Roi")) {
+    public void chooseCharacter(CharacterCardsList characters, Display events) {
+        for (int i = 0; i < characters.size(); i++) {
+            if (characters.get(i).getCardName().equals("Roi")) {
                 this.character = characters.remove(i);
+                events.displayCharacterChosen(this, this.character);
                 return;
             }
         }
         /*
-        * cannot find the king character
-        * Could happen if a player already took it
-        */
-        this.character= characters.remove(0);
+         * cannot find the king character
+         * Could happen if a player already took it
+         */
+        this.character = characters.remove(0);
+        events.displayCharacterChosen(this, this.character);
     }
 
 }
