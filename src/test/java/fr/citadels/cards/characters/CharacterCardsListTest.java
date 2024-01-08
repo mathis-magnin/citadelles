@@ -9,7 +9,7 @@ public class CharacterCardsListTest {
 
     CharacterCardsList characterCards = new CharacterCardsList();
 
-    /*@Test
+    @Test
     void testRemoveCharactersFaceUp() {
         assertEquals(2, characterCards.removeCharactersFaceUp().length);
     }
@@ -17,6 +17,6 @@ public class CharacterCardsListTest {
     @Test
     void testRemoveCharactersFaceDown() {
         assertEquals(1, characterCards.removeCharactersFaceDown().length);
-    }*/
+    }
 
 }

@@ -20,10 +20,17 @@ class GameTest {
 
     @Test
     void initializeGameTest() {
-        assertEquals(55, game.getDistrictCardsPile().size());
+        assertEquals(51, game.getDistrictCardsPile().size());
         for (Player player : game.getPlayerList()) {
             assertEquals(4, player.getCardsInHand().size());
         }
     }
 
+    @Test
+    void playSelectionPhaseTest() {
+        game.playSelectionPhase();
+        for (Player player : game.getPlayerList()) {
+            assertNotNull(player.getCharacter());
+        }
+    }
 }

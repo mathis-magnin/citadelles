@@ -1,16 +1,12 @@
 package fr.citadels.engine;
 
+import fr.citadels.cards.characters.CharacterCard;
+import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
-import fr.citadels.players.RandomBot;
-import fr.citadels.players.ThriftyBot;
-import fr.citadels.players.SpendthriftBot;
-import fr.citadels.players.Player;
+import fr.citadels.players.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class Game {
 
@@ -29,7 +25,7 @@ public class Game {
     private boolean isFinished;
     private Scoreboard scoreboard;
 
-    public static final int NB_PLAYERS = 3;
+    public static final int NB_PLAYERS = 4;
     public static final Bank BANK=new Bank();
 
     /* Constructor */
@@ -76,7 +72,6 @@ public class Game {
     void initializeGame() {
         this.districtCardsPile.initializePile();
         this.districtCardsPile.shufflePile();
-        this.crown.initializeCrown(RAND);
 
         //Initialize the players
         List<DistrictCard> cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
@@ -88,7 +83,28 @@ public class Game {
         cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
         this.playerList[2] = new SpendthriftBot("Joueur 3", cards,RAND);
 
+        cards = new ArrayList<>(Arrays.asList(districtCardsPile.draw(4)));
+        this.playerList[3] = new KingBot("Joueur 4", cards,RAND);
+
         this.scoreboard = new Scoreboard(this.playerList);
+        this.crown.initializeCrown(RAND);
+    }
+
+    /**
+     * Play the selection phase of the turn
+     */
+    public void playSelectionPhase() {
+        int crownedPlayerIndex = this.crown.getCrownedPlayerIndex();
+        int length = this.playerList.length;
+
+        CharacterCardsList characters = new CharacterCardsList();
+        Collections.shuffle(characters);
+        CharacterCard[] removedCharactersFaceUp = characters.removeCharactersFaceUp();
+        CharacterCard[] removedCharactersFaceDown = characters.removeCharactersFaceDown();
+
+        for (int i = 0; i < length; i++) {
+            this.playerList[(i + crownedPlayerIndex) % length].chooseCharacter(characters);
+        }
     }
 
 
@@ -96,10 +112,11 @@ public class Game {
      * Play a turn for each player
      */
     public void playTurn() {
-        // this.playSelectionPhase(); DORIAN A TOI !
+        this.playSelectionPhase();
+
         Player[] orderedPlayers = new Player[playerList.length];
         System.arraycopy(this.playerList, 0, orderedPlayers, 0, this.playerList.length);
-        Arrays.sort(this.playerList);   // Sort the player based on their character's rank.
+        Arrays.sort(orderedPlayers);   // Sort the player based on their character's rank.
 
         for (Player player : orderedPlayers) {
             System.out.println(player.play(this.districtCardsPile));
