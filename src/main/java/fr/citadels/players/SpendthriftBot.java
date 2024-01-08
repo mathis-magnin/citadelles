@@ -1,8 +1,10 @@
 package fr.citadels.players;
 
+import fr.citadels.cards.characters.CharacterCard;
 import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
+import fr.citadels.engine.Display;
 
 import java.util.List;
 import java.util.Random;
@@ -73,13 +75,11 @@ public class SpendthriftBot extends Player {
         return null;
     }
 
-    public String play(DistrictCardsPile pile) {
-        StringBuilder actions = new StringBuilder();
-        actions.append(this.getName());
+    public void play(DistrictCardsPile pile, Display events) {
 
         // Draw 2 cards or take 2 golds
         boolean draw = ((gold > 15) || (cardsInHand.isEmpty()) || ((gold > 5) && (getMostExpensiveCardInHand()[1] < 4)));
-        takeCardsOrGold(pile, draw);
+        takeCardsOrGold(pile, draw, events);
 
         // Buy the most expensive card with a cost > 1 if possible
         if (!this.cardsInHand.isEmpty()) {
@@ -87,15 +87,13 @@ public class SpendthriftBot extends Player {
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
                 pay(cardToPlace.getGoldCost());
-                actions.append(" a ajouté a sa ville : ").append(cardToPlace.getCardName());
+                events.displayDistrictBuilt(this, cardToPlace);
             } else {
-                actions.append(" n'a pas construit ce tour-ci");
+                events.displayNoDistrictBuilt(this);
             }
         } else {
-            actions.append(" n'a pas construit ce tour-ci");
+            events.displayNoDistrictBuilt(this);
         }
-
-        return actions.toString();
     }
 
 
@@ -104,7 +102,7 @@ public class SpendthriftBot extends Player {
      *
      * @param characters the list of characterCard.
      */
-    public void chooseCharacter(CharacterCardsList characters) {
+    public void chooseCharacter(CharacterCardsList characters, Display events) {
 
         int randomIndex = -1;
 
@@ -116,6 +114,7 @@ public class SpendthriftBot extends Player {
             }
         }
         this.character = characters.remove(randomIndex);
+        events.displayCharacterChosen(this, this.character);
     }
 
 }

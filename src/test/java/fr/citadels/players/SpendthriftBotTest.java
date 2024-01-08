@@ -2,6 +2,7 @@ package fr.citadels.players;
 
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
+import fr.citadels.engine.Display;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -11,20 +12,21 @@ import java.util.List;
 import java.util.Random;
 
 import static fr.citadels.engine.Game.BANK;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 class SpendthriftBotTest {
     @Mock
     Random random = mock(Random.class);
     SpendthriftBot player;
+    Display events = new Display();
 
     @BeforeEach
     void setUp() {
         BANK.reset();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
         player = new SpendthriftBot("Hello", districts, random);
+        events.resetDisplay();
     }
 
     @Test
@@ -77,24 +79,36 @@ class SpendthriftBotTest {
     void playWithNoMoney() {
         DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
-        String turn = player.play(pile);
+        player.play(pile, events);
 
         assertEquals(0, player.getCityCards().size());
         assertEquals(3, player.getCardsInHand().size());
         assertEquals(2, player.getGold());
-        assertEquals("Hello n'a pas construit ce tour-ci", turn);
+        assertEquals("Hello a pris 2 pièces d'or.\n" +
+                "Hello a 2 pièces d'or.\n" +
+                "Hello n'a rien construit.\n" +
+                "Hello a dans sa ville : \n", events.getEvents());
+        events.resetDisplay();
 
-        turn = player.play(pile);
+        player.play(pile, events);
         assertEquals(1, player.getCityCards().size());
         assertEquals(2, player.getCardsInHand().size());
         assertEquals(1, player.getGold());
-        assertEquals("Hello a ajouté a sa ville : Manoir", turn);
+        assertEquals("Hello a pris 2 pièces d'or.\n" +
+                "Hello a 4 pièces d'or.\n" +
+                "Hello a construit dans sa ville : Manoir\n" +
+                "Hello a dans sa ville : Manoir, \n", events.getEvents());
+        events.resetDisplay();
 
-        turn = player.play(pile);
+        player.play(pile, events);
         assertEquals(1, player.getCityCards().size());
         assertEquals(2, player.getCardsInHand().size());
         assertEquals(3, player.getGold());
-        assertEquals("Hello n'a pas construit ce tour-ci", turn);
+        assertEquals("Hello a pris 2 pièces d'or.\n" +
+                "Hello a 3 pièces d'or.\n" +
+                "Hello n'a rien construit.\n" +
+                "Hello a dans sa ville : Manoir, \n", events.getEvents());
+        events.resetDisplay();
     }
 
     @Test
@@ -103,20 +117,22 @@ class SpendthriftBotTest {
         pile.initializePile();
         player.addGold(25);
 
-        String turn = player.play(pile);
+        player.play(pile, events);
         assertEquals(1, player.getCityCards().size());
         assertEquals(3, player.getCardsInHand().size());
         assertEquals(20, player.getGold());
-        assertEquals("Hello a ajouté a sa ville : Cathédrale", turn);
+        assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Cathédrale"));
+        events.resetDisplay();
 
-        turn = player.play(pile);
+        player.play(pile, events);
         assertEquals(2, player.getCityCards().size());
         assertEquals(3, player.getCardsInHand().size());
         if (player.getCardsInHand().get(2).getGoldCost() > 3) {
             assertEquals(24 - player.getCardsInHand().get(2).getGoldCost(), player.getGold());
         } else {
             assertEquals(17, player.getGold());
-            assertEquals("Hello a ajouté a sa ville : Manoir", turn);
+            assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Manoir"));
+            events.resetDisplay();
         }
     }
 

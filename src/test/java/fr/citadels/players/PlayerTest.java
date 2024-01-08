@@ -3,6 +3,7 @@ package fr.citadels.players;
 import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
+import fr.citadels.engine.Display;
 import fr.citadels.engine.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,16 +33,16 @@ class PlayerTest {
             }
 
             @Override
-            public String play(DistrictCardsPile pile) {
-                this.chooseCharacter(new CharacterCardsList());
+            public void play(DistrictCardsPile pile, Display events) {
+                this.chooseCharacter(new CharacterCardsList(), events);
                 DistrictCard card = cardsInHand.get(0);
                 cityCards.add(cardsInHand.get(0));
                 cardsInHand.remove(0);
-                return player.getName() + " played " + card.getCardName();
+                events.displayDistrictBuilt(this, card);
             }
 
             @Override
-            public void chooseCharacter(CharacterCardsList characters) {
+            public void chooseCharacter(CharacterCardsList characters, Display events) {
                 this.character = characters.get(1);
             }
         };
@@ -65,17 +66,18 @@ class PlayerTest {
     @Test
     void getCityCards() {
         DistrictCardsPile pile = new DistrictCardsPile();
+        Display events = new Display();
         assertTrue(player.getCityCards().isEmpty());
 
-        player.play(pile);
+        player.play(pile, events);
         assertEquals(1, player.getCityCards().size());
         assertEquals("Temple", player.getCityCards().get(0).getCardName());
 
-        player.play(pile);
+        player.play(pile, events);
         assertEquals(2, player.getCityCards().size());
         assertEquals("Manoir", player.getCityCards().get(1).getCardName());
 
-        player.play(pile);
+        player.play(pile, events);
         assertEquals(3, player.getCityCards().size());
         assertEquals("Cathédrale", player.getCityCards().get(2).getCardName());
 
@@ -103,16 +105,17 @@ class PlayerTest {
     @Test
     void hasCompleteCity() {
         DistrictCardsPile pile = new DistrictCardsPile();
+        Display events = new Display();
         while (player.getCityCards().size() < 7) {
             assertFalse(player.hasCompleteCity());
-            player.play(pile);
+            player.play(pile, events);
         }
         assertTrue(player.hasCompleteCity());
     }
 
     @Test
     void hasCardInHand() {
-        player.play(new DistrictCardsPile());
+        player.play(new DistrictCardsPile(), new Display());
         assertTrue(player.hasCardInCity(new DistrictCard("Temple", 1)));
         assertFalse(player.hasCardInCity(new DistrictCard("Donjon", 3)));
     }
@@ -152,20 +155,27 @@ class PlayerTest {
     @Test
     void takeCardsOrGold() {
         DistrictCardsPile pile = new DistrictCardsPile();
+        Display events = new Display();
         pile.initializePile();
 
-        player.takeCardsOrGold(pile, false);
+        player.takeCardsOrGold(pile, false, events);
         assertEquals(7, player.getCardsInHand().size());
         assertEquals(2, player.getGold());
+        assertEquals("Hello a pris 2 pièces d'or.\nHello a 2 pièces d'or.\n", events.getEvents());
+        events.resetDisplay();
 
-        player.takeCardsOrGold(pile, true);
+        player.takeCardsOrGold(pile, true, events);
         assertEquals(8, player.getCardsInHand().size());
         assertEquals(2, player.getGold());
+        assertTrue(events.getEvents().contains("Hello a choisi : " + player.getCardsInHand().get(7).getCardName()));
+        events.resetDisplay();
 
         player.addGold(23);
-        player.takeCardsOrGold(pile, false);
+        player.takeCardsOrGold(pile, false, events);
         assertEquals(9, player.getCardsInHand().size());
         assertEquals(25, player.getGold());
+        assertTrue(events.getEvents().contains("Hello a choisi : " + player.getCardsInHand().get(8).getCardName()));
+        events.resetDisplay();
 
     }
 
@@ -184,21 +194,21 @@ class PlayerTest {
             }
 
             @Override
-            public String play(DistrictCardsPile pile) {
-                this.chooseCharacter(new CharacterCardsList());
+            public void play(DistrictCardsPile pile, Display events) {
+                this.chooseCharacter(new CharacterCardsList(), events);
                 DistrictCard card = cardsInHand.get(0);
                 cityCards.add(cardsInHand.get(0));
                 cardsInHand.remove(0);
-                return player.getName() + " played " + card.getCardName();
+                events.displayDistrictBuilt(this, card);
             }
 
             @Override
-            public void chooseCharacter(CharacterCardsList characters) {
+            public void chooseCharacter(CharacterCardsList characters, Display events) {
                 this.character = characters.get(2);
             }
         };
-        player.play(new DistrictCardsPile());
-        player2.play(new DistrictCardsPile());
+        player.play(new DistrictCardsPile(), new Display());
+        player2.play(new DistrictCardsPile(), new Display());
 
         assertTrue(player.compareTo(player2) < 0);
         assertTrue(player2.compareTo(player) > 0);
@@ -220,21 +230,21 @@ class PlayerTest {
             }
 
             @Override
-            public String play(DistrictCardsPile pile) {
-                this.chooseCharacter(new CharacterCardsList());
+            public void play(DistrictCardsPile pile, Display events) {
+                this.chooseCharacter(new CharacterCardsList(), events);
                 DistrictCard card = cardsInHand.get(0);
                 cityCards.add(cardsInHand.get(0));
                 cardsInHand.remove(0);
-                return player.getName() + " played " + card.getCardName();
+                events.displayDistrictBuilt(this, card);
             }
 
             @Override
-            public void chooseCharacter(CharacterCardsList characters) {
+            public void chooseCharacter(CharacterCardsList characters, Display events) {
                 this.character = characters.get(2);
             }
         };
-        player.play(new DistrictCardsPile());
-        player2.play(new DistrictCardsPile());
+        player.play(new DistrictCardsPile(), new Display());
+        player2.play(new DistrictCardsPile(), new Display());
         assertEquals(player, player2);
         assertEquals(player2, player);
 
@@ -251,16 +261,16 @@ class PlayerTest {
             }
 
             @Override
-            public String play(DistrictCardsPile pile) {
-                this.chooseCharacter(new CharacterCardsList());
+            public void play(DistrictCardsPile pile, Display events) {
+                this.chooseCharacter(new CharacterCardsList(), events);
                 DistrictCard card = cardsInHand.get(0);
                 cityCards.add(cardsInHand.get(0));
                 cardsInHand.remove(0);
-                return player.getName() + " played " + card.getCardName();
+                events.displayDistrictBuilt(this, card);
             }
 
             @Override
-            public void chooseCharacter(CharacterCardsList characters) {
+            public void chooseCharacter(CharacterCardsList characters, Display events) {
                 this.character = characters.get(2);
             }
         };
