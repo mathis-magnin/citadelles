@@ -1,7 +1,9 @@
 package fr.citadels.engine;
 
-import fr.citadels.cards.DistrictCard;
-import fr.citadels.cards.DistrictCardsPile;
+import fr.citadels.cards.characters.CharacterCard;
+import fr.citadels.cards.characters.CharacterCardsList;
+import fr.citadels.cards.districts.DistrictCard;
+import fr.citadels.cards.districts.DistrictCardsPile;
 import fr.citadels.players.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +14,8 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ScoreboardTest {
+
+    CharacterCardsList characters = new CharacterCardsList();
 
     /* Initialize cards */
 
@@ -54,6 +58,7 @@ class ScoreboardTest {
     /* Initialize players */
 
     DistrictCardsPile pile = new DistrictCardsPile();
+    Display events = new Display();
 
     Player player1 = new Player("Tom", cardsPlayer1) {
         @Override
@@ -66,9 +71,12 @@ class ScoreboardTest {
             return null;
         }
         @Override
-        public String play(DistrictCardsPile pile) {
+        public void play(DistrictCardsPile pile, Display events) {
             this.cityCards.addAll(this.cardsInHand);
-            return null;
+        }
+        @Override
+        public void chooseCharacter(CharacterCardsList characters, Display events) {
+            this.character = characters.get(1);
         }
     };
 
@@ -83,9 +91,12 @@ class ScoreboardTest {
             return null;
         }
         @Override
-        public String play(DistrictCardsPile pile) {
+        public void play(DistrictCardsPile pile, Display events) {
             this.cityCards.addAll(this.cardsInHand);
-            return null;
+        }
+        @Override
+        public void chooseCharacter(CharacterCardsList characters, Display events) {
+            this.character = characters.get(2);
         }
     };
 
@@ -100,9 +111,12 @@ class ScoreboardTest {
             return null;
         }
         @Override
-        public String play(DistrictCardsPile pile) {
+        public void play(DistrictCardsPile pile, Display events) {
             this.cityCards.addAll(this.cardsInHand);
-            return null;
+        }
+        @Override
+        public void chooseCharacter(CharacterCardsList characters, Display events) {
+            this.character = characters.get(3);
         }
     };
 
@@ -117,9 +131,12 @@ class ScoreboardTest {
             return null;
         }
         @Override
-        public String play(DistrictCardsPile pile) {
+        public void play(DistrictCardsPile pile, Display events) {
             this.cityCards.addAll(this.cardsInHand);
-            return null;
+        }
+        @Override
+        public void chooseCharacter(CharacterCardsList characters, Display events) {
+            this.character = characters.get(4);
         }
     };
     Scoreboard scoreboard = new Scoreboard(new Player[]{player1, player2, player3, player4});
@@ -131,10 +148,14 @@ class ScoreboardTest {
     /* Simulate an entire game (Only for this test class, the method play has been changed) */
     @BeforeEach
     void setUp() {
-        player1.play(pile);
-        player2.play(pile);
-        player3.play(pile);
-        player4.play(pile);
+        player1.play(pile, events);
+        player1.chooseCharacter(characters, events);
+        player2.play(pile, events);
+        player2.chooseCharacter(characters, events);
+        player3.play(pile, events);
+        player3.chooseCharacter(characters, events);
+        player4.play(pile, events);
+        player4.chooseCharacter(characters, events);
     }
 
     @Test

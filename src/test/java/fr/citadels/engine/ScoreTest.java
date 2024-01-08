@@ -1,7 +1,8 @@
 package fr.citadels.engine;
 
-import fr.citadels.cards.DistrictCard;
-import fr.citadels.cards.DistrictCardsPile;
+import fr.citadels.cards.characters.CharacterCardsList;
+import fr.citadels.cards.districts.DistrictCard;
+import fr.citadels.cards.districts.DistrictCardsPile;
 import fr.citadels.players.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,10 +11,13 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ScoreTest {
 
     /* Initialize cards */
+
+    CharacterCardsList characters = new CharacterCardsList();
 
     List<DistrictCard> cardsPlayer1 = Arrays.asList(
             DistrictCardsPile.allDistrictCards[0], //cost 3
@@ -31,7 +35,7 @@ class ScoreTest {
             DistrictCardsPile.allDistrictCards[37], //cost 3
             DistrictCardsPile.allDistrictCards[40], //cost 4
             DistrictCardsPile.allDistrictCards[43], //cost 5
-            DistrictCardsPile.allDistrictCards[45], //cost 1
+            // DistrictCardsPile.allDistrictCards[45], //cost 1
             DistrictCardsPile.allDistrictCards[48]); //cost 2
 
     List<DistrictCard> cardsPlayer3 = Arrays.asList(
@@ -54,6 +58,7 @@ class ScoreTest {
     /* Initialize players */
 
     DistrictCardsPile pile = new DistrictCardsPile();
+    Display events = new Display();
 
     Player player1 = new Player("Tom", cardsPlayer1) {
         @Override
@@ -67,12 +72,19 @@ class ScoreTest {
         }
 
         @Override
-        public String play(DistrictCardsPile pile) {
+        public void play(DistrictCardsPile pile, Display events) {
             this.cityCards.addAll(this.cardsInHand);
-            return null;
         }
+
+        @Override
+        public void chooseCharacter(CharacterCardsList characters, Display events) {
+            this.character = characters.get(1);
+        }
+
+        ;
     };
     Score score1 = new Score(player1);
+
     Player player2 = new Player("Bob", cardsPlayer2) {
         @Override
         public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
@@ -85,10 +97,16 @@ class ScoreTest {
         }
 
         @Override
-        public String play(DistrictCardsPile pile) {
+        public void play(DistrictCardsPile pile, Display events) {
             this.cityCards.addAll(this.cardsInHand);
-            return null;
         }
+
+        @Override
+        public void chooseCharacter(CharacterCardsList characters, Display events) {
+            this.character = characters.get(2);
+        }
+
+        ;
     };
     Score score2 = new Score(player2);
 
@@ -106,9 +124,13 @@ class ScoreTest {
         }
 
         @Override
-        public String play(DistrictCardsPile pile) {
+        public void play(DistrictCardsPile pile, Display events) {
             this.cityCards.addAll(this.cardsInHand);
-            return null;
+        }
+
+        @Override
+        public void chooseCharacter(CharacterCardsList characters, Display events) {
+            this.character = characters.get(3);
         }
     };
 
@@ -127,19 +149,26 @@ class ScoreTest {
         }
 
         @Override
-        public String play(DistrictCardsPile pile) {
+        public void play(DistrictCardsPile pile, Display events) {
             this.cityCards.addAll(this.cardsInHand);
-            return null;
+        }
+        @Override
+        public void chooseCharacter(CharacterCardsList characters, Display events) {
+            this.character = characters.get(4);
         }
     };
     Score score4 = new Score(player4);
 
     @BeforeEach
     void setUp() {
-        player1.play(pile);
-        player2.play(pile);
-        player3.play(pile);
-        player4.play(pile);
+        player1.play(pile, events);
+        player1.chooseCharacter(characters, events);
+        player2.play(pile, events);
+        player2.chooseCharacter(characters, events);
+        player3.play(pile, events);
+        player3.chooseCharacter(characters, events);
+        player4.play(pile, events);
+        player4.chooseCharacter(characters, events);
     }
 
     @Test
@@ -165,8 +194,8 @@ class ScoreTest {
         assertEquals("Score de Tom : 0", score1.toString());
 
         Score.setFirstPlayerWithCompleteCity(player2);
-        score2.determinePoints(); // 19 + 4 = 23
-        assertEquals("Score de Bob : 23", score2.toString());
+        score2.determinePoints(); // 18
+        assertEquals("Score de Bob : 18", score2.toString());
 
         assertEquals("Score de Noa : 0", score3.toString());
 
@@ -180,18 +209,18 @@ class ScoreTest {
         Score.setFirstPlayerWithCompleteCity(player1);
 
         score1.determinePoints(); // 24 + 4 = 28
-        score2.determinePoints(); // 19 + 2 = 21
+        score2.determinePoints(); // 18
         score3.determinePoints(); // 18
         score4.determinePoints(); // 39 + 2 = 41
 
-        assertEquals(1, score1.compareTo(score2));
-        assertEquals(-1, score2.compareTo(score1));
+        assertTrue(score1.compareTo(score2) > 0);
+        assertTrue(score2.compareTo(score1) < 0);
 
-        assertEquals(-1, score2.compareTo(score4));
-        assertEquals(1, score4.compareTo(score2));
+        assertTrue(score2.compareTo(score4) < 0);
+        assertTrue(score4.compareTo(score2) > 0);
 
-        assertEquals(-1, score3.compareTo(score2));
-        assertEquals(1, score2.compareTo(score3));
+        assertTrue(score3.compareTo(score2) > 0); // comparison based on character's rank.
+        assertTrue(score2.compareTo(score3) < 0);
     }
 
 
@@ -200,12 +229,12 @@ class ScoreTest {
         Score.setFirstPlayerWithCompleteCity(player4);
 
         score1.determinePoints(); // 24 + 2 = 26
-        score2.determinePoints(); // 19 + 2 = 21
+        score2.determinePoints(); // 18
         score3.determinePoints(); // 18
         score4.determinePoints(); // 39 + 4 = 43
 
         assertEquals(26, score1.getPoints());
-        assertEquals(21, score2.getPoints());
+        assertEquals(18, score2.getPoints());
         assertEquals(18, score3.getPoints());
         assertEquals(43, score4.getPoints());
     }

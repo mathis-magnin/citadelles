@@ -1,25 +1,32 @@
 package fr.citadels.players;
 
-import fr.citadels.cards.Card;
-import fr.citadels.cards.DistrictCard;
-import fr.citadels.cards.DistrictCardsPile;
+import fr.citadels.cards.districts.DistrictCard;
+import fr.citadels.cards.districts.DistrictCardsPile;
+import fr.citadels.engine.Display;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static fr.citadels.engine.Game.BANK;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
-class BotSecondStrategyTest {
-    BotSecondStrategy player;
+class SpendthriftBotTest {
+    @Mock
+    Random random = mock(Random.class);
+    SpendthriftBot player;
+    Display events = new Display();
 
     @BeforeEach
     void setUp() {
         BANK.reset();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
-        player = new BotSecondStrategy("Hello", districts);
+        player = new SpendthriftBot("Hello", districts, random);
+        events.resetDisplay();
     }
 
     @Test
@@ -34,12 +41,12 @@ class BotSecondStrategyTest {
     }
 
     @Test
-    void getCheapestCardInHand() {
+    void getMostExpensiveCardInHand() {
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[40], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[22]));
         player.cardsInHand = districts;
-        int[] minCard = player.getCheapestCardInHand();
-        assertEquals(2, minCard[0]);
-        assertEquals(1, minCard[1]);
+        int[] minCard = player.getMostExpensiveCardInHand();
+        assertEquals(4, minCard[0]);
+        assertEquals(5, minCard[1]);
     }
 
     @Test
@@ -48,14 +55,10 @@ class BotSecondStrategyTest {
 
         DistrictCard card = player.chooseCardInHand();
         assertEquals(2, player.getCardsInHand().size());
-        assertEquals("Temple", card.getCardName());
-
-        card = player.chooseCardInHand();
-        assertEquals(1, player.getCardsInHand().size());
         assertEquals("Manoir", card.getCardName());
 
         card = player.chooseCardInHand();
-        assertEquals(1, player.getCardsInHand().size());
+        assertEquals(2, player.getCardsInHand().size());
         assertNull(card);
     }
 
@@ -65,35 +68,47 @@ class BotSecondStrategyTest {
         pile.initializePile();
         DistrictCard[] drawnCards = new DistrictCard[]{DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0]};
         DistrictCard cardToPlay = player.chooseCardAmongDrawn(pile, drawnCards);
-        assertEquals("Temple", cardToPlay.getCardName());
+        assertEquals("Manoir", cardToPlay.getCardName());
 
         drawnCards = new DistrictCard[]{DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[0]};
         cardToPlay = player.chooseCardAmongDrawn(pile, drawnCards);
-        assertEquals("Manoir", cardToPlay.getCardName());
+        assertEquals("Cathédrale", cardToPlay.getCardName());
     }
 
     @Test
     void playWithNoMoney() {
         DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
-        String turn = player.play(pile);
+        player.play(pile, events);
 
+        assertEquals(0, player.getCityCards().size());
+        assertEquals(3, player.getCardsInHand().size());
+        assertEquals(2, player.getGold());
+        assertEquals("Hello a pris 2 pièces d'or.\n" +
+                "Hello a 2 pièces d'or.\n" +
+                "Hello n'a rien construit.\n" +
+                "Hello a dans sa ville : \n", events.getEvents());
+        events.resetDisplay();
+
+        player.play(pile, events);
         assertEquals(1, player.getCityCards().size());
         assertEquals(2, player.getCardsInHand().size());
         assertEquals(1, player.getGold());
-        assertEquals("Hello a ajouté a sa ville : Temple", turn);
+        assertEquals("Hello a pris 2 pièces d'or.\n" +
+                "Hello a 4 pièces d'or.\n" +
+                "Hello a construit dans sa ville : Manoir\n" +
+                "Hello a dans sa ville : Manoir, \n", events.getEvents());
+        events.resetDisplay();
 
-        turn = player.play(pile);
-        assertEquals(2, player.getCityCards().size());
-        assertEquals(1, player.getCardsInHand().size());
-        assertEquals(0, player.getGold());
-        assertEquals("Hello a ajouté a sa ville : Manoir", turn);
-
-        turn = player.play(pile);
-        assertEquals(2, player.getCityCards().size());
+        player.play(pile, events);
+        assertEquals(1, player.getCityCards().size());
         assertEquals(2, player.getCardsInHand().size());
-        assertEquals(0, player.getGold());
-        assertEquals("Hello n'a pas construit ce tour-ci", turn);
+        assertEquals(3, player.getGold());
+        assertEquals("Hello a pris 2 pièces d'or.\n" +
+                "Hello a 3 pièces d'or.\n" +
+                "Hello n'a rien construit.\n" +
+                "Hello a dans sa ville : Manoir, \n", events.getEvents());
+        events.resetDisplay();
     }
 
     @Test
@@ -102,20 +117,22 @@ class BotSecondStrategyTest {
         pile.initializePile();
         player.addGold(25);
 
-        String turn = player.play(pile);
+        player.play(pile, events);
         assertEquals(1, player.getCityCards().size());
         assertEquals(3, player.getCardsInHand().size());
-        assertEquals(24, player.getGold());
-        assertEquals("Hello a ajouté a sa ville : Temple", turn);
+        assertEquals(20, player.getGold());
+        assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Cathédrale"));
+        events.resetDisplay();
 
-        turn = player.play(pile);
+        player.play(pile, events);
         assertEquals(2, player.getCityCards().size());
         assertEquals(3, player.getCardsInHand().size());
-        if (player.getCardsInHand().get(2).getGoldCost() < 3) {
+        if (player.getCardsInHand().get(2).getGoldCost() > 3) {
             assertEquals(24 - player.getCardsInHand().get(2).getGoldCost(), player.getGold());
         } else {
-            assertEquals(21, player.getGold());
-            assertEquals("Hello a ajouté a sa ville : Manoir", turn);
+            assertEquals(17, player.getGold());
+            assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Manoir"));
+            events.resetDisplay();
         }
     }
 

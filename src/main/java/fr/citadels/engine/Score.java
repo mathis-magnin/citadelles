@@ -1,6 +1,6 @@
 package fr.citadels.engine;
 
-import fr.citadels.cards.DistrictCard;
+import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.players.Player;
 
 public class Score implements Comparable<Score> {
@@ -59,19 +59,13 @@ public class Score implements Comparable<Score> {
      * Note : this class has a natural ordering that is inconsistent with equals.
      *
      * @param other the other score to be compared.
-     * @return 1 if this score is greater than other score.
+     * @return a positive value if this score is greater than other score.
      * 0 if there is a tie.
-     * -1 if other score is greater than this score.
+     * a negative value if other score is greater than this score.
      */
     @Override
     public int compareTo(Score other) {
-        if (this.points > other.getPoints()) {
-            return 1;
-        } else if (this.points < other.getPoints()) {
-            return -1;
-        } else {
-            return 0;   // Milestone 1 : no character. Comparison only based on the points.
-        }
+        return (this.points - other.getPoints() != 0) ? this.points - other.getPoints() : this.player.compareTo(other.getPlayer());
     }
 
 
