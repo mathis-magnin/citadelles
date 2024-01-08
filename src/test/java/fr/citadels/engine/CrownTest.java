@@ -55,14 +55,28 @@ class CrownTest {
         Player player2 = new RandomBot("player2", new ArrayList<DistrictCard>(),new Random());
         Player player3 = new RandomBot("player3", new ArrayList<DistrictCard>(),new Random());
         Player playerSpy=spy(player);
-        Player[] players = {playerSpy, player2,player3};
+        Player playerSpy2=spy(player2);
+        Player[] players = {playerSpy, playerSpy2,player3};
 
+        //set the crown to the player 3
         when(RAND.nextInt(Game.NB_PLAYERS)).thenReturn(2);
         crown.defineNextCrownedPlayer(players,RAND);
         assertEquals(2, crown.getCrownedPlayerIndex());
 
+        //set the crown to the king
         when(playerSpy.getCharacter()).thenReturn(new CharacterCard("Roi", 4));
         crown.defineNextCrownedPlayer(players,RAND);
         assertEquals(0, crown.getCrownedPlayerIndex());
+
+        //Still the same player because no king
+        when(playerSpy.getCharacter()).thenReturn(new CharacterCard("Assassin", 1));
+        crown.defineNextCrownedPlayer(players,RAND);
+        assertEquals(0, crown.getCrownedPlayerIndex());
+
+        //switch to player two because he is the king
+        when(playerSpy2.getCharacter()).thenReturn(new CharacterCard("Roi", 4));
+        crown.defineNextCrownedPlayer(players,RAND);
+        assertEquals(1, crown.getCrownedPlayerIndex());
+
     }
 }
