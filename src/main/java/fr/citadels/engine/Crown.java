@@ -69,8 +69,10 @@ public class Crown {
         int index = getKingPlayer(players);
         if (index != -1) {
             this.playerIndex = index;
-        } else
+        }
+        else if(this.playerIndex == -1) {
             initializeCrown(rand);
+        }
     }
 
 }
