@@ -23,7 +23,7 @@ class CharacterCardTest {
     @Test
     void testToString() {
         for (CharacterCard c : CharacterCardsList.allCharacterCards) {
-            assertEquals("Carte personnage " + c.getCardName(), c.toString());
+            assertEquals("Carte personnage " + c.getCardName()+ " (" + c.getCardFamily() + ")", c.toString());
         }
     }
 

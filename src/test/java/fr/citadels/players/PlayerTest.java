@@ -116,8 +116,8 @@ class PlayerTest {
     @Test
     void hasCardInHand() {
         player.play(new DistrictCardsPile(), new Display());
-        assertTrue(player.hasCardInCity(new DistrictCard("Temple", 1)));
-        assertFalse(player.hasCardInCity(new DistrictCard("Donjon", 3)));
+        assertTrue(player.hasCardInCity(DistrictCardsPile.allDistrictCards[12]));
+        assertFalse(player.hasCardInCity(DistrictCardsPile.allDistrictCards[58]));
     }
 
     @Test
