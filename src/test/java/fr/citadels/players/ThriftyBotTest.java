@@ -42,8 +42,7 @@ class ThriftyBotTest {
 
     @Test
     void getCheapestCardInHand() {
-        List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[40], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[22]));
-        player.cardsInHand = districts;
+        player.cardsInHand = new Hand(List.of(DistrictCardsPile.allDistrictCards[40], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[22]));
         int[] minCard = player.getCheapestCardInHand();
         assertEquals(2, minCard[0]);
         assertEquals(1, minCard[1]);

@@ -23,8 +23,8 @@ public enum CardFamily {
     /* Constructor */
     /* *********** */
 
-    private CardFamily(String family) {
-        this.stringForm = family;
+    private CardFamily(String stringForm) {
+        this.stringForm = stringForm;
     }
 
     /* Methods */

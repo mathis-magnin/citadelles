@@ -15,8 +15,8 @@ public abstract class Player implements Comparable<Player> {
     /* Attributes */
 
     protected final String name;
-    protected List<DistrictCard> cardsInHand;
-    protected List<DistrictCard> cityCards;
+    protected Hand cardsInHand;
+    protected City cityCards;
     protected int gold;
 
     protected CharacterCard character;
@@ -26,9 +26,8 @@ public abstract class Player implements Comparable<Player> {
 
     protected Player(String name, List<DistrictCard> cards) {
         this.name = name;
-        this.cardsInHand = new ArrayList<>();
-        this.cardsInHand.addAll(cards); /* Avoid modification from outside */
-        this.cityCards = new ArrayList<>();
+        this.cardsInHand = new Hand(cards);
+        this.cityCards = new City();
         this.character = null;
     }
 
@@ -115,7 +114,7 @@ public abstract class Player implements Comparable<Player> {
      * @return A boolean value.
      */
     public boolean hasCompleteCity() {
-        return cityCards.size() >= 7;
+        return cityCards.isComplete();
     }
 
 
@@ -137,10 +136,10 @@ public abstract class Player implements Comparable<Player> {
 
 
     /**
-     * check if the player has the card in hand
+     * check if the player has the card in his city
      *
      * @param card the card to check
-     * @return true if the player has the card in hand
+     * @return true if the player has the card in his city
      */
     public boolean hasCardInCity(DistrictCard card) {
         return cityCards.contains(card);
@@ -191,7 +190,7 @@ public abstract class Player implements Comparable<Player> {
         if (draw) {
             DistrictCard[] drawnCards = pile.draw(2);
             events.displayCardDrawn(this, drawnCards);
-            if (drawnCards.length != 0) {//if there is at least 1 card
+            if (drawnCards.length != 0) { // if there is at least 1 card
                 DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
                 cardsInHand.add(cardToPlay);
                 events.displayCardChosen(this, cardToPlay);
