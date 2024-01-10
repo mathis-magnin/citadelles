@@ -8,16 +8,23 @@ public abstract class Card {
 
     private final String cardName;
 
+    private final CardFamily cardFamily;
+
     /* Constructor */
 
-    protected Card(String cardName) {
+    protected Card(String cardName, CardFamily cardFamily) {
         this.cardName = cardName;
+        this.cardFamily = cardFamily;
     }
 
     /* Methods */
 
     public String getCardName() {
         return this.cardName;
+    }
+
+    public CardFamily getCardFamily() {
+        return this.cardFamily;
     }
 
     /**

@@ -1,11 +1,13 @@
 package fr.citadels.cards.characters;
 
+import fr.citadels.cards.CardFamily;
+
 public class AssassinCard extends CharacterCard {
 
     /* Constructor */
 
     public AssassinCard() {
-        super("Assassin", 1);
+        super("Assassin", CardFamily.NEUTRAL, 1);
     }
 
 }

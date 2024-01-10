@@ -1,5 +1,6 @@
 package fr.citadels.cards.districts;
 
+import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ class DistrictCardTest {
     @Test
     void testToString() {
         for (DistrictCard d : DistrictCardsPile.allDistrictCards) {
-            assertEquals("Carte quartier " + d.getCardName() + " (" + d.getGoldCost() + ")", d.toString());
+            assertEquals("Carte quartier " + d.getCardName() + " (" + d.getGoldCost() + " - " + d.getCardFamily() + ")", d.toString());
         }
     }
 
@@ -31,6 +32,6 @@ class DistrictCardTest {
     void testEquals() {
         assertTrue(DistrictCardsPile.allDistrictCards[0].equals(DistrictCardsPile.allDistrictCards[0]));
         assertFalse(DistrictCardsPile.allDistrictCards[0].equals(DistrictCardsPile.allDistrictCards[DistrictCardsPile.allDistrictCards.length - 1]));
-        assertTrue(DistrictCardsPile.allDistrictCards[0].equals(new DistrictCard("Manoir", 3)));
+        assertTrue(DistrictCardsPile.allDistrictCards[0].equals(new DistrictCard("Manoir", CardFamily.NOBLE, 3)));
     }
 }

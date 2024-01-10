@@ -1,6 +1,8 @@
 package fr.citadels.engine;
 
+import fr.citadels.cards.characters.AssassinCard;
 import fr.citadels.cards.characters.CharacterCard;
+import fr.citadels.cards.characters.KingCard;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.players.RandomBot;
 import fr.citadels.players.Player;
@@ -43,7 +45,7 @@ class CrownTest {
         players[1]=player2Spy;
 
 
-        when(player2Spy.getCharacter()).thenReturn(new CharacterCard("Roi", 4));
+        when(player2Spy.getCharacter()).thenReturn(new KingCard());
         assertEquals(1, crown.getKingPlayer(players));
 
     }
@@ -64,17 +66,17 @@ class CrownTest {
         assertEquals(2, crown.getCrownedPlayerIndex());
 
         //set the crown to the king
-        when(playerSpy.getCharacter()).thenReturn(new CharacterCard("Roi", 4));
+        when(playerSpy.getCharacter()).thenReturn(new KingCard());
         crown.defineNextCrownedPlayer(players,RAND);
         assertEquals(0, crown.getCrownedPlayerIndex());
 
         //Still the same player because no king
-        when(playerSpy.getCharacter()).thenReturn(new CharacterCard("Assassin", 1));
+        when(playerSpy.getCharacter()).thenReturn(new AssassinCard());
         crown.defineNextCrownedPlayer(players,RAND);
         assertEquals(0, crown.getCrownedPlayerIndex());
 
         //switch to player two because he is the king
-        when(playerSpy2.getCharacter()).thenReturn(new CharacterCard("Roi", 4));
+        when(playerSpy2.getCharacter()).thenReturn(new KingCard());
         crown.defineNextCrownedPlayer(players,RAND);
         assertEquals(1, crown.getCrownedPlayerIndex());
 

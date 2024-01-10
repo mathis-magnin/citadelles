@@ -1,5 +1,6 @@
 package fr.citadels.cards.districts;
 
+import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,15 +31,15 @@ class DistrictCardsPileTest {
 
     @org.junit.jupiter.api.Test
     void testDraw() {
-        DistrictCard[] cardsDrawn = new DistrictCard[]{new DistrictCard("Manoir", 3), new DistrictCard("Manoir", 3)};
+        DistrictCard[] cardsDrawn = new DistrictCard[]{new DistrictCard("Manoir", CardFamily.NOBLE, 3), new DistrictCard("Manoir", CardFamily.NOBLE, 3)};
         assertEquals(Arrays.asList(cardsDrawn), Arrays.asList(districtCardsPile.draw(2)));
     }
 
     @org.junit.jupiter.api.Test
     void testPlaceBelowPile() {
         districtCardsPile.shufflePile();
-        districtCardsPile.placeBelowPile(new DistrictCard("Manoir", 3));
+        districtCardsPile.placeBelowPile(new DistrictCard("Manoir", CardFamily.NOBLE, 3));
         districtCardsPile.draw(DistrictCardsPile.allDistrictCards.length);
-        assertEquals(new DistrictCard("Manoir", 3), districtCardsPile.draw(1)[0]);
+        assertEquals(new DistrictCard("Manoir", CardFamily.NOBLE, 3), districtCardsPile.draw(1)[0]);
     }
 }

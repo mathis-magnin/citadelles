@@ -1,6 +1,7 @@
 package fr.citadels.cards.characters;
 
 import fr.citadels.cards.Card;
+import fr.citadels.cards.CardFamily;
 import fr.citadels.engine.Score;
 
 public class CharacterCard extends Card implements Comparable<CharacterCard> {
@@ -11,8 +12,8 @@ public class CharacterCard extends Card implements Comparable<CharacterCard> {
 
     /* Constructor */
 
-    public CharacterCard(String cardName, int rank) {
-        super(cardName);
+    public CharacterCard(String cardName, CardFamily cardFamily, int rank) {
+        super(cardName, cardFamily);
         this.rank = rank;
     }
 
@@ -27,7 +28,7 @@ public class CharacterCard extends Card implements Comparable<CharacterCard> {
      */
     @Override
     public String toString() {
-        return "Carte personnage " + this.getCardName();
+        return "Carte personnage " + this.getCardName()+ " (" + this.getCardFamily() + ")";
     }
 
 
