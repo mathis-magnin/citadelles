@@ -51,6 +51,7 @@ public class Score implements Comparable<Score> {
         return "Score de " + this.player.getName() + " : " + this.points;
     }
 
+
     /* Method */
 
     /**

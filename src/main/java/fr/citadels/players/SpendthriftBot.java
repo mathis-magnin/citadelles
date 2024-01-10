@@ -4,6 +4,7 @@ import fr.citadels.cards.characters.CharacterCard;
 import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
+import fr.citadels.engine.Bank;
 import fr.citadels.engine.Display;
 
 import java.util.List;
@@ -75,18 +76,18 @@ public class SpendthriftBot extends Player {
         return null;
     }
 
-    public void play(DistrictCardsPile pile, Display events) {
+    public void play(DistrictCardsPile pile, Bank bank, Display events) {
 
         // Draw 2 cards or take 2 golds
         boolean draw = ((gold > 15) || (cardsInHand.isEmpty()) || ((gold > 5) && (getMostExpensiveCardInHand()[1] < 4)));
-        takeCardsOrGold(pile, draw, events);
+        takeCardsOrGold(pile, bank,draw, events);
 
         // Buy the most expensive card with a cost > 1 if possible
         if (!this.cardsInHand.isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
-                pay(cardToPlace.getGoldCost());
+                pay(cardToPlace.getGoldCost(), bank);
                 events.displayDistrictBuilt(this, cardToPlace);
             } else {
                 events.displayNoDistrictBuilt(this);

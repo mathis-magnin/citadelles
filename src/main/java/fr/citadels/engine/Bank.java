@@ -21,10 +21,7 @@ public class Bank {
         return this.gold;
     }
 
-    public void reset() {
-        //Only used for tests
-        this.gold = Bank.CAPACITY;
-    }
+
     /* Methods */
 
     /**
