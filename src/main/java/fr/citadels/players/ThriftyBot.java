@@ -87,7 +87,6 @@ public class ThriftyBot extends Player {
         // Draw if the player has less than 5 golds, if he has no cards in hand or if the cheapest card in hand costs more than 3
         // Else pick 2 golds
         boolean draw = ((gold > 5) || this.cardsInHand.isEmpty() || (getCheapestCardInHand()[1] > 3));
-
         takeCardsOrGold(pile, bank, draw, events);
 
         // Buy the cheapest card if possible
@@ -103,6 +102,7 @@ public class ThriftyBot extends Player {
         } else {
             events.displayNoDistrictBuilt(this);
         }
+        takeGoldFromCity(bank);
     }
 
 

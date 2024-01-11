@@ -80,6 +80,7 @@ public class SpendthriftBot extends Player {
 
         // Draw 2 cards or take 2 golds
         boolean draw = ((gold > 15) || (cardsInHand.isEmpty()) || ((gold > 5) && (getMostExpensiveCardInHand()[1] < 4)));
+        takeGoldFromCity(bank);
         takeCardsOrGold(pile, bank,draw, events);
 
         // Buy the most expensive card with a cost > 1 if possible
