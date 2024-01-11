@@ -27,85 +27,99 @@ public class Display {
 
     /* Methods */
 
+    private void removeLastComma() {
+        if (this.events.charAt(this.events.length() - 2) == ',') {
+            this.events.delete(this.events.length() - 2, this.events.length());
+        }
+    }
+
+
     public void addDistrictBuilt(Player player, Card card) {
-        this.events.append(player.getName()).append(" a construit dans sa ville : ").append(card.getCardName()).append("\n");
+        this.events.append("Il construit : ").append(card.getCardName()).append("\n");
         this.addCity(player);
     }
 
 
     public void addNoDistrictBuilt(Player player) {
-        this.events.append(player.getName()).append(" n'a rien construit.\n");
+        this.events.append("Il ne construit rien.\n");
         this.addCity(player);
     }
 
 
     public void addCardDrawn(Player player, Card[] cards) {
-        this.events.append(player.getName()).append(" a pioché : ");
+        this.events.append("Il pioche : ");
         for (Card card : cards) {
             this.events.append(card.getCardName()).append(", ");
         }
-        this.events.append("\n");
+        this.removeLastComma();
+        this.addBlankLine();
     }
 
 
     public void addCardChosen(Player player, Card card) {
-        this.events.append(player.getName()).append(" a choisi : ").append(card.getCardName()).append("\n");
+        this.events.append("Il choisit : ").append(card.getCardName()).append("\n");
         this.addHand(player);
     }
 
 
     public void addGoldTaken(Player player, int gold) {
-        this.events.append(player.getName()).append(" a pris ").append(gold).append(" pièces d'or.\n");
+        this.events.append("Il prend ").append(gold).append(" pièces d'or.\n");
         this.addGold(player);
     }
 
 
     public void addCrownedPlayer(Player player) {
-        this.events.append(player.getName()).append(" obtient la couronne.\n");
+        this.events.append(player.getName()).append(" est le joueur couronné.\nIl sera donc le premier à choisir son personnage.\n");
     }
 
 
     public void addCharacterChosen(Player player, CharacterCard card) {
-        this.events.append(player.getName()).append(" a choisi le personnage : ").append(card.getCardName()).append("\n");
+        this.events.append(player.getName()).append(" choisit : ").append(card.getCardName()).append("\n");
     }
 
 
     public void addCity(Player player) {
-        this.events.append(player.getName()).append(" a dans sa ville : ");
+        this.events.append("Il a dans sa ville : ");
         for (Card card : player.getCityCards()) {
             this.events.append(card.getCardName()).append(", ");
         }
-        this.events.append("\n");
+        this.removeLastComma();
+        this.addBlankLine();
     }
 
 
     public void addHand(Player player) {
-        this.events.append(player.getName()).append(" a en main : ");
+        this.events.append("Il a en main : ");
         for (Card card : player.getCardsInHand()) {
             this.events.append(card.getCardName()).append(", ");
         }
-        this.events.append("\n");
+        this.removeLastComma();
+        this.addBlankLine();
     }
 
 
     public void addGold(Player player) {
-        this.events.append(player.getName()).append(" a ").append(player.getGold()).append(" pièces d'or.\n");
+        this.events.append("Il possède ").append(player.getGold()).append(" pièces d'or.\n");
     }
 
 
     public void addScoreboard(Scoreboard scoreboard) {
-        this.events.append("\nScores : \n");
         this.events.append(scoreboard.toString());
     }
 
 
-    public void addWinner(Player player) {
-        this.events.append("\nLe gagnant est : ").append(player.getName()).append(" !\n");
+    public void addGameFinished(Player player) {
+        this.events.append(player.getName()).append(" est le premier joueur à posséder une cité complète.\nLa partie se terminera donc à la fin de ce tour.\n");
     }
 
 
-    public void addTurn(int turn) {
-        this.events.append("\n--------\nTour ").append(turn).append("\n--------\n");
+    public void addWinner(Player player) {
+        this.events.append("Le gagnant est : ").append(player.getName()).append(" !\n");
+    }
+
+
+    public void addTurnTitle(int turn) {
+        this.events.append("\n╭─────────╮\n│ Tour ").append(String.format("%2d", turn)).append(" │\n╰─────────╯\n");
     }
 
 
@@ -115,15 +129,37 @@ public class Display {
 
 
     public void addRemovedCharacter(CharacterCard[] cardsUp, CharacterCard[] cardsDown) {
-        this.events.append("les personnages retirés face visible sont : ");
+        /* Cards up */
+        if (cardsUp.length >= 2) {
+            this.events.append("Les personnages retirés en face visible sont : ");
+        }
+        else if (cardsUp.length == 1) {
+            this.events.append("Le personnage retiré en face visible est : ");
+        }
+        else {
+            this.events.append("Aucun personnage n'est retiré en face visible.");
+        }
         for (CharacterCard card : cardsUp) {
             this.events.append(card.getCardName()).append(", ");
         }
-        this.events.append("\nles personnages retirés face cachée sont : ");
+        this.removeLastComma();
+        this.addBlankLine();
+
+        /* Cards down */
+        if (cardsDown.length >= 2) {
+            this.events.append("Les personnages retirés en face cachée sont : ");
+        }
+        else if (cardsDown.length == 1) {
+            this.events.append("Le personnage retiré en face cachée est : ");
+        }
+        else {
+            this.events.append("Aucun personnage n'est retiré en face cachée.");
+        }
         for (CharacterCard card : cardsDown) {
             this.events.append(card.getCardName()).append(", ");
         }
-        this.events.append("\n");
+        this.removeLastComma();
+        this.addBlankLine();
     }
 
 
@@ -133,7 +169,7 @@ public class Display {
 
 
     private void print() {
-        System.out.println(this.events);
+        System.out.print(this.events);
     }
 
 
@@ -142,4 +178,36 @@ public class Display {
         this.reset();
     }
 
+
+    public void addSelectionPhaseTitle() {
+        this.events.append("\n\t╭────────────────────────────────────╮\n\t│ Phase de sélection des personnages │\n\t╰────────────────────────────────────╯\n\n");
+    }
+
+
+    public void addTurnPhaseTitle() {
+        this.events.append("\n\t╭──────────────╮\n\t│ Phase de jeu │\n\t╰──────────────╯\n\n");
+    }
+
+
+    public void addBlankLine() {
+        this.events.append("\n");
+    }
+
+
+    public void addScoreTitle() {
+        this.events.append("\n╭────────╮\n│ Scores │\n╰────────╯\n\n");
+    }
+
+    public void addGameTitle() {
+        this.events.append("\n╭────────────╮\n│ Citadelles │\n╰────────────╯\n\n");
+    }
+
+    public void addPlayers(Player[] players) {
+        this.events.append("Les joueurs présents dans cette partie sont : ");
+        for (Player player : players) {
+            this.events.append(player.getName()).append(", ");
+        }
+        this.removeLastComma();
+        this.addBlankLine();
+    }
 }
