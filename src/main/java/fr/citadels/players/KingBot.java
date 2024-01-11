@@ -65,7 +65,7 @@ public class KingBot extends Player {
      * @return the actions of the player
      */
     @Override
-    public void play(DistrictCardsPile pile, Display events) {
+    public void play(DistrictCardsPile pile, Display display) {
         boolean draw;
         try {
             draw = !RAND.nextBoolean();
@@ -73,7 +73,7 @@ public class KingBot extends Player {
             draw = false; //take money (if possible) when exception raised
         }
 
-        takeCardsOrGold(pile, draw, events);
+        takeCardsOrGold(pile, draw, display);
 
         boolean play;
         try {
@@ -87,11 +87,11 @@ public class KingBot extends Player {
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
                 pay(cardToPlace.getGoldCost());
-                events.displayDistrictBuilt(this, cardToPlace);
+                display.addDistrictBuilt(this, cardToPlace);
             } else {
-                events.displayNoDistrictBuilt(this);
+                display.addNoDistrictBuilt(this);
             }
-        } else events.displayNoDistrictBuilt(this);
+        } else display.addNoDistrictBuilt(this);
     }
 
 
@@ -100,11 +100,11 @@ public class KingBot extends Player {
      *
      * @param characters the list of characterCard.
      */
-    public void chooseCharacter(CharacterCardsList characters, Display events) {
+    public void chooseCharacter(CharacterCardsList characters, Display display) {
         for (int i = 0; i < characters.size(); i++) {
             if (characters.get(i).getCardName().equals("Roi")) {
                 this.character = characters.remove(i);
-                events.displayCharacterChosen(this, this.character);
+                display.addCharacterChosen(this, this.character);
                 return;
             }
         }
@@ -113,7 +113,7 @@ public class KingBot extends Player {
          * Could happen if a player already took it
          */
         this.character = characters.remove(0);
-        events.displayCharacterChosen(this, this.character);
+        display.addCharacterChosen(this, this.character);
     }
 
 }

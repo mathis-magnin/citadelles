@@ -178,22 +178,22 @@ public abstract class Player implements Comparable<Player> {
      * @param pile pile of cards
      * @param draw true if the player has to draw cards
      */
-    public void takeCardsOrGold(DistrictCardsPile pile, boolean draw, Display events) {
+    public void takeCardsOrGold(DistrictCardsPile pile, boolean draw, Display display) {
         if (!draw) {
             try {
                 addGold(2);
-                events.displayGoldTaken(this, 2);
+                display.addGoldTaken(this, 2);
             } catch (IllegalArgumentException e) {
                 draw = true;
             }
         }
         if (draw) {
             DistrictCard[] drawnCards = pile.draw(2);
-            events.displayCardDrawn(this, drawnCards);
+            display.addCardDrawn(this, drawnCards);
             if (drawnCards.length != 0) { // if there is at least 1 card
                 DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
                 cardsInHand.add(cardToPlay);
-                events.displayCardChosen(this, cardToPlay);
+                display.addCardChosen(this, cardToPlay);
             }
         }
     }
@@ -222,7 +222,7 @@ public abstract class Player implements Comparable<Player> {
      * @param pile of cards
      * @return the actions of the player
      */
-    public abstract void play(DistrictCardsPile pile, Display events);
+    public abstract void play(DistrictCardsPile pile, Display display);
 
 
     /**
@@ -230,6 +230,6 @@ public abstract class Player implements Comparable<Player> {
      *
      * @param characters the list of characterCard.
      */
-    public abstract void chooseCharacter(CharacterCardsList characters, Display events);
+    public abstract void chooseCharacter(CharacterCardsList characters, Display display);
 
 }

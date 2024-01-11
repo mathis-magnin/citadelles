@@ -75,11 +75,11 @@ public class SpendthriftBot extends Player {
         return null;
     }
 
-    public void play(DistrictCardsPile pile, Display events) {
+    public void play(DistrictCardsPile pile, Display display) {
 
         // Draw 2 cards or take 2 golds
         boolean draw = ((gold > 15) || (cardsInHand.isEmpty()) || ((gold > 5) && (getMostExpensiveCardInHand()[1] < 4)));
-        takeCardsOrGold(pile, draw, events);
+        takeCardsOrGold(pile, draw, display);
 
         // Buy the most expensive card with a cost > 1 if possible
         if (!this.cardsInHand.isEmpty()) {
@@ -87,12 +87,12 @@ public class SpendthriftBot extends Player {
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
                 pay(cardToPlace.getGoldCost());
-                events.displayDistrictBuilt(this, cardToPlace);
+                display.addDistrictBuilt(this, cardToPlace);
             } else {
-                events.displayNoDistrictBuilt(this);
+                display.addNoDistrictBuilt(this);
             }
         } else {
-            events.displayNoDistrictBuilt(this);
+            display.addNoDistrictBuilt(this);
         }
     }
 
@@ -102,7 +102,7 @@ public class SpendthriftBot extends Player {
      *
      * @param characters the list of characterCard.
      */
-    public void chooseCharacter(CharacterCardsList characters, Display events) {
+    public void chooseCharacter(CharacterCardsList characters, Display display) {
 
         int randomIndex = -1;
 
@@ -114,7 +114,7 @@ public class SpendthriftBot extends Player {
             }
         }
         this.character = characters.remove(randomIndex);
-        events.displayCharacterChosen(this, this.character);
+        display.addCharacterChosen(this, this.character);
     }
 
 }

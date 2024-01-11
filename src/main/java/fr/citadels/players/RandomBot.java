@@ -62,7 +62,7 @@ public class RandomBot extends Player {
      * @return the actions of the player
      */
     @Override
-    public void play(DistrictCardsPile pile, Display events) {
+    public void play(DistrictCardsPile pile, Display display) {
         boolean draw;
         try {
             draw = !RAND.nextBoolean();
@@ -70,7 +70,7 @@ public class RandomBot extends Player {
             draw = false; //take money (if possible) when exception raised
         }
 
-        takeCardsOrGold(pile, draw, events);
+        takeCardsOrGold(pile, draw, display);
 
         boolean play;
         try {
@@ -84,11 +84,11 @@ public class RandomBot extends Player {
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
                 pay(cardToPlace.getGoldCost());
-                events.displayDistrictBuilt(this, cardToPlace);
+                display.addDistrictBuilt(this, cardToPlace);
             } else {
-                events.displayNoDistrictBuilt(this);
+                display.addNoDistrictBuilt(this);
             }
-        } else events.displayNoDistrictBuilt(this);
+        } else display.addNoDistrictBuilt(this);
     }
 
 
@@ -97,7 +97,7 @@ public class RandomBot extends Player {
      *
      * @param characters the list of characterCard.
      */
-    public void chooseCharacter(CharacterCardsList characters, Display events) {
+    public void chooseCharacter(CharacterCardsList characters, Display display) {
 
         int randomIndex = -1;
 
@@ -109,7 +109,7 @@ public class RandomBot extends Player {
             }
         }
         this.character = characters.remove(randomIndex);
-        events.displayCharacterChosen(this, this.character);
+        display.addCharacterChosen(this, this.character);
     }
 
 }

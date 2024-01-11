@@ -8,119 +8,138 @@ public class Display {
 
     /* Attributes */
 
-    private String events;
+    private final StringBuilder events;
+
 
     /* Constructor */
 
     public Display() {
-        this.events = "";
+        this.events = new StringBuilder();
     }
+
 
     /* Getters */
 
     public String getEvents() {
-        return this.events;
+        return this.toString();
     }
+
 
     /* Methods */
-    public void displayDistrictBuilt(Player player, Card card) {
-        this.events += player.getName() + " a construit dans sa ville : " + card.getCardName() + "\n";
-        this.displayCity(player);
+
+    public void addDistrictBuilt(Player player, Card card) {
+        this.events.append(player.getName()).append(" a construit dans sa ville : ").append(card.getCardName()).append("\n");
+        this.addCity(player);
     }
 
-    public void displayNoDistrictBuilt(Player player) {
-        this.events += player.getName() + " n'a rien construit.\n";
-        this.displayCity(player);
+
+    public void addNoDistrictBuilt(Player player) {
+        this.events.append(player.getName()).append(" n'a rien construit.\n");
+        this.addCity(player);
     }
 
-    public void displayCardDrawn(Player player, Card[] cards) {
-        this.events += player.getName() + " a pioché : ";
+
+    public void addCardDrawn(Player player, Card[] cards) {
+        this.events.append(player.getName()).append(" a pioché : ");
         for (Card card : cards) {
-            this.events += card.getCardName() + ", ";
+            this.events.append(card.getCardName()).append(", ");
         }
-        this.events += "\n";
+        this.events.append("\n");
     }
 
-    public void displayCardChosen(Player player, Card card) {
-        this.events += player.getName() + " a choisi : " + card.getCardName() + "\n";
-        this.displayHand(player);
+
+    public void addCardChosen(Player player, Card card) {
+        this.events.append(player.getName()).append(" a choisi : ").append(card.getCardName()).append("\n");
+        this.addHand(player);
     }
 
-    public void displayGoldTaken(Player player, int gold) {
-        this.events += player.getName() + " a pris " + gold + " pièces d'or.\n";
-        this.displayGold(player);
+
+    public void addGoldTaken(Player player, int gold) {
+        this.events.append(player.getName()).append(" a pris ").append(gold).append(" pièces d'or.\n");
+        this.addGold(player);
     }
 
-    public void displayCrownedPlayer(Player player) {
-        this.events += player.getName() + " obtient la couronne.\n";
+
+    public void addCrownedPlayer(Player player) {
+        this.events.append(player.getName()).append(" obtient la couronne.\n");
     }
 
-    public void displayCharacterChosen(Player player, CharacterCard card) {
-        this.events += player.getName() + " a choisi le personnage : " + card.getCardName() + "\n";
+
+    public void addCharacterChosen(Player player, CharacterCard card) {
+        this.events.append(player.getName()).append(" a choisi le personnage : ").append(card.getCardName()).append("\n");
     }
 
-    public void displayCity(Player player) {
-        this.events += player.getName() + " a dans sa ville : ";
+
+    public void addCity(Player player) {
+        this.events.append(player.getName()).append(" a dans sa ville : ");
         for (Card card : player.getCityCards()) {
-            this.events += card.getCardName() + ", ";
+            this.events.append(card.getCardName()).append(", ");
         }
-        this.events += "\n";
+        this.events.append("\n");
     }
 
-    public void displayHand(Player player) {
-        this.events += player.getName() + " a en main : ";
+
+    public void addHand(Player player) {
+        this.events.append(player.getName()).append(" a en main : ");
         for (Card card : player.getCardsInHand()) {
-            this.events += card.getCardName() + ", ";
+            this.events.append(card.getCardName()).append(", ");
         }
-        this.events += "\n";
+        this.events.append("\n");
     }
 
-    public void displayGold(Player player) {
-        this.events += player.getName() + " a " + player.getGold() + " pièces d'or.\n";
+
+    public void addGold(Player player) {
+        this.events.append(player.getName()).append(" a ").append(player.getGold()).append(" pièces d'or.\n");
     }
 
-    public void displayScoreboard(Scoreboard scoreboard) {
-        this.events += "\nScores : \n";
-        this.events += scoreboard.toString();
+
+    public void addScoreboard(Scoreboard scoreboard) {
+        this.events.append("\nScores : \n");
+        this.events.append(scoreboard.toString());
     }
 
-    public void displayWinner(Player player) {
-        this.events += "\nLe gagnant est : " + player.getName() + " !\n";
+
+    public void addWinner(Player player) {
+        this.events.append("\nLe gagnant est : ").append(player.getName()).append(" !\n");
     }
 
-    public void displayTurn(int turn) {
-        this.events += "\n--------\n";
-        this.events += "Tour " + turn + "\n";
-        this.events += "--------\n";
+
+    public void addTurn(int turn) {
+        this.events.append("\n--------\nTour ").append(turn).append("\n--------\n");
     }
 
-    public void displayPlayerTurn(Player player) {
-        this.events += "C'est au tour de " + player.getName() + "\n";
+
+    public void addPlayerTurn(Player player) {
+        this.events.append("C'est au tour de ").append(player.getName()).append("\n");
     }
 
-    public void displayRemovedCharacter(CharacterCard[] cardsUp, CharacterCard[] cardsDown) {
-        this.events += "les personnages retirés face visible sont : ";
+
+    public void addRemovedCharacter(CharacterCard[] cardsUp, CharacterCard[] cardsDown) {
+        this.events.append("les personnages retirés face visible sont : ");
         for (CharacterCard card : cardsUp) {
-            this.events += card.getCardName() + ", ";
+            this.events.append(card.getCardName()).append(", ");
         }
-        this.events += "\n";
-        this.events += "les personnages retirés face cachée sont : ";
+        this.events.append("\nles personnages retirés face cachée sont : ");
         for (CharacterCard card : cardsDown) {
-            this.events += card.getCardName() + ", ";
+            this.events.append(card.getCardName()).append(", ");
         }
-        this.events += "\n";
+        this.events.append("\n");
     }
 
-    public void resetDisplay() {
-        this.events = "";
+
+    private void reset() {
+        this.events.delete(0, this.events.length());
     }
 
-    public void printDisplay() {
+
+    private void print() {
         System.out.println(this.events);
     }
 
+
     public void printAndReset() {
-        this.printDisplay();
-        this.resetDisplay();
+        this.print();
+        this.reset();
     }
+
 }

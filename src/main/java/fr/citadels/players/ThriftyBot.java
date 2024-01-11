@@ -80,14 +80,14 @@ public class ThriftyBot extends Player {
      * @param pile of cards
      * @return the actions of the player
      */
-    public void play(DistrictCardsPile pile, Display events) {
+    public void play(DistrictCardsPile pile, Display display) {
 
         // Draw 2 cards or pick 2 golds
         // Draw if the player has less than 5 golds, if he has no cards in hand or if the cheapest card in hand costs more than 3
         // Else pick 2 golds
         boolean draw = ((gold > 5) || this.cardsInHand.isEmpty() || (getCheapestCardInHand()[1] > 3));
 
-        takeCardsOrGold(pile, draw, events);
+        takeCardsOrGold(pile, draw, display);
 
         // Buy the cheapest card if possible
         if (!this.cardsInHand.isEmpty()) {
@@ -95,12 +95,12 @@ public class ThriftyBot extends Player {
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
                 pay(cardToPlace.getGoldCost());
-                events.displayDistrictBuilt(this, cardToPlace);
+                display.addDistrictBuilt(this, cardToPlace);
             } else {
-                events.displayNoDistrictBuilt(this);
+                display.addNoDistrictBuilt(this);
             }
         } else {
-            events.displayNoDistrictBuilt(this);
+            display.addNoDistrictBuilt(this);
         }
     }
 
@@ -110,7 +110,7 @@ public class ThriftyBot extends Player {
      *
      * @param characters the list of characterCard.
      */
-    public void chooseCharacter(CharacterCardsList characters, Display events) {
+    public void chooseCharacter(CharacterCardsList characters, Display display) {
 
         int randomIndex = -1;
 
@@ -122,7 +122,7 @@ public class ThriftyBot extends Player {
             }
         }
         this.character = characters.remove(randomIndex);
-        events.displayCharacterChosen(this, this.character);
+        display.addCharacterChosen(this, this.character);
     }
 
 }
