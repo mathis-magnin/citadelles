@@ -58,6 +58,7 @@ class ScoreboardTest {
     /* Initialize players */
 
     DistrictCardsPile pile = new DistrictCardsPile();
+    Bank bank;
     Display events = new Display();
 
     Player player1 = new Player("Tom", cardsPlayer1) {
@@ -71,7 +72,7 @@ class ScoreboardTest {
             return null;
         }
         @Override
-        public void play(DistrictCardsPile pile, Display events) {
+        public void play(DistrictCardsPile pile, Bank bank, Display events) {
             this.cityCards.addAll(this.cardsInHand);
         }
         @Override
@@ -91,7 +92,7 @@ class ScoreboardTest {
             return null;
         }
         @Override
-        public void play(DistrictCardsPile pile, Display events) {
+        public void play(DistrictCardsPile pile, Bank bank, Display events) {
             this.cityCards.addAll(this.cardsInHand);
         }
         @Override
@@ -111,7 +112,7 @@ class ScoreboardTest {
             return null;
         }
         @Override
-        public void play(DistrictCardsPile pile, Display events) {
+        public void play(DistrictCardsPile pile, Bank bank, Display events) {
             this.cityCards.addAll(this.cardsInHand);
         }
         @Override
@@ -131,7 +132,7 @@ class ScoreboardTest {
             return null;
         }
         @Override
-        public void play(DistrictCardsPile pile, Display events) {
+        public void play(DistrictCardsPile pile, Bank bank, Display events) {
             this.cityCards.addAll(this.cardsInHand);
         }
         @Override
@@ -148,13 +149,13 @@ class ScoreboardTest {
     /* Simulate an entire game (Only for this test class, the method play has been changed) */
     @BeforeEach
     void setUp() {
-        player1.play(pile, events);
+        player1.play(pile, bank, events);
         player1.chooseCharacter(characters, events);
-        player2.play(pile, events);
+        player2.play(pile, bank, events);
         player2.chooseCharacter(characters, events);
-        player3.play(pile, events);
+        player3.play(pile, bank, events);
         player3.chooseCharacter(characters, events);
-        player4.play(pile, events);
+        player4.play(pile, bank, events);
         player4.chooseCharacter(characters, events);
     }
 

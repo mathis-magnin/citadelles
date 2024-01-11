@@ -3,6 +3,7 @@ package fr.citadels.players;
 import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
+import fr.citadels.engine.Bank;
 import fr.citadels.engine.Display;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static fr.citadels.engine.Game.BANK;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
@@ -24,10 +24,11 @@ class KingBotTest {
     Player player1;
     Player player2;
     Display events = new Display();
+    Bank bank;
 
     @BeforeEach
     void setUp() {
-        BANK.reset();
+        bank = new Bank();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
         player1 = new KingBot("Hello1", districts, random);
         events.resetDisplay();

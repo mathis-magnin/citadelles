@@ -10,23 +10,21 @@ import java.util.*;
 
 public class Game {
 
-    /*
-    const nbDistrict to win
-     */
+    /* Static constant */
+    public static final int NB_PLAYERS = 4;
 
     private static final Random RAND = new Random();
 
     /* Attributes */
 
     private final Player[] playerList;
-
     private final DistrictCardsPile districtCardsPile;
     private final Crown crown;
-    private boolean isFinished;
+    private final Bank bank;
     private Scoreboard scoreboard;
+    private boolean isFinished;
 
-    public static final int NB_PLAYERS = 4;
-    public static final Bank BANK = new Bank();
+
 
     /* Constructor */
 
@@ -34,6 +32,7 @@ public class Game {
         this.playerList = new Player[NB_PLAYERS];
         this.districtCardsPile = new DistrictCardsPile();
         this.crown = new Crown();
+        this.bank = new Bank();
         this.isFinished = false;
     }
 
@@ -53,6 +52,12 @@ public class Game {
     public Crown getCrown() {
         return crown;
     }
+
+
+    public Bank getBank() {
+        return this.bank;
+    }
+
 
     public boolean isFinished() {
         return this.isFinished;
@@ -132,7 +137,7 @@ public class Game {
 
         for (Player player : orderedPlayers) {
             events.displayPlayerTurn(player);
-            player.play(this.districtCardsPile, events);
+            player.play(this.districtCardsPile, this.bank, events);
             if (player.hasCompleteCity()) {
                 if (!this.isFinished) {
                     Score.setFirstPlayerWithCompleteCity(player);
