@@ -4,8 +4,8 @@ import fr.citadels.cards.characters.CharacterCard;
 import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
+import fr.citadels.engine.Bank;
 import fr.citadels.engine.Display;
-import fr.citadels.engine.Game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,9 +151,9 @@ public abstract class Player implements Comparable<Player> {
      *
      * @param amount that represents the amount to add
      */
-    public void addGold(int amount) {
-        if (Game.BANK.getGold() >= amount)
-            gold += Game.BANK.take(amount);
+    public void addGold(int amount, Bank bank) {
+        if (bank.getGold() >= amount)
+            gold += bank.take(amount);
         else throw new IllegalArgumentException("Not enough money in bank");
     }
 
@@ -165,11 +165,11 @@ public abstract class Player implements Comparable<Player> {
      * @throws IllegalArgumentException if the amount exceeds the money owned
      * @precondition amount must be less or equal to the gold amount of the player
      */
-    public void pay(int amount) throws IllegalArgumentException {
+    public void pay(int amount, Bank bank) throws IllegalArgumentException {
         if (amount > gold || amount < 0)
             throw new IllegalArgumentException("Not enough money\n" + "expected : " + amount + "\nactual : " + gold);
         gold -= amount;
-        Game.BANK.give(amount);
+        bank.give(amount);
     }
 
     /**
@@ -178,10 +178,10 @@ public abstract class Player implements Comparable<Player> {
      * @param pile pile of cards
      * @param draw true if the player has to draw cards
      */
-    public void takeCardsOrGold(DistrictCardsPile pile, boolean draw, Display display) {
+    public void takeCardsOrGold(DistrictCardsPile pile, Bank bank, boolean draw, Display display) {
         if (!draw) {
             try {
-                addGold(2);
+                addGold(2, bank);
                 display.addGoldTaken(this, 2);
             } catch (IllegalArgumentException e) {
                 draw = true;
@@ -222,7 +222,7 @@ public abstract class Player implements Comparable<Player> {
      * @param pile of cards
      * @return the actions of the player
      */
-    public abstract void play(DistrictCardsPile pile, Display display);
+    public abstract void play(DistrictCardsPile pile, Bank bank, Display display);
 
 
     /**

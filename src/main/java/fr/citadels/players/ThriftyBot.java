@@ -4,6 +4,7 @@ import fr.citadels.cards.characters.CharacterCard;
 import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
+import fr.citadels.engine.Bank;
 import fr.citadels.engine.Display;
 
 import java.util.List;
@@ -80,21 +81,21 @@ public class ThriftyBot extends Player {
      * @param pile of cards
      * @return the actions of the player
      */
-    public void play(DistrictCardsPile pile, Display display) {
+    public void play(DistrictCardsPile pile, Bank bank, Display display) {
 
         // Draw 2 cards or pick 2 golds
         // Draw if the player has less than 5 golds, if he has no cards in hand or if the cheapest card in hand costs more than 3
         // Else pick 2 golds
         boolean draw = ((gold > 5) || this.cardsInHand.isEmpty() || (getCheapestCardInHand()[1] > 3));
 
-        takeCardsOrGold(pile, draw, display);
+        takeCardsOrGold(pile, bank, draw, display);
 
         // Buy the cheapest card if possible
         if (!this.cardsInHand.isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
-                pay(cardToPlace.getGoldCost());
+                pay(cardToPlace.getGoldCost(), bank);
                 display.addDistrictBuilt(this, cardToPlace);
             } else {
                 display.addNoDistrictBuilt(this);

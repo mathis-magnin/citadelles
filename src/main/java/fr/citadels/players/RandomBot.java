@@ -4,6 +4,7 @@ import fr.citadels.cards.characters.CharacterCard;
 import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
+import fr.citadels.engine.Bank;
 import fr.citadels.engine.Display;
 
 import java.util.List;
@@ -62,15 +63,14 @@ public class RandomBot extends Player {
      * @return the actions of the player
      */
     @Override
-    public void play(DistrictCardsPile pile, Display display) {
+    public void play(DistrictCardsPile pile, Bank bank, Display display) {
         boolean draw;
         try {
             draw = !RAND.nextBoolean();
         } catch (Exception e) {
             draw = false; //take money (if possible) when exception raised
         }
-
-        takeCardsOrGold(pile, draw, display);
+        takeCardsOrGold(pile, bank, draw, display);
 
         boolean play;
         try {
@@ -83,7 +83,7 @@ public class RandomBot extends Player {
             DistrictCard cardToPlace = chooseCardInHand();
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
-                pay(cardToPlace.getGoldCost());
+                pay(cardToPlace.getGoldCost(), bank);
                 display.addDistrictBuilt(this, cardToPlace);
             } else {
                 display.addNoDistrictBuilt(this);
