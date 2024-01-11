@@ -199,6 +199,19 @@ public abstract class Player implements Comparable<Player> {
     }
 
     /**
+     * take gold from the city if the family of the card is the same as the family of the character
+     */
+    public void takeGoldFromCity(Bank bank){
+        if(character!=null){
+            for(DistrictCard card : getCityCards()){
+                if(card.getCardFamily().equals(character.getCardFamily())){
+                    addGold(1,bank);
+                }
+            }
+        }
+    }
+
+    /**
      * choose a card to play among the cards drawn
      *
      * @param pile       pile of cards

@@ -1,5 +1,6 @@
 package fr.citadels.players;
 
+import fr.citadels.cards.characters.CharacterCard;
 import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 class PlayerTest {
 
@@ -278,6 +281,52 @@ class PlayerTest {
         };
         assertNotEquals(player, player2);
         assertNotEquals(player2, player);
+
+    }
+
+    @Test
+    void takeGoldFromCity(){
+        Player playerSpy=spy(player);
+        //NOBLE card
+        when(playerSpy.getCityCards()).thenReturn(new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[0],DistrictCardsPile.allDistrictCards[5],DistrictCardsPile.allDistrictCards[12],DistrictCardsPile.allDistrictCards[25],DistrictCardsPile.allDistrictCards[30],DistrictCardsPile.allDistrictCards[45],DistrictCardsPile.allDistrictCards[60])));
+
+        CharacterCardsList characters = new CharacterCardsList();
+        playerSpy.takeGoldFromCity(bank);
+
+        //no character
+        assertEquals(0, playerSpy.getGold());
+
+        //choose NOBLE
+        playerSpy.character= characters.get(3);
+
+        playerSpy.takeGoldFromCity(bank);
+        assertEquals(2, playerSpy.getGold());
+
+
+        //choose RELIGIOUS
+        playerSpy.character= characters.get(4);
+        playerSpy.takeGoldFromCity(bank);
+        //+1
+        assertEquals(3, playerSpy.getGold());
+
+
+        //choose TRADE
+        playerSpy.character= characters.get(5);
+        playerSpy.takeGoldFromCity(bank);
+        //+2
+        assertEquals(5, playerSpy.getGold());
+
+        //choose MILITARY
+        playerSpy.character= characters.get(7);
+        playerSpy.takeGoldFromCity(bank);
+        //+1
+        assertEquals(6, playerSpy.getGold());
+
+        //choose NEUTRAL
+        playerSpy.character= characters.get(1);
+        playerSpy.takeGoldFromCity(bank);
+        //+0
+        assertEquals(6, playerSpy.getGold());
 
     }
 
