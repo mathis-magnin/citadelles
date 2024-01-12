@@ -7,9 +7,9 @@ public enum CardFamily {
     /* ***** */
 
     NEUTRAL("Neutre"),
-    NOBLE("Royal"),
+    NOBLE("Noble"),
     RELIGIOUS("Religieux"),
-    TRADE("Marchand"),
+    TRADE("Commerçant"),
     MILITARY("Militaire"),
     UNIQUE("Merveille");
 

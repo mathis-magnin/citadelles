@@ -49,8 +49,8 @@ public abstract class Player implements Comparable<Player> {
      *
      * @return the cards in hand
      */
-    public List<DistrictCard> getCardsInHand() {
-        return new ArrayList<>(this.cardsInHand);
+    public Hand getCardsInHand() {
+        return new Hand(this.cardsInHand);
     }
 
 
@@ -103,6 +103,12 @@ public abstract class Player implements Comparable<Player> {
     @Override
     public int hashCode() {
         return this.name.hashCode();
+    }
+
+
+    @Override
+    public String toString() {
+        return this.name + "\n\tPersonnage : " +  this.character + "\n\tFortune : " + this.gold + "\n\tMain : " + this.cardsInHand + "\n\tCité : " + this.cityCards;
     }
 
 
@@ -182,18 +188,22 @@ public abstract class Player implements Comparable<Player> {
         if (!draw) {
             try {
                 addGold(2, bank);
-                display.addGoldTaken(this, 2);
+
+                display.addGoldTaken(2);
+                display.addGold(this.gold);
             } catch (IllegalArgumentException e) {
                 draw = true;
             }
         }
         if (draw) {
             DistrictCard[] drawnCards = pile.draw(2);
-            display.addCardDrawn(this, drawnCards);
+            display.addDistrictDrawn(drawnCards);
             if (drawnCards.length != 0) { // if there is at least 1 card
                 DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
                 cardsInHand.add(cardToPlay);
-                display.addCardChosen(this, cardToPlay);
+
+                display.addDistrictChosen(cardToPlay);
+                display.addHand(this.cardsInHand);
             }
         }
     }

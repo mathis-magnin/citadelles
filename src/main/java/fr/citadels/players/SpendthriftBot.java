@@ -89,12 +89,13 @@ public class SpendthriftBot extends Player {
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
                 pay(cardToPlace.getGoldCost(), bank);
-                display.addDistrictBuilt(this, cardToPlace);
+                display.addDistrictBuilt(cardToPlace);
+                display.addCity(this.cityCards);
             } else {
-                display.addNoDistrictBuilt(this);
+                display.addNoDistrictBuilt();
             }
         } else {
-            display.addNoDistrictBuilt(this);
+            display.addNoDistrictBuilt();
         }
     }
 
