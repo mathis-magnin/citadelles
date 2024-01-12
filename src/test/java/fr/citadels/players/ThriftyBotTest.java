@@ -16,11 +16,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 
 class ThriftyBotTest {
-
-    ThriftyBot player;
-    Bank bank;
     @Mock
     Random random = mock(Random.class);
+    ThriftyBot player;
+    Bank bank;
     Display events = new Display();
 
     @BeforeEach
@@ -43,11 +42,11 @@ class ThriftyBotTest {
     }
 
     @Test
-    void getCheapestCardInHand() {
+    void getMostExpensiveCardInHand() {
         player.cardsInHand = new Hand(List.of(DistrictCardsPile.allDistrictCards[40], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[22]));
-        int[] minCard = player.getCheapestCardInHand();
-        assertEquals(2, minCard[0]);
-        assertEquals(1, minCard[1]);
+        int[] minCard = player.getMostExpensiveCardInHand();
+        assertEquals(4, minCard[0]);
+        assertEquals(5, minCard[1]);
     }
 
     @Test
@@ -56,14 +55,10 @@ class ThriftyBotTest {
 
         DistrictCard card = player.chooseCardInHand();
         assertEquals(2, player.getCardsInHand().size());
-        assertEquals("Temple", card.getCardName());
-
-        card = player.chooseCardInHand();
-        assertEquals(1, player.getCardsInHand().size());
         assertEquals("Manoir", card.getCardName());
 
         card = player.chooseCardInHand();
-        assertEquals(1, player.getCardsInHand().size());
+        assertEquals(2, player.getCardsInHand().size());
         assertNull(card);
     }
 
@@ -73,11 +68,11 @@ class ThriftyBotTest {
         pile.initializePile();
         DistrictCard[] drawnCards = new DistrictCard[]{DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0]};
         DistrictCard cardToPlay = player.chooseCardAmongDrawn(pile, drawnCards);
-        assertEquals("Temple", cardToPlay.getCardName());
+        assertEquals("Manoir", cardToPlay.getCardName());
 
         drawnCards = new DistrictCard[]{DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[0]};
         cardToPlay = player.chooseCardAmongDrawn(pile, drawnCards);
-        assertEquals("Manoir", cardToPlay.getCardName());
+        assertEquals("Cathédrale", cardToPlay.getCardName());
     }
 
     @Test
@@ -86,30 +81,33 @@ class ThriftyBotTest {
         pile.initializePile();
         player.play(pile, bank, events);
 
+        assertEquals(0, player.getCityCards().size());
+        assertEquals(3, player.getCardsInHand().size());
+        assertEquals(2, player.getGold());
+        assertEquals("Hello a pris 2 pièces d'or.\n" +
+                "Hello a 2 pièces d'or.\n" +
+                "Hello n'a rien construit.\n" +
+                "Hello a dans sa ville : \n", events.getEvents());
+        events.resetDisplay();
+
+        player.play(pile, bank, events);
         assertEquals(1, player.getCityCards().size());
         assertEquals(2, player.getCardsInHand().size());
         assertEquals(1, player.getGold());
         assertEquals("Hello a pris 2 pièces d'or.\n" +
-                "Hello a 2 pièces d'or.\n" +
-                "Hello a construit dans sa ville : Temple\n" +
-                "Hello a dans sa ville : Temple, \n", events.getEvents());
+                "Hello a 4 pièces d'or.\n" +
+                "Hello a construit dans sa ville : Manoir\n" +
+                "Hello a dans sa ville : Manoir, \n", events.getEvents());
         events.resetDisplay();
 
         player.play(pile, bank, events);
-        assertEquals(2, player.getCityCards().size());
-        assertEquals(1, player.getCardsInHand().size());
-        assertEquals(0, player.getGold());
+        assertEquals(1, player.getCityCards().size());
+        assertEquals(2, player.getCardsInHand().size());
+        assertEquals(3, player.getGold());
         assertEquals("Hello a pris 2 pièces d'or.\n" +
                 "Hello a 3 pièces d'or.\n" +
-                "Hello a construit dans sa ville : Manoir\n" +
-                "Hello a dans sa ville : Temple, Manoir, \n", events.getEvents());
-        events.resetDisplay();
-
-        player.play(pile, bank, events);
-        assertEquals(2, player.getCityCards().size());
-        assertEquals(2, player.getCardsInHand().size());
-        assertEquals(0, player.getGold());
-        assertTrue(events.getEvents().contains("Hello n'a rien construit"));
+                "Hello n'a rien construit.\n" +
+                "Hello a dans sa ville : Manoir, \n", events.getEvents());
         events.resetDisplay();
     }
 
@@ -122,17 +120,17 @@ class ThriftyBotTest {
         player.play(pile, bank, events);
         assertEquals(1, player.getCityCards().size());
         assertEquals(3, player.getCardsInHand().size());
-        assertEquals(24, player.getGold());
-        assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Temple"));
+        assertEquals(20, player.getGold());
+        assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Cathédrale"));
         events.resetDisplay();
 
         player.play(pile, bank, events);
         assertEquals(2, player.getCityCards().size());
         assertEquals(3, player.getCardsInHand().size());
-        if (player.getCardsInHand().get(2).getGoldCost() < 3) {
+        if (player.getCardsInHand().get(2).getGoldCost() > 3) {
             assertEquals(24 - player.getCardsInHand().get(2).getGoldCost(), player.getGold());
         } else {
-            assertEquals(21, player.getGold());
+            assertEquals(17, player.getGold());
             assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Manoir"));
             events.resetDisplay();
         }
