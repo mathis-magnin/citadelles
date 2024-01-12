@@ -22,7 +22,7 @@ class RandomBotTest {
 
     @Mock
     Random random = mock(Random.class);
-    Player player;
+    RandomBot player;
     Bank bank;
     Display events = new Display();
 
@@ -94,9 +94,9 @@ class RandomBotTest {
         DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
 
-        Player playerSpy= spy(player);
+        Player playerSpy = spy(player);
 
-        when(random.nextBoolean()).thenReturn(false,false);
+        when(random.nextBoolean()).thenReturn(false, false);
         playerSpy.play(pile, bank, events);
         assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
         assertEquals(4, playerSpy.getCardsInHand().size());
@@ -105,7 +105,7 @@ class RandomBotTest {
         events.resetDisplay();
 
         /*case 2 : takes gold and don't place*/
-        when(random.nextBoolean()).thenReturn(false,true, false);
+        when(random.nextBoolean()).thenReturn(false, true, false);
         playerSpy.play(pile, bank, events);
 
         assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
@@ -115,7 +115,7 @@ class RandomBotTest {
         events.resetDisplay();
 
         /*case 3 : takes gold and place*/
-        when(random.nextBoolean()).thenReturn(true,true, true);
+        when(random.nextBoolean()).thenReturn(true, true, true);
         playerSpy.play(pile, bank, events);
 
         assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Temple\n"));
@@ -131,11 +131,11 @@ class RandomBotTest {
     void playWith2GoldsTemple() {
         DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
-        Player playerSpy= spy(player);
+        Player playerSpy = spy(player);
         playerSpy.addGold(2, bank);
 
         /*case 1 : take card and don't place*/
-        when(random.nextBoolean()).thenReturn(true,false, false);
+        when(random.nextBoolean()).thenReturn(true, false, false);
         playerSpy.play(pile, bank, events);
 
         assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
@@ -146,7 +146,7 @@ class RandomBotTest {
 
         /*case 2 : doesn't take gold and place*/
 
-        when(random.nextBoolean()).thenReturn(false,false, true);
+        when(random.nextBoolean()).thenReturn(false, false, true);
         playerSpy.play(pile, bank, events);
 
         assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Temple\n"));
@@ -156,7 +156,7 @@ class RandomBotTest {
         events.resetDisplay();
 
         /*case 3 : takes gold and don't place*/
-        when(random.nextBoolean()).thenReturn(false,true, false);
+        when(random.nextBoolean()).thenReturn(false, true, false);
         playerSpy.play(pile, bank, events);
 
         assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
@@ -166,7 +166,7 @@ class RandomBotTest {
         events.resetDisplay();
 
         /*case 4 : takes gold and place*/
-        when(random.nextBoolean()).thenReturn(true,true, true);
+        when(random.nextBoolean()).thenReturn(true, true, true);
         playerSpy.play(pile, bank, events);
 
         assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Manoir\n"));
@@ -183,12 +183,12 @@ class RandomBotTest {
     void playWith2GoldsCardAlreadyIn() {
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[13]));
         player = new RandomBot("Hello", districts, random);
-        Player playerSpy= spy(player);
+        Player playerSpy = spy(player);
 
         DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
         playerSpy.addGold(2, bank);
-        when(random.nextBoolean()).thenReturn(false,true, true);
+        when(random.nextBoolean()).thenReturn(false, true, true);
         playerSpy.play(pile, bank, events);
         assertEquals(1, playerSpy.getCardsInHand().size());
         assertEquals(1, playerSpy.getCityCards().size());
@@ -210,7 +210,7 @@ class RandomBotTest {
     void playWithWrongBooleanGenerated() {
         DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
-        Player playerSpy= spy(player);
+        Player playerSpy = spy(player);
 
         when(random.nextBoolean()).thenThrow(IllegalArgumentException.class);
         playerSpy.play(pile, bank, events);
