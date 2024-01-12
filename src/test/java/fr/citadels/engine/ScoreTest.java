@@ -192,19 +192,19 @@ class ScoreTest {
 
     @Test
     void testToString() {
-        assertEquals("Score total de Tom : 0.\n" +
+        assertEquals("    Score total : 0.\n" +
                 "    Quartiers construits : 0 points.\n", score1.toString());
 
         Score.setFirstPlayerWithCompleteCity(player2);
         score2.determinePoints(); // 18
-        assertEquals("Score total de Bob : 18.\n" +
+        assertEquals("    Score total : 18.\n" +
                 "    Quartiers construits : 18 points.\n", score2.toString());
 
-        assertEquals("Score total de Noa : 0.\n" +
+        assertEquals("    Score total : 0.\n" +
                 "    Quartiers construits : 0 points.\n", score3.toString());
 
         score4.determinePoints(); // 39 + 2 = 41
-        assertEquals("Score total de Luk : 41.\n" +
+        assertEquals("    Score total : 41.\n" +
                 "    Quartiers construits : 39 points.\n" +
                 "    Cité complète : 2 points bonus.\n", score4.toString());
     }

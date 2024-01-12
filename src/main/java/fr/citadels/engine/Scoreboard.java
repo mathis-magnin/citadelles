@@ -38,12 +38,13 @@ public class Scoreboard {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
-        int i = 1;
-        for (Score score : scores) {
-            str.append(i).append("e place :\n");
-            str.append(score.toString());
+        for (int i = 0; i < scores.length; i++) {
+            str.append(i+1).append("e place : ").append(scores[i].getPlayer().getName()).append(".\n");
+            if (((i != scores.length-1) && (scores[i].getPoints() == scores[i+1].getPoints())) || ((i != 0) && (scores[i].getPoints() == scores[i-1].getPoints()))) {
+                str.append("    Dernier personnage joué : ").append(scores[i].getPlayer().getCharacter()).append(".\n");
+            }
+            str.append(scores[i].toString());
             str.append("\n");
-            i++;
         }
         return str.toString();
     }

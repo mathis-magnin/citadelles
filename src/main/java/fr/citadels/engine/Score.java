@@ -55,7 +55,7 @@ public class Score implements Comparable<Score> {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
-        str.append("Score total de ").append(this.player.getName()).append(" : ").append(this.points).append(".\n");
+        str.append("    Score total : ").append(this.points).append(".\n");
         str.append("    Quartiers construits : ").append(this.districtsPoints).append(" points.\n");
         if (this.completeCityBonus) {
             if (this.player == Score.firstPlayerWithCompleteCity) {
