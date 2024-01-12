@@ -24,6 +24,9 @@ public class Score implements Comparable<Score> {
 
     private final Player player;
     private int points;
+    private int districtsPoints;
+    private boolean completeCityBonus;
+    private boolean allFamilyBonus;
 
 
     /* Constructor */
@@ -71,7 +74,7 @@ public class Score implements Comparable<Score> {
 
 
     /**
-     * Determine the score of a player.
+     * Determine the score of a player and update it attributes.
      * Player scores points as follows :
      * 1. Score points equal to the building cost of each of his districts.
      * 2. Player scores any extra points from his unique districts.
@@ -83,9 +86,10 @@ public class Score implements Comparable<Score> {
      * be able to follow rule 4.
      */
     public void determinePoints() {
-        for (DistrictCard district : this.player.getCityCards()) {
-            this.points += district.getGoldCost();   // 1
+        for (DistrictCard district : this.player.getCity()) {
+            this.districtsPoints += district.getGoldCost();   // 1
         }
+        this.points += this.districtsPoints;
 
         if (this.player.hasCompleteCity()) {
             if (this.player == Score.firstPlayerWithCompleteCity) {

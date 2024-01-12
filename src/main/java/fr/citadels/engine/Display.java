@@ -61,7 +61,7 @@ public class Display {
 
     public void displayCity(Player player) {
         this.events += player.getName() + " a dans sa ville : ";
-        for (Card card : player.getCityCards()) {
+        for (Card card : player.getCity()) {
             this.events += card.getCardName() + ", ";
         }
         this.events += "\n";
@@ -69,7 +69,7 @@ public class Display {
 
     public void displayHand(Player player) {
         this.events += player.getName() + " a en main : ";
-        for (Card card : player.getCardsInHand()) {
+        for (Card card : player.getHand()) {
             this.events += card.getCardName() + ", ";
         }
         this.events += "\n";

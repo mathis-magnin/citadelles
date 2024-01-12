@@ -21,7 +21,7 @@ public class Game {
     private final DistrictCardsPile districtCardsPile;
     private final Crown crown;
     private final Bank bank;
-    private Scoreboard scoreboard;
+    private final Scoreboard scoreboard;
     private boolean isFinished;
 
 
@@ -34,6 +34,7 @@ public class Game {
         this.crown = new Crown();
         this.bank = new Bank();
         this.isFinished = false;
+        this.scoreboard = new Scoreboard(NB_PLAYERS);
     }
 
 
@@ -96,7 +97,7 @@ public class Game {
         this.playerList[3] = new KingBot("Le monarchiste", new ArrayList<>(Arrays.asList(cards)), RAND);
         events.displayCardDrawn(this.playerList[3], cards);
 
-        this.scoreboard = new Scoreboard(this.playerList);
+        this.scoreboard.initializeScoreboard(this.playerList);
         this.crown.initializeCrown(RAND);
         events.printDisplay();
     }

@@ -46,22 +46,22 @@ public abstract class Player implements Comparable<Player> {
 
 
     /**
-     * Get a copy of the cards in hand
+     * Get a copy of the player's hand
      *
-     * @return the cards in hand
+     * @return the hand
      */
-    public List<DistrictCard> getCardsInHand() {
-        return new ArrayList<>(this.cardsInHand);
+    public List<DistrictCard> getHand() {
+        return new Hand(new ArrayList<>(this.cardsInHand));
     }
 
 
     /**
-     * Get a copy of the cards face up (of the player's city)
+     * Get a copy of the player's city
      *
-     * @return the cards face up
+     * @return the city
      */
-    public List<DistrictCard> getCityCards() {
-        return new ArrayList<>(this.cityCards);
+    public City getCity() {
+        return new City(new ArrayList<>(this.cityCards));
     }
 
 
@@ -204,7 +204,7 @@ public abstract class Player implements Comparable<Player> {
      */
     public void takeGoldFromCity(Bank bank){
         if(character!=null){
-            for(DistrictCard card : getCityCards()){
+            for(DistrictCard card : getCity()){
                 if(card.getCardFamily().equals(character.getCardFamily())){
                     addGold(1,bank);
                 }

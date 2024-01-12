@@ -14,6 +14,10 @@ public class Scoreboard {
 
     /* Constructor */
 
+    public Scoreboard(int nbPlayers){
+        this.scores = new Score[nbPlayers];
+    }
+
     public Scoreboard(Player[] players) {
         this.scores = new Score[players.length];
         for (int i = 0; i < players.length; i++) {
@@ -23,6 +27,12 @@ public class Scoreboard {
 
 
     /* Basic method */
+
+    public void initializeScoreboard(Player[] players) {
+        for (int i = 0; i < players.length; i++) {
+            scores[i] = new Score(players[i]);
+        }
+    }
 
     @Override
     public String toString() {
