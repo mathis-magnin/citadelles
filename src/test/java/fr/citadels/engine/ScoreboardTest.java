@@ -161,14 +161,39 @@ class ScoreboardTest {
 
     @Test
     void testToString() {
-        assertEquals("Score de Tom : 0\nScore de Bob : 0\nScore de Noa : 0\nScore de Luk : 0\n", scoreboard.toString());
+        assertEquals("1e place :\n" +
+                "Score total de Tom : 0.\n" +
+                "    Quartiers construits : 0 points.\n\n" +
+                "2e place :\n" +
+                "Score total de Bob : 0.\n" +
+                "    Quartiers construits : 0 points.\n\n" +
+                "3e place :\n" +
+                "Score total de Noa : 0.\n" +
+                "    Quartiers construits : 0 points.\n\n" +
+                "4e place :\n" +
+                "Score total de Luk : 0.\n" +
+                "    Quartiers construits : 0 points.\n\n", scoreboard.toString());
     }
 
     @Test
     void determineRanking() {
         Score.setFirstPlayerWithCompleteCity(player1);
         scoreboard.determineRanking();
-        assertEquals("Score de Luk : 41\nScore de Tom : 28\nScore de Bob : 21\nScore de Noa : 18\n", scoreboard.toString());
+        assertEquals("1e place :\n" +
+                "Score total de Luk : 41.\n" +
+                "    Quartiers construits : 39 points.\n" +
+                "    Cité complète : 2 points bonus.\n\n" +
+                "2e place :\n" +
+                "Score total de Tom : 28.\n" +
+                "    Quartiers construits : 24 points.\n" +
+                "    Première cité complète : 4 points bonus.\n\n" +
+                "3e place :\n" +
+                "Score total de Bob : 21.\n" +
+                "    Quartiers construits : 19 points.\n" +
+                "    Cité complète : 2 points bonus.\n\n" +
+                "4e place :\n" +
+                "Score total de Noa : 18.\n" +
+                "    Quartiers construits : 18 points.\n\n", scoreboard.toString());
     }
 
     @Test

@@ -22,6 +22,7 @@ public class Scoreboard {
         this.scores = new Score[players.length];
         for (int i = 0; i < players.length; i++) {
             scores[i] = new Score(players[i]);
+
         }
     }
 
@@ -37,9 +38,12 @@ public class Scoreboard {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
+        int i = 1;
         for (Score score : scores) {
+            str.append(i).append("e place :\n");
             str.append(score.toString());
             str.append("\n");
+            i++;
         }
         return str.toString();
     }
