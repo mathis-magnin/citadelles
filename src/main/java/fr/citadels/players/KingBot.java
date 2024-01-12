@@ -1,6 +1,6 @@
 package fr.citadels.players;
 
-import fr.citadels.cards.characters.CharacterCard;
+import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
@@ -16,11 +16,14 @@ import java.util.Random;
 public class KingBot extends Player {
     private final Random RAND;
 
+    private boolean canPlaceCard;
+
     /*
      * Constructor
      */
     public KingBot(String name, List<DistrictCard> cards, Random random) {
         super(name, cards);
+        cardsInHand.sortCards(CardFamily.NOBLE);
         RAND = random;
     }
 
@@ -29,62 +32,63 @@ public class KingBot extends Player {
      * Methods
      */
 
+
     /***
-     * choose a card to play among the cards drawn
-     * /!\SAME AS RANDOMBOT FOR NOW /!\ /!\ SHOULD BE CHANGED WHEN DISTRICTS TYPES WILL BE IMPLEMENTED /!\
+     * choose a NOBLE card if possible or the first card
      * drawnCards must contain at least 1 card
      * @param pile pile of cards
      * @param drawnCards cards drawn
      * @return the card to play
      */
     public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
-        int randomIndex = RAND.nextInt(drawnCards.length);
-        DistrictCard cardToPlay = drawnCards[randomIndex];
-        putBack(drawnCards, pile, randomIndex);
-        return cardToPlay;
+        DistrictCard cardToPlay = drawnCards[0];
+        //take the card that is noble if possible
+        for (int i = 0; i < drawnCards.length; i++) {
+            if (drawnCards[i].getCardFamily().equals(CardFamily.NOBLE)) {
+                cardToPlay = drawnCards[i];
+                putBack(drawnCards, pile, i);
+                return cardToPlay;
+            }
+        }
 
+        putBack(drawnCards, pile, 0);
+        return cardToPlay;
     }
 
     /***
+     * take the most expensive card that he can place (preferred noble)
      * choose a card in hand
-     * /!\SAME AS RANDOMBOT FOR NOW /!\ /!\ SHOULD BE CHANGED WHEN DISTRICTS TYPES WILL BE IMPLEMENTED /!\
      * @return the card chosen or null if no card can be chosen
      */
     public DistrictCard chooseCardInHand() {
+        DistrictCard cardToPlace = null;
         for (int i = 0; i < cardsInHand.size(); i++) {
-            if (cardsInHand.get(i).getGoldCost() <= gold && !hasCardInCity(cardsInHand.get(i)))
-                return cardsInHand.remove(i);
-
+            if (cardsInHand.get(i).getGoldCost() <= gold) {
+                cardToPlace = cardsInHand.get(i);
+                cardsInHand.remove(i);
+                return cardToPlace;
+            }
         }
-        return null;
+        return cardToPlace;
     }
 
     /***
      * play a round for the linked player
-     * /!\SAME AS RANDOMBOT FOR NOW /!\
      * @param  pile of cards
-     * @return the actions of the player
      */
     @Override
     public void play(DistrictCardsPile pile, Bank bank, Display events) {
-        boolean draw;
-        try {
-            draw = !RAND.nextBoolean();
-        } catch (Exception e) {
-            draw = false; //take money (if possible) when exception raised
-        }
+        boolean draw = getHand().isEmpty() || getHand().get(0).getGoldCost() < getGold();
 
         takeCardsOrGold(pile, bank, draw, events);
 
-        boolean play;
-        try {
-            play = RAND.nextBoolean();
-        } catch (Exception e) {
-            play = false; //don't play when exception raised
-        }
 
-        if (play && !cardsInHand.isEmpty()) {
+        if (!cardsInHand.isEmpty()) {
+            if (draw)
+                cardsInHand.sortCards(CardFamily.NOBLE);
+
             DistrictCard cardToPlace = chooseCardInHand();
+
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
                 pay(cardToPlace.getGoldCost(), bank);
@@ -93,6 +97,8 @@ public class KingBot extends Player {
                 events.displayNoDistrictBuilt(this);
             }
         } else events.displayNoDistrictBuilt(this);
+
+        takeGoldFromCity(bank);
     }
 
 
@@ -116,5 +122,6 @@ public class KingBot extends Player {
         this.character = characters.remove(0);
         events.displayCharacterChosen(this, this.character);
     }
+
 
 }

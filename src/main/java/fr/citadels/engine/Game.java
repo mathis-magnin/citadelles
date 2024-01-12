@@ -86,11 +86,11 @@ public class Game {
         events.displayCardDrawn(this.playerList[0], cards);
 
         cards = districtCardsPile.draw(4);
-        this.playerList[1] = new SpendthriftBot("Le dépensier", new ArrayList<>(Arrays.asList(cards)), RAND);
+        this.playerList[1] = new ThriftyBot("L'économe", new ArrayList<>(Arrays.asList(cards)), RAND);
         events.displayCardDrawn(this.playerList[1], cards);
 
         cards = districtCardsPile.draw(4);
-        this.playerList[2] = new ThriftyBot("L'économe", new ArrayList<>(Arrays.asList(cards)), RAND);
+        this.playerList[2] = new SpendthriftBot("Le dépensier", new ArrayList<>(Arrays.asList(cards)), RAND);
         events.displayCardDrawn(this.playerList[2], cards);
 
         cards = districtCardsPile.draw(4);
