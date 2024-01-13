@@ -78,7 +78,7 @@ public class KingBot extends Player {
      */
     @Override
     public void play(DistrictCardsPile pile, Bank bank, Display events) {
-        boolean draw = getCardsInHand().isEmpty() || getCardsInHand().get(0).getGoldCost() < getGold();
+        boolean draw = getHand().isEmpty() || getHand().get(0).getGoldCost() < getGold();
 
         takeCardsOrGold(pile, bank, draw, events);
 

@@ -37,10 +37,10 @@ class KingBotTest {
     @Test
     void createBot() {
         assertEquals("Hello1", player1.getName());
-        assertEquals(3, player1.getCardsInHand().size());
-        assertEquals("Manoir", player1.getCardsInHand().get(0).getCardName());
-        assertEquals("Cathédrale", player1.getCardsInHand().get(1).getCardName());
-        assertEquals("Temple", player1.getCardsInHand().get(2).getCardName());
+        assertEquals(3, player1.getHand().size());
+        assertEquals("Manoir", player1.getHand().get(0).getCardName());
+        assertEquals("Cathédrale", player1.getHand().get(1).getCardName());
+        assertEquals("Temple", player1.getHand().get(2).getCardName());
 
     }
 
@@ -84,18 +84,18 @@ class KingBotTest {
         //no money
         DistrictCard cardToPlay = player1.chooseCardInHand();
         assertNull(cardToPlay);
-        assertEquals(3, player1.getCardsInHand().size());
-        assertEquals("Manoir", player1.getCardsInHand().get(0).getCardName());
-        assertEquals("Cathédrale", player1.getCardsInHand().get(1).getCardName());
-        assertEquals("Temple", player1.getCardsInHand().get(2).getCardName());
+        assertEquals(3, player1.getHand().size());
+        assertEquals("Manoir", player1.getHand().get(0).getCardName());
+        assertEquals("Cathédrale", player1.getHand().get(1).getCardName());
+        assertEquals("Temple", player1.getHand().get(2).getCardName());
 
         //Manoir
         player1.addGold(3, bank);
         cardToPlay = player1.chooseCardInHand();
         assertEquals("Manoir", cardToPlay.getCardName());
-        assertEquals(2, player1.getCardsInHand().size());
-        assertEquals("Cathédrale", player1.getCardsInHand().get(0).getCardName());
-        assertEquals("Temple", player1.getCardsInHand().get(1).getCardName());
+        assertEquals(2, player1.getHand().size());
+        assertEquals("Cathédrale", player1.getHand().get(0).getCardName());
+        assertEquals("Temple", player1.getHand().get(1).getCardName());
 
     }
 
@@ -108,42 +108,42 @@ class KingBotTest {
         //take gold because no money
         player1.play(pile, bank, events);
         assertEquals(1, player1.getGold());
-        assertEquals(2, player1.getCardsInHand().size());
-        assertEquals("Manoir", player1.getCardsInHand().get(0).getCardName());
-        assertEquals("Cathédrale", player1.getCardsInHand().get(1).getCardName());
-        assertEquals("Temple", player1.getCityCards().get(0).getCardName());
+        assertEquals(2, player1.getHand().size());
+        assertEquals("Manoir", player1.getHand().get(0).getCardName());
+        assertEquals("Cathédrale", player1.getHand().get(1).getCardName());
+        assertEquals("Temple", player1.getCity().get(0).getCardName());
 
         //take cards because money
         player1.play(pile, bank, events);
         assertEquals(1, player1.getGold()); // 1+2-3+1(gold from family)
-        assertEquals(1, player1.getCardsInHand().size());
-        assertEquals("Cathédrale", player1.getCardsInHand().get(0).getCardName());
-        assertEquals("Temple", player1.getCityCards().get(0).getCardName());
-        assertEquals("Manoir", player1.getCityCards().get(1).getCardName());
+        assertEquals(1, player1.getHand().size());
+        assertEquals("Cathédrale", player1.getHand().get(0).getCardName());
+        assertEquals("Temple", player1.getCity().get(0).getCardName());
+        assertEquals("Manoir", player1.getCity().get(1).getCardName());
 
         //take money because money needed
         player1.play(pile, bank, events);
         assertEquals(4, player1.getGold());
-        assertEquals(1, player1.getCardsInHand().size());
-        assertEquals("Cathédrale", player1.getCardsInHand().get(0).getCardName());
-        assertEquals("Temple", player1.getCityCards().get(0).getCardName());
-        assertEquals("Manoir", player1.getCityCards().get(1).getCardName());
+        assertEquals(1, player1.getHand().size());
+        assertEquals("Cathédrale", player1.getHand().get(0).getCardName());
+        assertEquals("Temple", player1.getCity().get(0).getCardName());
+        assertEquals("Manoir", player1.getCity().get(1).getCardName());
 
         //take cards because money needed
         player1.play(pile, bank, events);
         assertEquals(2, player1.getGold()); // 4+2-5+1
-        assertEquals(0, player1.getCardsInHand().size());
-        assertEquals("Temple", player1.getCityCards().get(0).getCardName());
-        assertEquals("Manoir", player1.getCityCards().get(1).getCardName());
-        assertEquals("Cathédrale", player1.getCityCards().get(2).getCardName());
+        assertEquals(0, player1.getHand().size());
+        assertEquals("Temple", player1.getCity().get(0).getCardName());
+        assertEquals("Manoir", player1.getCity().get(1).getCardName());
+        assertEquals("Cathédrale", player1.getCity().get(2).getCardName());
 
         //take cards because no money
         player1.play(pile, bank, events);
         assertEquals(3, player1.getGold());
-        assertEquals(1, player1.getCardsInHand().size());
-        assertEquals("Temple", player1.getCityCards().get(0).getCardName());
-        assertEquals("Manoir", player1.getCityCards().get(1).getCardName());
-        assertEquals("Cathédrale", player1.getCityCards().get(2).getCardName());
+        assertEquals(1, player1.getHand().size());
+        assertEquals("Temple", player1.getCity().get(0).getCardName());
+        assertEquals("Manoir", player1.getCity().get(1).getCardName());
+        assertEquals("Cathédrale", player1.getCity().get(2).getCardName());
 
 
     }

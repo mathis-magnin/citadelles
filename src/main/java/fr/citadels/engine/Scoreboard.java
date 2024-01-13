@@ -14,21 +14,36 @@ public class Scoreboard {
 
     /* Constructor */
 
+    public Scoreboard(int nbPlayers){
+        this.scores = new Score[nbPlayers];
+    }
+
     public Scoreboard(Player[] players) {
         this.scores = new Score[players.length];
         for (int i = 0; i < players.length; i++) {
             scores[i] = new Score(players[i]);
+
         }
     }
 
 
     /* Basic method */
 
+    public void initializeScoreboard(Player[] players) {
+        for (int i = 0; i < players.length; i++) {
+            scores[i] = new Score(players[i]);
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
-        for (Score score : scores) {
-            str.append(score.toString());
+        for (int i = 0; i < scores.length; i++) {
+            str.append(i+1).append("e place : ").append(scores[i].getPlayer().getName()).append(".\n");
+            if (((i != scores.length-1) && (scores[i].getPoints() == scores[i+1].getPoints())) || ((i != 0) && (scores[i].getPoints() == scores[i-1].getPoints()))) {
+                str.append("    Dernier personnage joué : ").append(scores[i].getPlayer().getCharacter()).append(".\n");
+            }
+            str.append(scores[i].toString());
             str.append("\n");
         }
         return str.toString();

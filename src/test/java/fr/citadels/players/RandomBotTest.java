@@ -37,12 +37,12 @@ class RandomBotTest {
     @Test
     void initializeBot() {
         assertEquals("Hello", player.getName());
-        assertEquals(3, player.getCardsInHand().size());
+        assertEquals(3, player.getHand().size());
         /*check if the elements are in the list*/
-        assertEquals("Temple", player.getCardsInHand().get(0).getCardName());
-        assertEquals("Manoir", player.getCardsInHand().get(1).getCardName());
-        assertEquals("Cathédrale", player.getCardsInHand().get(2).getCardName());
-        assertEquals(0, player.getCityCards().size());
+        assertEquals("Temple", player.getHand().get(0).getCardName());
+        assertEquals("Manoir", player.getHand().get(1).getCardName());
+        assertEquals("Cathédrale", player.getHand().get(2).getCardName());
+        assertEquals(0, player.getCity().size());
 
     }
 
@@ -51,15 +51,15 @@ class RandomBotTest {
 
         player.addGold(4, bank);
         DistrictCard card = player.chooseCardInHand();
-        assertEquals(2, player.getCardsInHand().size());
+        assertEquals(2, player.getHand().size());
         assertEquals(DistrictCardsPile.allDistrictCards[12], card);
 
         card = player.chooseCardInHand();
-        assertEquals(1, player.getCardsInHand().size());
+        assertEquals(1, player.getHand().size());
         assertEquals(DistrictCardsPile.allDistrictCards[0], card);
 
         card = player.chooseCardInHand();
-        assertEquals(1, player.getCardsInHand().size());
+        assertEquals(1, player.getHand().size());
         assertNull(card);
 
         /*test if the player has the card he wants in his city*/
@@ -67,12 +67,12 @@ class RandomBotTest {
         Player playerSpy = spy(player);
         when(playerSpy.hasCardInCity(any())).thenReturn(true);
         card = playerSpy.chooseCardInHand();
-        assertEquals(1, playerSpy.getCardsInHand().size());
+        assertEquals(1, playerSpy.getHand().size());
         assertNull(card);
 
         player.chooseCardInHand();
         card = player.chooseCardInHand();
-        assertEquals(0, player.getCardsInHand().size());
+        assertEquals(0, player.getHand().size());
         assertNull(card);
 
     }
@@ -99,9 +99,11 @@ class RandomBotTest {
         when(random.nextBoolean()).thenReturn(false, false);
         playerSpy.play(pile, bank, events);
         assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
-        assertEquals(4, playerSpy.getCardsInHand().size());
-        assertEquals(0, playerSpy.getCityCards().size());
+
+        assertEquals(4, playerSpy.getHand().size());
+        assertEquals(0, playerSpy.getCity().size());
         assertEquals(0, playerSpy.getGold());
+
         events.resetDisplay();
 
         /*case 2 : takes gold and don't place*/
@@ -109,9 +111,11 @@ class RandomBotTest {
         playerSpy.play(pile, bank, events);
 
         assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
-        assertEquals(4, playerSpy.getCardsInHand().size());
-        assertEquals(0, playerSpy.getCityCards().size());
+
+        assertEquals(4, playerSpy.getHand().size());
+        assertEquals(0, playerSpy.getCity().size());
         assertEquals(2, playerSpy.getGold());
+
         events.resetDisplay();
 
         /*case 3 : takes gold and place*/
@@ -119,9 +123,11 @@ class RandomBotTest {
         playerSpy.play(pile, bank, events);
 
         assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Temple\n"));
-        assertEquals(3, playerSpy.getCardsInHand().size());
-        assertEquals(1, playerSpy.getCityCards().size());
+
+        assertEquals(3, playerSpy.getHand().size());
+        assertEquals(1, playerSpy.getCity().size());
         assertEquals(3, playerSpy.getGold());
+
         events.resetDisplay();
 
         verify(playerSpy, times(3)).takeGoldFromCity(any());
@@ -139,9 +145,11 @@ class RandomBotTest {
         playerSpy.play(pile, bank, events);
 
         assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
-        assertEquals(4, playerSpy.getCardsInHand().size());
-        assertEquals(0, playerSpy.getCityCards().size());
+
+        assertEquals(4, playerSpy.getHand().size());
+        assertEquals(0, playerSpy.getCity().size());
         assertEquals(2, playerSpy.getGold());
+
         events.resetDisplay();
 
         /*case 2 : doesn't take gold and place*/
@@ -150,9 +158,11 @@ class RandomBotTest {
         playerSpy.play(pile, bank, events);
 
         assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Temple\n"));
-        assertEquals(4, playerSpy.getCardsInHand().size());
-        assertEquals(1, playerSpy.getCityCards().size());
+
+        assertEquals(4, playerSpy.getHand().size());
+        assertEquals(1, playerSpy.getCity().size());
         assertEquals(1, playerSpy.getGold());
+
         events.resetDisplay();
 
         /*case 3 : takes gold and don't place*/
@@ -160,9 +170,11 @@ class RandomBotTest {
         playerSpy.play(pile, bank, events);
 
         assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
-        assertEquals(4, playerSpy.getCardsInHand().size());
-        assertEquals(1, playerSpy.getCityCards().size());
+
+        assertEquals(4, playerSpy.getHand().size());
+        assertEquals(1, playerSpy.getCity().size());
         assertEquals(3, playerSpy.getGold());
+
         events.resetDisplay();
 
         /*case 4 : takes gold and place*/
@@ -170,9 +182,11 @@ class RandomBotTest {
         playerSpy.play(pile, bank, events);
 
         assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Manoir\n"));
-        assertEquals(3, playerSpy.getCardsInHand().size());
-        assertEquals(2, playerSpy.getCityCards().size());
+
+        assertEquals(3, playerSpy.getHand().size());
+        assertEquals(2, playerSpy.getCity().size());
         assertEquals(2, playerSpy.getGold());
+
         events.resetDisplay();
 
         verify(playerSpy, times(4)).takeGoldFromCity(any());
@@ -187,18 +201,21 @@ class RandomBotTest {
 
         DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
+
         playerSpy.addGold(2, bank);
         when(random.nextBoolean()).thenReturn(false, true, true);
         playerSpy.play(pile, bank, events);
-        assertEquals(1, playerSpy.getCardsInHand().size());
-        assertEquals(1, playerSpy.getCityCards().size());
+        assertEquals(1, playerSpy.getHand().size());
+        assertEquals(1, playerSpy.getCity().size());
         assertEquals(3, playerSpy.getGold());
+
         events.resetDisplay();
 
         playerSpy.play(pile, bank, events);
         assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
-        assertEquals(1, playerSpy.getCardsInHand().size());
-        assertEquals(1, playerSpy.getCityCards().size());
+
+        assertEquals(1, playerSpy.getHand().size());
+        assertEquals(1, playerSpy.getCity().size());
         assertEquals(5, playerSpy.getGold());
 
         verify(playerSpy, times(2)).takeGoldFromCity(any());
@@ -213,18 +230,20 @@ class RandomBotTest {
         Player playerSpy = spy(player);
 
         when(random.nextBoolean()).thenThrow(IllegalArgumentException.class);
+
         playerSpy.play(pile, bank, events);
-        assertEquals(3, playerSpy.getCardsInHand().size());
-        assertEquals(0, playerSpy.getCityCards().size());
+        assertEquals(3, playerSpy.getHand().size());
+        assertEquals(0, playerSpy.getCity().size());
         assertEquals(2, playerSpy.getGold()); //took money
         assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
         events.resetDisplay();
 
         playerSpy.addGold(23, bank); //no money in bank anymore
         playerSpy.play(pile, bank, events);
-        assertEquals(4, playerSpy.getCardsInHand().size());
-        assertEquals(0, playerSpy.getCityCards().size());
+        assertEquals(4, playerSpy.getHand().size());
+        assertEquals(0, playerSpy.getCity().size());
         assertEquals(25, playerSpy.getGold()); //took money
+
         assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
     }
 

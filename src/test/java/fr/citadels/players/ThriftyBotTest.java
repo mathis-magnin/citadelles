@@ -33,12 +33,12 @@ class ThriftyBotTest {
     @Test
     void initializeBot() {
         assertEquals("Hello", player.getName());
-        assertEquals(3, player.getCardsInHand().size());
+        assertEquals(3, player.getHand().size());
         /*check if the elements are in the list*/
-        assertEquals("Temple", player.getCardsInHand().get(0).getCardName());
-        assertEquals("Manoir", player.getCardsInHand().get(1).getCardName());
-        assertEquals("Cathédrale", player.getCardsInHand().get(2).getCardName());
-        assertEquals(0, player.getCityCards().size());
+        assertEquals("Temple", player.getHand().get(0).getCardName());
+        assertEquals("Manoir", player.getHand().get(1).getCardName());
+        assertEquals("Cathédrale", player.getHand().get(2).getCardName());
+        assertEquals(0, player.getCity().size());
     }
 
     @Test
@@ -54,11 +54,11 @@ class ThriftyBotTest {
         player.addGold(4, bank);
 
         DistrictCard card = player.chooseCardInHand();
-        assertEquals(2, player.getCardsInHand().size());
+        assertEquals(2, player.getHand().size());
         assertEquals("Manoir", card.getCardName());
-
         card = player.chooseCardInHand();
-        assertEquals(2, player.getCardsInHand().size());
+        assertEquals(2, player.getHand().size());
+
         assertNull(card);
     }
 
@@ -81,8 +81,8 @@ class ThriftyBotTest {
         pile.initializePile();
         player.play(pile, bank, events);
 
-        assertEquals(0, player.getCityCards().size());
-        assertEquals(3, player.getCardsInHand().size());
+        assertEquals(0, player.getCity().size());
+        assertEquals(3, player.getHand().size());
         assertEquals(2, player.getGold());
         assertEquals("Hello a pris 2 pièces d'or.\n" +
                 "Hello a 2 pièces d'or.\n" +
@@ -91,8 +91,9 @@ class ThriftyBotTest {
         events.resetDisplay();
 
         player.play(pile, bank, events);
-        assertEquals(1, player.getCityCards().size());
-        assertEquals(2, player.getCardsInHand().size());
+        assertEquals(1, player.getCity().size());
+        assertEquals(2, player.getHand().size());
+
         assertEquals(1, player.getGold());
         assertEquals("Hello a pris 2 pièces d'or.\n" +
                 "Hello a 4 pièces d'or.\n" +
@@ -101,8 +102,8 @@ class ThriftyBotTest {
         events.resetDisplay();
 
         player.play(pile, bank, events);
-        assertEquals(1, player.getCityCards().size());
-        assertEquals(2, player.getCardsInHand().size());
+        assertEquals(1, player.getCity().size());
+        assertEquals(2, player.getHand().size());
         assertEquals(3, player.getGold());
         assertEquals("Hello a pris 2 pièces d'or.\n" +
                 "Hello a 3 pièces d'or.\n" +
@@ -118,17 +119,18 @@ class ThriftyBotTest {
         player.addGold(25, bank);
 
         player.play(pile, bank, events);
-        assertEquals(1, player.getCityCards().size());
-        assertEquals(3, player.getCardsInHand().size());
+        assertEquals(1, player.getCity().size());
+        assertEquals(3, player.getHand().size());
         assertEquals(20, player.getGold());
         assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Cathédrale"));
         events.resetDisplay();
 
         player.play(pile, bank, events);
-        assertEquals(2, player.getCityCards().size());
-        assertEquals(3, player.getCardsInHand().size());
-        if (player.getCardsInHand().get(2).getGoldCost() > 3) {
-            assertEquals(24 - player.getCardsInHand().get(2).getGoldCost(), player.getGold());
+        assertEquals(2, player.getCity().size());
+        assertEquals(3, player.getHand().size());
+
+        if (player.getHand().get(2).getGoldCost() > 3) {
+            assertEquals(24 - player.getHand().get(2).getGoldCost(), player.getGold());
         } else {
             assertEquals(17, player.getGold());
             assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Manoir"));
