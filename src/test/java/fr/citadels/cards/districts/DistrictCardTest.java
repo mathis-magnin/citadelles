@@ -24,7 +24,7 @@ class DistrictCardTest {
     @Test
     void testToString() {
         for (DistrictCard d : DistrictCardsPile.allDistrictCards) {
-            assertEquals("Carte quartier " + d.getCardName() + " (" + d.getGoldCost() + " - " + d.getCardFamily() + ")", d.toString());
+            assertEquals(d.getCardName() + " (" + d.getGoldCost() + " - " + d.getCardFamily() + ")", d.toString());
         }
     }
 

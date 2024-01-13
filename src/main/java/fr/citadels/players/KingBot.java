@@ -14,6 +14,7 @@ import java.util.Random;
  * This bot will try to take the king character every time it can
  */
 public class KingBot extends Player {
+
     private final Random RAND;
 
     private boolean canPlaceCard;
@@ -77,11 +78,10 @@ public class KingBot extends Player {
      * @param  pile of cards
      */
     @Override
-    public void play(DistrictCardsPile pile, Bank bank, Display events) {
+    public void play(DistrictCardsPile pile, Bank bank, Display display) {
         boolean draw = getHand().isEmpty() || getHand().get(0).getGoldCost() < getGold();
 
-        takeCardsOrGold(pile, bank, draw, events);
-
+        takeCardsOrGold(pile, bank, draw, display);
 
         if (!cardsInHand.isEmpty()) {
             if (draw)
@@ -92,13 +92,15 @@ public class KingBot extends Player {
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
                 pay(cardToPlace.getGoldCost(), bank);
-                events.displayDistrictBuilt(this, cardToPlace);
+                display.addDistrictBuilt(this, cardToPlace);
             } else {
-                events.displayNoDistrictBuilt(this);
+                display.addNoDistrictBuilt();
             }
-        } else events.displayNoDistrictBuilt(this);
-
-        takeGoldFromCity(bank);
+        } else {
+            display.addNoDistrictBuilt();
+        }
+        display.addBlankLine();
+        takeGoldFromCity(bank, display);
     }
 
 
@@ -107,11 +109,11 @@ public class KingBot extends Player {
      *
      * @param characters the list of characterCard.
      */
-    public void chooseCharacter(CharacterCardsList characters, Display events) {
+    public void chooseCharacter(CharacterCardsList characters, Display display) {
         for (int i = 0; i < characters.size(); i++) {
             if (characters.get(i).getCardName().equals("Roi")) {
                 this.character = characters.remove(i);
-                events.displayCharacterChosen(this, this.character);
+                display.addCharacterChosen(this, this.character);
                 return;
             }
         }
@@ -120,7 +122,7 @@ public class KingBot extends Player {
          * Could happen if a player already took it
          */
         this.character = characters.remove(0);
-        events.displayCharacterChosen(this, this.character);
+        display.addCharacterChosen(this, this.character);
     }
 
 

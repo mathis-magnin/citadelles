@@ -61,11 +61,11 @@ public class RandomBot extends Player {
      * @param  pile of cards
      */
     @Override
-    public void play(DistrictCardsPile pile, Bank bank, Display events) {
+    public void play(DistrictCardsPile pile, Bank bank, Display display) {
         boolean takeGoldFromFamily;
         try {
             takeGoldFromFamily = RAND.nextBoolean();
-            if(takeGoldFromFamily) takeGoldFromCity(bank);
+            if(takeGoldFromFamily) takeGoldFromCity(bank, display);
         } catch (Exception e) {
             takeGoldFromFamily = false; //don't play when exception raised
         }
@@ -76,8 +76,7 @@ public class RandomBot extends Player {
         } catch (Exception e) {
             draw = false; //take money (if possible) when exception raised
         }
-
-        takeCardsOrGold(pile, bank, draw, events);
+        takeCardsOrGold(pile, bank, draw, display);
 
 
         boolean play;
@@ -92,14 +91,18 @@ public class RandomBot extends Player {
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
                 pay(cardToPlace.getGoldCost(), bank);
-                events.displayDistrictBuilt(this, cardToPlace);
-            } else {
-                events.displayNoDistrictBuilt(this);
-            }
-        } else events.displayNoDistrictBuilt(this);
+                display.addDistrictBuilt(this, cardToPlace);
 
+            } else {
+                display.addNoDistrictBuilt();
+            }
+        } else {
+            display.addNoDistrictBuilt();
+        }
+
+        display.addBlankLine();
         if(!takeGoldFromFamily)
-            takeGoldFromCity(bank);
+            takeGoldFromCity(bank, display);
     }
 
 
@@ -108,7 +111,7 @@ public class RandomBot extends Player {
      *
      * @param characters the list of characterCard.
      */
-    public void chooseCharacter(CharacterCardsList characters, Display events) {
+    public void chooseCharacter(CharacterCardsList characters, Display display) {
 
         int randomIndex = -1;
 
@@ -120,7 +123,7 @@ public class RandomBot extends Player {
             }
         }
         this.character = characters.remove(randomIndex);
-        events.displayCharacterChosen(this, this.character);
+        display.addCharacterChosen(this, this.character);
     }
 
 }

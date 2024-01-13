@@ -27,7 +27,7 @@ public class DistrictCard extends Card {
      */
     @Override
     public String toString() {
-        return "Carte quartier " + this.getCardName() + " (" + this.getGoldCost() + " - " + this.getCardFamily() + ")";
+        return this.getCardName() + " (" + this.getGoldCost() + " - " + this.getCardFamily() + ")";
     }
 
 }

@@ -7,15 +7,33 @@ import java.util.List;
 
 public class City extends ArrayList<DistrictCard> {
 
-    /* Constructor */
+    /* Constructors */
 
-    public City(){
+    public City() {
         super();
     }
 
+
     public City(List<DistrictCard> cards){
         this.addAll(cards);
+
     }
+
+
+    /* Basic method */
+
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        if (!this.isEmpty()) {
+            for (DistrictCard districtCard : this) {
+                str.append(districtCard.toString()).append(", ");
+            }
+            str.delete(str.length() - 2, str.length());
+        }
+        return str.toString();
+    }
+
 
     /* Methods */
 
@@ -27,6 +45,7 @@ public class City extends ArrayList<DistrictCard> {
     public boolean isComplete() {
         return this.size() >= 7;
     }
+
 
     /**
      * Check if the player has one district of each family in his city.
@@ -55,6 +74,8 @@ public class City extends ArrayList<DistrictCard> {
                     break;
                 case UNIQUE:
                     hasSpecial = true;
+                    break;
+                case NEUTRAL:
                     break;
             }
         }

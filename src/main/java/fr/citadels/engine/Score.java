@@ -23,27 +23,29 @@ public class Score implements Comparable<Score> {
     /* Attributes */
 
     private final Player player;
-    private int points;
     private int districtsPoints;
-    private boolean completeCityBonus;
-    private boolean allFamilyBonus;
+    private int allFamilyPoints;
+    private int completeCityPoints;
 
 
     /* Constructor */
 
     public Score(Player player) {
-        this.points = 0;
         this.player = player;
         this.districtsPoints = 0;
-        this.completeCityBonus = false;
-        this.allFamilyBonus = false;
+        this.allFamilyPoints = 0;
+        this.completeCityPoints = 0;
     }
 
 
     /* Basic methods */
 
+    /**
+     *
+     * @return the total amount of points.
+     */
     public int getPoints() {
-        return this.points;
+        return this.districtsPoints + this.allFamilyPoints + this.completeCityPoints;
     }
 
 
@@ -55,17 +57,14 @@ public class Score implements Comparable<Score> {
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
-        str.append("    Score total : ").append(this.points).append(".\n");
-        str.append("    Quartiers construits : ").append(this.districtsPoints).append(" points.\n");
-        if (this.completeCityBonus) {
-            if (this.player == Score.firstPlayerWithCompleteCity) {
-                str.append("    Première cité complète : 4 points bonus.\n");
-            } else {
-                str.append("    Cité complète : 2 points bonus.\n");
-            }
+        str.append(this.player.getName()).append("\n");
+        str.append("\tScore total : ").append(this.getPoints()).append(" points\n");
+        str.append("\tQuartiers construits : ").append(this.districtsPoints).append(" points\n");
+        if (this.completeCityPoints != 0) {
+            str.append((this.player == Score.firstPlayerWithCompleteCity) ? "\tPremière cité " : "\tCité ").append("complète : ").append(this.completeCityPoints).append(" points\n");
         }
-        if (this.allFamilyBonus) {
-            str.append("    Quartier de chaque famille : 3 points bonus.\n");
+        if (this.allFamilyPoints != 0) {
+            str.append("\tQuartier de chaque famille : ").append(this.allFamilyPoints).append(" points\n");
         }
         return str.toString();
     }
@@ -85,7 +84,7 @@ public class Score implements Comparable<Score> {
      */
     @Override
     public int compareTo(Score other) {
-        return (this.points - other.getPoints() != 0) ? this.points - other.getPoints() : this.player.compareTo(other.getPlayer());
+        return (this.getPoints() - other.getPoints() != 0) ? this.getPoints() - other.getPoints() : this.player.compareTo(other.getPlayer());
     }
 
 
@@ -105,20 +104,13 @@ public class Score implements Comparable<Score> {
         for (DistrictCard district : this.player.getCity()) {
             this.districtsPoints += district.getGoldCost();   // 1
         }
-        this.points += this.districtsPoints;
 
         if (this.player.getCity().hasOneDistrictOfEachFamily()) {
-            this.points += 3;   // 3
-            this.allFamilyBonus = true;
+            this.allFamilyPoints += 3;   // 3
         }
 
         if (this.player.hasCompleteCity()) {
-            if (this.player == Score.firstPlayerWithCompleteCity) {
-                this.points += 4;   // 4
-            } else {
-                this.points += 2;   // 5
-            }
-            this.completeCityBonus = true;
+            this.completeCityPoints = ((this.player == Score.firstPlayerWithCompleteCity) ? 4 : 2); // 4 and 5
         }
     }
 

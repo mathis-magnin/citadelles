@@ -6,7 +6,6 @@ import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
 import fr.citadels.engine.Bank;
 import fr.citadels.engine.Display;
-import fr.citadels.engine.Game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +49,7 @@ public abstract class Player implements Comparable<Player> {
      *
      * @return the hand
      */
-    public List<DistrictCard> getHand() {
+    public Hand getHand() {
         return new Hand(new ArrayList<>(this.cardsInHand));
     }
 
@@ -94,6 +93,7 @@ public abstract class Player implements Comparable<Player> {
         return this.getCharacter().compareTo(other.getCharacter());
     }
 
+
     @Override
     public boolean equals(Object other) {
         if (other == null) return false;
@@ -101,9 +101,16 @@ public abstract class Player implements Comparable<Player> {
         return this.name.equals(otherPlayer.name);
     }
 
+
     @Override
     public int hashCode() {
         return this.name.hashCode();
+    }
+
+
+    @Override
+    public String toString() {
+        return this.name + "\n\tPersonnage : " +  this.character + "\n\tFortune : " + this.gold + "\n\tMain : " + this.cardsInHand + "\n\tCité : " + this.cityCards;
     }
 
 
@@ -179,22 +186,26 @@ public abstract class Player implements Comparable<Player> {
      * @param pile pile of cards
      * @param draw true if the player has to draw cards
      */
-    public void takeCardsOrGold(DistrictCardsPile pile, Bank bank, boolean draw, Display events) {
+    public void takeCardsOrGold(DistrictCardsPile pile, Bank bank, boolean draw, Display display) {
         if (!draw) {
             try {
                 addGold(2, bank);
-                events.displayGoldTaken(this, 2);
+
+                display.addGoldTaken(this,2);
+                display.addBlankLine();
             } catch (IllegalArgumentException e) {
                 draw = true;
             }
         }
         if (draw) {
             DistrictCard[] drawnCards = pile.draw(2);
-            events.displayCardDrawn(this, drawnCards);
+            display.addDistrictDrawn(drawnCards);
             if (drawnCards.length != 0) { // if there is at least 1 card
                 DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
                 cardsInHand.add(cardToPlay);
-                events.displayCardChosen(this, cardToPlay);
+
+                display.addDistrictChosen(this, cardToPlay);
+                display.addBlankLine();
             }
         }
     }
@@ -202,12 +213,18 @@ public abstract class Player implements Comparable<Player> {
     /**
      * take gold from the city if the family of the card is the same as the family of the character
      */
-    public void takeGoldFromCity(Bank bank){
-        if(character!=null){
-            for(DistrictCard card : getCity()){
-                if(card.getCardFamily().equals(character.getCardFamily())){
-                    addGold(1,bank);
+    public void takeGoldFromCity(Bank bank, Display display){
+        if(character != null) {
+            int goldToTake = 0;
+            for(DistrictCard card : getCity()) {
+                if(card.getCardFamily().equals(character.getCardFamily())) {
+                    goldToTake++;
                 }
+            }
+            if (goldToTake > 0) {
+                addGold(goldToTake, bank);
+                display.addGoldTakenFromCity(this, goldToTake);
+                display.addBlankLine();
             }
         }
     }
@@ -236,7 +253,7 @@ public abstract class Player implements Comparable<Player> {
      * @param pile of cards
      * @return the actions of the player
      */
-    public abstract void play(DistrictCardsPile pile, Bank bank, Display events);
+    public abstract void play(DistrictCardsPile pile, Bank bank, Display display);
 
 
     /**
@@ -244,6 +261,6 @@ public abstract class Player implements Comparable<Player> {
      *
      * @param characters the list of characterCard.
      */
-    public abstract void chooseCharacter(CharacterCardsList characters, Display events);
+    public abstract void chooseCharacter(CharacterCardsList characters, Display display);
 
 }

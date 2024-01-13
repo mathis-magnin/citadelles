@@ -31,7 +31,7 @@ class KingBotTest {
         bank = new Bank();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
         player1 = new KingBot("Hello1", districts, random);
-        events.resetDisplay();
+        events.reset();
     }
 
     @Test
