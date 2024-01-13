@@ -65,27 +65,27 @@ public class Display {
 
 
     public void addGameTitle() {
-        this.events.append("\n╭────────────╮\n│ Citadelles │\n╰────────────╯\n\n");
+        this.events.append("\n┌────────────┐\n│ Citadelles │\n└────────────┘\n\n");
     }
 
 
     public void addTurnTitle(int turn) {
-        this.events.append("╭─────────╮\n│ Tour ").append(String.format("%2d", turn)).append(" │\n╰─────────╯\n");
+        this.events.append("┌─────────┐\n│ Tour ").append(String.format("%2d", turn)).append(" │\n└─────────┘\n");
     }
 
 
     public void addSelectionPhaseTitle() {
-        this.events.append("\n\t╭────────────────────╮\n\t│ Phase de sélection │\n\t╰────────────────────╯\n\n");
+        this.events.append("\n\t┌────────────────────┐\n\t│ Phase de sélection │\n\t└────────────────────┘\n\n");
     }
 
 
     public void addTurnPhaseTitle() {
-        this.events.append("\n\t╭──────────────╮\n\t│ Phase de jeu │\n\t╰──────────────╯\n\n");
+        this.events.append("\n\t┌──────────────┐\n\t│ Phase de jeu │\n\t└──────────────┘\n\n");
     }
 
 
     public void addScoreTitle() {
-        this.events.append("╭────────╮\n│ Scores │\n╰────────╯\n\n");
+        this.events.append("┌────────┐\n│ Scores │\n└────────┘\n\n");
     }
 
 
@@ -160,7 +160,7 @@ public class Display {
 
 
     public void addPlayerTurn(Player player) {
-        this.events.append("● Le joueur couronné appelle : ").append(player.getCharacter().getCardName()).append("\nC'est donc au tour de ").append(player.getName()).append(".\n");
+        this.events.append("■ Le joueur couronné appelle : ").append(player.getCharacter().getCardName()).append("\nC'est donc au tour de ").append(player.getName()).append(".\n");
     }
 
 
