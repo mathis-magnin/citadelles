@@ -35,21 +35,6 @@ public class Bank {
 
 
     /**
-     * Take the starting amount of gold from the bank.
-     *
-     * @return 2 golds if it can be taken from the bank.
-     * O if not.
-     */
-    public int takeStartingGoldAmount() {
-        if (2 <= this.gold) {
-            this.gold -= 2;
-            return 2;
-        }
-        return 0;
-    }
-
-
-    /**
      * Take golds from the bank.
      *
      * @param amount a positive value that will be taken from the bank if it is possible.

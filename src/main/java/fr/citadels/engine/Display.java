@@ -99,6 +99,11 @@ public class Display {
     }
 
 
+    public void addInitialGoldGiven(int gold) {
+        this.events.append("Tous les joueurs obtiennent ").append(gold).append(" pièces d'or.\n");
+    }
+
+
     public void addFirstDistrictsDrawn(Player player) {
         this.events.append(player.getName()).append(" pioche : ");
         for (DistrictCard districtCard : player.getHand() ) {

@@ -90,15 +90,20 @@ public class Game {
         this.playerList[1] = new SpendthriftBot("DÉPENSIER", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
         this.playerList[2] = new ThriftyBot("ÉCONOME", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
         this.playerList[3] = new KingBot("MONARCHISTE", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
-
-        this.scoreboard.initializeScoreboard(this.playerList);
-
         this.display.addPlayers(this.playerList);
         this.display.addBlankLine();
+
         for (Player player : this.playerList) {
             this.display.addFirstDistrictsDrawn(player);
         }
-        this.display.addBlankLine(2);
+        this.display.addBlankLine();
+
+        // Give 2 golds to every player
+        for (Player player : this.playerList) {
+            player.addGold(2, this.bank);
+        }
+        this.display.addInitialGoldGiven(2);
+        this.display.addBlankLine();
 
         this.crown.initializeCrown(RAND);
         this.display.addFirstCrownedPlayer(this.playerList[this.crown.getCrownedPlayerIndex()]);
@@ -185,6 +190,7 @@ public class Game {
             this.display.printAndReset();
         }
 
+        this.scoreboard.initializeScoreboard(this.playerList);
         this.scoreboard.determineRanking();
         this.display.addScoreTitle();
         this.display.addScoreboard(this.scoreboard);

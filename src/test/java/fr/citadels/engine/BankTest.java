@@ -24,13 +24,6 @@ class BankTest {
 
 
     @Test
-    void takeStartingGoldAmount() {
-        assertEquals(2, bank.takeStartingGoldAmount());
-        assertEquals(23, bank.getGold());
-    }
-
-
-    @Test
     void take() {
         assertEquals(6, bank.take(6));
         assertEquals(19, bank.getGold());
