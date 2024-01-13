@@ -41,7 +41,7 @@ public class Scoreboard {
     public String toString() {
         StringBuilder str = new StringBuilder();
         for (int i = 0; i < scores.length; i++) {
-            str.append("● ").append(i + 1).append("e place\n").append(scores[i].toString());
+            str.append("■ ").append(i + 1).append("e place\n").append(scores[i].toString());
             if (((i != scores.length - 1) && (scores[i].getPoints() == scores[i + 1].getPoints())) || ((i != 0) && (scores[i].getPoints() == scores[i - 1].getPoints()))) {
                 str.append("\tDernier personnage joué : ").append(scores[i].getPlayer().getCharacter()).append("\n");
             }
