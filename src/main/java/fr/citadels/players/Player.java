@@ -45,22 +45,22 @@ public abstract class Player implements Comparable<Player> {
 
 
     /**
-     * Get a copy of the cards in hand
+     * Get a copy of the player's hand
      *
-     * @return the cards in hand
+     * @return the hand
      */
-    public Hand getCardsInHand() {
-        return new Hand(this.cardsInHand);
+    public Hand getHand() {
+        return new Hand(new ArrayList<>(this.cardsInHand));
     }
 
 
     /**
-     * Get a copy of the cards face up (of the player's city)
+     * Get a copy of the player's city
      *
-     * @return the cards face up
+     * @return the city
      */
-    public List<DistrictCard> getCityCards() {
-        return new ArrayList<>(this.cityCards);
+    public City getCity() {
+        return new City(new ArrayList<>(this.cityCards));
     }
 
 
@@ -93,12 +93,14 @@ public abstract class Player implements Comparable<Player> {
         return this.getCharacter().compareTo(other.getCharacter());
     }
 
+
     @Override
     public boolean equals(Object other) {
         if (other == null) return false;
         if (!(other instanceof Player otherPlayer)) return false;
         return this.name.equals(otherPlayer.name);
     }
+
 
     @Override
     public int hashCode() {
@@ -189,8 +191,8 @@ public abstract class Player implements Comparable<Player> {
             try {
                 addGold(2, bank);
 
-                display.addGoldTaken(2);
-                display.addGold(this.gold);
+                display.addGoldTaken(this,2);
+                display.addBlankLine();
             } catch (IllegalArgumentException e) {
                 draw = true;
             }
@@ -202,8 +204,8 @@ public abstract class Player implements Comparable<Player> {
                 DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
                 cardsInHand.add(cardToPlay);
 
-                display.addDistrictChosen(cardToPlay);
-                display.addHand(this.cardsInHand);
+                display.addDistrictChosen(this, cardToPlay);
+                display.addBlankLine();
             }
         }
     }
@@ -211,12 +213,18 @@ public abstract class Player implements Comparable<Player> {
     /**
      * take gold from the city if the family of the card is the same as the family of the character
      */
-    public void takeGoldFromCity(Bank bank){
-        if(character!=null){
-            for(DistrictCard card : getCityCards()){
-                if(card.getCardFamily().equals(character.getCardFamily())){
-                    addGold(1,bank);
+    public void takeGoldFromCity(Bank bank, Display display){
+        if(character != null) {
+            int goldToTake = 0;
+            for(DistrictCard card : getCity()) {
+                if(card.getCardFamily().equals(character.getCardFamily())) {
+                    goldToTake++;
                 }
+            }
+            if (goldToTake > 0) {
+                addGold(goldToTake, bank);
+                display.addGoldTakenFromCity(this, goldToTake);
+                display.addBlankLine();
             }
         }
     }

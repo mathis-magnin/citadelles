@@ -28,7 +28,7 @@ public class CharacterCard extends Card implements Comparable<CharacterCard> {
      */
     @Override
     public String toString() {
-        return this.getCardName()+ " (" + this.getCardFamily() + ")";
+        return this.getCardName()+ " (" + this.getRank() + " - " + this.getCardFamily() + ")";
     }
 
 

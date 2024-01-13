@@ -1,6 +1,5 @@
 package fr.citadels.players;
 
-import fr.citadels.cards.characters.CharacterCard;
 import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
@@ -60,10 +59,17 @@ public class RandomBot extends Player {
     /***
      * play a round for the linked player
      * @param  pile of cards
-     * @return the actions of the player
      */
     @Override
     public void play(DistrictCardsPile pile, Bank bank, Display display) {
+        boolean takeGoldFromFamily;
+        try {
+            takeGoldFromFamily = RAND.nextBoolean();
+            if(takeGoldFromFamily) takeGoldFromCity(bank, display);
+        } catch (Exception e) {
+            takeGoldFromFamily = false; //don't play when exception raised
+        }
+
         boolean draw;
         try {
             draw = !RAND.nextBoolean();
@@ -71,6 +77,7 @@ public class RandomBot extends Player {
             draw = false; //take money (if possible) when exception raised
         }
         takeCardsOrGold(pile, bank, draw, display);
+
 
         boolean play;
         try {
@@ -84,12 +91,18 @@ public class RandomBot extends Player {
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
                 pay(cardToPlace.getGoldCost(), bank);
-                display.addDistrictBuilt(cardToPlace);
-                display.addCity(this.cityCards);
+                display.addDistrictBuilt(this, cardToPlace);
+
             } else {
                 display.addNoDistrictBuilt();
             }
-        } else display.addNoDistrictBuilt();
+        } else {
+            display.addNoDistrictBuilt();
+        }
+
+        display.addBlankLine();
+        if(!takeGoldFromFamily)
+            takeGoldFromCity(bank, display);
     }
 
 

@@ -1,6 +1,7 @@
 package fr.citadels.engine;
 
 import fr.citadels.cards.Card;
+import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.characters.CharacterCard;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.players.City;
@@ -30,7 +31,7 @@ public class Display {
 
     /* Methods */
 
-    private void reset() {
+    public void reset() {
         this.events.delete(0, this.events.length());
     }
 
@@ -56,6 +57,12 @@ public class Display {
         this.events.append("\n");
     }
 
+    public void addBlankLine(int number) {
+        for (int i = 0; i < number; i++) {
+            this.events.append("\n");
+        }
+    }
+
 
     public void addGameTitle() {
         this.events.append("\n╭────────────╮\n│ Citadelles │\n╰────────────╯\n\n");
@@ -63,7 +70,7 @@ public class Display {
 
 
     public void addTurnTitle(int turn) {
-        this.events.append("\n╭─────────╮\n│ Tour ").append(String.format("%2d", turn)).append(" │\n╰─────────╯\n");
+        this.events.append("╭─────────╮\n│ Tour ").append(String.format("%2d", turn)).append(" │\n╰─────────╯\n");
     }
 
 
@@ -78,7 +85,7 @@ public class Display {
 
 
     public void addScoreTitle() {
-        this.events.append("\n╭────────╮\n│ Scores │\n╰────────╯\n\n");
+        this.events.append("╭────────╮\n│ Scores │\n╰────────╯\n\n");
     }
 
 
@@ -92,9 +99,9 @@ public class Display {
     }
 
 
-    public void addFirstDistrictsDrawn(Player player, Hand hand) {
+    public void addFirstDistrictsDrawn(Player player) {
         this.events.append(player.getName()).append(" pioche : ");
-        for (DistrictCard districtCard : hand) {
+        for (DistrictCard districtCard : player.getHand() ) {
             this.events.append(districtCard.toString()).append(", ");
         }
         this.removeLastComma();
@@ -162,13 +169,20 @@ public class Display {
     }
 
 
-    public void addGoldTaken(int gold) {
-        this.events.append("Le joueur prend ").append(gold).append(" pièces d'or.\n");
+    public void addGoldTakenFromCity(Player player, int gold) {
+        this.events.append("Le joueur prend ").append(gold).append(" pièces d'or grâce à ses quartiers : ").append(player.getCharacter().getCardFamily()).append("\n");
+        this.addGoldUpdate(player.getGold());
     }
 
 
-    public void addGold(int gold) {
-        this.events.append("Sa fortune s'élève donc à ").append(gold).append(" pièces d'or.\n");
+    public void addGoldTaken(Player player, int gold) {
+        this.events.append("Le joueur prend ").append(gold).append(" pièces d'or.\n");
+        this.addGoldUpdate(player.getGold());
+    }
+
+
+    private void addGoldUpdate(int gold) {
+        this.events.append("\tSa fortune s'élève donc à ").append(gold).append(" pièces d'or.\n");
     }
 
 
@@ -182,13 +196,14 @@ public class Display {
     }
 
 
-    public void addDistrictChosen(DistrictCard districtCard) {
+    public void addDistrictChosen(Player player, DistrictCard districtCard) {
         this.events.append("Le joueur choisit : ").append(districtCard.getCardName()).append("\n");
+        this.addHandUpdate(player.getHand());
     }
 
 
-    public void addHand(Hand hand) {
-        this.events.append("Sa main comporte donc : ").append(hand.toString()).append("\n");
+    private void addHandUpdate(Hand hand) {
+        this.events.append("\tSa main comporte donc : ").append(hand.toString()).append("\n");
     }
 
 
@@ -197,13 +212,16 @@ public class Display {
     }
 
 
-    public void addDistrictBuilt(DistrictCard districtCard) {
+    public void addDistrictBuilt(Player player, DistrictCard districtCard) {
         this.events.append("Le joueur construit : ").append(districtCard.toString()).append("\n");
+        this.addGoldUpdate(player.getGold());
+        this.addHandUpdate(player.getHand());
+        this.addCityUpdate(player.getCity());
     }
 
 
-    public void addCity(City city) {
-        this.events.append("Sa ville comporte donc : ").append(city.toString()).append("\n");
+    private void addCityUpdate(City city) {
+        this.events.append("\tSa cité comporte donc : ").append(city.toString()).append("\n");
     }
 
 

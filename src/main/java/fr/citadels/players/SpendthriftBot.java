@@ -1,6 +1,5 @@
 package fr.citadels.players;
 
-import fr.citadels.cards.characters.CharacterCard;
 import fr.citadels.cards.characters.CharacterCardsList;
 import fr.citadels.cards.districts.DistrictCard;
 import fr.citadels.cards.districts.DistrictCardsPile;
@@ -11,7 +10,8 @@ import java.util.List;
 import java.util.Random;
 
 /*
- * This bot will try to buy expensive cards to obtain the most points
+ * This bot has a more spending strategy
+ * It will choose cheaper cards and buy cards as soon as it can to fill its city
  */
 public class SpendthriftBot extends Player {
 
@@ -26,22 +26,24 @@ public class SpendthriftBot extends Player {
     /* Methods */
 
     /**
-     * Get the index and the cost of the most expensive card in the hand that can be bought
+     * Get the index and the cost of the cheapest card in the hand that can be built
+     *
+     * @precondition cardsInHand must contain at least 1 card
      */
-    public int[] getMostExpensiveCardInHand() {
-        int maxIndex = 0;
+    public int[] getCheapestCardInHand() {
+        int minIndex = 0;
         for (int i = 1; i < cardsInHand.size(); i++) {
-            if ((cardsInHand.get(i).getGoldCost() > cardsInHand.get(maxIndex).getGoldCost()) && (!hasCardInCity(cardsInHand.get(maxIndex))))
-                maxIndex = i;
+            if ((cardsInHand.get(i).getGoldCost() < cardsInHand.get(minIndex).getGoldCost()) && (!hasCardInCity(cardsInHand.get(minIndex))))
+                minIndex = i;
         }
         int[] result = new int[2];
-        result[0] = maxIndex;
-        result[1] = cardsInHand.get(maxIndex).getGoldCost();
+        result[0] = minIndex;
+        result[1] = cardsInHand.get(minIndex).getGoldCost();
         return result;
     }
 
     /**
-     * Choose the most expensive card among the cards drawn
+     * Choose the cheapest card among the cards drawn
      *
      * @param pile       pile of cards
      * @param drawnCards cards drawn
@@ -49,54 +51,59 @@ public class SpendthriftBot extends Player {
      * @precondition drawnCards must contain at least 1 card
      */
     public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
-        int maxIndex = 0;
+        int minIndex = 0;
         for (int i = 1; i < drawnCards.length; i++) {
-            if (drawnCards[i].getGoldCost() > drawnCards[maxIndex].getGoldCost())
-                maxIndex = i;
+            if (drawnCards[i].getGoldCost() < drawnCards[minIndex].getGoldCost())
+                minIndex = i;
         }
-        DistrictCard cardToPlay = drawnCards[maxIndex];
-        putBack(drawnCards, pile, maxIndex);
+        DistrictCard cardToPlay = drawnCards[minIndex];
+        putBack(drawnCards, pile, minIndex);
         return cardToPlay;
     }
 
     /**
-     * Choose the most expensive card in hand with a cost > 1 that can be bought
+     * Choose the cheapest card in hand that can be bought
      *
      * @return the card chosen or null if no card can be chosen
      * @precondition cardsInHand must contain at least 1 card
      */
     public DistrictCard chooseCardInHand() {
-        int maxIndex = 0;
-        for (int i = 1; i < cardsInHand.size(); i++) {
-            if ((cardsInHand.get(i).getGoldCost() > cardsInHand.get(maxIndex).getGoldCost()) && (!hasCardInCity(cardsInHand.get(maxIndex))) && (cardsInHand.get(i).getGoldCost() <= gold))
-                maxIndex = i;
-        }
-        if ((cardsInHand.get(maxIndex).getGoldCost() < gold) && (cardsInHand.get(maxIndex).getGoldCost() > 1))
-            return cardsInHand.remove(maxIndex);
+        int minIndex = getCheapestCardInHand()[0];
+        if (cardsInHand.get(minIndex).getGoldCost() <= gold)
+            return cardsInHand.remove(minIndex);
         return null;
     }
 
 
+    /**
+     * Play a round for the linked player
+     *
+     * @param pile of cards
+     * @return the actions of the player
+     */
     public void play(DistrictCardsPile pile, Bank bank, Display display) {
 
-        // Draw 2 cards or take 2 golds
-        boolean draw = ((gold > 15) || (cardsInHand.isEmpty()) || ((gold > 5) && (getMostExpensiveCardInHand()[1] < 4)));
+        // Draw 2 cards or pick 2 golds
+        // Draw if the player has less than 5 golds, if he has no cards in hand or if the cheapest card in hand costs more than 3
+        // Else pick 2 golds
+        boolean draw = ((gold > 5) || this.cardsInHand.isEmpty() || (getCheapestCardInHand()[1] > 3));
         takeCardsOrGold(pile, bank, draw, display);
 
-        // Buy the most expensive card with a cost > 1 if possible
+        // Buy the cheapest card if possible
         if (!this.cardsInHand.isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();
             if (cardToPlace != null) {
                 cityCards.add(cardToPlace);
                 pay(cardToPlace.getGoldCost(), bank);
-                display.addDistrictBuilt(cardToPlace);
-                display.addCity(this.cityCards);
+                display.addDistrictBuilt(this, cardToPlace);
             } else {
                 display.addNoDistrictBuilt();
             }
         } else {
             display.addNoDistrictBuilt();
         }
+        display.addBlankLine();
+        takeGoldFromCity(bank, display);
     }
 
 

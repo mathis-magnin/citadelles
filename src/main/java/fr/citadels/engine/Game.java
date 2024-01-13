@@ -19,8 +19,8 @@ public class Game {
     private final DistrictCardsPile districtCardsPile;
     private final Crown crown;
     private final Bank bank;
-    private Scoreboard scoreboard;
     private final Display display;
+    private final Scoreboard scoreboard;
     private boolean isFinished;
 
 
@@ -33,6 +33,7 @@ public class Game {
         this.bank = new Bank();
         this.display = new Display();
         this.isFinished = false;
+        this.scoreboard = new Scoreboard(NB_PLAYERS);
     }
 
 
@@ -90,19 +91,18 @@ public class Game {
         this.playerList[2] = new ThriftyBot("ÉCONOME", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
         this.playerList[3] = new KingBot("MONARCHISTE", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
 
+        this.scoreboard.initializeScoreboard(this.playerList);
+
         this.display.addPlayers(this.playerList);
         this.display.addBlankLine();
-        this.display.addFirstDistrictsDrawn(this.playerList[0], this.playerList[0].getCardsInHand());
-        this.display.addFirstDistrictsDrawn(this.playerList[1], this.playerList[1].getCardsInHand());
-        this.display.addFirstDistrictsDrawn(this.playerList[2], this.playerList[2].getCardsInHand());
-        this.display.addFirstDistrictsDrawn(this.playerList[3], this.playerList[3].getCardsInHand());
-        this.display.addBlankLine();
-
-        this.scoreboard = new Scoreboard(this.playerList);
+        for (Player player : this.playerList) {
+            this.display.addFirstDistrictsDrawn(player);
+        }
+        this.display.addBlankLine(2);
 
         this.crown.initializeCrown(RAND);
         this.display.addFirstCrownedPlayer(this.playerList[this.crown.getCrownedPlayerIndex()]);
-        this.display.addBlankLine();
+        this.display.addBlankLine(3);
 
         this.display.printAndReset();
     }
@@ -120,7 +120,7 @@ public class Game {
         CharacterCard[] removedCharactersFaceDown = characters.removeCharactersFaceDown();
 
         this.display.addRemovedCharacter(removedCharactersFaceUp, removedCharactersFaceDown);
-        this.display.addBlankLine();
+        this.display.addBlankLine(2);
 
         this.crown.defineNextCrownedPlayer(this.playerList, RAND);
         int crownedPlayerIndex = this.crown.getCrownedPlayerIndex();
@@ -136,7 +136,7 @@ public class Game {
             playerList[index].chooseCharacter(characters, display);
         }
 
-        this.display.printAndReset();
+        this.display.addBlankLine();
     }
 
 
@@ -159,16 +159,13 @@ public class Game {
             if (player.hasCompleteCity()) {
                 if (!this.isFinished) {
                     Score.setFirstPlayerWithCompleteCity(player);
-                    this.display.addBlankLine();
                     this.display.addGameFinished(player);
+                    this.display.addBlankLine();
                 }
                 this.isFinished = true;
             }
             this.display.addBlankLine();
-            this.display.addBlankLine();
         }
-
-        this.display.printAndReset();
     }
 
 
@@ -181,10 +178,11 @@ public class Game {
 
         while (!this.isFinished) {
             this.display.addTurnTitle(round++);
-            this.display.printAndReset();
 
             this.playSelectionPhase();
             this.playTurnPhase();
+
+            this.display.printAndReset();
         }
 
         this.scoreboard.determineRanking();

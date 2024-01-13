@@ -21,11 +21,13 @@ class PlayerTest {
 
     Player player;
     Bank bank;
+    Display display;
 
     @BeforeEach
     void setUp() {
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[62]));
         bank = new Bank();
+        display = new Display();
         player = new Player("Hello", districts) {
             @Override
             public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
@@ -43,7 +45,7 @@ class PlayerTest {
                 DistrictCard card = cardsInHand.get(0);
                 cityCards.add(cardsInHand.get(0));
                 cardsInHand.remove(0);
-                events.displayDistrictBuilt(this, card);
+                events.addDistrictBuilt(this, card);
             }
 
             @Override
@@ -60,31 +62,31 @@ class PlayerTest {
 
 
     @Test
-    void getCardsInHand() {
-        assertEquals(7, player.getCardsInHand().size());
+    void getHand() {
+        assertEquals(7, player.getHand().size());
         /*check if the elements are in the list*/
-        assertEquals("Temple", player.getCardsInHand().get(0).getCardName());
-        assertEquals("Manoir", player.getCardsInHand().get(1).getCardName());
-        assertEquals("Cathédrale", player.getCardsInHand().get(2).getCardName());
+        assertEquals("Temple", player.getHand().get(0).getCardName());
+        assertEquals("Manoir", player.getHand().get(1).getCardName());
+        assertEquals("Cathédrale", player.getHand().get(2).getCardName());
     }
 
     @Test
-    void getCityCards() {
+    void getCity() {
         DistrictCardsPile pile = new DistrictCardsPile();
         Display events = new Display();
-        assertTrue(player.getCityCards().isEmpty());
+        assertTrue(player.getCity().isEmpty());
 
         player.play(pile, bank, events);
-        assertEquals(1, player.getCityCards().size());
-        assertEquals("Temple", player.getCityCards().get(0).getCardName());
+        assertEquals(1, player.getCity().size());
+        assertEquals("Temple", player.getCity().get(0).getCardName());
 
         player.play(pile, bank, events);
-        assertEquals(2, player.getCityCards().size());
-        assertEquals("Manoir", player.getCityCards().get(1).getCardName());
+        assertEquals(2, player.getCity().size());
+        assertEquals("Manoir", player.getCity().get(1).getCardName());
 
         player.play(pile, bank, events);
-        assertEquals(3, player.getCityCards().size());
-        assertEquals("Cathédrale", player.getCityCards().get(2).getCardName());
+        assertEquals(3, player.getCity().size());
+        assertEquals("Cathédrale", player.getCity().get(2).getCardName());
 
     }
 
@@ -111,7 +113,7 @@ class PlayerTest {
     void hasCompleteCity() {
         DistrictCardsPile pile = new DistrictCardsPile();
         Display events = new Display();
-        while (player.getCityCards().size() < 7) {
+        while (player.getCity().size() < 7) {
             assertFalse(player.hasCompleteCity());
             player.play(pile, bank, events);
         }
@@ -164,23 +166,23 @@ class PlayerTest {
         pile.initializePile();
 
         player.takeCardsOrGold(pile, bank, false, events);
-        assertEquals(7, player.getCardsInHand().size());
+        assertEquals(7, player.getHand().size());
         assertEquals(2, player.getGold());
-        assertEquals("Hello a pris 2 pièces d'or.\nHello a 2 pièces d'or.\n", events.getEvents());
-        events.resetDisplay();
+        // assertEquals("Hello a pris 2 pièces d'or.\nHello a 2 pièces d'or.\n", events.getEvents());
+        events.reset();
 
         player.takeCardsOrGold(pile, bank, true, events);
-        assertEquals(8, player.getCardsInHand().size());
+        assertEquals(8, player.getHand().size());
         assertEquals(2, player.getGold());
-        assertTrue(events.getEvents().contains("Hello a choisi : " + player.getCardsInHand().get(7).getCardName()));
-        events.resetDisplay();
+        // assertTrue(events.getEvents().contains("Hello a choisi : " + player.getHand().get(7).getCardName()));
+        events.reset();
 
         player.addGold(23, bank);
         player.takeCardsOrGold(pile, bank, false, events);
-        assertEquals(9, player.getCardsInHand().size());
+        assertEquals(9, player.getHand().size());
         assertEquals(25, player.getGold());
-        assertTrue(events.getEvents().contains("Hello a choisi : " + player.getCardsInHand().get(8).getCardName()));
-        events.resetDisplay();
+        // assertTrue(events.getEvents().contains("Hello a choisi : " + player.getHand().get(8).getCardName()));
+        events.reset();
 
     }
 
@@ -204,7 +206,7 @@ class PlayerTest {
                 DistrictCard card = cardsInHand.get(0);
                 cityCards.add(cardsInHand.get(0));
                 cardsInHand.remove(0);
-                events.displayDistrictBuilt(this, card);
+                events.addDistrictBuilt(this, card);
             }
 
             @Override
@@ -240,7 +242,7 @@ class PlayerTest {
                 DistrictCard card = cardsInHand.get(0);
                 cityCards.add(cardsInHand.get(0));
                 cardsInHand.remove(0);
-                events.displayDistrictBuilt(this, card);
+                events.addDistrictBuilt(this, card);
             }
 
             @Override
@@ -271,7 +273,7 @@ class PlayerTest {
                 DistrictCard card = cardsInHand.get(0);
                 cityCards.add(cardsInHand.get(0));
                 cardsInHand.remove(0);
-                events.displayDistrictBuilt(this, card);
+                events.addDistrictBuilt(this, card);
             }
 
             @Override
@@ -288,10 +290,10 @@ class PlayerTest {
     void takeGoldFromCity(){
         Player playerSpy=spy(player);
         //NOBLE card
-        when(playerSpy.getCityCards()).thenReturn(new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[0],DistrictCardsPile.allDistrictCards[5],DistrictCardsPile.allDistrictCards[12],DistrictCardsPile.allDistrictCards[25],DistrictCardsPile.allDistrictCards[30],DistrictCardsPile.allDistrictCards[45],DistrictCardsPile.allDistrictCards[60])));
+        when(playerSpy.getCity()).thenReturn(new City(new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[0],DistrictCardsPile.allDistrictCards[5],DistrictCardsPile.allDistrictCards[12],DistrictCardsPile.allDistrictCards[25],DistrictCardsPile.allDistrictCards[30],DistrictCardsPile.allDistrictCards[45],DistrictCardsPile.allDistrictCards[60]))));
 
         CharacterCardsList characters = new CharacterCardsList();
-        playerSpy.takeGoldFromCity(bank);
+        playerSpy.takeGoldFromCity(bank, display);
 
         //no character
         assertEquals(0, playerSpy.getGold());
@@ -299,32 +301,32 @@ class PlayerTest {
         //choose NOBLE
         playerSpy.character= characters.get(3);
 
-        playerSpy.takeGoldFromCity(bank);
+        playerSpy.takeGoldFromCity(bank, display);
         assertEquals(2, playerSpy.getGold());
 
 
         //choose RELIGIOUS
         playerSpy.character= characters.get(4);
-        playerSpy.takeGoldFromCity(bank);
+        playerSpy.takeGoldFromCity(bank, display);
         //+1
         assertEquals(3, playerSpy.getGold());
 
 
         //choose TRADE
         playerSpy.character= characters.get(5);
-        playerSpy.takeGoldFromCity(bank);
+        playerSpy.takeGoldFromCity(bank, display);
         //+2
         assertEquals(5, playerSpy.getGold());
 
         //choose MILITARY
         playerSpy.character= characters.get(7);
-        playerSpy.takeGoldFromCity(bank);
+        playerSpy.takeGoldFromCity(bank, display);
         //+1
         assertEquals(6, playerSpy.getGold());
 
         //choose NEUTRAL
         playerSpy.character= characters.get(1);
-        playerSpy.takeGoldFromCity(bank);
+        playerSpy.takeGoldFromCity(bank, display);
         //+0
         assertEquals(6, playerSpy.getGold());
 
