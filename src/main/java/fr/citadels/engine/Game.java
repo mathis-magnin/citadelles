@@ -1,32 +1,35 @@
 package fr.citadels.engine;
 
-import fr.citadels.cards.characters.CharacterCard;
-import fr.citadels.cards.characters.CharacterCardsList;
-import fr.citadels.cards.districts.DistrictCard;
-import fr.citadels.cards.districts.DistrictCardsPile;
+import fr.citadels.engine.score.Score;
+import fr.citadels.engine.score.Scoreboard;
+import fr.citadels.gameelements.Bank;
+import fr.citadels.gameelements.Crown;
+import fr.citadels.gameelements.cards.charactercards.CharacterCard;
+import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.*;
+import fr.citadels.players.bots.KingBot;
+import fr.citadels.players.bots.RandomBot;
+import fr.citadels.players.bots.SpendthriftBot;
+import fr.citadels.players.bots.ThriftyBot;
 
 import java.util.*;
 
 public class Game {
 
-    /*
-    const nbDistrict to win
-     */
-
     private static final Random RAND = new Random();
+    public static final int NB_PLAYERS = 4;
 
     /* Attributes */
 
     private final Player[] playerList;
-
     private final DistrictCardsPile districtCardsPile;
     private final Crown crown;
+    private final Bank bank;
+    private final Display display;
+    private final Scoreboard scoreboard;
     private boolean isFinished;
-    private Scoreboard scoreboard;
 
-    public static final int NB_PLAYERS = 4;
-    public static final Bank BANK = new Bank();
 
     /* Constructor */
 
@@ -34,7 +37,10 @@ public class Game {
         this.playerList = new Player[NB_PLAYERS];
         this.districtCardsPile = new DistrictCardsPile();
         this.crown = new Crown();
+        this.bank = new Bank();
+        this.display = new Display();
         this.isFinished = false;
+        this.scoreboard = new Scoreboard(NB_PLAYERS);
     }
 
 
@@ -51,8 +57,14 @@ public class Game {
 
 
     public Crown getCrown() {
-        return crown;
+        return this.crown;
     }
+
+
+    public Bank getBank() {
+        return this.bank;
+    }
+
 
     public boolean isFinished() {
         return this.isFinished;
@@ -64,6 +76,11 @@ public class Game {
     }
 
 
+    public Display getDisplay() {
+        return this.display;
+    }
+
+
     /* Methods */
 
     /**
@@ -72,74 +89,94 @@ public class Game {
     void initializeGame() {
         this.districtCardsPile.initializePile();
         this.districtCardsPile.shufflePile();
-        Display events = new Display();
 
-        //Initialize the players
-        DistrictCard[] cards = districtCardsPile.draw(4);
-        this.playerList[0] = new RandomBot("L'hasardeux", new ArrayList<>(Arrays.asList(cards)), RAND);
-        events.displayCardDrawn(this.playerList[0], cards);
+        this.display.addGameTitle();
 
-        cards = districtCardsPile.draw(4);
-        this.playerList[1] = new SpendthriftBot("Le dépensier", new ArrayList<>(Arrays.asList(cards)), RAND);
-        events.displayCardDrawn(this.playerList[1], cards);
+        // Initialize the players
+        this.playerList[0] = new RandomBot("HASARDEUX", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
+        this.playerList[1] = new SpendthriftBot("DÉPENSIER", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
+        this.playerList[2] = new ThriftyBot("ÉCONOME", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
+        this.playerList[3] = new KingBot("MONARCHISTE", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
+        this.display.addPlayers(this.playerList);
+        this.display.addBlankLine();
 
-        cards = districtCardsPile.draw(4);
-        this.playerList[2] = new ThriftyBot("L'économe", new ArrayList<>(Arrays.asList(cards)), RAND);
-        events.displayCardDrawn(this.playerList[2], cards);
+        for (Player player : this.playerList) {
+            this.display.addFirstDistrictsDrawn(player);
+        }
+        this.display.addBlankLine();
 
-        cards = districtCardsPile.draw(4);
-        this.playerList[3] = new KingBot("Le monarchiste", new ArrayList<>(Arrays.asList(cards)), RAND);
-        events.displayCardDrawn(this.playerList[3], cards);
+        // Give 2 golds to every player
+        for (Player player : this.playerList) {
+            player.addGold(2, this.bank);
+        }
+        this.display.addInitialGoldGiven(2);
+        this.display.addBlankLine();
 
-        this.scoreboard = new Scoreboard(this.playerList);
         this.crown.initializeCrown(RAND);
-        events.printDisplay();
+        this.display.addFirstCrownedPlayer(this.playerList[this.crown.getCrownedPlayerIndex()]);
+        this.display.addBlankLine(3);
+
+        this.display.printAndReset();
     }
+
 
     /**
      * Play the selection phase of the turn
      */
     public void playSelectionPhase() {
-        Display events = new Display();
-        int crownedPlayerIndex = this.crown.getCrownedPlayerIndex();
-        int length = this.playerList.length;
-        int index;
+        this.display.addSelectionPhaseTitle();
 
         CharacterCardsList characters = new CharacterCardsList();
         Collections.shuffle(characters);
         CharacterCard[] removedCharactersFaceUp = characters.removeCharactersFaceUp();
         CharacterCard[] removedCharactersFaceDown = characters.removeCharactersFaceDown();
-        events.displayRemovedCharacter(removedCharactersFaceUp, removedCharactersFaceDown);
+
+        this.display.addRemovedCharacter(removedCharactersFaceUp, removedCharactersFaceDown);
+        this.display.addBlankLine(2);
+
+        this.crown.defineNextCrownedPlayer(this.playerList, RAND);
+        int crownedPlayerIndex = this.crown.getCrownedPlayerIndex();
+
+        this.display.addCrownedPlayer(this.playerList[crownedPlayerIndex]);
+        this.display.addBlankLine();
+
+        int length = this.playerList.length;
+        int index;
 
         for (int i = 0; i < length; i++) {
             index = (i + crownedPlayerIndex) % length;
-            playerList[index].chooseCharacter(characters, events);
+            playerList[index].chooseCharacter(characters, display);
         }
-        events.printDisplay();
+
+        this.display.addBlankLine();
     }
 
 
     /**
      * Play a turn for each player
      */
-    public void playTurn() {
-        this.playSelectionPhase();
-        Display events = new Display();
+    public void playTurnPhase() {
+        this.display.addTurnPhaseTitle();
 
         Player[] orderedPlayers = new Player[playerList.length];
         System.arraycopy(this.playerList, 0, orderedPlayers, 0, this.playerList.length);
         Arrays.sort(orderedPlayers);   // Sort the player based on their character's rank.
 
         for (Player player : orderedPlayers) {
-            events.displayPlayerTurn(player);
-            player.play(this.districtCardsPile, events);
+            this.display.addPlayerTurn(player);
+            this.display.addBlankLine();
+            this.display.addPlayer(player);
+            this.display.addBlankLine();
+            player.play(this.districtCardsPile, this.bank, this.display);
             if (player.hasCompleteCity()) {
                 if (!this.isFinished) {
                     Score.setFirstPlayerWithCompleteCity(player);
+                    this.display.addGameFinished(player);
+                    this.display.addBlankLine();
                 }
                 this.isFinished = true;
             }
-            events.printAndReset();
+            this.display.addBlankLine();
         }
     }
 
@@ -148,22 +185,25 @@ public class Game {
      * Play the game until a player has a complete city and determine the ranking
      */
     public void playGame() {
-        Display events = new Display();
         this.initializeGame();
         int round = 1;
 
         while (!this.isFinished) {
-            events.displayTurn(round++);
-            this.crown.defineNextCrownedPlayer(this.playerList, RAND);
-            events.displayCrownedPlayer(this.playerList[this.crown.getCrownedPlayerIndex()]);
-            events.printAndReset();
-            this.playTurn();
+            this.display.addTurnTitle(round++);
+
+            this.playSelectionPhase();
+            this.playTurnPhase();
+
+            this.display.printAndReset();
         }
 
+        this.scoreboard.initializeScoreboard(this.playerList);
         this.scoreboard.determineRanking();
-        events.displayWinner(this.scoreboard.getWinner());
-        events.displayScoreboard(this.scoreboard);
-        events.printDisplay();
+        this.display.addScoreTitle();
+        this.display.addScoreboard(this.scoreboard);
+        this.display.addBlankLine();
+        this.display.addWinner(this.scoreboard.getWinner());
+        this.display.printAndReset();
     }
 
 }

@@ -1,11 +1,14 @@
 package fr.citadels.players;
 
-import fr.citadels.cards.characters.CharacterCard;
-import fr.citadels.cards.characters.CharacterCardsList;
-import fr.citadels.cards.districts.DistrictCard;
-import fr.citadels.cards.districts.DistrictCardsPile;
+import fr.citadels.gameelements.cards.CardFamily;
+import fr.citadels.gameelements.cards.charactercards.CharacterCard;
+import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.districtcards.City;
+import fr.citadels.gameelements.cards.districtcards.DistrictCard;
+import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
+import fr.citadels.gameelements.Bank;
 import fr.citadels.engine.Display;
-import fr.citadels.engine.Game;
+import fr.citadels.gameelements.cards.districtcards.Hand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,21 +17,20 @@ public abstract class Player implements Comparable<Player> {
 
     /* Attributes */
 
-    protected final String name;
-    protected List<DistrictCard> cardsInHand;
-    protected List<DistrictCard> cityCards;
-    protected int gold;
+    private final String name;
+    private Hand hand;
+    private City city;
+    private int gold;
 
-    protected CharacterCard character;
+    private CharacterCard character;
 
 
     /* Constructor */
 
-    protected Player(String name, List<DistrictCard> cards) {
+    public Player(String name, List<DistrictCard> cards) {
         this.name = name;
-        this.cardsInHand = new ArrayList<>();
-        this.cardsInHand.addAll(cards); /* Avoid modification from outside */
-        this.cityCards = new ArrayList<>();
+        this.hand = new Hand(cards);
+        this.city = new City();
         this.character = null;
     }
 
@@ -46,22 +48,57 @@ public abstract class Player implements Comparable<Player> {
 
 
     /**
-     * Get a copy of the cards in hand
+     * Get a copy of the player's hand
      *
-     * @return the cards in hand
+     * @return the hand
      */
-    public List<DistrictCard> getCardsInHand() {
-        return new ArrayList<>(this.cardsInHand);
+    public Hand getHand() {
+        return new Hand(new ArrayList<>(this.hand));
+    }
+
+    public void setHand(Hand hand) {
+        this.hand = hand;
+    }
+
+    /**
+     * Sort the player's hand
+     * @param family the family of the cards to put first
+     */
+    public void sortHand(CardFamily family) {
+        this.hand.sortCards(family);
+    }
+
+    /**
+     * Remove a card from the player's hand
+     * @param index the index of the card to remove
+     * @return the card removed
+     */
+    public DistrictCard removeCardFromHand(int index) {
+        return this.hand.removeCard(index);
     }
 
 
     /**
-     * Get a copy of the cards face up (of the player's city)
+     * Get a copy of the player's city
      *
-     * @return the cards face up
+     * @return the city
      */
-    public List<DistrictCard> getCityCards() {
-        return new ArrayList<>(this.cityCards);
+    public City getCity() {
+        return new City(new ArrayList<>(this.city));
+    }
+
+    /**
+     * Add a card to the player's city
+     */
+    public void addCardToCity(DistrictCard card) {
+        this.city.add(card);
+    }
+
+    /**
+     * Add cards to the player's city
+     */
+    public void addCardsToCity(List<DistrictCard> cards) {
+        this.city.addAll(cards);
     }
 
 
@@ -74,9 +111,17 @@ public abstract class Player implements Comparable<Player> {
         return this.gold;
     }
 
-
+    /**
+     * Get a copy of the player's character
+     * @return the character
+     */
     public CharacterCard getCharacter() {
-        return this.character;
+        if (this.character == null) return null; // if the player has no character (first round
+        return new CharacterCard(this.character.getCardName(), this.character.getCardFamily(), this.character.getRank());
+    }
+
+    public void setCharacter(CharacterCard character) {
+        this.character = character;
     }
 
 
@@ -94,6 +139,7 @@ public abstract class Player implements Comparable<Player> {
         return this.getCharacter().compareTo(other.getCharacter());
     }
 
+
     @Override
     public boolean equals(Object other) {
         if (other == null) return false;
@@ -101,9 +147,16 @@ public abstract class Player implements Comparable<Player> {
         return this.name.equals(otherPlayer.name);
     }
 
+
     @Override
     public int hashCode() {
         return this.name.hashCode();
+    }
+
+
+    @Override
+    public String toString() {
+        return this.name + "\n\tPersonnage : " +  this.character + "\n\tFortune : " + this.gold + "\n\tMain : " + this.hand + "\n\tCité : " + this.city;
     }
 
 
@@ -115,7 +168,7 @@ public abstract class Player implements Comparable<Player> {
      * @return A boolean value.
      */
     public boolean hasCompleteCity() {
-        return cityCards.size() >= 7;
+        return city.isComplete();
     }
 
 
@@ -137,13 +190,13 @@ public abstract class Player implements Comparable<Player> {
 
 
     /**
-     * check if the player has the card in hand
+     * check if the player has the card in his city
      *
      * @param card the card to check
-     * @return true if the player has the card in hand
+     * @return true if the player has the card in his city
      */
     public boolean hasCardInCity(DistrictCard card) {
-        return cityCards.contains(card);
+        return city.contains(card);
     }
 
 
@@ -152,9 +205,9 @@ public abstract class Player implements Comparable<Player> {
      *
      * @param amount that represents the amount to add
      */
-    public void addGold(int amount) {
-        if (Game.BANK.getGold() >= amount)
-            gold += Game.BANK.take(amount);
+    public void addGold(int amount, Bank bank) {
+        if (bank.getGold() >= amount)
+            gold += bank.take(amount);
         else throw new IllegalArgumentException("Not enough money in bank");
     }
 
@@ -166,11 +219,11 @@ public abstract class Player implements Comparable<Player> {
      * @throws IllegalArgumentException if the amount exceeds the money owned
      * @precondition amount must be less or equal to the gold amount of the player
      */
-    public void pay(int amount) throws IllegalArgumentException {
+    public void pay(int amount, Bank bank) throws IllegalArgumentException {
         if (amount > gold || amount < 0)
             throw new IllegalArgumentException("Not enough money\n" + "expected : " + amount + "\nactual : " + gold);
         gold -= amount;
-        Game.BANK.give(amount);
+        bank.give(amount);
     }
 
     /**
@@ -179,22 +232,45 @@ public abstract class Player implements Comparable<Player> {
      * @param pile pile of cards
      * @param draw true if the player has to draw cards
      */
-    public void takeCardsOrGold(DistrictCardsPile pile, boolean draw, Display events) {
+    public void takeCardsOrGold(DistrictCardsPile pile, Bank bank, boolean draw, Display display) {
         if (!draw) {
             try {
-                addGold(2);
-                events.displayGoldTaken(this, 2);
+                addGold(2, bank);
+
+                display.addGoldTaken(this,2);
+                display.addBlankLine();
             } catch (IllegalArgumentException e) {
                 draw = true;
             }
         }
         if (draw) {
             DistrictCard[] drawnCards = pile.draw(2);
-            events.displayCardDrawn(this, drawnCards);
-            if (drawnCards.length != 0) {//if there is at least 1 card
+            display.addDistrictDrawn(drawnCards);
+            if (drawnCards.length != 0) { // if there is at least 1 card
                 DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
-                cardsInHand.add(cardToPlay);
-                events.displayCardChosen(this, cardToPlay);
+                hand.add(cardToPlay);
+
+                display.addDistrictChosen(this, cardToPlay);
+                display.addBlankLine();
+            }
+        }
+    }
+
+    /**
+     * take gold from the city if the family of the card is the same as the family of the character
+     */
+    public void takeGoldFromCity(Bank bank, Display display){
+        if(character != null) {
+            int goldToTake = 0;
+            for(DistrictCard card : getCity()) {
+                if(card.getCardFamily().equals(character.getCardFamily())) {
+                    goldToTake++;
+                }
+            }
+            if (goldToTake > 0) {
+                addGold(goldToTake, bank);
+                display.addGoldTakenFromCity(this, goldToTake);
+                display.addBlankLine();
             }
         }
     }
@@ -223,7 +299,7 @@ public abstract class Player implements Comparable<Player> {
      * @param pile of cards
      * @return the actions of the player
      */
-    public abstract void play(DistrictCardsPile pile, Display events);
+    public abstract void play(DistrictCardsPile pile, Bank bank, Display display);
 
 
     /**
@@ -231,6 +307,6 @@ public abstract class Player implements Comparable<Player> {
      *
      * @param characters the list of characterCard.
      */
-    public abstract void chooseCharacter(CharacterCardsList characters, Display events);
+    public abstract void chooseCharacter(CharacterCardsList characters, Display display);
 
 }

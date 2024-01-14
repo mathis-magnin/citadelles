@@ -4,7 +4,6 @@ import fr.citadels.players.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static fr.citadels.engine.Game.BANK;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
@@ -13,7 +12,6 @@ class GameTest {
 
     @BeforeEach
     void setUp() {
-        BANK.reset();
         game.initializeGame();
     }
 
@@ -22,7 +20,8 @@ class GameTest {
     void initializeGameTest() {
         assertEquals(51, game.getDistrictCardsPile().size());
         for (Player player : game.getPlayerList()) {
-            assertEquals(4, player.getCardsInHand().size());
+            assertEquals(4, player.getHand().size());
+            assertEquals(2, player.getGold());
         }
     }
 
