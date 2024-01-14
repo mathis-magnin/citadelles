@@ -1,4 +1,4 @@
-package fr.citadels.engine.Score;
+package fr.citadels.engine.score;
 
 import fr.citadels.players.Player;
 
@@ -14,7 +14,7 @@ public class Scoreboard {
 
     /* Constructor */
 
-    public Scoreboard(int nbPlayers){
+    public Scoreboard(int nbPlayers) {
         this.scores = new Score[nbPlayers];
     }
 

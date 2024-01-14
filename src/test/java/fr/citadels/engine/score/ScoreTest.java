@@ -1,6 +1,7 @@
-package fr.citadels.engine;
+package fr.citadels.engine.score;
 
-import fr.citadels.engine.Score.Score;
+import fr.citadels.engine.Display;
+import fr.citadels.engine.score.Score;
 import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
@@ -155,6 +156,7 @@ class ScoreTest {
         public void play(DistrictCardsPile pile, Bank bank, Display events) {
             this.addCardsToCity(this.getHand());
         }
+
         @Override
         public void chooseCharacter(CharacterCardsList characters, Display events) {
             this.setCharacter(characters.get(4));

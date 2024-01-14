@@ -1,4 +1,4 @@
-package fr.citadels.players;
+package fr.citadels.gameelements.cards.districtcards;
 
 import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;

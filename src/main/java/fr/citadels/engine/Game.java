@@ -1,7 +1,7 @@
 package fr.citadels.engine;
 
-import fr.citadels.engine.Score.Score;
-import fr.citadels.engine.Score.Scoreboard;
+import fr.citadels.engine.score.Score;
+import fr.citadels.engine.score.Scoreboard;
 import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.Crown;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;

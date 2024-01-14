@@ -1,7 +1,8 @@
-package fr.citadels.engine;
+package fr.citadels.engine.score;
 
-import fr.citadels.engine.Score.Score;
-import fr.citadels.engine.Score.Scoreboard;
+import fr.citadels.engine.Display;
+import fr.citadels.engine.score.Score;
+import fr.citadels.engine.score.Scoreboard;
 import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
@@ -75,10 +76,12 @@ class ScoreboardTest {
         public DistrictCard chooseCardInHand() {
             return null;
         }
+
         @Override
         public void play(DistrictCardsPile pile, Bank bank, Display events) {
             this.addCardsToCity(this.getHand());
         }
+
         @Override
         public void chooseCharacter(CharacterCardsList characters, Display events) {
             this.setCharacter(characters.get(1));
@@ -95,10 +98,12 @@ class ScoreboardTest {
         public DistrictCard chooseCardInHand() {
             return null;
         }
+
         @Override
         public void play(DistrictCardsPile pile, Bank bank, Display events) {
             this.addCardsToCity(this.getHand());
         }
+
         @Override
         public void chooseCharacter(CharacterCardsList characters, Display events) {
             this.setCharacter(characters.get(2));
@@ -115,10 +120,12 @@ class ScoreboardTest {
         public DistrictCard chooseCardInHand() {
             return null;
         }
+
         @Override
         public void play(DistrictCardsPile pile, Bank bank, Display events) {
             this.addCardsToCity(this.getHand());
         }
+
         @Override
         public void chooseCharacter(CharacterCardsList characters, Display events) {
             this.setCharacter(characters.get(3));
@@ -135,10 +142,12 @@ class ScoreboardTest {
         public DistrictCard chooseCardInHand() {
             return null;
         }
+
         @Override
         public void play(DistrictCardsPile pile, Bank bank, Display events) {
             this.addCardsToCity(this.getHand());
         }
+
         @Override
         public void chooseCharacter(CharacterCardsList characters, Display events) {
             this.setCharacter(characters.get(4));

@@ -1,6 +1,6 @@
 package fr.citadels.engine;
 
-import fr.citadels.engine.Score.Scoreboard;
+import fr.citadels.engine.score.Scoreboard;
 import fr.citadels.gameelements.cards.Card;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
@@ -106,7 +106,7 @@ public class Display {
 
     public void addFirstDistrictsDrawn(Player player) {
         this.events.append(player.getName()).append(" pioche : ");
-        for (DistrictCard districtCard : player.getHand() ) {
+        for (DistrictCard districtCard : player.getHand()) {
             this.events.append(districtCard.toString()).append(", ");
         }
         this.removeLastComma();
@@ -123,11 +123,9 @@ public class Display {
         /* Cards up */
         if (cardsUp.length >= 2) {
             this.events.append("Les personnages retirés face visible sont : ");
-        }
-        else if (cardsUp.length == 1) {
+        } else if (cardsUp.length == 1) {
             this.events.append("Le personnage retiré face visible est : ");
-        }
-        else {
+        } else {
             this.events.append("Aucun personnage n'est retiré face visible.");
         }
         for (CharacterCard card : cardsUp) {
@@ -139,11 +137,9 @@ public class Display {
         /* Cards down */
         if (cardsDown.length >= 2) {
             this.events.append("Les personnages retirés face cachée sont : ");
-        }
-        else if (cardsDown.length == 1) {
+        } else if (cardsDown.length == 1) {
             this.events.append("Le personnage retiré face cachée est : ");
-        }
-        else {
+        } else {
             this.events.append("Aucun personnage n'est retiré face cachée.");
         }
         for (CharacterCard card : cardsDown) {
