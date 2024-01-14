@@ -1,10 +1,17 @@
 package fr.citadels.engine;
 
-import fr.citadels.cards.characters.CharacterCard;
-import fr.citadels.cards.characters.CharacterCardsList;
-import fr.citadels.cards.districts.DistrictCard;
-import fr.citadels.cards.districts.DistrictCardsPile;
+import fr.citadels.engine.Score.Score;
+import fr.citadels.engine.Score.Scoreboard;
+import fr.citadels.gameelements.Bank;
+import fr.citadels.gameelements.Crown;
+import fr.citadels.gameelements.cards.charactercards.CharacterCard;
+import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.*;
+import fr.citadels.players.bots.KingBot;
+import fr.citadels.players.bots.RandomBot;
+import fr.citadels.players.bots.SpendthriftBot;
+import fr.citadels.players.bots.ThriftyBot;
 
 import java.util.*;
 

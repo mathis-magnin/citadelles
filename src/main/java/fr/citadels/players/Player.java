@@ -1,11 +1,14 @@
 package fr.citadels.players;
 
-import fr.citadels.cards.characters.CharacterCard;
-import fr.citadels.cards.characters.CharacterCardsList;
-import fr.citadels.cards.districts.DistrictCard;
-import fr.citadels.cards.districts.DistrictCardsPile;
-import fr.citadels.engine.Bank;
+import fr.citadels.gameelements.cards.CardFamily;
+import fr.citadels.gameelements.cards.charactercards.CharacterCard;
+import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.districtcards.City;
+import fr.citadels.gameelements.cards.districtcards.DistrictCard;
+import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
+import fr.citadels.gameelements.Bank;
 import fr.citadels.engine.Display;
+import fr.citadels.gameelements.cards.districtcards.Hand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,20 +17,20 @@ public abstract class Player implements Comparable<Player> {
 
     /* Attributes */
 
-    protected final String name;
-    protected Hand cardsInHand;
-    protected City cityCards;
-    protected int gold;
+    private final String name;
+    private Hand hand;
+    private City city;
+    private int gold;
 
-    protected CharacterCard character;
+    private CharacterCard character;
 
 
     /* Constructor */
 
-    protected Player(String name, List<DistrictCard> cards) {
+    public Player(String name, List<DistrictCard> cards) {
         this.name = name;
-        this.cardsInHand = new Hand(cards);
-        this.cityCards = new City();
+        this.hand = new Hand(cards);
+        this.city = new City();
         this.character = null;
     }
 
@@ -50,7 +53,28 @@ public abstract class Player implements Comparable<Player> {
      * @return the hand
      */
     public Hand getHand() {
-        return new Hand(new ArrayList<>(this.cardsInHand));
+        return new Hand(new ArrayList<>(this.hand));
+    }
+
+    public void setHand(Hand hand) {
+        this.hand = hand;
+    }
+
+    /**
+     * Sort the player's hand
+     * @param family the family of the cards to put first
+     */
+    public void sortHand(CardFamily family) {
+        this.hand.sortCards(family);
+    }
+
+    /**
+     * Remove a card from the player's hand
+     * @param index the index of the card to remove
+     * @return the card removed
+     */
+    public DistrictCard removeCardFromHand(int index) {
+        return this.hand.removeCard(index);
     }
 
 
@@ -60,7 +84,21 @@ public abstract class Player implements Comparable<Player> {
      * @return the city
      */
     public City getCity() {
-        return new City(new ArrayList<>(this.cityCards));
+        return new City(new ArrayList<>(this.city));
+    }
+
+    /**
+     * Add a card to the player's city
+     */
+    public void addCardToCity(DistrictCard card) {
+        this.city.add(card);
+    }
+
+    /**
+     * Add cards to the player's city
+     */
+    public void addCardsToCity(List<DistrictCard> cards) {
+        this.city.addAll(cards);
     }
 
 
@@ -73,9 +111,17 @@ public abstract class Player implements Comparable<Player> {
         return this.gold;
     }
 
-
+    /**
+     * Get a copy of the player's character
+     * @return the character
+     */
     public CharacterCard getCharacter() {
-        return this.character;
+        if (this.character == null) return null; // if the player has no character (first round
+        return new CharacterCard(this.character.getCardName(), this.character.getCardFamily(), this.character.getRank());
+    }
+
+    public void setCharacter(CharacterCard character) {
+        this.character = character;
     }
 
 
@@ -110,7 +156,7 @@ public abstract class Player implements Comparable<Player> {
 
     @Override
     public String toString() {
-        return this.name + "\n\tPersonnage : " +  this.character + "\n\tFortune : " + this.gold + "\n\tMain : " + this.cardsInHand + "\n\tCité : " + this.cityCards;
+        return this.name + "\n\tPersonnage : " +  this.character + "\n\tFortune : " + this.gold + "\n\tMain : " + this.hand + "\n\tCité : " + this.city;
     }
 
 
@@ -122,7 +168,7 @@ public abstract class Player implements Comparable<Player> {
      * @return A boolean value.
      */
     public boolean hasCompleteCity() {
-        return cityCards.isComplete();
+        return city.isComplete();
     }
 
 
@@ -150,7 +196,7 @@ public abstract class Player implements Comparable<Player> {
      * @return true if the player has the card in his city
      */
     public boolean hasCardInCity(DistrictCard card) {
-        return cityCards.contains(card);
+        return city.contains(card);
     }
 
 
@@ -202,7 +248,7 @@ public abstract class Player implements Comparable<Player> {
             display.addDistrictDrawn(drawnCards);
             if (drawnCards.length != 0) { // if there is at least 1 card
                 DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
-                cardsInHand.add(cardToPlay);
+                hand.add(cardToPlay);
 
                 display.addDistrictChosen(this, cardToPlay);
                 display.addBlankLine();

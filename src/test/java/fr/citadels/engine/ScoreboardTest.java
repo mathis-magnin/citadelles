@@ -1,9 +1,11 @@
 package fr.citadels.engine;
 
-import fr.citadels.cards.characters.CharacterCard;
-import fr.citadels.cards.characters.CharacterCardsList;
-import fr.citadels.cards.districts.DistrictCard;
-import fr.citadels.cards.districts.DistrictCardsPile;
+import fr.citadels.engine.Score.Score;
+import fr.citadels.engine.Score.Scoreboard;
+import fr.citadels.gameelements.Bank;
+import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.districtcards.DistrictCard;
+import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -75,11 +77,11 @@ class ScoreboardTest {
         }
         @Override
         public void play(DistrictCardsPile pile, Bank bank, Display events) {
-            this.cityCards.addAll(this.cardsInHand);
+            this.addCardsToCity(this.getHand());
         }
         @Override
         public void chooseCharacter(CharacterCardsList characters, Display events) {
-            this.character = characters.get(1);
+            this.setCharacter(characters.get(1));
         }
     };
 
@@ -95,11 +97,11 @@ class ScoreboardTest {
         }
         @Override
         public void play(DistrictCardsPile pile, Bank bank, Display events) {
-            this.cityCards.addAll(this.cardsInHand);
+            this.addCardsToCity(this.getHand());
         }
         @Override
         public void chooseCharacter(CharacterCardsList characters, Display events) {
-            this.character = characters.get(2);
+            this.setCharacter(characters.get(2));
         }
     };
 
@@ -115,11 +117,11 @@ class ScoreboardTest {
         }
         @Override
         public void play(DistrictCardsPile pile, Bank bank, Display events) {
-            this.cityCards.addAll(this.cardsInHand);
+            this.addCardsToCity(this.getHand());
         }
         @Override
         public void chooseCharacter(CharacterCardsList characters, Display events) {
-            this.character = characters.get(3);
+            this.setCharacter(characters.get(3));
         }
     };
 
@@ -135,11 +137,11 @@ class ScoreboardTest {
         }
         @Override
         public void play(DistrictCardsPile pile, Bank bank, Display events) {
-            this.cityCards.addAll(this.cardsInHand);
+            this.addCardsToCity(this.getHand());
         }
         @Override
         public void chooseCharacter(CharacterCardsList characters, Display events) {
-            this.character = characters.get(4);
+            this.setCharacter(characters.get(4));
         }
     };
     Scoreboard scoreboard = new Scoreboard(new Player[]{player1, player2, player3, player4});
