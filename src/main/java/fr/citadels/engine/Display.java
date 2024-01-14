@@ -1,11 +1,11 @@
 package fr.citadels.engine;
 
-import fr.citadels.cards.Card;
-import fr.citadels.cards.CardFamily;
-import fr.citadels.cards.characters.CharacterCard;
-import fr.citadels.cards.districts.DistrictCard;
-import fr.citadels.players.City;
-import fr.citadels.players.Hand;
+import fr.citadels.engine.Score.Scoreboard;
+import fr.citadels.gameelements.cards.Card;
+import fr.citadels.gameelements.cards.charactercards.CharacterCard;
+import fr.citadels.gameelements.cards.districtcards.DistrictCard;
+import fr.citadels.gameelements.cards.districtcards.City;
+import fr.citadels.gameelements.cards.districtcards.Hand;
 import fr.citadels.players.Player;
 
 public class Display {

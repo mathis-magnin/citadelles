@@ -1,12 +1,11 @@
 package fr.citadels.players;
 
-import fr.citadels.cards.characters.CharacterCard;
-import fr.citadels.cards.characters.CharacterCardsList;
-import fr.citadels.cards.districts.DistrictCard;
-import fr.citadels.cards.districts.DistrictCardsPile;
-import fr.citadels.engine.Bank;
+import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.districtcards.City;
+import fr.citadels.gameelements.cards.districtcards.DistrictCard;
+import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
+import fr.citadels.gameelements.Bank;
 import fr.citadels.engine.Display;
-import fr.citadels.engine.Game;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -42,15 +41,15 @@ class PlayerTest {
             @Override
             public void play(DistrictCardsPile pile, Bank bank, Display events) {
                 this.chooseCharacter(new CharacterCardsList(), events);
-                DistrictCard card = cardsInHand.get(0);
-                cityCards.add(cardsInHand.get(0));
-                cardsInHand.remove(0);
+                DistrictCard card = getHand().get(0);
+                addCardToCity(getHand().get(0));
+                removeCardFromHand(0);
                 events.addDistrictBuilt(this, card);
             }
 
             @Override
             public void chooseCharacter(CharacterCardsList characters, Display events) {
-                this.character = characters.get(1);
+                this.setCharacter(characters.get(1));
             }
         };
     }
@@ -203,15 +202,15 @@ class PlayerTest {
             @Override
             public void play(DistrictCardsPile pile, Bank bank, Display events) {
                 this.chooseCharacter(new CharacterCardsList(), events);
-                DistrictCard card = cardsInHand.get(0);
-                cityCards.add(cardsInHand.get(0));
-                cardsInHand.remove(0);
+                DistrictCard card = getHand().get(0);
+                addCardToCity(getHand().get(0));
+                removeCardFromHand(0);
                 events.addDistrictBuilt(this, card);
             }
 
             @Override
             public void chooseCharacter(CharacterCardsList characters, Display events) {
-                this.character = characters.get(2);
+                this.setCharacter(characters.get(2));
             }
         };
         player.play(new DistrictCardsPile(), bank, new Display());
@@ -239,15 +238,15 @@ class PlayerTest {
             @Override
             public void play(DistrictCardsPile pile, Bank bank, Display events) {
                 this.chooseCharacter(new CharacterCardsList(), events);
-                DistrictCard card = cardsInHand.get(0);
-                cityCards.add(cardsInHand.get(0));
-                cardsInHand.remove(0);
+                DistrictCard card = getHand().get(0);
+                addCardToCity(getHand().get(0));
+                removeCardFromHand(0);
                 events.addDistrictBuilt(this, card);
             }
 
             @Override
             public void chooseCharacter(CharacterCardsList characters, Display events) {
-                this.character = characters.get(2);
+                this.setCharacter(characters.get(2));
             }
         };
         player.play(new DistrictCardsPile(), bank, new Display());
@@ -270,15 +269,15 @@ class PlayerTest {
             @Override
             public void play(DistrictCardsPile pile, Bank bank, Display events) {
                 this.chooseCharacter(new CharacterCardsList(), events);
-                DistrictCard card = cardsInHand.get(0);
-                cityCards.add(cardsInHand.get(0));
-                cardsInHand.remove(0);
+                DistrictCard card = getHand().get(0);
+                addCardToCity(getHand().get(0));
+                removeCardFromHand(0);
                 events.addDistrictBuilt(this, card);
             }
 
             @Override
             public void chooseCharacter(CharacterCardsList characters, Display events) {
-                this.character = characters.get(2);
+                this.setCharacter(characters.get(2));
             }
         };
         assertNotEquals(player, player2);
@@ -299,33 +298,33 @@ class PlayerTest {
         assertEquals(0, playerSpy.getGold());
 
         //choose NOBLE
-        playerSpy.character= characters.get(3);
+        playerSpy.setCharacter(characters.get(3));
 
         playerSpy.takeGoldFromCity(bank, display);
         assertEquals(2, playerSpy.getGold());
 
 
         //choose RELIGIOUS
-        playerSpy.character= characters.get(4);
+        playerSpy.setCharacter(characters.get(4));
         playerSpy.takeGoldFromCity(bank, display);
         //+1
         assertEquals(3, playerSpy.getGold());
 
 
         //choose TRADE
-        playerSpy.character= characters.get(5);
+        playerSpy.setCharacter(characters.get(5));
         playerSpy.takeGoldFromCity(bank, display);
         //+2
         assertEquals(5, playerSpy.getGold());
 
         //choose MILITARY
-        playerSpy.character= characters.get(7);
+        playerSpy.setCharacter(characters.get(7));
         playerSpy.takeGoldFromCity(bank, display);
         //+1
         assertEquals(6, playerSpy.getGold());
 
         //choose NEUTRAL
-        playerSpy.character= characters.get(1);
+        playerSpy.setCharacter(characters.get(1));
         playerSpy.takeGoldFromCity(bank, display);
         //+0
         assertEquals(6, playerSpy.getGold());

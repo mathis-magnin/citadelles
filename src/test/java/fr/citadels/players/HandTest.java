@@ -1,12 +1,10 @@
 package fr.citadels.players;
 
-import fr.citadels.cards.CardFamily;
-import fr.citadels.cards.districts.DistrictCard;
-import fr.citadels.cards.districts.DistrictCardsPile;
-import org.junit.jupiter.api.BeforeEach;
+import fr.citadels.gameelements.cards.CardFamily;
+import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
+import fr.citadels.gameelements.cards.districtcards.Hand;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
