@@ -5,6 +5,8 @@ import java.util.List;
 
 public class City extends ArrayList<DistrictCard> {
 
+    public static final int SIZE_TO_WIN = 7;
+
     /* Constructors */
 
     public City() {
@@ -41,7 +43,7 @@ public class City extends ArrayList<DistrictCard> {
      * @return A boolean value.
      */
     public boolean isComplete() {
-        return this.size() >= 7;
+        return this.size() >= SIZE_TO_WIN;
     }
 
 
