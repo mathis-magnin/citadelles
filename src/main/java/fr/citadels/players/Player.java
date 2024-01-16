@@ -60,8 +60,20 @@ public abstract class Player implements Comparable<Player> {
         this.hand = hand;
     }
 
+    public void addGold(int amount) {
+        this.gold += amount;
+    }
+
+    public void removeGold(int amount) {
+        if (amount >= this.gold)
+            this.gold = 0;
+        else
+            this.gold -= amount;
+    }
+
     /**
      * Sort the player's hand
+     *
      * @param family the family of the cards to put first
      */
     public void sortHand(CardFamily family) {
@@ -70,6 +82,7 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * Remove a card from the player's hand
+     *
      * @param index the index of the card to remove
      * @return the card removed
      */
@@ -113,6 +126,7 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * Get a copy of the player's character
+     *
      * @return the character
      */
     public CharacterCard getCharacter() {
@@ -156,7 +170,7 @@ public abstract class Player implements Comparable<Player> {
 
     @Override
     public String toString() {
-        return this.name + "\n\tPersonnage : " +  this.character + "\n\tFortune : " + this.gold + "\n\tMain : " + this.hand + "\n\tCité : " + this.city;
+        return this.name + "\n\tPersonnage : " + this.character + "\n\tFortune : " + this.gold + "\n\tMain : " + this.hand + "\n\tCité : " + this.city;
     }
 
 
@@ -201,32 +215,6 @@ public abstract class Player implements Comparable<Player> {
 
 
     /**
-     * add amount to the gold of the player
-     *
-     * @param amount that represents the amount to add
-     */
-    public void addGold(int amount, Bank bank) {
-        if (bank.getGold() >= amount)
-            gold += bank.take(amount);
-        else throw new IllegalArgumentException("Not enough money in bank");
-    }
-
-
-    /**
-     * decrease the gold of "amount"
-     *
-     * @param amount the amount to remove from the player's wallet
-     * @throws IllegalArgumentException if the amount exceeds the money owned
-     * @precondition amount must be less or equal to the gold amount of the player
-     */
-    public void pay(int amount, Bank bank) throws IllegalArgumentException {
-        if (amount > gold || amount < 0)
-            throw new IllegalArgumentException("Not enough money\n" + "expected : " + amount + "\nactual : " + gold);
-        gold -= amount;
-        bank.give(amount);
-    }
-
-    /**
      * takes 2 cards or 2 golds from the bank and add them to the player
      *
      * @param pile pile of cards
@@ -234,14 +222,12 @@ public abstract class Player implements Comparable<Player> {
      */
     public void takeCardsOrGold(DistrictCardsPile pile, Bank bank, boolean draw, Display display) {
         if (!draw) {
-            try {
-                addGold(2, bank);
+            if (!bank.isEmpty())
+                addGold(bank.take(2));
+            else draw = true;
 
-                display.addGoldTaken(this,2);
-                display.addBlankLine();
-            } catch (IllegalArgumentException e) {
-                draw = true;
-            }
+            display.addGoldTaken(this, 2);
+            display.addBlankLine();
         }
         if (draw) {
             DistrictCard[] drawnCards = pile.draw(2);
@@ -259,16 +245,17 @@ public abstract class Player implements Comparable<Player> {
     /**
      * take gold from the city if the family of the card is the same as the family of the character
      */
-    public void takeGoldFromCity(Bank bank, Display display){
-        if(character != null) {
+    public void takeGoldFromCity(Bank bank, Display display) {
+        if (character != null) {
             int goldToTake = 0;
-            for(DistrictCard card : getCity()) {
-                if(card.getCardFamily().equals(character.getCardFamily())) {
+            for (DistrictCard card : getCity()) {
+                if (card.getCardFamily().equals(character.getCardFamily())) {
                     goldToTake++;
                 }
             }
             if (goldToTake > 0) {
-                addGold(goldToTake, bank);
+
+                addGold(bank.take(goldToTake));
                 display.addGoldTakenFromCity(this, goldToTake);
                 display.addBlankLine();
             }

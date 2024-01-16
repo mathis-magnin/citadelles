@@ -90,7 +90,7 @@ class KingBotTest {
         assertEquals("Temple", player1.getHand().get(2).getCardName());
 
         //Manoir
-        player1.addGold(3, bank);
+        player1.addGold(bank.take(3));
         cardToPlay = player1.chooseCardInHand();
         assertEquals("Manoir", cardToPlay.getCardName());
         assertEquals(2, player1.getHand().size());

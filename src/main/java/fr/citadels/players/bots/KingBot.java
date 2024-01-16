@@ -16,17 +16,12 @@ import java.util.Random;
  */
 public class KingBot extends Player {
 
-    private final Random RAND;
-
-    private boolean canPlaceCard;
-
     /*
      * Constructor
      */
     public KingBot(String name, List<DistrictCard> cards, Random random) {
         super(name, cards);
         sortHand(CardFamily.NOBLE);
-        RAND = random;
     }
 
 
@@ -92,7 +87,8 @@ public class KingBot extends Player {
 
             if (cardToPlace != null) {
                 addCardToCity(cardToPlace);
-                pay(cardToPlace.getGoldCost(), bank);
+                bank.give(cardToPlace.getGoldCost());
+                removeGold(cardToPlace.getGoldCost());
                 display.addDistrictBuilt(this, cardToPlace);
             } else {
                 display.addNoDistrictBuilt();

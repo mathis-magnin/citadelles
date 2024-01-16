@@ -53,7 +53,7 @@ class SpendthriftBotTest {
 
     @Test
     void chooseCardInHand() {
-        player.addGold(4, bank);
+        player.addGold(bank.take(4));
 
         DistrictCard card = player.chooseCardInHand();
         assertEquals(2, player.getHand().size());
@@ -117,7 +117,7 @@ class SpendthriftBotTest {
     void playWithGolds() {
         DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
-        player.addGold(25, bank);
+        player.addGold(bank.take(25));
 
         player.play(pile, bank, events);
         assertEquals(1, player.getCity().size());

@@ -95,7 +95,8 @@ public class SpendthriftBot extends Player {
             DistrictCard cardToPlace = chooseCardInHand();
             if (cardToPlace != null) {
                 addCardToCity(cardToPlace);
-                pay(cardToPlace.getGoldCost(), bank);
+                bank.give(cardToPlace.getGoldCost());
+                removeGold(cardToPlace.getGoldCost());
                 display.addDistrictBuilt(this, cardToPlace);
             } else {
                 display.addNoDistrictBuilt();

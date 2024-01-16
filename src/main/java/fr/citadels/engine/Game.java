@@ -107,7 +107,7 @@ public class Game {
 
         // Give 2 golds to every player
         for (Player player : this.playerList) {
-            player.addGold(2, this.bank);
+            player.addGold(bank.take(2));
         }
         this.display.addInitialGoldGiven(2);
         this.display.addBlankLine();

@@ -66,7 +66,7 @@ public class RandomBot extends Player {
         boolean takeGoldFromFamily;
         try {
             takeGoldFromFamily = RAND.nextBoolean();
-            if(takeGoldFromFamily) takeGoldFromCity(bank, display);
+            if (takeGoldFromFamily) takeGoldFromCity(bank, display);
         } catch (Exception e) {
             takeGoldFromFamily = false; //don't play when exception raised
         }
@@ -91,7 +91,8 @@ public class RandomBot extends Player {
             DistrictCard cardToPlace = chooseCardInHand();
             if (cardToPlace != null) {
                 addCardToCity(cardToPlace);
-                pay(cardToPlace.getGoldCost(), bank);
+                bank.give(cardToPlace.getGoldCost());
+                removeGold(cardToPlace.getGoldCost());
                 display.addDistrictBuilt(this, cardToPlace);
 
             } else {
@@ -102,7 +103,7 @@ public class RandomBot extends Player {
         }
 
         display.addBlankLine();
-        if(!takeGoldFromFamily)
+        if (!takeGoldFromFamily)
             takeGoldFromCity(bank, display);
     }
 
