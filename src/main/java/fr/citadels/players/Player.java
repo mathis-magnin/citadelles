@@ -117,7 +117,7 @@ public abstract class Player implements Comparable<Player> {
      */
     public CharacterCard getCharacter() {
         if (this.character == null) return null; // if the player has no character (first round
-        return new CharacterCard(this.character.getCardName(), this.character.getCardFamily(), this.character.getRank());
+        return this.character; //new CharacterCard(this.character.getCardName(), this.character.getCardFamily(), this.character.getRank());
     }
 
     public void setCharacter(CharacterCard character) {
