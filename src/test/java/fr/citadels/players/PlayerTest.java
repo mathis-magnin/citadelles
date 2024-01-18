@@ -313,5 +313,19 @@ class PlayerTest {
 
     }
 
+    @Test
+    void placeCard() {
+        player.placeCard(null);
+        assertEquals(0, player.getCity().size());
+
+        player.placeCard(DistrictCardsPile.allDistrictCards[0]);
+        assertEquals(1, player.getCity().size());
+        assertEquals("Manoir", player.getCity().get(0).getCardName());
+
+        player.placeCard(DistrictCardsPile.allDistrictCards[66]);
+        assertEquals(2, player.getCity().size());
+        assertEquals("Dracoport", player.getCity().get(1).getCardName());
+    }
+
 
 }
