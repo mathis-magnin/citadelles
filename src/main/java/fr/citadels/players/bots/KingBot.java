@@ -1,11 +1,11 @@
 package fr.citadels.players.bots;
 
+import fr.citadels.engine.Display;
+import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.engine.Display;
 import fr.citadels.players.Player;
 
 import java.util.List;
@@ -23,8 +23,8 @@ public class KingBot extends Player {
     /*
      * Constructor
      */
-    public KingBot(String name, List<DistrictCard> cards, Random random) {
-        super(name, cards);
+    public KingBot(String name, List<DistrictCard> cards, DistrictCardsPile pile, Bank bank, Display display, Random random) {
+        super(name, cards, pile, bank, display);
         sortHand(CardFamily.NOBLE);
         RAND = random;
     }
@@ -38,22 +38,21 @@ public class KingBot extends Player {
     /***
      * choose a NOBLE card if possible or the first card
      * drawnCards must contain at least 1 card
-     * @param pile pile of cards
      * @param drawnCards cards drawn
      * @return the card to play
      */
-    public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+    public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
         DistrictCard cardToPlay = drawnCards[0];
         //take the card that is noble if possible
         for (int i = 0; i < drawnCards.length; i++) {
             if (drawnCards[i].getCardFamily().equals(CardFamily.NOBLE)) {
                 cardToPlay = drawnCards[i];
-                putBack(drawnCards, pile, i);
+                putBack(drawnCards, i);
                 return cardToPlay;
             }
         }
 
-        putBack(drawnCards, pile, 0);
+        putBack(drawnCards, 0);
         return cardToPlay;
     }
 
@@ -76,13 +75,12 @@ public class KingBot extends Player {
 
     /***
      * play a round for the linked player
-     * @param  pile of cards
      */
     @Override
-    public void play(DistrictCardsPile pile, Bank bank, Display display) {
+    public void play() {
         boolean draw = getHand().isEmpty() || getHand().get(0).getGoldCost() < getGold();
 
-        takeCardsOrGold(pile, bank, draw, display);
+        takeCardsOrGold(draw);
 
         if (!getHand().isEmpty()) {
             if (draw)
@@ -92,16 +90,16 @@ public class KingBot extends Player {
 
             if (cardToPlace != null) {
                 addCardToCity(cardToPlace);
-                pay(cardToPlace.getGoldCost(), bank);
-                display.addDistrictBuilt(this, cardToPlace);
+                pay(cardToPlace.getGoldCost());
+                this.display.addDistrictBuilt(this, cardToPlace);
             } else {
-                display.addNoDistrictBuilt();
+                this.display.addNoDistrictBuilt();
             }
         } else {
-            display.addNoDistrictBuilt();
+            this.display.addNoDistrictBuilt();
         }
-        display.addBlankLine();
-        takeGoldFromCity(bank, display);
+        this.display.addBlankLine();
+        takeGoldFromCity();
     }
 
 
@@ -110,11 +108,11 @@ public class KingBot extends Player {
      *
      * @param characters the list of characterCard.
      */
-    public void chooseCharacter(CharacterCardsList characters, Display display) {
+    public void chooseCharacter(CharacterCardsList characters) {
         for (int i = 0; i < characters.size(); i++) {
             if (characters.get(i).getCardName().equals("Roi")) {
                 this.setCharacter(characters.remove(i));
-                display.addCharacterChosen(this, this.getCharacter());
+                this.display.addCharacterChosen(this, this.getCharacter());
                 return;
             }
         }
@@ -123,7 +121,7 @@ public class KingBot extends Player {
          * Could happen if a player already took it
          */
         this.setCharacter(characters.remove(0));
-        display.addCharacterChosen(this, this.getCharacter());
+        this.display.addCharacterChosen(this, this.getCharacter());
     }
 
 

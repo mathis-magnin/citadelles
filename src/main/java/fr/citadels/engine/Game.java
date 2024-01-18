@@ -17,16 +17,23 @@ import java.util.*;
 
 public class Game {
 
-    private static final Random RAND = new Random();
+    /* Constant values */
+
     public static final int NB_PLAYERS = 4;
+
+
+    /* Static attributes */
+
+    private static final Random RAND = new Random();
+
 
     /* Attributes */
 
     private final Player[] playerList;
-    private final DistrictCardsPile districtCardsPile;
     private final Crown crown;
     private final Bank bank;
     private final Display display;
+    private final DistrictCardsPile pile;
     private final Scoreboard scoreboard;
     private boolean isFinished;
 
@@ -35,10 +42,10 @@ public class Game {
 
     public Game() {
         this.playerList = new Player[NB_PLAYERS];
-        this.districtCardsPile = new DistrictCardsPile();
         this.crown = new Crown();
         this.bank = new Bank();
         this.display = new Display();
+        this.pile = new DistrictCardsPile();
         this.isFinished = false;
         this.scoreboard = new Scoreboard(NB_PLAYERS);
     }
@@ -48,11 +55,6 @@ public class Game {
 
     public Player[] getPlayerList() {
         return this.playerList;
-    }
-
-
-    public DistrictCardsPile getDistrictCardsPile() {
-        return this.districtCardsPile;
     }
 
 
@@ -66,6 +68,16 @@ public class Game {
     }
 
 
+    public Display getDisplay() {
+        return this.display;
+    }
+
+
+    public DistrictCardsPile getPile() {
+        return this.pile;
+    }
+
+
     public boolean isFinished() {
         return this.isFinished;
     }
@@ -76,27 +88,22 @@ public class Game {
     }
 
 
-    public Display getDisplay() {
-        return this.display;
-    }
-
-
     /* Methods */
 
     /**
      * Initialize the game
      */
     void initializeGame() {
-        this.districtCardsPile.initializePile();
-        this.districtCardsPile.shufflePile();
+        this.pile.initializePile();
+        this.pile.shufflePile();
 
         this.display.addGameTitle();
 
         // Initialize the players
-        this.playerList[0] = new RandomBot("HASARDEUX", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
-        this.playerList[1] = new SpendthriftBot("DÉPENSIER", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
-        this.playerList[2] = new ThriftyBot("ÉCONOME", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
-        this.playerList[3] = new KingBot("MONARCHISTE", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
+        this.playerList[0] = new RandomBot("HASARDEUX", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display, RAND);
+        this.playerList[1] = new SpendthriftBot("DÉPENSIER", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display, RAND);
+        this.playerList[2] = new ThriftyBot("ÉCONOME", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display, RAND);
+        this.playerList[3] = new KingBot("MONARCHISTE", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display, RAND);
         this.display.addPlayers(this.playerList);
         this.display.addBlankLine();
 
@@ -107,7 +114,7 @@ public class Game {
 
         // Give 2 golds to every player
         for (Player player : this.playerList) {
-            player.addGold(2, this.bank);
+            player.addGold(2);
         }
         this.display.addInitialGoldGiven(2);
         this.display.addBlankLine();
@@ -145,7 +152,7 @@ public class Game {
 
         for (int i = 0; i < length; i++) {
             index = (i + crownedPlayerIndex) % length;
-            playerList[index].chooseCharacter(characters, display);
+            this.playerList[index].chooseCharacter(characters);
         }
 
         this.display.addBlankLine();
@@ -158,7 +165,7 @@ public class Game {
     public void playTurnPhase() {
         this.display.addTurnPhaseTitle();
 
-        Player[] orderedPlayers = new Player[playerList.length];
+        Player[] orderedPlayers = new Player[this.playerList.length];
         System.arraycopy(this.playerList, 0, orderedPlayers, 0, this.playerList.length);
         Arrays.sort(orderedPlayers);   // Sort the player based on their character's rank.
 
@@ -167,7 +174,7 @@ public class Game {
             this.display.addBlankLine();
             this.display.addPlayer(player);
             this.display.addBlankLine();
-            player.play(this.districtCardsPile, this.bank, this.display);
+            player.play();
             if (player.hasCompleteCity()) {
                 if (!this.isFinished) {
                     Score.setFirstPlayerWithCompleteCity(player);

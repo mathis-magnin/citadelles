@@ -1,7 +1,6 @@
 package fr.citadels.engine.score;
 
 import fr.citadels.engine.Display;
-import fr.citadels.engine.score.Score;
 import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
@@ -61,12 +60,12 @@ class ScoreTest {
     /* Initialize players */
 
     DistrictCardsPile pile = new DistrictCardsPile();
-    Bank bank;
+    Bank bank = new Bank();
     Display events = new Display();
 
-    Player player1 = new Player("Tom", cardsPlayer1) {
+    Player player1 = new Player("Tom", cardsPlayer1, pile, bank, events) {
         @Override
-        public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+        public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
             return null;
         }
 
@@ -76,22 +75,20 @@ class ScoreTest {
         }
 
         @Override
-        public void play(DistrictCardsPile pile, Bank bank, Display events) {
+        public void play() {
             this.addCardsToCity(this.getHand());
         }
 
         @Override
-        public void chooseCharacter(CharacterCardsList characters, Display events) {
+        public void chooseCharacter(CharacterCardsList characters) {
             this.setCharacter(characters.get(1));
         }
-
-        ;
     };
     Score score1 = new Score(player1);
 
-    Player player2 = new Player("Bob", cardsPlayer2) {
+    Player player2 = new Player("Bob", cardsPlayer2, pile, bank, events) {
         @Override
-        public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+        public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
             return null;
         }
 
@@ -101,24 +98,22 @@ class ScoreTest {
         }
 
         @Override
-        public void play(DistrictCardsPile pile, Bank bank, Display events) {
+        public void play() {
             this.addCardsToCity(this.getHand());
         }
 
         @Override
-        public void chooseCharacter(CharacterCardsList characters, Display events) {
+        public void chooseCharacter(CharacterCardsList characters) {
             this.setCharacter(characters.get(2));
         }
-
-        ;
     };
     Score score2 = new Score(player2);
 
 
     /* Simulate an entire game (Only for this test class, the method play has been changed) */
-    Player player3 = new Player("Noa", cardsPlayer3) {
+    Player player3 = new Player("Noa", cardsPlayer3, pile, bank, events) {
         @Override
-        public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+        public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
             return null;
         }
 
@@ -128,12 +123,12 @@ class ScoreTest {
         }
 
         @Override
-        public void play(DistrictCardsPile pile, Bank bank, Display events) {
+        public void play() {
             this.addCardsToCity(this.getHand());
         }
 
         @Override
-        public void chooseCharacter(CharacterCardsList characters, Display events) {
+        public void chooseCharacter(CharacterCardsList characters) {
             this.setCharacter(characters.get(3));
         }
     };
@@ -141,9 +136,9 @@ class ScoreTest {
 
     /* Create the score */
     Score score3 = new Score(player3);
-    Player player4 = new Player("Luk", cardsPlayer4) {
+    Player player4 = new Player("Luk", cardsPlayer4, pile, bank, events) {
         @Override
-        public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+        public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
             return null;
         }
 
@@ -153,12 +148,12 @@ class ScoreTest {
         }
 
         @Override
-        public void play(DistrictCardsPile pile, Bank bank, Display events) {
+        public void play() {
             this.addCardsToCity(this.getHand());
         }
 
         @Override
-        public void chooseCharacter(CharacterCardsList characters, Display events) {
+        public void chooseCharacter(CharacterCardsList characters) {
             this.setCharacter(characters.get(4));
         }
     };
@@ -166,14 +161,14 @@ class ScoreTest {
 
     @BeforeEach
     void setUp() {
-        player1.play(pile, bank, events);
-        player1.chooseCharacter(characters, events);
-        player2.play(pile, bank, events);
-        player2.chooseCharacter(characters, events);
-        player3.play(pile, bank, events);
-        player3.chooseCharacter(characters, events);
-        player4.play(pile, bank, events);
-        player4.chooseCharacter(characters, events);
+        player1.play();
+        player1.chooseCharacter(characters);
+        player2.play();
+        player2.chooseCharacter(characters);
+        player3.play();
+        player3.chooseCharacter(characters);
+        player4.play();
+        player4.chooseCharacter(characters);
     }
 
     @Test

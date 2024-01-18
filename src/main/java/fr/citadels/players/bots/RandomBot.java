@@ -1,10 +1,10 @@
 package fr.citadels.players.bots;
 
+import fr.citadels.engine.Display;
+import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.engine.Display;
 import fr.citadels.players.Player;
 
 import java.util.List;
@@ -21,8 +21,8 @@ public class RandomBot extends Player {
     /*
      * Constructor
      */
-    public RandomBot(String name, List<DistrictCard> cards, Random random) {
-        super(name, cards);
+    public RandomBot(String name, List<DistrictCard> cards, DistrictCardsPile pile, Bank bank, Display display, Random random) {
+        super(name, cards, pile, bank, display);
         RAND = random;
     }
 
@@ -34,14 +34,13 @@ public class RandomBot extends Player {
     /***
      * choose a card to play among the cards drawn
      * drawnCards must contain at least 1 card
-     * @param pile pile of cards
      * @param drawnCards cards drawn
      * @return the card to play
      */
-    public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+    public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
         int randomIndex = RAND.nextInt(drawnCards.length);
         DistrictCard cardToPlay = drawnCards[randomIndex];
-        putBack(drawnCards, pile, randomIndex);
+        putBack(drawnCards, randomIndex);
         return cardToPlay;
     }
 
@@ -59,51 +58,38 @@ public class RandomBot extends Player {
 
     /***
      * play a round for the linked player
-     * @param  pile of cards
      */
     @Override
-    public void play(DistrictCardsPile pile, Bank bank, Display display) {
+    public void play() {
         boolean takeGoldFromFamily;
-        try {
-            takeGoldFromFamily = RAND.nextBoolean();
-            if(takeGoldFromFamily) takeGoldFromCity(bank, display);
-        } catch (Exception e) {
-            takeGoldFromFamily = false; //don't play when exception raised
-        }
+        takeGoldFromFamily = RAND.nextBoolean();
+        if(takeGoldFromFamily) takeGoldFromCity();
 
         boolean draw;
-        try {
-            draw = !RAND.nextBoolean();
-        } catch (Exception e) {
-            draw = false; //take money (if possible) when exception raised
-        }
-        takeCardsOrGold(pile, bank, draw, display);
+        draw = !RAND.nextBoolean();
+        takeCardsOrGold(draw);
 
 
         boolean play;
-        try {
-            play = RAND.nextBoolean();
-        } catch (Exception e) {
-            play = false; //don't play when exception raised
-        }
+        play = RAND.nextBoolean();
 
         if (play && !getHand().isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();
             if (cardToPlace != null) {
                 addCardToCity(cardToPlace);
-                pay(cardToPlace.getGoldCost(), bank);
-                display.addDistrictBuilt(this, cardToPlace);
+                pay(cardToPlace.getGoldCost());
+                this.display.addDistrictBuilt(this, cardToPlace);
 
             } else {
-                display.addNoDistrictBuilt();
+                this.display.addNoDistrictBuilt();
             }
         } else {
-            display.addNoDistrictBuilt();
+            this.display.addNoDistrictBuilt();
         }
 
-        display.addBlankLine();
+        this.display.addBlankLine();
         if(!takeGoldFromFamily)
-            takeGoldFromCity(bank, display);
+            takeGoldFromCity();
     }
 
 
@@ -112,19 +98,15 @@ public class RandomBot extends Player {
      *
      * @param characters the list of characterCard.
      */
-    public void chooseCharacter(CharacterCardsList characters, Display display) {
+    public void chooseCharacter(CharacterCardsList characters) {
 
         int randomIndex = -1;
 
         while (randomIndex >= characters.size() || randomIndex < 0) {
-            try {
-                randomIndex = RAND.nextInt(characters.size());
-            } catch (Exception e) {
-                randomIndex = -1;
-            }
+            randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        display.addCharacterChosen(this, this.getCharacter());
+        this.display.addCharacterChosen(this, this.getCharacter());
     }
 
 }

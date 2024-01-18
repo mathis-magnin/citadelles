@@ -1,9 +1,10 @@
 package fr.citadels.gameelements;
 
+import fr.citadels.engine.Display;
 import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
 import fr.citadels.gameelements.cards.charactercards.characters.KingCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCard;
+import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.bots.RandomBot;
 import fr.citadels.players.Player;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,6 @@ class CrownTest {
     @Test
     void crownTest() {
         Crown crown = new Crown();
-        Player player = new RandomBot("player", new ArrayList<DistrictCard>(),new Random());
-        Player player2 = new RandomBot("player2", new ArrayList<DistrictCard>(),new Random());
 
         crown.initializeCrown(RAND);
         assertNotEquals(-1, crown.getCrownedPlayerIndex());
@@ -34,9 +33,12 @@ class CrownTest {
     @Test
     void getKingPlayerTest() {
         Crown crown = new Crown();
-        Player player = new RandomBot("player", new ArrayList<DistrictCard>(),new Random());
-        Player player2 = new RandomBot("player2", new ArrayList<DistrictCard>(),new Random());
-        Player player3 = new RandomBot("player3", new ArrayList<DistrictCard>(),new Random());
+        DistrictCardsPile pile = new DistrictCardsPile();
+        Bank bank = new Bank();
+        Display events = new Display();
+        Player player = new RandomBot("player", new ArrayList<>(), pile, bank, events, new Random());
+        Player player2 = new RandomBot("player2", new ArrayList<>(), pile, bank, events, new Random());
+        Player player3 = new RandomBot("player3", new ArrayList<>(), pile, bank, events, new Random());
 
         Player[] players = {player, player2,player3};
 
@@ -53,9 +55,12 @@ class CrownTest {
     @Test
     void defineNextCrownedPlayer(){
         Crown crown = new Crown();
-        Player player = new RandomBot("player", new ArrayList<DistrictCard>(),new Random());
-        Player player2 = new RandomBot("player2", new ArrayList<DistrictCard>(),new Random());
-        Player player3 = new RandomBot("player3", new ArrayList<DistrictCard>(),new Random());
+        DistrictCardsPile pile = new DistrictCardsPile();
+        Bank bank = new Bank();
+        Display events = new Display();
+        Player player = new RandomBot("player", new ArrayList<>(), pile, bank, events,new Random());
+        Player player2 = new RandomBot("player2", new ArrayList<>(), pile, bank, events,new Random());
+        Player player3 = new RandomBot("player3", new ArrayList<>(), pile, bank, events,new Random());
         Player playerSpy=spy(player);
         Player playerSpy2=spy(player2);
         Player[] players = {playerSpy, playerSpy2,player3};

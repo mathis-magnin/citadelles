@@ -1,10 +1,10 @@
 package fr.citadels.players.bots;
 
+import fr.citadels.engine.Display;
+import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.engine.Display;
 import fr.citadels.players.Player;
 
 import java.util.List;
@@ -19,8 +19,8 @@ public class SpendthriftBot extends Player {
     private final Random RAND;
     /* Constructor */
 
-    public SpendthriftBot(String name, List<DistrictCard> cards, Random random) {
-        super(name, cards);
+    public SpendthriftBot(String name, List<DistrictCard> cards, DistrictCardsPile pile, Bank bank, Display display, Random random) {
+        super(name, cards, pile, bank, display);
         this.RAND = random;
     }
 
@@ -46,19 +46,18 @@ public class SpendthriftBot extends Player {
     /**
      * Choose the cheapest card among the cards drawn
      *
-     * @param pile       pile of cards
      * @param drawnCards cards drawn
      * @return the card to play
      * @precondition drawnCards must contain at least 1 card
      */
-    public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+    public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
         int minIndex = 0;
         for (int i = 1; i < drawnCards.length; i++) {
             if (drawnCards[i].getGoldCost() < drawnCards[minIndex].getGoldCost())
                 minIndex = i;
         }
         DistrictCard cardToPlay = drawnCards[minIndex];
-        putBack(drawnCards, pile, minIndex);
+        putBack(drawnCards, minIndex);
         return cardToPlay;
     }
 
@@ -78,33 +77,30 @@ public class SpendthriftBot extends Player {
 
     /**
      * Play a round for the linked player
-     *
-     * @param pile of cards
-     * @return the actions of the player
      */
-    public void play(DistrictCardsPile pile, Bank bank, Display display) {
+    public void play() {
 
         // Draw 2 cards or pick 2 golds
         // Draw if the player has less than 5 golds, if he has no cards in hand or if the cheapest card in hand costs more than 3
         // Else pick 2 golds
         boolean draw = ((getGold() > 5) || this.getHand().isEmpty() || (getCheapestCardInHand()[1] > 3));
-        takeCardsOrGold(pile, bank, draw, display);
+        takeCardsOrGold(draw);
 
         // Buy the cheapest card if possible
         if (!this.getHand().isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();
             if (cardToPlace != null) {
                 addCardToCity(cardToPlace);
-                pay(cardToPlace.getGoldCost(), bank);
-                display.addDistrictBuilt(this, cardToPlace);
+                pay(cardToPlace.getGoldCost());
+                this.display.addDistrictBuilt(this, cardToPlace);
             } else {
-                display.addNoDistrictBuilt();
+                this.display.addNoDistrictBuilt();
             }
         } else {
-            display.addNoDistrictBuilt();
+            this.display.addNoDistrictBuilt();
         }
-        display.addBlankLine();
-        takeGoldFromCity(bank, display);
+        this.display.addBlankLine();
+        takeGoldFromCity();
     }
 
 
@@ -113,19 +109,15 @@ public class SpendthriftBot extends Player {
      *
      * @param characters the list of characterCard.
      */
-    public void chooseCharacter(CharacterCardsList characters, Display display) {
+    public void chooseCharacter(CharacterCardsList characters) {
 
         int randomIndex = -1;
 
         while (randomIndex >= characters.size() || randomIndex < 0) {
-            try {
-                randomIndex = RAND.nextInt(characters.size());
-            } catch (Exception e) {
-                randomIndex = -1;
-            }
+            randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        display.addCharacterChosen(this, this.getCharacter());
+        this.display.addCharacterChosen(this, this.getCharacter());
     }
 
 }
