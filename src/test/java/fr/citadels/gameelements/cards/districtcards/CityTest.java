@@ -17,7 +17,7 @@ class CityTest {
     City c3 = new City(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[25], DistrictCardsPile.allDistrictCards[45], DistrictCardsPile.allDistrictCards[17], DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[7]));
 
     @Test
-    void testCity(){
+    void testCity() {
         assertEquals(0, c1.size());
         assertEquals(8, c2.size());
         assertEquals(7, c3.size());
@@ -35,6 +35,23 @@ class CityTest {
         assertFalse(c1.hasOneDistrictOfEachFamily());
         assertTrue(c2.hasOneDistrictOfEachFamily());
         assertFalse(c3.hasOneDistrictOfEachFamily());
+    }
+
+    @Test
+    void getFirstNotDuplicateIndex() {
+        //all duplicates
+        assertEquals(-1, c2.getFirstNotDuplicateIndex(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[25], DistrictCardsPile.allDistrictCards[45], DistrictCardsPile.allDistrictCards[17], DistrictCardsPile.allDistrictCards[65], DistrictCardsPile.allDistrictCards[33], DistrictCardsPile.allDistrictCards[55])));
+
+        //no duplicates
+        assertEquals(0, c2.getFirstNotDuplicateIndex(List.of(DistrictCardsPile.allDistrictCards[9], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[35], DistrictCardsPile.allDistrictCards[49], DistrictCardsPile.allDistrictCards[66], DistrictCardsPile.allDistrictCards[52], DistrictCardsPile.allDistrictCards[43], DistrictCardsPile.allDistrictCards[50])));
+
+        //some duplicates at the beginning
+        assertEquals(2, c2.getFirstNotDuplicateIndex(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[5], DistrictCardsPile.allDistrictCards[19], DistrictCardsPile.allDistrictCards[33])));
+
+        //some duplicates at the end
+        assertEquals(0, c2.getFirstNotDuplicateIndex(List.of(DistrictCardsPile.allDistrictCards[58], DistrictCardsPile.allDistrictCards[40], DistrictCardsPile.allDistrictCards[25], DistrictCardsPile.allDistrictCards[45], DistrictCardsPile.allDistrictCards[17])));
+
+
     }
 
 }

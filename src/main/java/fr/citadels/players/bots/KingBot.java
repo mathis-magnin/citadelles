@@ -59,7 +59,7 @@ public class KingBot extends Player {
     public DistrictCard chooseCardInHand() {
         DistrictCard cardToPlace = null;
         for (int i = 0; i < getHand().size(); i++) {
-            if (getHand().get(i).getGoldCost() <= getGold()) {
+            if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i))) {
                 cardToPlace = getHand().get(i);
                 removeCardFromHand(i);
                 return cardToPlace;
@@ -73,7 +73,8 @@ public class KingBot extends Player {
      */
     @Override
     public void play() {
-        boolean draw = getHand().isEmpty() || getHand().get(0).getGoldCost() < getGold();
+        int firstNotDuplicateIndex = getCity().getFirstNotDuplicateIndex(getHand());
+        boolean draw = getHand().isEmpty() || firstNotDuplicateIndex == -1 || getHand().get(firstNotDuplicateIndex).getGoldCost() < getGold();
 
         takeCardsOrGold(draw);
 
