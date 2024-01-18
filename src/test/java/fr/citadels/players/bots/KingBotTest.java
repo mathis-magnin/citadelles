@@ -100,6 +100,7 @@ class KingBotTest {
         assertEquals("Cathédrale", player1.getHand().get(0).getCardName());
         assertEquals("Temple", player1.getHand().get(1).getCardName());
 
+
     }
 
     @Test
