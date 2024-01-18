@@ -1,13 +1,13 @@
 package fr.citadels.players;
 
+import fr.citadels.engine.Display;
+import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.engine.Display;
 import fr.citadels.gameelements.cards.districtcards.Hand;
 
 import java.util.ArrayList;
@@ -21,17 +21,24 @@ public abstract class Player implements Comparable<Player> {
     private Hand hand;
     private City city;
     private int gold;
-
     private CharacterCard character;
 
+    protected final DistrictCardsPile pile;
+
+    protected final Bank bank;
+
+    protected final Display display;
 
     /* Constructor */
 
-    public Player(String name, List<DistrictCard> cards) {
+    public Player(String name, List<DistrictCard> cards, DistrictCardsPile pile, Bank bank, Display display) {
         this.name = name;
         this.hand = new Hand(cards);
         this.city = new City();
         this.character = null;
+        this.pile = pile;
+        this.bank = bank;
+        this.display = display;
     }
 
 
@@ -61,14 +68,18 @@ public abstract class Player implements Comparable<Player> {
     }
 
     public void addGold(int amount) {
+        this.bank.take(amount);
         this.gold += amount;
     }
 
     public void removeGold(int amount) {
-        if (amount >= this.gold)
+        if (amount >= this.gold) {
+            this.bank.give(this.gold);
             this.gold = 0;
-        else
+        } else {
+            this.bank.give(amount);
             this.gold -= amount;
+        }
     }
 
     /**
@@ -131,7 +142,7 @@ public abstract class Player implements Comparable<Player> {
      */
     public CharacterCard getCharacter() {
         if (this.character == null) return null; // if the player has no character (first round
-        return new CharacterCard(this.character.getCardName(), this.character.getCardFamily(), this.character.getRank());
+        return this.character; //new CharacterCard(this.character.getCardName(), this.character.getCardFamily(), this.character.getRank());
     }
 
     public void setCharacter(CharacterCard character) {
@@ -190,13 +201,12 @@ public abstract class Player implements Comparable<Player> {
      * put back the cards drawn except the one played
      *
      * @param drawnCards  cards drawn
-     * @param pile        pile of cards
      * @param randomIndex index of the card played
      */
-    public void putBack(DistrictCard[] drawnCards, DistrictCardsPile pile, int randomIndex) {
+    public void putBack(DistrictCard[] drawnCards, int randomIndex) {
         for (int i = 0; i < drawnCards.length; i++) {
             if (i != randomIndex) {
-                pile.placeBelowPile(drawnCards[i]);
+                this.pile.placeBelowPile(drawnCards[i]);
                 drawnCards[i] = null;
             }
         }
@@ -217,27 +227,26 @@ public abstract class Player implements Comparable<Player> {
     /**
      * takes 2 cards or 2 golds from the bank and add them to the player
      *
-     * @param pile pile of cards
      * @param draw true if the player has to draw cards
      */
-    public void takeCardsOrGold(DistrictCardsPile pile, Bank bank, boolean draw, Display display) {
+    public void takeCardsOrGold(boolean draw) {
         if (!draw) {
             if (!bank.isEmpty())
-                addGold(bank.take(2));
+                addGold(2);
             else draw = true;
 
             display.addGoldTaken(this, 2);
             display.addBlankLine();
         }
         if (draw) {
-            DistrictCard[] drawnCards = pile.draw(2);
-            display.addDistrictDrawn(drawnCards);
+            DistrictCard[] drawnCards = this.pile.draw(2);
+            this.display.addDistrictDrawn(drawnCards);
             if (drawnCards.length != 0) { // if there is at least 1 card
-                DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
+                DistrictCard cardToPlay = chooseCardAmongDrawn(drawnCards);
                 hand.add(cardToPlay);
 
-                display.addDistrictChosen(this, cardToPlay);
-                display.addBlankLine();
+                this.display.addDistrictChosen(this, cardToPlay);
+                this.display.addBlankLine();
             }
         }
     }
@@ -245,7 +254,8 @@ public abstract class Player implements Comparable<Player> {
     /**
      * take gold from the city if the family of the card is the same as the family of the character
      */
-    public void takeGoldFromCity(Bank bank, Display display) {
+
+    public void takeGoldFromCity() {
         if (character != null) {
             int goldToTake = 0;
             for (DistrictCard card : getCity()) {
@@ -254,16 +264,16 @@ public abstract class Player implements Comparable<Player> {
                 }
             }
             if (goldToTake > 0) {
-
-                addGold(bank.take(goldToTake));
-                display.addGoldTakenFromCity(this, goldToTake);
-                display.addBlankLine();
+                addGold(goldToTake);
+                bank.take(goldToTake);
+                this.display.addGoldTakenFromCity(this, goldToTake);
+                this.display.addBlankLine();
             }
         }
     }
 
 
-    public void placeCard(DistrictCard cardToPlace, Bank bank, Display display) {
+    public void placeCard(DistrictCard cardToPlace) {
         if (cardToPlace != null) {
             addCardToCity(cardToPlace);
             bank.give(cardToPlace.getGoldCost());
@@ -277,11 +287,10 @@ public abstract class Player implements Comparable<Player> {
     /**
      * choose a card to play among the cards drawn
      *
-     * @param pile       pile of cards
      * @param drawnCards cards drawn
      * @return the card to play
      */
-    public abstract DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards);
+    public abstract DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards);
 
 
     /**
@@ -294,11 +303,8 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * play a round for the linked player
-     *
-     * @param pile of cards
-     * @return the actions of the player
      */
-    public abstract void play(DistrictCardsPile pile, Bank bank, Display display);
+    public abstract void play();
 
 
     /**
@@ -306,6 +312,6 @@ public abstract class Player implements Comparable<Player> {
      *
      * @param characters the list of characterCard.
      */
-    public abstract void chooseCharacter(CharacterCardsList characters, Display display);
+    public abstract void chooseCharacter(CharacterCardsList characters);
 
 }

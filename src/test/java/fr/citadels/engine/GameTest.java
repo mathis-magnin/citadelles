@@ -18,7 +18,7 @@ class GameTest {
 
     @Test
     void initializeGameTest() {
-        assertEquals(51, game.getDistrictCardsPile().size());
+        assertEquals(51, game.getPile().size());
         for (Player player : game.getPlayerList()) {
             assertEquals(4, player.getHand().size());
             assertEquals(2, player.getGold());

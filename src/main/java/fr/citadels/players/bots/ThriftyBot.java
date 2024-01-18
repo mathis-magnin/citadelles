@@ -1,10 +1,10 @@
 package fr.citadels.players.bots;
 
+import fr.citadels.engine.Display;
+import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.engine.Display;
 import fr.citadels.players.Player;
 
 import java.util.List;
@@ -18,8 +18,8 @@ public class ThriftyBot extends Player {
     private final Random RAND;
     /* Constructor */
 
-    public ThriftyBot(String name, List<DistrictCard> cards, Random random) {
-        super(name, cards);
+    public ThriftyBot(String name, List<DistrictCard> cards, DistrictCardsPile pile, Bank bank, Display display, Random random) {
+        super(name, cards, pile, bank, display);
         this.RAND = random;
     }
 
@@ -43,19 +43,18 @@ public class ThriftyBot extends Player {
     /**
      * Choose the most expensive card among the cards drawn
      *
-     * @param pile       pile of cards
      * @param drawnCards cards drawn
      * @return the card to play
      * @precondition drawnCards must contain at least 1 card
      */
-    public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+    public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
         int maxIndex = 0;
         for (int i = 1; i < drawnCards.length; i++) {
             if (drawnCards[i].getGoldCost() > drawnCards[maxIndex].getGoldCost())
                 maxIndex = i;
         }
         DistrictCard cardToPlay = drawnCards[maxIndex];
-        putBack(drawnCards, pile, maxIndex);
+        putBack(drawnCards, maxIndex);
         return cardToPlay;
     }
 
@@ -77,21 +76,21 @@ public class ThriftyBot extends Player {
     }
 
 
-    public void play(DistrictCardsPile pile, Bank bank, Display display) {
+    public void play() {
 
         // Draw 2 cards or take 2 golds
         boolean draw = ((getGold() > 15) || (getHand().isEmpty()) || ((getGold() > 5) && (getMostExpensiveCardInHand()[1] < 4)));
-        takeGoldFromCity(bank, display);
-        takeCardsOrGold(pile, bank, draw, display);
+        takeGoldFromCity();
+        takeCardsOrGold(draw);
 
         // Buy the most expensive card with a cost > 1 if possible
         if (!this.getHand().isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();
-            placeCard(cardToPlace, bank, display);
+            placeCard(cardToPlace);
         } else {
-            display.addNoDistrictBuilt();
+            this.display.addNoDistrictBuilt();
         }
-        display.addBlankLine();
+        this.display.addBlankLine();
     }
 
 
@@ -100,19 +99,15 @@ public class ThriftyBot extends Player {
      *
      * @param characters the list of characterCard.
      */
-    public void chooseCharacter(CharacterCardsList characters, Display display) {
+    public void chooseCharacter(CharacterCardsList characters) {
 
         int randomIndex = -1;
 
         while (randomIndex >= characters.size() || randomIndex < 0) {
-            try {
-                randomIndex = RAND.nextInt(characters.size());
-            } catch (Exception e) {
-                randomIndex = -1;
-            }
+            randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        display.addCharacterChosen(this, this.getCharacter());
+        this.display.addCharacterChosen(this, this.getCharacter());
     }
 
 }
