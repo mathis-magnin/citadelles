@@ -16,6 +16,7 @@ import java.util.Random;
 public class ThriftyBot extends Player {
 
     private final Random RAND;
+
     /* Constructor */
 
     public ThriftyBot(String name, List<DistrictCard> cards, DistrictCardsPile pile, Bank bank, Display display, Random random) {
@@ -76,6 +77,23 @@ public class ThriftyBot extends Player {
     }
 
 
+    /**
+     * Choose randomly a characterCard from the list of character.
+     *
+     * @param characters the list of characterCard.
+     */
+    public void chooseCharacter(CharacterCardsList characters) {
+
+        int randomIndex = -1;
+
+        while (randomIndex >= characters.size() || randomIndex < 0) {
+            randomIndex = RAND.nextInt(characters.size());
+        }
+        this.setCharacter(characters.remove(randomIndex));
+        this.display.addCharacterChosen(this, this.getCharacter());
+    }
+
+
     public void play() {
 
         // Draw 2 cards or take 2 golds
@@ -93,21 +111,44 @@ public class ThriftyBot extends Player {
         this.display.addBlankLine();
     }
 
+    @Override
+    public void playAsAssassin() {
+        this.play();
+    }
 
-    /**
-     * Choose randomly a characterCard from the list of character.
-     *
-     * @param characters the list of characterCard.
-     */
-    public void chooseCharacter(CharacterCardsList characters) {
+    @Override
+    public void playAsThief() {
+        this.play();
+    }
 
-        int randomIndex = -1;
+    @Override
+    public void playAsMagician() {
+        this.play();
+    }
 
-        while (randomIndex >= characters.size() || randomIndex < 0) {
-            randomIndex = RAND.nextInt(characters.size());
-        }
-        this.setCharacter(characters.remove(randomIndex));
-        this.display.addCharacterChosen(this, this.getCharacter());
+    @Override
+    public void playAsKing() {
+        this.play();
+    }
+
+    @Override
+    public void playAsBishop() {
+        this.play();
+    }
+
+    @Override
+    public void playAsMerchant() {
+        this.play();
+    }
+
+    @Override
+    public void playAsArchitect() {
+        this.play();
+    }
+
+    @Override
+    public void playAsWarlord() {
+        this.play();
     }
 
 }

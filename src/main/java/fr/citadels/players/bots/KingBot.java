@@ -68,6 +68,29 @@ public class KingBot extends Player {
         return cardToPlace;
     }
 
+
+    /**
+     * Choose the king characterCard from the list of character.
+     *
+     * @param characters the list of characterCard.
+     */
+    public void chooseCharacter(CharacterCardsList characters) {
+        for (int i = 0; i < characters.size(); i++) {
+            if (characters.get(i).getCardName().equals("Roi")) {
+                this.setCharacter(characters.remove(i));
+                this.display.addCharacterChosen(this, this.getCharacter());
+                return;
+            }
+        }
+        /*
+         * cannot find the king character
+         * Could happen if a player already took it
+         */
+        this.setCharacter(characters.remove(0));
+        this.display.addCharacterChosen(this, this.getCharacter());
+    }
+
+
     /***
      * play a round for the linked player
      */
@@ -93,25 +116,44 @@ public class KingBot extends Player {
     }
 
 
-    /**
-     * Choose the king characterCard from the list of character.
-     *
-     * @param characters the list of characterCard.
-     */
-    public void chooseCharacter(CharacterCardsList characters) {
-        for (int i = 0; i < characters.size(); i++) {
-            if (characters.get(i).getCardName().equals("Roi")) {
-                this.setCharacter(characters.remove(i));
-                this.display.addCharacterChosen(this, this.getCharacter());
-                return;
-            }
-        }
-        /*
-         * cannot find the king character
-         * Could happen if a player already took it
-         */
-        this.setCharacter(characters.remove(0));
-        this.display.addCharacterChosen(this, this.getCharacter());
+    @Override
+    public void playAsAssassin() {
+        this.play();
+    }
+
+    @Override
+    public void playAsThief() {
+        this.play();
+    }
+
+    @Override
+    public void playAsMagician() {
+        this.play();
+    }
+
+    @Override
+    public void playAsKing() {
+        this.play();
+    }
+
+    @Override
+    public void playAsBishop() {
+        this.play();
+    }
+
+    @Override
+    public void playAsMerchant() {
+        this.play();
+    }
+
+    @Override
+    public void playAsArchitect() {
+        this.play();
+    }
+
+    @Override
+    public void playAsWarlord() {
+        this.play();
     }
 
 
