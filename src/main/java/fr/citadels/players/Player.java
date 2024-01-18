@@ -262,6 +262,18 @@ public abstract class Player implements Comparable<Player> {
         }
     }
 
+
+    public void placeCard(DistrictCard cardToPlace, Bank bank, Display display) {
+        if (cardToPlace != null) {
+            addCardToCity(cardToPlace);
+            bank.give(cardToPlace.getGoldCost());
+            removeGold(cardToPlace.getGoldCost());
+            display.addDistrictBuilt(this, cardToPlace);
+        } else {
+            display.addNoDistrictBuilt();
+        }
+    }
+
     /**
      * choose a card to play among the cards drawn
      *
