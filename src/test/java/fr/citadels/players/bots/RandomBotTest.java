@@ -52,7 +52,9 @@ class RandomBotTest {
     @Test
     void chooseCardInHand() {
 
+
         player.addGold(4);
+
         DistrictCard card = player.chooseCardInHand();
         assertEquals(2, player.getHand().size());
         assertEquals(DistrictCardsPile.allDistrictCards[12], card);
@@ -66,6 +68,7 @@ class RandomBotTest {
         assertNull(card);
 
         /*test if the player has the card he wants in his city*/
+
         player.addGold(1);
         Player playerSpy = spy(player);
         when(playerSpy.hasCardInCity(any())).thenReturn(true);
@@ -138,7 +141,9 @@ class RandomBotTest {
     void playWith2GoldsTemple() {
         pile.initializePile();
         Player playerSpy = spy(player);
+
         playerSpy.addGold(2);
+
 
         /*case 1 : take card and don't place*/
         when(random.nextBoolean()).thenReturn(true, false, false);
@@ -201,6 +206,7 @@ class RandomBotTest {
 
         pile.initializePile();
 
+
         playerSpy.addGold(2);
         when(random.nextBoolean()).thenReturn(false, true, true);
         playerSpy.play();
@@ -237,8 +243,13 @@ class RandomBotTest {
         assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
         events.reset();
 
+<<<<<<< HEAD
+        playerSpy.addGold(bank.take(23)); //no money in bank anymore
+        playerSpy.play(pile, bank, events);
+=======
         playerSpy.addGold(23); //no money in bank anymore
         playerSpy.play();
+>>>>>>> develop
         assertEquals(4, playerSpy.getHand().size());
         assertEquals(0, playerSpy.getCity().size());
         assertEquals(25, playerSpy.getGold()); //took money

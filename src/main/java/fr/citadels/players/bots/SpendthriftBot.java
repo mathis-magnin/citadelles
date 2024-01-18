@@ -89,13 +89,8 @@ public class SpendthriftBot extends Player {
         // Buy the cheapest card if possible
         if (!this.getHand().isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();
-            if (cardToPlace != null) {
-                addCardToCity(cardToPlace);
-                pay(cardToPlace.getGoldCost());
-                this.display.addDistrictBuilt(this, cardToPlace);
-            } else {
-                this.display.addNoDistrictBuilt();
-            }
+            placeCard(cardToPlace);
+
         } else {
             this.display.addNoDistrictBuilt();
         }

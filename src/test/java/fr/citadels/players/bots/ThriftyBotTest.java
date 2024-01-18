@@ -55,6 +55,7 @@ class ThriftyBotTest {
 
     @Test
     void chooseCardInHand() {
+
         player.addGold(4);
 
         DistrictCard card = player.chooseCardInHand();

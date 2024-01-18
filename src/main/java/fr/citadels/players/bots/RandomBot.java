@@ -62,8 +62,9 @@ public class RandomBot extends Player {
     @Override
     public void play() {
         boolean takeGoldFromFamily;
+
         takeGoldFromFamily = RAND.nextBoolean();
-        if(takeGoldFromFamily) takeGoldFromCity();
+        if (takeGoldFromFamily) takeGoldFromCity();
 
         boolean draw;
         draw = !RAND.nextBoolean();
@@ -75,20 +76,13 @@ public class RandomBot extends Player {
 
         if (play && !getHand().isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();
-            if (cardToPlace != null) {
-                addCardToCity(cardToPlace);
-                pay(cardToPlace.getGoldCost());
-                this.display.addDistrictBuilt(this, cardToPlace);
-
-            } else {
-                this.display.addNoDistrictBuilt();
-            }
+            placeCard(cardToPlace);
         } else {
             this.display.addNoDistrictBuilt();
         }
 
         this.display.addBlankLine();
-        if(!takeGoldFromFamily)
+        if (!takeGoldFromFamily)
             takeGoldFromCity();
     }
 

@@ -86,13 +86,7 @@ public class ThriftyBot extends Player {
         // Buy the most expensive card with a cost > 1 if possible
         if (!this.getHand().isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();
-            if (cardToPlace != null) {
-                addCardToCity(cardToPlace);
-                pay(cardToPlace.getGoldCost());
-                this.display.addDistrictBuilt(this, cardToPlace);
-            } else {
-                this.display.addNoDistrictBuilt();
-            }
+            placeCard(cardToPlace);
         } else {
             this.display.addNoDistrictBuilt();
         }

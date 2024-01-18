@@ -128,35 +128,6 @@ class PlayerTest {
         assertEquals(0, player.getGold());
     }
 
-    @Test
-    void addGold() {
-        player.addGold(2);
-        assertEquals(2, player.getGold());
-        player.addGold(7);
-        assertEquals(9, player.getGold());
-        assertThrows(IllegalArgumentException.class, () -> {
-            player.addGold(17);
-        });
-    }
-
-    @Test
-    void pay() {
-        player.addGold(10);
-        player.pay(2);
-        assertEquals(8, player.getGold());
-        player.pay(5);
-        assertEquals(3, player.getGold());
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            player.pay(4);
-        });
-        assertEquals("""
-                Not enough money
-                expected : 4
-                actual : 3""", thrown.getMessage());
-        assertThrows(IllegalArgumentException.class, () -> {
-            player.pay(-1);
-        });
-    }
 
     @Test
     void takeCardsOrGold() {
@@ -169,8 +140,10 @@ class PlayerTest {
         assertEquals(8, player.getHand().size());
         assertEquals(2, player.getGold());
 
+
         player.addGold(23);
         player.takeCardsOrGold(false);
+
         assertEquals(9, player.getHand().size());
         assertEquals(25, player.getGold());
 
@@ -271,10 +244,10 @@ class PlayerTest {
     }
 
     @Test
-    void takeGoldFromCity(){
-        Player playerSpy=spy(player);
+    void takeGoldFromCity() {
+        Player playerSpy = spy(player);
         //NOBLE card
-        when(playerSpy.getCity()).thenReturn(new City(new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[0],DistrictCardsPile.allDistrictCards[5],DistrictCardsPile.allDistrictCards[12],DistrictCardsPile.allDistrictCards[25],DistrictCardsPile.allDistrictCards[30],DistrictCardsPile.allDistrictCards[45],DistrictCardsPile.allDistrictCards[60]))));
+        when(playerSpy.getCity()).thenReturn(new City(new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[5], DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[25], DistrictCardsPile.allDistrictCards[30], DistrictCardsPile.allDistrictCards[45], DistrictCardsPile.allDistrictCards[60]))));
 
         CharacterCardsList characters = new CharacterCardsList();
         playerSpy.takeGoldFromCity();
@@ -315,5 +288,44 @@ class PlayerTest {
         assertEquals(6, playerSpy.getGold());
 
     }
+
+    @Test
+    void addGold() {
+        player.addGold(5);
+        assertEquals(5, player.getGold());
+        assertEquals(20, bank.getGold());
+        player.addGold(2);
+        assertEquals(7, player.getGold());
+        assertEquals(18, bank.getGold());
+    }
+
+
+    @Test
+    void removeGold() {
+        player.addGold(5);
+        assertEquals(5, player.getGold());
+        player.removeGold(2);
+        assertEquals(3, player.getGold());
+        assertEquals(22, bank.getGold());
+        player.removeGold(10);
+        assertEquals(0, player.getGold());
+        assertEquals(25, bank.getGold());
+
+    }
+
+    @Test
+    void placeCard() {
+        player.placeCard(null);
+        assertEquals(0, player.getCity().size());
+
+        player.placeCard(DistrictCardsPile.allDistrictCards[0]);
+        assertEquals(1, player.getCity().size());
+        assertEquals("Manoir", player.getCity().get(0).getCardName());
+
+        player.placeCard(DistrictCardsPile.allDistrictCards[66]);
+        assertEquals(2, player.getCity().size());
+        assertEquals("Dracoport", player.getCity().get(1).getCardName());
+    }
+
 
 }
