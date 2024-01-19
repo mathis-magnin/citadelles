@@ -250,4 +250,8 @@ public class Display {
         this.events.append("Le gagnant est : ").append(player.getName()).append(" !\n");
     }
 
+    public void killed(CharacterCard character) {
+        this.events.append(character.getCardName()).append(" a été tué par l'Assassin !\n");
+    }
+
 }
