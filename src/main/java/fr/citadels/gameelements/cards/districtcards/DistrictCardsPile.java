@@ -97,9 +97,7 @@ public class DistrictCardsPile extends LinkedList<DistrictCard> {
      * shuffle the pile of district cards
      */
     public void shufflePile() {
-        /*ArrayList<DistrictCard> listOfPileElements = new ArrayList<>(this);*/
         Collections.shuffle(this);
-        /*this = new LinkedList<>(listOfPileElements);*/
     }
 
     /***

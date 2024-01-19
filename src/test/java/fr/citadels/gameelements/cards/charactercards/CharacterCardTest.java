@@ -28,9 +28,9 @@ class CharacterCardTest {
 
     @Test
     void testEquals() {
-        assertTrue(CharacterCardsList.allCharacterCards[0].equals(CharacterCardsList.allCharacterCards[0]));
-        assertFalse(CharacterCardsList.allCharacterCards[0].equals(CharacterCardsList.allCharacterCards[CharacterCardsList.allCharacterCards.length - 1]));
-        assertTrue(CharacterCardsList.allCharacterCards[0].equals(new AssassinCard()));
+        assertEquals(CharacterCardsList.allCharacterCards[0], (CharacterCardsList.allCharacterCards[0]));
+        assertNotEquals(CharacterCardsList.allCharacterCards[0], (CharacterCardsList.allCharacterCards[CharacterCardsList.allCharacterCards.length - 1]));
+        assertEquals(CharacterCardsList.allCharacterCards[0], (new AssassinCard()));
     }
 
 }

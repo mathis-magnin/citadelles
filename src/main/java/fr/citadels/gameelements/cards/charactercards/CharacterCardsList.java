@@ -9,7 +9,7 @@ public class CharacterCardsList extends ArrayList<CharacterCard> {
 
     /* Static Content */
 
-    public static final CharacterCard[] allCharacterCards = new CharacterCard[]{
+    protected static final CharacterCard[] allCharacterCards = new CharacterCard[]{
             new AssassinCard(),
             new ThiefCard(),
             new MagicianCard(),
