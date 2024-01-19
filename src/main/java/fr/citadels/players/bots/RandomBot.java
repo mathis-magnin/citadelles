@@ -48,12 +48,14 @@ public class RandomBot extends Player {
      * choose a card in hand
      * @return the card chosen or null if no card can be chosen
      */
-    public DistrictCard chooseCardInHand() {
+    public void chooseCardInHand() {
         for (int i = 0; i < getHand().size(); i++) {
-            if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i)))
-                return removeCardFromHand(i);
+            if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i))) {
+                this.setDistrictToBuild(removeCardFromHand(i));
+                return;
+            }
         }
-        return null;
+        this.setDistrictToBuild(null);
     }
 
 
@@ -92,9 +94,9 @@ public class RandomBot extends Player {
         boolean play;
         play = RAND.nextBoolean();
 
-        if (play && !getHand().isEmpty()) {
-            DistrictCard cardToPlace = chooseCardInHand();
-            placeCard(cardToPlace);
+        if (play) {
+            this.chooseCardInHand();
+            this.build();
         } else {
             this.display.addNoDistrictBuilt();
         }
@@ -136,7 +138,14 @@ public class RandomBot extends Player {
 
     @Override
     public void playAsArchitect() {
+        this.setPowerToUse(1);
+        this.getCharacter().usePower(); // draw two cards
         this.play();
+        this.setPowerToUse(2);
+        this.chooseCardInHand();    // build another district
+        this.getCharacter().usePower();
+        this.chooseCardInHand();    // build another district
+        this.getCharacter().usePower();
     }
 
     @Override

@@ -29,6 +29,11 @@ public abstract class Player implements Comparable<Player> {
 
     protected final Display display;
 
+    /* Actions attributes */
+    private int powerToUse;
+    private DistrictCard districtToBuild;
+
+
     /* Constructor */
 
     protected Player(String name, List<DistrictCard> cards, DistrictCardsPile pile, Bank bank, Display display) {
@@ -39,6 +44,7 @@ public abstract class Player implements Comparable<Player> {
         this.pile = pile;
         this.bank = bank;
         this.display = display;
+        this.powerToUse = 1;
     }
 
 
@@ -111,12 +117,14 @@ public abstract class Player implements Comparable<Player> {
         return new City(new ArrayList<>(this.city));
     }
 
+
     /**
      * Add a card to the player's city
      */
     public void addCardToCity(DistrictCard card) {
         this.city.add(card);
     }
+
 
     /**
      * Add cards to the player's city
@@ -152,6 +160,31 @@ public abstract class Player implements Comparable<Player> {
     public void setCharacter(CharacterCard character) {
         this.character = character;
         character.setPlayer(this);
+    }
+
+
+    public int getPowerToUse() {
+        return this.powerToUse;
+    }
+
+
+    public void setPowerToUse(int number) {
+        this.powerToUse = number;
+    }
+
+
+    public DistrictCard getDistrictToBuild() {
+        return this.districtToBuild;
+    }
+
+
+    public void setDistrictToBuild(DistrictCard district) {
+        this.districtToBuild = district;
+    }
+
+
+    public Display getDisplay() {
+        return this.display;
     }
 
 
@@ -278,16 +311,25 @@ public abstract class Player implements Comparable<Player> {
     }
 
 
-    public void placeCard(DistrictCard cardToPlace) {
-        if (cardToPlace != null) {
-            addCardToCity(cardToPlace);
-            bank.give(cardToPlace.getGoldCost());
-            removeGold(cardToPlace.getGoldCost());
-            display.addDistrictBuilt(this, cardToPlace);
+    public void build() {
+        if (this.districtToBuild != null) {
+            addCardToCity(this.districtToBuild);
+            bank.give(this.districtToBuild.getGoldCost());
+            removeGold(this.districtToBuild.getGoldCost());
+            display.addDistrictBuilt(this, this.districtToBuild);
         } else {
             display.addNoDistrictBuilt();
         }
     }
+
+    /**
+     * The player draw a certain number of card and place them in his hand.
+     * @param number of card to draw.
+     */
+    public void draw(int number) {
+        this.hand.addAll(List.of(this.pile.draw(number)));
+    }
+
 
     /**
      * choose a card to take among the cards drawn
@@ -303,7 +345,7 @@ public abstract class Player implements Comparable<Player> {
      *
      * @return the card chosen or null if no card can be chosen
      */
-    public abstract DistrictCard chooseCardInHand();
+    public abstract void chooseCardInHand();
 
 
     /**

@@ -57,16 +57,14 @@ public class KingBot extends Player {
      * choose a card in hand
      * @return the card chosen or null if no card can be chosen
      */
-    public DistrictCard chooseCardInHand() {
-        DistrictCard cardToPlace = null;
+    public void chooseCardInHand() {
         for (int i = 0; i < getHand().size(); i++) {
             if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i))) {
-                cardToPlace = getHand().get(i);
-                removeCardFromHand(i);
-                return cardToPlace;
+                this.setDistrictToBuild(removeCardFromHand(i));
+                return;
             }
         }
-        return cardToPlace;
+        this.setDistrictToBuild(null);
     }
 
 
@@ -105,10 +103,8 @@ public class KingBot extends Player {
         if (!getHand().isEmpty()) {
             if (draw)
                 sortHand(CardFamily.NOBLE);
-
-            DistrictCard cardToPlace = chooseCardInHand();
-
-            placeCard(cardToPlace);
+            this.chooseCardInHand();
+            this.build();
         } else {
             this.display.addNoDistrictBuilt();
         }

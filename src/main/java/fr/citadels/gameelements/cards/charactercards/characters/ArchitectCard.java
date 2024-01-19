@@ -23,7 +23,27 @@ public class ArchitectCard extends CharacterCard {
         }
     }
 
+
     public void usePower(){
-        return;
+        switch (this.getPlayer().getPowerToUse()) {
+            case 1 :
+                this.drawTwoCards();
+                break;
+            case 2:
+                this.build();
+                break;
+        }
     }
+
+
+    private void drawTwoCards() {
+        this.getPlayer().getDisplay().add;
+        this.getPlayer().draw(2);
+    }
+
+
+    private void build() {
+        this.getPlayer().build();
+    }
+
 }
