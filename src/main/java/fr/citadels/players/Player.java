@@ -31,7 +31,7 @@ public abstract class Player implements Comparable<Player> {
 
     /* Constructor */
 
-    public Player(String name, List<DistrictCard> cards, DistrictCardsPile pile, Bank bank, Display display) {
+    protected Player(String name, List<DistrictCard> cards, DistrictCardsPile pile, Bank bank, Display display) {
         this.name = name;
         this.hand = new Hand(cards);
         this.city = new City();
@@ -136,13 +136,12 @@ public abstract class Player implements Comparable<Player> {
     }
 
     /**
-     * Get a copy of the player's character
+     * Get the player's character
      *
      * @return the character
      */
     public CharacterCard getCharacter() {
-        if (this.character == null) return null; // if the player has no character (first round
-        return this.character; //new CharacterCard(this.character.getCardName(), this.character.getCardFamily(), this.character.getRank());
+        return this.character;
     }
 
 

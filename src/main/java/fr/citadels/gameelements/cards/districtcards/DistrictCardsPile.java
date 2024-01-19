@@ -7,68 +7,85 @@ import java.util.*;
 public class DistrictCardsPile extends LinkedList<DistrictCard> {
 
     /* Static contents */
+    private static final String MANOIR = "Manoir";
+    private static final String CHATEAU = "Château";
+    private static final String PALAIS = "Palais";
+    private static final String TEMPLE = "Temple";
+    private static final String EGLISE = "Église";
+    private static final String MONASTERE = "Monastère";
+    private static final String CATHEDRALE = "Cathédrale";
+    private static final String TAVERNE = "Taverne";
+    private static final String ECHOPPE = "Échoppe";
+    private static final String MARCHE = "Marché";
+    private static final String COMPTOIR = "Comptoir";
+    private static final String PORT = "Port";
+    private static final String HOTEL_DE_VILLE = "Hôtel de ville";
+    private static final String TOUR_DE_GARDE = "Tour de garde";
+    private static final String PRISON = "Prison";
+    private static final String CASERNE = "Caserne";
+    private static final String FORTERESSE = "Forteresse";
 
     public static final DistrictCard[] allDistrictCards = {
-            new DistrictCard("Manoir", CardFamily.NOBLE, 3), //0
-            new DistrictCard("Manoir", CardFamily.NOBLE, 3),
-            new DistrictCard("Manoir", CardFamily.NOBLE, 3),
-            new DistrictCard("Manoir", CardFamily.NOBLE, 3),
-            new DistrictCard("Manoir", CardFamily.NOBLE, 3),
-            new DistrictCard("Château", CardFamily.NOBLE, 4), //5
-            new DistrictCard("Château", CardFamily.NOBLE, 4),
-            new DistrictCard("Château", CardFamily.NOBLE, 4),
-            new DistrictCard("Château", CardFamily.NOBLE, 4),
-            new DistrictCard("Château", CardFamily.NOBLE, 4),
-            new DistrictCard("Palais", CardFamily.NOBLE, 5), //10
-            new DistrictCard("Palais", CardFamily.NOBLE, 5),
+            new DistrictCard(MANOIR, CardFamily.NOBLE, 3), //0
+            new DistrictCard(MANOIR, CardFamily.NOBLE, 3),
+            new DistrictCard(MANOIR, CardFamily.NOBLE, 3),
+            new DistrictCard(MANOIR, CardFamily.NOBLE, 3),
+            new DistrictCard(MANOIR, CardFamily.NOBLE, 3),
+            new DistrictCard(CHATEAU, CardFamily.NOBLE, 4), //5
+            new DistrictCard(CHATEAU, CardFamily.NOBLE, 4),
+            new DistrictCard(CHATEAU, CardFamily.NOBLE, 4),
+            new DistrictCard(CHATEAU, CardFamily.NOBLE, 4),
+            new DistrictCard(CHATEAU, CardFamily.NOBLE, 4),
+            new DistrictCard(PALAIS, CardFamily.NOBLE, 5), //10
+            new DistrictCard(PALAIS, CardFamily.NOBLE, 5),
 
-            new DistrictCard("Temple", CardFamily.RELIGIOUS, 1),
-            new DistrictCard("Temple", CardFamily.RELIGIOUS, 1),
-            new DistrictCard("Temple", CardFamily.RELIGIOUS, 1),
-            new DistrictCard("Église", CardFamily.RELIGIOUS, 2), //15
-            new DistrictCard("Église", CardFamily.RELIGIOUS, 2),
-            new DistrictCard("Église", CardFamily.RELIGIOUS, 2),
-            new DistrictCard("Monastère", CardFamily.RELIGIOUS, 3),
-            new DistrictCard("Monastère", CardFamily.RELIGIOUS, 3),
-            new DistrictCard("Monastère", CardFamily.RELIGIOUS, 3), //20
-            new DistrictCard("Monastère", CardFamily.RELIGIOUS, 3),
-            new DistrictCard("Cathédrale", CardFamily.RELIGIOUS, 5),
-            new DistrictCard("Cathédrale", CardFamily.RELIGIOUS, 5),
+            new DistrictCard(TEMPLE, CardFamily.RELIGIOUS, 1),
+            new DistrictCard(TEMPLE, CardFamily.RELIGIOUS, 1),
+            new DistrictCard(TEMPLE, CardFamily.RELIGIOUS, 1),
+            new DistrictCard(EGLISE, CardFamily.RELIGIOUS, 2), //15
+            new DistrictCard(EGLISE, CardFamily.RELIGIOUS, 2),
+            new DistrictCard(EGLISE, CardFamily.RELIGIOUS, 2),
+            new DistrictCard(MONASTERE, CardFamily.RELIGIOUS, 3),
+            new DistrictCard(MONASTERE, CardFamily.RELIGIOUS, 3),
+            new DistrictCard(MONASTERE, CardFamily.RELIGIOUS, 3), //20
+            new DistrictCard(MONASTERE, CardFamily.RELIGIOUS, 3),
+            new DistrictCard(CATHEDRALE, CardFamily.RELIGIOUS, 5),
+            new DistrictCard(CATHEDRALE, CardFamily.RELIGIOUS, 5),
 
-            new DistrictCard("Taverne", CardFamily.TRADE, 1),
-            new DistrictCard("Taverne", CardFamily.TRADE, 1), //25
-            new DistrictCard("Taverne", CardFamily.TRADE, 1),
-            new DistrictCard("Taverne", CardFamily.TRADE, 1),
-            new DistrictCard("Taverne", CardFamily.TRADE, 1),
-            new DistrictCard("Échoppe", CardFamily.TRADE, 2),
-            new DistrictCard("Échoppe", CardFamily.TRADE, 2), //30
-            new DistrictCard("Échoppe", CardFamily.TRADE, 2),
-            new DistrictCard("Échoppe", CardFamily.TRADE, 2),
-            new DistrictCard("Marché", CardFamily.TRADE, 2),
-            new DistrictCard("Marché", CardFamily.TRADE, 2),
-            new DistrictCard("Marché", CardFamily.TRADE, 2), //35
-            new DistrictCard("Marché", CardFamily.TRADE, 2),
-            new DistrictCard("Comptoir", CardFamily.TRADE, 3),
-            new DistrictCard("Comptoir", CardFamily.TRADE, 3),
-            new DistrictCard("Comptoir", CardFamily.TRADE, 3),
-            new DistrictCard("Port", CardFamily.TRADE, 4), //40
-            new DistrictCard("Port", CardFamily.TRADE, 4),
-            new DistrictCard("Port", CardFamily.TRADE, 4),
-            new DistrictCard("Hôtel de ville", CardFamily.TRADE, 5),
-            new DistrictCard("Hôtel de ville", CardFamily.TRADE, 5),
+            new DistrictCard(TAVERNE, CardFamily.TRADE, 1),
+            new DistrictCard(TAVERNE, CardFamily.TRADE, 1), //25
+            new DistrictCard(TAVERNE, CardFamily.TRADE, 1),
+            new DistrictCard(TAVERNE, CardFamily.TRADE, 1),
+            new DistrictCard(TAVERNE, CardFamily.TRADE, 1),
+            new DistrictCard(ECHOPPE, CardFamily.TRADE, 2),
+            new DistrictCard(ECHOPPE, CardFamily.TRADE, 2), //30
+            new DistrictCard(ECHOPPE, CardFamily.TRADE, 2),
+            new DistrictCard(ECHOPPE, CardFamily.TRADE, 2),
+            new DistrictCard(MARCHE, CardFamily.TRADE, 2),
+            new DistrictCard(MARCHE, CardFamily.TRADE, 2),
+            new DistrictCard(MARCHE, CardFamily.TRADE, 2), //35
+            new DistrictCard(MARCHE, CardFamily.TRADE, 2),
+            new DistrictCard(COMPTOIR, CardFamily.TRADE, 3),
+            new DistrictCard(COMPTOIR, CardFamily.TRADE, 3),
+            new DistrictCard(COMPTOIR, CardFamily.TRADE, 3),
+            new DistrictCard(PORT, CardFamily.TRADE, 4), //40
+            new DistrictCard(PORT, CardFamily.TRADE, 4),
+            new DistrictCard(PORT, CardFamily.TRADE, 4),
+            new DistrictCard(HOTEL_DE_VILLE, CardFamily.TRADE, 5),
+            new DistrictCard(HOTEL_DE_VILLE, CardFamily.TRADE, 5),
 
-            new DistrictCard("Tour de garde", CardFamily.MILITARY, 1), //45
-            new DistrictCard("Tour de garde", CardFamily.MILITARY, 1),
-            new DistrictCard("Tour de garde", CardFamily.MILITARY, 1),
-            new DistrictCard("Prison", CardFamily.MILITARY, 2),
-            new DistrictCard("Prison", CardFamily.MILITARY, 2),
-            new DistrictCard("Prison", CardFamily.MILITARY, 2), //50
-            new DistrictCard("Caserne", CardFamily.MILITARY, 3),
-            new DistrictCard("Caserne", CardFamily.MILITARY, 3),
-            new DistrictCard("Caserne", CardFamily.MILITARY, 3),
-            new DistrictCard("Forteresse", CardFamily.MILITARY, 5),
-            new DistrictCard("Forteresse", CardFamily.MILITARY, 5), //55
-            new DistrictCard("Forteresse", CardFamily.MILITARY, 5),
+            new DistrictCard(TOUR_DE_GARDE, CardFamily.MILITARY, 1), //45
+            new DistrictCard(TOUR_DE_GARDE, CardFamily.MILITARY, 1),
+            new DistrictCard(TOUR_DE_GARDE, CardFamily.MILITARY, 1),
+            new DistrictCard(PRISON, CardFamily.MILITARY, 2),
+            new DistrictCard(PRISON, CardFamily.MILITARY, 2),
+            new DistrictCard(PRISON, CardFamily.MILITARY, 2), //50
+            new DistrictCard(CASERNE, CardFamily.MILITARY, 3),
+            new DistrictCard(CASERNE, CardFamily.MILITARY, 3),
+            new DistrictCard(CASERNE, CardFamily.MILITARY, 3),
+            new DistrictCard(FORTERESSE, CardFamily.MILITARY, 5),
+            new DistrictCard(FORTERESSE, CardFamily.MILITARY, 5), //55
+            new DistrictCard(FORTERESSE, CardFamily.MILITARY, 5),
 
             new DistrictCard("Cour des miracles", CardFamily.UNIQUE, 2),
             new DistrictCard("Donjon", CardFamily.UNIQUE, 3),
@@ -97,9 +114,7 @@ public class DistrictCardsPile extends LinkedList<DistrictCard> {
      * shuffle the pile of district cards
      */
     public void shufflePile() {
-        /*ArrayList<DistrictCard> listOfPileElements = new ArrayList<>(this);*/
         Collections.shuffle(this);
-        /*this = new LinkedList<>(listOfPileElements);*/
     }
 
     /***

@@ -103,7 +103,7 @@ public class Game {
         this.playerList[0] = new RandomBot("HASARDEUX", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display, RAND);
         this.playerList[1] = new SpendthriftBot("DÉPENSIER", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display, RAND);
         this.playerList[2] = new ThriftyBot("ÉCONOME", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display, RAND);
-        this.playerList[3] = new KingBot("MONARCHISTE", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display, RAND);
+        this.playerList[3] = new KingBot("MONARCHISTE", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display);
         this.display.addPlayers(this.playerList);
         this.display.addBlankLine();
 

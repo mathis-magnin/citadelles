@@ -20,7 +20,7 @@ public class KingBot extends Player {
     /*
      * Constructor
      */
-    public KingBot(String name, List<DistrictCard> cards, DistrictCardsPile pile, Bank bank, Display display, Random random) {
+    public KingBot(String name, List<DistrictCard> cards, DistrictCardsPile pile, Bank bank, Display display) {
         super(name, cards, pile, bank, display);
         sortHand(CardFamily.NOBLE);
     }

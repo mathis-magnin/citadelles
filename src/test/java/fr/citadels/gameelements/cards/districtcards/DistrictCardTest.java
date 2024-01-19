@@ -28,8 +28,8 @@ class DistrictCardTest {
 
     @Test
     void testEquals() {
-        assertTrue(DistrictCardsPile.allDistrictCards[0].equals(DistrictCardsPile.allDistrictCards[0]));
-        assertFalse(DistrictCardsPile.allDistrictCards[0].equals(DistrictCardsPile.allDistrictCards[DistrictCardsPile.allDistrictCards.length - 1]));
-        assertTrue(DistrictCardsPile.allDistrictCards[0].equals(new DistrictCard("Manoir", CardFamily.NOBLE, 3)));
+        assertEquals(DistrictCardsPile.allDistrictCards[0], (DistrictCardsPile.allDistrictCards[0]));
+        assertNotEquals(DistrictCardsPile.allDistrictCards[0], (DistrictCardsPile.allDistrictCards[DistrictCardsPile.allDistrictCards.length - 1]));
+        assertEquals(DistrictCardsPile.allDistrictCards[0], (new DistrictCard("Manoir", CardFamily.NOBLE, 3)));
     }
 }
