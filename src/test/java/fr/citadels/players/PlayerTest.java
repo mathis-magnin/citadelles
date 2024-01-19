@@ -42,6 +42,11 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseCharacter(CharacterCardsList characters) {
+                this.setCharacter(characters.get(1));
+            }
+
+            @Override
             public void play() {
                 this.chooseCharacter(new CharacterCardsList());
                 addCardToCity(getHand().get(0));
@@ -49,9 +54,45 @@ class PlayerTest {
             }
 
             @Override
-            public void chooseCharacter(CharacterCardsList characters) {
-                this.setCharacter(characters.get(1));
+            public void playAsAssassin() {
+                this.play();
             }
+
+            @Override
+            public void playAsThief() {
+                this.play();
+            }
+
+            @Override
+            public void playAsMagician() {
+                this.play();
+            }
+
+            @Override
+            public void playAsKing() {
+                this.play();
+            }
+
+            @Override
+            public void playAsBishop() {
+                this.play();
+            }
+
+            @Override
+            public void playAsMerchant() {
+                this.play();
+            }
+
+            @Override
+            public void playAsArchitect() {
+                this.play();
+            }
+
+            @Override
+            public void playAsWarlord() {
+                this.play();
+            }
+
         };
     }
 
@@ -164,6 +205,11 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseCharacter(CharacterCardsList characters) {
+                this.setCharacter(characters.get(2));
+            }
+
+            @Override
             public void play() {
                 this.chooseCharacter(new CharacterCardsList());
                 addCardToCity(getHand().get(0));
@@ -171,9 +217,45 @@ class PlayerTest {
             }
 
             @Override
-            public void chooseCharacter(CharacterCardsList characters) {
-                this.setCharacter(characters.get(2));
+            public void playAsAssassin() {
+                this.play();
             }
+
+            @Override
+            public void playAsThief() {
+                this.play();
+            }
+
+            @Override
+            public void playAsMagician() {
+                this.play();
+            }
+
+            @Override
+            public void playAsKing() {
+                this.play();
+            }
+
+            @Override
+            public void playAsBishop() {
+                this.play();
+            }
+
+            @Override
+            public void playAsMerchant() {
+                this.play();
+            }
+
+            @Override
+            public void playAsArchitect() {
+                this.play();
+            }
+
+            @Override
+            public void playAsWarlord() {
+                this.play();
+            }
+
         };
         player.play();
         player2.play();
@@ -198,6 +280,11 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseCharacter(CharacterCardsList characters) {
+                this.setCharacter(characters.get(2));
+            }
+
+            @Override
             public void play() {
                 this.chooseCharacter(new CharacterCardsList());
                 addCardToCity(getHand().get(0));
@@ -205,8 +292,43 @@ class PlayerTest {
             }
 
             @Override
-            public void chooseCharacter(CharacterCardsList characters) {
-                this.setCharacter(characters.get(2));
+            public void playAsAssassin() {
+                this.play();
+            }
+
+            @Override
+            public void playAsThief() {
+                this.play();
+            }
+
+            @Override
+            public void playAsMagician() {
+                this.play();
+            }
+
+            @Override
+            public void playAsKing() {
+                this.play();
+            }
+
+            @Override
+            public void playAsBishop() {
+                this.play();
+            }
+
+            @Override
+            public void playAsMerchant() {
+                this.play();
+            }
+
+            @Override
+            public void playAsArchitect() {
+                this.play();
+            }
+
+            @Override
+            public void playAsWarlord() {
+                this.play();
             }
         };
         player.play();
@@ -227,6 +349,11 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseCharacter(CharacterCardsList characters) {
+                this.setCharacter(characters.get(2));
+            }
+
+            @Override
             public void play() {
                 this.chooseCharacter(new CharacterCardsList());
                 addCardToCity(getHand().get(0));
@@ -234,8 +361,43 @@ class PlayerTest {
             }
 
             @Override
-            public void chooseCharacter(CharacterCardsList characters) {
-                this.setCharacter(characters.get(2));
+            public void playAsAssassin() {
+                this.play();
+            }
+
+            @Override
+            public void playAsThief() {
+                this.play();
+            }
+
+            @Override
+            public void playAsMagician() {
+                this.play();
+            }
+
+            @Override
+            public void playAsKing() {
+                this.play();
+            }
+
+            @Override
+            public void playAsBishop() {
+                this.play();
+            }
+
+            @Override
+            public void playAsMerchant() {
+                this.play();
+            }
+
+            @Override
+            public void playAsArchitect() {
+                this.play();
+            }
+
+            @Override
+            public void playAsWarlord() {
+                this.play();
             }
         };
         assertNotEquals(player, player2);

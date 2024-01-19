@@ -56,6 +56,24 @@ public class RandomBot extends Player {
         return null;
     }
 
+
+    /**
+     * Choose randomly a characterCard from the list of character.
+     *
+     * @param characters the list of characterCard.
+     */
+    public void chooseCharacter(CharacterCardsList characters) {
+
+        int randomIndex = -1;
+
+        while (randomIndex >= characters.size() || randomIndex < 0) {
+            randomIndex = RAND.nextInt(characters.size());
+        }
+        this.setCharacter(characters.remove(randomIndex));
+        this.display.addCharacterChosen(this, this.getCharacter());
+    }
+
+
     /***
      * play a round for the linked player
      */
@@ -86,21 +104,44 @@ public class RandomBot extends Player {
             takeGoldFromCity();
     }
 
+    @Override
+    public void playAsAssassin() {
+        this.play();
+    }
 
-    /**
-     * Choose randomly a characterCard from the list of character.
-     *
-     * @param characters the list of characterCard.
-     */
-    public void chooseCharacter(CharacterCardsList characters) {
+    @Override
+    public void playAsThief() {
+        this.play();
+    }
 
-        int randomIndex = -1;
+    @Override
+    public void playAsMagician() {
+        this.play();
+    }
 
-        while (randomIndex >= characters.size() || randomIndex < 0) {
-            randomIndex = RAND.nextInt(characters.size());
-        }
-        this.setCharacter(characters.remove(randomIndex));
-        this.display.addCharacterChosen(this, this.getCharacter());
+    @Override
+    public void playAsKing() {
+        this.play();
+    }
+
+    @Override
+    public void playAsBishop() {
+        this.play();
+    }
+
+    @Override
+    public void playAsMerchant() {
+        this.play();
+    }
+
+    @Override
+    public void playAsArchitect() {
+        this.play();
+    }
+
+    @Override
+    public void playAsWarlord() {
+        this.play();
     }
 
 }

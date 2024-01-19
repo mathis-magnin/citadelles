@@ -285,7 +285,7 @@ public abstract class Player implements Comparable<Player> {
     }
 
     /**
-     * choose a card to play among the cards drawn
+     * choose a card to take among the cards drawn
      *
      * @param drawnCards cards drawn
      * @return the card to play
@@ -302,16 +302,64 @@ public abstract class Player implements Comparable<Player> {
 
 
     /**
+     * Choose and take a characterCard from the list of character.
+     *
+     * @param characters the list of characterCard.
+     */
+    public abstract void chooseCharacter(CharacterCardsList characters);
+
+
+    /**
      * play a round for the linked player
      */
     public abstract void play();
 
 
     /**
-     * Choose and take a characterCard from the list of character.
-     *
-     * @param characters the list of characterCard.
+     * play a round for the linked player when he embodies the assassin
      */
-    public abstract void chooseCharacter(CharacterCardsList characters);
+    public abstract void playAsAssassin();
+
+
+    /**
+     * play a round for the linked player when he embodies the thief
+     */
+    public abstract void playAsThief();
+
+
+    /**
+     * play a round for the linked player when he embodies the magician
+     */
+    public abstract void playAsMagician();
+
+
+    /**
+     * play a round for the linked player when he embodies the king
+     */
+    public abstract void playAsKing();
+
+
+    /**
+     * play a round for the linked player when he embodies the bishop
+     */
+    public abstract void playAsBishop();
+
+
+    /**
+     * play a round for the linked player if he embodies the merchant
+     */
+    public abstract void playAsMerchant();
+
+
+    /**
+     * play a round for the linked player if he embodies the architect
+     */
+    public abstract void playAsArchitect();
+
+
+    /**
+     * play a round for the linked player if he embodies the warlord
+     */
+    public abstract void playAsWarlord();
 
 }
