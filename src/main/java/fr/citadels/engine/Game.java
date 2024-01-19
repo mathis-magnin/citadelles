@@ -162,6 +162,29 @@ public class Game {
         System.arraycopy(this.playerList, 0, orderedPlayers, 0, this.playerList.length);
         Arrays.sort(orderedPlayers);   // Sort the player based on their character's rank.
 
+        for (CharacterCard character : CharacterCardsList.allCharacterCards) {
+            if (character.getPlayer() != null) {
+                this.display.addPlayerTurn(character.getPlayer());
+                this.display.addBlankLine();
+                this.display.addPlayer(character.getPlayer());
+                this.display.addBlankLine();
+
+                character.makePlay(this.districtCardsPile, this.bank, this.display);
+
+                if (character.getPlayer().hasCompleteCity() && !this.isFinished) {
+                    Score.setFirstPlayerWithCompleteCity(player);
+                    this.display.addGameFinished(player);
+                    this.display.addBlankLine();
+                    this.isFinished = true;
+                }
+            }
+            else {
+                this.display.addNoPlayerTurn();
+            }
+
+            this.display.addBlankLine();
+        }
+
         for (Player player : orderedPlayers) {
             this.display.addPlayerTurn(player);
             this.display.addBlankLine();
@@ -170,9 +193,7 @@ public class Game {
             player.play(this.districtCardsPile, this.bank, this.display);
             if (player.hasCompleteCity()) {
                 if (!this.isFinished) {
-                    Score.setFirstPlayerWithCompleteCity(player);
-                    this.display.addGameFinished(player);
-                    this.display.addBlankLine();
+
                 }
                 this.isFinished = true;
             }

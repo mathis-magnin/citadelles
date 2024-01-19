@@ -2,6 +2,7 @@ package fr.citadels.players.bots;
 
 import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.charactercards.characters.MagicianCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.gameelements.Bank;
@@ -83,6 +84,8 @@ public class KingBot extends Player {
         boolean draw = getHand().isEmpty() || getHand().get(0).getGoldCost() < getGold();
 
         takeCardsOrGold(pile, bank, draw, display);
+
+        // ((MagicianCard) (this.getCharacter())).exchangeHands();
 
         if (!getHand().isEmpty()) {
             if (draw)
