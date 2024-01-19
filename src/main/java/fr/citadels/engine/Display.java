@@ -236,6 +236,16 @@ public class Display {
     }
 
 
+    public void addThiefPower(Player player, CharacterCard target) {
+        this.events.append(player.getName()).append(" utilise le pouvoir du voleur sur le personnage ").append(target.getPlayer().getName()).append(".\n");
+    }
+
+
+    public void addPlayerRobbed(Player thief, Player target, int gold) {
+        this.events.append(thief.getName()).append(" a volé ").append(gold).append(" pièces d'or à ").append(target.getName()).append(".\n");
+    }
+
+
     public void addGameFinished(Player player) {
         this.events.append(player.getName()).append(" est le premier joueur à posséder une cité complète.\nLa partie se terminera donc à la fin de ce tour.\n");
     }

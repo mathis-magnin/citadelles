@@ -22,6 +22,7 @@ public abstract class Player implements Comparable<Player> {
     private City city;
     private int gold;
     private CharacterCard character;
+    private CharacterCard target;
 
     protected final DistrictCardsPile pile;
 
@@ -39,6 +40,7 @@ public abstract class Player implements Comparable<Player> {
         this.pile = pile;
         this.bank = bank;
         this.display = display;
+        this.target = null;
     }
 
 
@@ -80,6 +82,22 @@ public abstract class Player implements Comparable<Player> {
             this.bank.give(amount);
             this.gold -= amount;
         }
+    }
+
+    /**
+     * Set the player's gold
+     * @param gold
+     */
+    public void setGold(int gold) {
+        this.gold = gold;
+    }
+
+    /**
+     * Set the player's target
+     * @param target
+     */
+    public void setTarget(CharacterCard target) {
+        this.target = target;
     }
 
     /**
@@ -144,6 +162,15 @@ public abstract class Player implements Comparable<Player> {
         return this.character;
     }
 
+    /**
+     * Get the player's target
+     *
+     * @return the target
+     */
+    public CharacterCard getTarget() {
+        return this.target;
+    }
+
 
     /**
      * Set the player's character and the character's player.
@@ -152,6 +179,11 @@ public abstract class Player implements Comparable<Player> {
     public void setCharacter(CharacterCard character) {
         this.character = character;
         character.setPlayer(this);
+    }
+
+
+    public Display getDisplay() {
+        return this.display;
     }
 
 
@@ -287,6 +319,17 @@ public abstract class Player implements Comparable<Player> {
         } else {
             display.addNoDistrictBuilt();
         }
+    }
+
+    /**
+     * Give all the player's gold to the thief
+     */
+    public void getRobbed() {
+        int goldToTake = this.getGold();
+        CharacterCardsList.allCharacterCards[2].getPlayer().addGold(goldToTake);
+        this.setGold(0);
+        this.character.setRobbed(false);
+        this.display.addPlayerRobbed(CharacterCardsList.allCharacterCards[2].getPlayer(), this, goldToTake);
     }
 
     /**
