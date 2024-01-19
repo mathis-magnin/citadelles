@@ -23,15 +23,17 @@ class KingBotTest {
     @Mock
     Random random = mock(Random.class);
     KingBot player1;
-    Display events = new Display();
+    DistrictCardsPile pile;
+    Display events;
     Bank bank;
 
     @BeforeEach
     void setUp() {
+        pile = new DistrictCardsPile();
         bank = new Bank();
+        events = new Display();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
-        player1 = new KingBot("Hello1", districts, random);
-        events.reset();
+        player1 = new KingBot("Hello1", districts, pile, bank, events, random);
     }
 
     @Test
@@ -48,11 +50,10 @@ class KingBotTest {
     @Test
     void chooseCardAmongDrawn() {
         //two NOBLE cards
-        DistrictCardsPile pile = new DistrictCardsPile();
         DistrictCard[] drawnCards = new DistrictCard[2];
         drawnCards[0] = DistrictCardsPile.allDistrictCards[0];
         drawnCards[1] = DistrictCardsPile.allDistrictCards[5];
-        DistrictCard cardToPlay = player1.chooseCardAmongDrawn(pile, drawnCards);
+        DistrictCard cardToPlay = player1.chooseCardAmongDrawn(drawnCards);
         assertEquals("Manoir", cardToPlay.getCardName());
         assertEquals(1, pile.size());
         assertEquals("Château", pile.get(0).getCardName());
@@ -60,7 +61,7 @@ class KingBotTest {
         //two cards, one NOBLE
         drawnCards[0] = DistrictCardsPile.allDistrictCards[30];
         drawnCards[1] = DistrictCardsPile.allDistrictCards[6];
-        cardToPlay = player1.chooseCardAmongDrawn(pile, drawnCards);
+        cardToPlay = player1.chooseCardAmongDrawn(drawnCards);
         assertEquals("Château", cardToPlay.getCardName());
         assertEquals(2, pile.size());
         assertEquals("Château", pile.get(0).getCardName());
@@ -69,7 +70,7 @@ class KingBotTest {
         //two cards, no NOBLE
         drawnCards[0] = DistrictCardsPile.allDistrictCards[31];
         drawnCards[1] = DistrictCardsPile.allDistrictCards[65];
-        cardToPlay = player1.chooseCardAmongDrawn(pile, drawnCards);
+        cardToPlay = player1.chooseCardAmongDrawn(drawnCards);
         assertEquals("Échoppe", cardToPlay.getCardName());
         assertEquals(3, pile.size());
         assertEquals("Château", pile.get(0).getCardName());
@@ -90,23 +91,25 @@ class KingBotTest {
         assertEquals("Temple", player1.getHand().get(2).getCardName());
 
         //Manoir
-        player1.addGold(3, bank);
+
+        player1.addGold(3);
+
         cardToPlay = player1.chooseCardInHand();
         assertEquals("Manoir", cardToPlay.getCardName());
         assertEquals(2, player1.getHand().size());
         assertEquals("Cathédrale", player1.getHand().get(0).getCardName());
         assertEquals("Temple", player1.getHand().get(1).getCardName());
 
+
     }
 
     @Test
     void play() {
-        DistrictCardsPile pile = new DistrictCardsPile();
         this.player1.setCharacter(new KingCard());
         pile.initializePile();
 
         //take gold because no money
-        player1.play(pile, bank, events);
+        player1.play();
         assertEquals(1, player1.getGold());
         assertEquals(2, player1.getHand().size());
         assertEquals("Manoir", player1.getHand().get(0).getCardName());
@@ -114,7 +117,7 @@ class KingBotTest {
         assertEquals("Temple", player1.getCity().get(0).getCardName());
 
         //take cards because money
-        player1.play(pile, bank, events);
+        player1.play();
         assertEquals(1, player1.getGold()); // 1+2-3+1(gold from family)
         assertEquals(1, player1.getHand().size());
         assertEquals("Cathédrale", player1.getHand().get(0).getCardName());
@@ -122,7 +125,7 @@ class KingBotTest {
         assertEquals("Manoir", player1.getCity().get(1).getCardName());
 
         //take money because money needed
-        player1.play(pile, bank, events);
+        player1.play();
         assertEquals(4, player1.getGold());
         assertEquals(1, player1.getHand().size());
         assertEquals("Cathédrale", player1.getHand().get(0).getCardName());
@@ -130,7 +133,7 @@ class KingBotTest {
         assertEquals("Manoir", player1.getCity().get(1).getCardName());
 
         //take cards because money needed
-        player1.play(pile, bank, events);
+        player1.play();
         assertEquals(2, player1.getGold()); // 4+2-5+1
         assertEquals(0, player1.getHand().size());
         assertEquals("Temple", player1.getCity().get(0).getCardName());
@@ -138,7 +141,7 @@ class KingBotTest {
         assertEquals("Cathédrale", player1.getCity().get(2).getCardName());
 
         //take cards because no money
-        player1.play(pile, bank, events);
+        player1.play();
         assertEquals(3, player1.getGold());
         assertEquals(1, player1.getHand().size());
         assertEquals("Temple", player1.getCity().get(0).getCardName());
@@ -151,11 +154,11 @@ class KingBotTest {
     @Test
     void chooseCharacter() {
         CharacterCardsList characters = new CharacterCardsList();
-        player1.chooseCharacter(characters, events);
+        player1.chooseCharacter(characters);
         assertEquals("Roi", player1.getCharacter().getCardName());
         assertEquals(7, characters.size());
 
-        player1.chooseCharacter(characters, events);
+        player1.chooseCharacter(characters);
         assertEquals("Assassin", player1.getCharacter().getCardName());
         assertEquals(6, characters.size());
     }

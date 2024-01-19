@@ -19,17 +19,19 @@ import static org.mockito.Mockito.mock;
 class SpendthriftBotTest {
 
     SpendthriftBot player;
-    Bank bank;
     @Mock
     Random random = mock(Random.class);
-    Display events = new Display();
+    DistrictCardsPile pile;
+    Bank bank;
+    Display events;
 
     @BeforeEach
     void setUp() {
+        pile = new DistrictCardsPile();
         bank = new Bank();
+        events = new Display();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
-        player = new SpendthriftBot("Hello", districts, random);
-        events.reset();
+        player = new SpendthriftBot("Hello", districts, pile, bank, events, random);
     }
 
     @Test
@@ -53,7 +55,9 @@ class SpendthriftBotTest {
 
     @Test
     void chooseCardInHand() {
-        player.addGold(4, bank);
+
+        player.addGold(4);
+
 
         DistrictCard card = player.chooseCardInHand();
         assertEquals(2, player.getHand().size());
@@ -69,22 +73,20 @@ class SpendthriftBotTest {
 
     @Test
     void chooseCardAmongDrawn() {
-        DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
         DistrictCard[] drawnCards = new DistrictCard[]{DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0]};
-        DistrictCard cardToPlay = player.chooseCardAmongDrawn(pile, drawnCards);
+        DistrictCard cardToPlay = player.chooseCardAmongDrawn(drawnCards);
         assertEquals("Temple", cardToPlay.getCardName());
 
         drawnCards = new DistrictCard[]{DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[0]};
-        cardToPlay = player.chooseCardAmongDrawn(pile, drawnCards);
+        cardToPlay = player.chooseCardAmongDrawn(drawnCards);
         assertEquals("Manoir", cardToPlay.getCardName());
     }
 
     @Test
     void playWithNoMoney() {
-        DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
-        player.play(pile, bank, events);
+        player.play();
 
         assertEquals(1, player.getCity().size());
         assertEquals(2, player.getHand().size());
@@ -95,7 +97,7 @@ class SpendthriftBotTest {
                 "Hello a dans sa ville : Temple, \n", events.getEvents());*/
         events.reset();
 
-        player.play(pile, bank, events);
+        player.play();
         assertEquals(2, player.getCity().size());
         assertEquals(1, player.getHand().size());
         assertEquals(0, player.getGold());
@@ -105,7 +107,7 @@ class SpendthriftBotTest {
                 "Hello a dans sa ville : Temple, Manoir, \n", events.getEvents());*/
         events.reset();
 
-        player.play(pile, bank, events);
+        player.play();
         assertEquals(2, player.getCity().size());
         assertEquals(2, player.getHand().size());
         assertEquals(0, player.getGold());
@@ -115,11 +117,11 @@ class SpendthriftBotTest {
 
     @Test
     void playWithGolds() {
-        DistrictCardsPile pile = new DistrictCardsPile();
         pile.initializePile();
-        player.addGold(25, bank);
 
-        player.play(pile, bank, events);
+        player.addGold(25);
+
+        player.play();
         assertEquals(1, player.getCity().size());
         assertEquals(3, player.getHand().size());
         assertEquals(24, player.getGold());
@@ -127,7 +129,7 @@ class SpendthriftBotTest {
         // assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Temple"));
         events.reset();
 
-        player.play(pile, bank, events);
+        player.play();
         assertEquals(2, player.getCity().size());
         assertEquals(3, player.getHand().size());
         if (player.getHand().get(2).getGoldCost() < 3) {

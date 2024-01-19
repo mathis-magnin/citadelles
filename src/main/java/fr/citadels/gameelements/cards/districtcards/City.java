@@ -5,6 +5,8 @@ import java.util.List;
 
 public class City extends ArrayList<DistrictCard> {
 
+    public static final int SIZE_TO_WIN = 7;
+
     /* Constructors */
 
     public City() {
@@ -12,7 +14,7 @@ public class City extends ArrayList<DistrictCard> {
     }
 
 
-    public City(List<DistrictCard> cards){
+    public City(List<DistrictCard> cards) {
         this.addAll(cards);
 
     }
@@ -41,12 +43,13 @@ public class City extends ArrayList<DistrictCard> {
      * @return A boolean value.
      */
     public boolean isComplete() {
-        return this.size() >= 7;
+        return this.size() >= SIZE_TO_WIN;
     }
 
 
     /**
      * Check if the player has one district of each family in his city.
+     *
      * @return A boolean value.
      */
     public boolean hasOneDistrictOfEachFamily() {
@@ -81,4 +84,19 @@ public class City extends ArrayList<DistrictCard> {
         return hasNoble && hasReligious && hasTrade && hasMilitary && hasSpecial;
     }
 
+
+    /**
+     * this method gives the first card in the hand that is not already in the city
+     *
+     * @param hand the cards to check
+     * @return the index of the first card in the hand that is not already in the city
+     */
+    public int getFirstNotDuplicateIndex(List<DistrictCard> hand) {
+        for (int i = 0; i < hand.size(); i++) {
+            if (!this.contains(hand.get(i))) {
+                return i;
+            }
+        }
+        return -1;
+    }
 }
