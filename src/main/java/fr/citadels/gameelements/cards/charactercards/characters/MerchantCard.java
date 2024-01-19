@@ -17,9 +17,9 @@ public class MerchantCard extends CharacterCard {
     /* Methods */
 
     @Override
-    public void bringIntoPlay(DistrictCardsPile pile, Bank bank, Display display) {
+    public void bringIntoPlay() {
         if(this.getPlayer() != null) {
-            //this.getPlayer().playAsMerchant(pile,bank,display);
+            this.getPlayer().playAsMerchant();
         }
     }
 

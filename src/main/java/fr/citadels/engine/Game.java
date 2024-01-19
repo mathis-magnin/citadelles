@@ -131,6 +131,11 @@ public class Game {
      * Play the selection phase of the turn
      */
     public void playSelectionPhase() {
+        /* Set all character's player at null */
+        for (CharacterCard character : CharacterCardsList.allCharacterCards) {
+            character.setPlayer(null);
+        }
+
         this.display.addSelectionPhaseTitle();
 
         CharacterCardsList characters = new CharacterCardsList();
@@ -156,6 +161,9 @@ public class Game {
         }
 
         this.display.addBlankLine();
+        this.display.addCharacterNotChosen(characters.remove(0)); // Only one character is not chosen
+
+        this.display.addBlankLine();
     }
 
 
@@ -165,24 +173,27 @@ public class Game {
     public void playTurnPhase() {
         this.display.addTurnPhaseTitle();
 
-        Player[] orderedPlayers = new Player[this.playerList.length];
-        System.arraycopy(this.playerList, 0, orderedPlayers, 0, this.playerList.length);
-        Arrays.sort(orderedPlayers);   // Sort the player based on their character's rank.
+        for (CharacterCard character : CharacterCardsList.allCharacterCards) {
+            if (character.getPlayer() != null) {
+                this.display.addPlayerTurn(this.playerList[this.crown.getCrownedPlayerIndex()], character.getPlayer());
+                this.display.addBlankLine();
+                this.display.addPlayer(character.getPlayer());
+                this.display.addBlankLine();
 
-        for (Player player : orderedPlayers) {
-            this.display.addPlayerTurn(player);
-            this.display.addBlankLine();
-            this.display.addPlayer(player);
-            this.display.addBlankLine();
-            player.play();
-            if (player.hasCompleteCity()) {
-                if (!this.isFinished) {
-                    Score.setFirstPlayerWithCompleteCity(player);
-                    this.display.addGameFinished(player);
+                character.bringIntoPlay();
+
+                if (character.getPlayer().hasCompleteCity() && !this.isFinished) {
+                    Score.setFirstPlayerWithCompleteCity(character.getPlayer());
+                    this.display.addGameFinished(character.getPlayer());
                     this.display.addBlankLine();
+                    this.isFinished = true;
                 }
-                this.isFinished = true;
             }
+            else {
+                this.display.addNoPlayerTurn(this.playerList[this.crown.getCrownedPlayerIndex()], character);
+                this.display.addBlankLine();
+            }
+
             this.display.addBlankLine();
         }
     }

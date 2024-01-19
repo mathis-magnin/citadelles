@@ -90,6 +90,7 @@ public class ThriftyBot extends Player {
             randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
+
         this.display.addCharacterChosen(this, this.getCharacter());
     }
 

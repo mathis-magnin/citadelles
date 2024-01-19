@@ -160,8 +160,18 @@ public class Display {
     }
 
 
-    public void addPlayerTurn(Player player) {
-        this.events.append("■ Le joueur couronné appelle : ").append(player.getCharacter().getCardName()).append("\nC'est donc au tour de ").append(player.getName()).append(".\n");
+    public void addCharacterNotChosen(CharacterCard character) {
+        this.events.append("Le personnage non choisis est : ").append(character.getCardName());
+    }
+
+
+    public void addNoPlayerTurn(Player crowned, CharacterCard character) {
+        this.events.append("■ ").append(crowned.getName()).append(" appelle : ").append(character.getCardName()).append("\nAucun joueur ne se manifeste.\n");
+    }
+
+
+    public void addPlayerTurn(Player crowned, Player player) {
+        this.events.append("■ ").append(crowned.getName()).append(" appelle : ").append(player.getCharacter().getCardName()).append("\n").append(player.getName()).append(" dévoile son rôle.\n");
     }
 
 

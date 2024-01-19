@@ -17,9 +17,9 @@ public class ThiefCard extends CharacterCard {
     /* Methods */
 
     @Override
-    public void bringIntoPlay(DistrictCardsPile pile, Bank bank, Display display) {
+    public void bringIntoPlay() {
         if(this.getPlayer() != null) {
-            //this.getPlayer().playAsThief(pile,bank,display);
+            this.getPlayer().playAsThief();
         }
     }
 

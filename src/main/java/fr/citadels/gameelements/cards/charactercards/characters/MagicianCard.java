@@ -14,12 +14,13 @@ public class MagicianCard extends CharacterCard {
         super("Magicien", CardFamily.NEUTRAL, 3);
     }
 
+
     /* Methods */
 
     @Override
-    public void bringIntoPlay(DistrictCardsPile pile, Bank bank, Display display) {
+    public void bringIntoPlay() {
         if(this.getPlayer() != null) {
-            //this.getPlayer().playAsMagician(pile,bank,display);
+            this.getPlayer().playAsMagician();
         }
     }
 

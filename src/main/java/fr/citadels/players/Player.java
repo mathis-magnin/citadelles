@@ -145,8 +145,14 @@ public abstract class Player implements Comparable<Player> {
         return this.character; //new CharacterCard(this.character.getCardName(), this.character.getCardFamily(), this.character.getRank());
     }
 
+
+    /**
+     * Set the player's character and the character's player.
+     * @param character
+     */
     public void setCharacter(CharacterCard character) {
         this.character = character;
+        character.setPlayer(this);
     }
 
 

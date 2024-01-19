@@ -17,9 +17,9 @@ public class AssassinCard extends CharacterCard {
     /* Methods */
 
     @Override
-    public void bringIntoPlay(DistrictCardsPile pile, Bank bank, Display display) {
+    public void bringIntoPlay() {
         if(this.getPlayer() != null) {
-            //this.getPlayer().playAsAssasin(pile,bank,display);
+            this.getPlayer().playAsAssassin();
         }
     }
 

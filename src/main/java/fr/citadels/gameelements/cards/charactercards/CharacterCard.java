@@ -29,11 +29,17 @@ public abstract class CharacterCard extends Card implements Comparable<Character
         return this.rank;
     }
 
+
     public Player getPlayer() {
         return this.player;
     }
 
-    public abstract void bringIntoPlay(DistrictCardsPile pile, Bank bank, Display display);
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public abstract void bringIntoPlay();
 
     public abstract void usePower();
 
