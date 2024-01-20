@@ -10,11 +10,14 @@ import java.util.List;
 public class PlayerActions {
     /* Attributes */
     private final Player player;
+    private final PlayerInformation information;
 
 
     /* Constructor */
-    public PlayerActions(Player player) {
+    public PlayerActions(Player player, PlayerInformation information) {
         this.player = player;
+        this.information = information;
+
     }
 
     /* Methods */
@@ -25,7 +28,7 @@ public class PlayerActions {
      * @param amount
      */
     public void addGold(int amount) {
-        player.getGame().getBank().take(amount);
+        player.getInformation().getBank().take(amount);
         player.setGold(player.getGold() + amount);
     }
 
@@ -36,10 +39,10 @@ public class PlayerActions {
      */
     public void removeGold(int amount) {
         if (amount >= player.getGold()) {
-            player.getGame().getBank().give(player.getGold());
+            player.getInformation().getBank().give(player.getGold());
             player.setGold(0);
         } else {
-            player.getGame().getBank().give(amount);
+            player.getInformation().getBank().give(amount);
             player.setGold(player.getGold() - amount);
         }
     }
@@ -65,7 +68,7 @@ public class PlayerActions {
     public void putBack(DistrictCard[] drawnCards, int randomIndex) {
         for (int i = 0; i < drawnCards.length; i++) {
             if (i != randomIndex) {
-                player.getGame().getPile().placeBelowPile(drawnCards[i]);
+                player.getInformation().getPile().placeBelowPile(drawnCards[i]);
                 drawnCards[i] = null;
             }
         }
@@ -78,16 +81,16 @@ public class PlayerActions {
      */
     public void takeCardsOrGold(boolean draw) {
         if (!draw) {
-            if (!player.getGame().getBank().isEmpty())
+            if (!player.getInformation().getBank().isEmpty())
                 addGold(2);
             else draw = true;
 
-            player.getGame().getDisplay().addGoldTaken(player, 2);
-            player.getGame().getDisplay().addBlankLine();
+            player.getInformation().getDisplay().addGoldTaken(player, 2);
+            player.getInformation().getDisplay().addBlankLine();
         }
         if (draw) {
-            DistrictCard[] drawnCards = player.getGame().getPile().draw(2);
-            player.getGame().getDisplay().addDistrictDrawn(drawnCards);
+            DistrictCard[] drawnCards = player.getInformation().getPile().draw(2);
+            player.getInformation().getDisplay().addDistrictDrawn(drawnCards);
             if (drawnCards.length != 0) { // if there is at least 1 card
                 DistrictCard cardToPlay = player.chooseCardAmongDrawn(drawnCards);
 
@@ -95,8 +98,8 @@ public class PlayerActions {
                 hand.add(cardToPlay);
                 player.setHand(hand);
 
-                player.getGame().getDisplay().addDistrictChosen(player, cardToPlay);
-                player.getGame().getDisplay().addBlankLine();
+                player.getInformation().getDisplay().addDistrictChosen(player, cardToPlay);
+                player.getInformation().getDisplay().addBlankLine();
             }
         }
     }
@@ -116,9 +119,9 @@ public class PlayerActions {
             }
             if (goldToTake > 0) {
                 addGold(goldToTake);
-                player.getGame().getBank().take(goldToTake);
-                player.getGame().getDisplay().addGoldTakenFromCity(player, goldToTake);
-                player.getGame().getDisplay().addBlankLine();
+                player.getInformation().getBank().take(goldToTake);
+                player.getInformation().getDisplay().addGoldTakenFromCity(player, goldToTake);
+                player.getInformation().getDisplay().addBlankLine();
             }
         }
     }
@@ -131,11 +134,11 @@ public class PlayerActions {
     public void placeCard(DistrictCard cardToPlace) {
         if (cardToPlace != null) {
             addCardToCity(cardToPlace);
-            player.getGame().getBank().give(cardToPlace.getGoldCost());
+            player.getInformation().getBank().give(cardToPlace.getGoldCost());
             removeGold(cardToPlace.getGoldCost());
-            player.getGame().getDisplay().addDistrictBuilt(player, cardToPlace);
+            player.getInformation().getDisplay().addDistrictBuilt(player, cardToPlace);
         } else {
-            player.getGame().getDisplay().addNoDistrictBuilt();
+            player.getInformation().getDisplay().addNoDistrictBuilt();
         }
     }
 

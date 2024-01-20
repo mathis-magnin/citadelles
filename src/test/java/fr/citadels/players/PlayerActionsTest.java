@@ -20,13 +20,15 @@ import static org.mockito.Mockito.when;
 class PlayerActionsTest {
     Player player;
     PlayerActions actions;
+    PlayerInformation info;
 
     @BeforeEach
     void setUp() {
         Game game = new Game();
         game.getPile().initializePile();
+        info = new PlayerInformation(game);
         player = new KingBot("test", List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[62]), game);
-        actions = new PlayerActions(player);
+        actions = new PlayerActions(player, info);
 
     }
 
@@ -73,7 +75,7 @@ class PlayerActionsTest {
     @Test
     void takeGoldFromCity() {
         Player playerSpy = spy(player);
-        actions = new PlayerActions(playerSpy);
+        actions = new PlayerActions(playerSpy, info);
         //NOBLE card
         when(playerSpy.getCity()).thenReturn(new City(new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[5], DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[25], DistrictCardsPile.allDistrictCards[30], DistrictCardsPile.allDistrictCards[45], DistrictCardsPile.allDistrictCards[60]))));
 
@@ -121,10 +123,10 @@ class PlayerActionsTest {
     void addGold() {
         actions.addGold(5);
         assertEquals(5, player.getGold());
-        assertEquals(20, player.getGame().getBank().getGold());
+        assertEquals(20, player.getInformation().getBank().getGold());
         actions.addGold(2);
         assertEquals(7, player.getGold());
-        assertEquals(18, player.getGame().getBank().getGold());
+        assertEquals(18, player.getInformation().getBank().getGold());
     }
 
     @Test
@@ -133,10 +135,10 @@ class PlayerActionsTest {
         assertEquals(5, player.getGold());
         actions.removeGold(2);
         assertEquals(3, player.getGold());
-        assertEquals(22, player.getGame().getBank().getGold());
+        assertEquals(22, player.getInformation().getBank().getGold());
         actions.removeGold(10);
         assertEquals(0, player.getGold());
-        assertEquals(25, player.getGame().getBank().getGold());
+        assertEquals(25, player.getInformation().getBank().getGold());
 
     }
 

@@ -13,13 +13,12 @@ import java.util.List;
 public abstract class Player implements Comparable<Player>, CharacterStrategy {
 
     /* Attributes */
-    private CharacterCard target;
     private final String name;
     private Hand hand;
     private final City city;
     private int gold;
     private CharacterCard character;
-    protected final Game game;
+    protected final PlayerInformation information;
     protected final PlayerActions actions;
 
 
@@ -30,9 +29,8 @@ public abstract class Player implements Comparable<Player>, CharacterStrategy {
         this.hand = new Hand(cards);
         this.city = new City();
         this.character = null;
-        this.game = game;
-        this.target = null;
-        actions = new PlayerActions(this);
+        this.information = new PlayerInformation(game);
+        actions = new PlayerActions(this, information);
     }
 
 
@@ -47,15 +45,6 @@ public abstract class Player implements Comparable<Player>, CharacterStrategy {
         return this.name;
     }
 
-    /**
-     * Get the game of the player
-     *
-     * @return the bank
-     */
-    public Game getGame() {
-        return this.game;
-    }
-
 
     /**
      * Get a copy of the player's hand
@@ -64,15 +53,6 @@ public abstract class Player implements Comparable<Player>, CharacterStrategy {
      */
     public Hand getHand() {
         return this.hand;
-    }
-
-    /**
-     * Get the target of the player
-     *
-     * @return the target
-     */
-    public CharacterCard getTarget() {
-        return target;
     }
 
     /**
@@ -111,13 +91,13 @@ public abstract class Player implements Comparable<Player>, CharacterStrategy {
         return this.character;
     }
 
-
-    /***
-     * Set the target of the player
-     * @param target the target to set
+    /**
+     * Get the player's information
+     *
+     * @return
      */
-    public void setTarget(CharacterCard target) {
-        this.target = target;
+    public PlayerInformation getInformation() {
+        return information;
     }
 
     /**

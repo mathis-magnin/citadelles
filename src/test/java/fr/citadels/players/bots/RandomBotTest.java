@@ -82,7 +82,7 @@ class RandomBotTest {
 
     @Test
     void chooseCardAmongDrawn() {
-        player.getGame().getPile().initializePile();
+        player.getInformation().getPile().initializePile();
         DistrictCard[] drawnCards = game.getPile().draw(2);
         DistrictCard cardToPlay = player.chooseCardAmongDrawn(drawnCards);
         for (Card card : drawnCards)
@@ -161,7 +161,7 @@ class RandomBotTest {
         assertEquals(1, player.getCity().size());
         assertEquals(1, player.getGold());
 
-        player.getGame().getDisplay().reset();
+        player.getInformation().getDisplay().reset();
 
         /*case 3 : takes gold and don't place*/
         when(random.nextBoolean()).thenReturn(false, true, false);
@@ -173,7 +173,7 @@ class RandomBotTest {
         assertEquals(1, player.getCity().size());
         assertEquals(3, player.getGold());
 
-        player.getGame().getDisplay().reset();
+        player.getInformation().getDisplay().reset();
 
         /*case 4 : takes gold and place*/
         when(random.nextBoolean()).thenReturn(true, true, true);
@@ -185,7 +185,7 @@ class RandomBotTest {
         assertEquals(2, player.getCity().size());
         assertEquals(2, player.getGold());
 
-        player.getGame().getDisplay().reset();
+        player.getInformation().getDisplay().reset();
 
 
     }
@@ -196,7 +196,7 @@ class RandomBotTest {
         player = new RandomBot("Hello", districts, game, random);
         Player playerSpy = spy(player);
 
-        player.getGame().getDisplay().reset();
+        player.getInformation().getDisplay().reset();
 
 
         playerSpy.getActions().addGold(2);
@@ -206,7 +206,7 @@ class RandomBotTest {
         assertEquals(1, player.getCity().size());
         assertEquals(3, player.getGold());
 
-        player.getGame().getDisplay().reset();
+        player.getInformation().getDisplay().reset();
         ;
 
         player.play();
@@ -228,7 +228,7 @@ class RandomBotTest {
         assertEquals("Roi", player.getCharacter().getCardName());
         assertFalse(characters.contains(new KingCard()));
         // assertEquals("Hello a choisi le personnage : Roi\n", events.getEvents());
-        player.getGame().getDisplay().reset();
+        player.getInformation().getDisplay().reset();
 
         when(random.nextInt(anyInt())).thenReturn(20, 3);
         player.chooseCharacter(characters);
@@ -242,17 +242,17 @@ class RandomBotTest {
         player.setCharacter(CharacterCardsList.allCharacterCards[0]);
         when(random.nextInt(anyInt())).thenReturn(3);
         player.playAsAssassin();
-        assertEquals(player.getTarget(), CharacterCardsList.allCharacterCards[4]);
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[4]);
 
         player.setCharacter(CharacterCardsList.allCharacterCards[0]);
         when(random.nextInt(anyInt())).thenReturn(6);
         player.playAsAssassin();
-        assertEquals(player.getTarget(), CharacterCardsList.allCharacterCards[7]);
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[7]);
 
         player.setCharacter(CharacterCardsList.allCharacterCards[0]);
         when(random.nextInt(anyInt())).thenReturn(0);
         player.playAsAssassin();
-        assertEquals(player.getTarget(), CharacterCardsList.allCharacterCards[1]);
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[1]);
     }
 
 }

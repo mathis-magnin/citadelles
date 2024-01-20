@@ -75,7 +75,7 @@ public class KingBot extends Player {
         for (int i = 0; i < characters.size(); i++) {
             if (characters.get(i).getCardName().equals("Roi")) {
                 this.setCharacter(characters.remove(i));
-                getGame().getDisplay().addCharacterChosen(this, this.getCharacter());
+                getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
                 return;
             }
         }
@@ -84,7 +84,7 @@ public class KingBot extends Player {
          * Could happen if a player already took it
          */
         this.setCharacter(characters.remove(0));
-        getGame().getDisplay().addCharacterChosen(this, this.getCharacter());
+        getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
 
@@ -106,16 +106,16 @@ public class KingBot extends Player {
 
             getActions().placeCard(cardToPlace);
         } else {
-            getGame().getDisplay().addNoDistrictBuilt();
+            getInformation().getDisplay().addNoDistrictBuilt();
         }
-        getGame().getDisplay().addBlankLine();
+        getInformation().getDisplay().addBlankLine();
         getActions().takeGoldFromCity();
     }
 
 
     @Override
     public void playAsAssassin() {
-        setTarget(CharacterCardsList.allCharacterCards[3]);
+        getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
         getCharacter().usePower();
         this.play();
     }

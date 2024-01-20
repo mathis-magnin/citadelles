@@ -145,9 +145,9 @@ class SpendthriftBotTest {
         player.setCharacter(CharacterCardsList.allCharacterCards[0]);
         when(random.nextBoolean()).thenReturn(true, false);
         player.playAsAssassin();
-        assertEquals(player.getTarget(), CharacterCardsList.allCharacterCards[5]);
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[5]);
         player.playAsAssassin();
-        assertEquals(player.getTarget(), CharacterCardsList.allCharacterCards[6]);
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[6]);
     }
 
 }

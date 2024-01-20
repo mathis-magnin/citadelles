@@ -86,7 +86,7 @@ public class SpendthriftBot extends Player {
             randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        getGame().getDisplay().addCharacterChosen(this, this.getCharacter());
+        getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
 
@@ -107,18 +107,18 @@ public class SpendthriftBot extends Player {
             getActions().placeCard(cardToPlace);
 
         } else {
-            getGame().getDisplay().addNoDistrictBuilt();
+            getInformation().getDisplay().addNoDistrictBuilt();
         }
-        getGame().getDisplay().addBlankLine();
+        getInformation().getDisplay().addBlankLine();
         getActions().takeGoldFromCity();
     }
 
     @Override
     public void playAsAssassin() {
         if (RAND.nextBoolean())
-            setTarget(CharacterCardsList.allCharacterCards[5]);
+            getInformation().setTarget(CharacterCardsList.allCharacterCards[5]);
         else
-            setTarget(CharacterCardsList.allCharacterCards[6]);
+            getInformation().setTarget(CharacterCardsList.allCharacterCards[6]);
         getCharacter().usePower();
         this.play();
     }

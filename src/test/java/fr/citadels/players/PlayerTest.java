@@ -27,7 +27,8 @@ class PlayerTest {
     @BeforeEach
     void setUp() {
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[62]));
-        player = new Player("Hello", districts, new Game()) {
+        game = new Game();
+        player = new Player("Hello", districts, game) {
             @Override
             public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
                 return drawnCards[0];
@@ -82,14 +83,6 @@ class PlayerTest {
             public void playAsThief() {
             }
         };
-    }
-
-    @Test
-    void getTarget() {
-        assertNull(player.getTarget());
-        KingCard king = new KingCard();
-        player.setTarget(king);
-        assertEquals(king, player.getTarget());
     }
 
     @Test

@@ -23,7 +23,7 @@ class AssassinCardTest {
     void usePower() {
         assassin = new AssassinCard();
         assassin.setPlayer(player);
-        player.setTarget(CharacterCardsList.allCharacterCards[3]);
+        player.getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
         assassin.usePower();
         assertTrue(CharacterCardsList.allCharacterCards[3].isDead());
     }

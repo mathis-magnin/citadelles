@@ -68,7 +68,7 @@ public class RandomBot extends Player {
             randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        getGame().getDisplay().addCharacterChosen(this, this.getCharacter());
+        getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
 
@@ -94,10 +94,10 @@ public class RandomBot extends Player {
             DistrictCard cardToPlace = chooseCardInHand();
             getActions().placeCard(cardToPlace);
         } else {
-            getGame().getDisplay().addNoDistrictBuilt();
+            getInformation().getDisplay().addNoDistrictBuilt();
         }
 
-        getGame().getDisplay().addBlankLine();
+        getInformation().getDisplay().addBlankLine();
         if (!takeGoldFromFamily)
             getActions().takeGoldFromCity();
     }
@@ -105,7 +105,7 @@ public class RandomBot extends Player {
     @Override
     public void playAsAssassin() {
         int randIndex = RAND.nextInt(CharacterCardsList.allCharacterCards.length - 1) + 1;
-        setTarget(CharacterCardsList.allCharacterCards[randIndex]);
+        getInformation().setTarget(CharacterCardsList.allCharacterCards[randIndex]);
         getCharacter().usePower();
         this.play();
     }

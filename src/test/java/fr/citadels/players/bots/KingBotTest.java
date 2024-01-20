@@ -165,7 +165,7 @@ class KingBotTest {
     void playAsAssassin() {
         player1.setCharacter(CharacterCardsList.allCharacterCards[0]);
         player1.playAsAssassin();
-        assertEquals(player1.getTarget(), CharacterCardsList.allCharacterCards[3]);
+        assertEquals(player1.getInformation().getTarget(), CharacterCardsList.allCharacterCards[3]);
     }
 
 }
