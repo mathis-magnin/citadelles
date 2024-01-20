@@ -56,6 +56,14 @@ class PlayerTest {
             }
 
             @Override
+            public void playResourcesPhase() {
+            }
+
+            @Override
+            public void playBuildingPhase() {
+            }
+
+            @Override
             public void playAsAssassin() {
                 this.play();
             }
@@ -227,6 +235,14 @@ class PlayerTest {
             }
 
             @Override
+            public void playResourcesPhase() {
+            }
+
+            @Override
+            public void playBuildingPhase() {
+            }
+
+            @Override
             public void playAsAssassin() {
                 this.play();
             }
@@ -302,6 +318,14 @@ class PlayerTest {
             }
 
             @Override
+            public void playResourcesPhase() {
+            }
+
+            @Override
+            public void playBuildingPhase() {
+            }
+
+            @Override
             public void playAsAssassin() {
                 this.play();
             }
@@ -368,6 +392,14 @@ class PlayerTest {
                 this.chooseCharacter(new CharacterCardsList());
                 addCardToCity(getHand().get(0));
                 removeCardFromHand(0);
+            }
+
+            @Override
+            public void playResourcesPhase() {
+            }
+
+            @Override
+            public void playBuildingPhase() {
             }
 
             @Override

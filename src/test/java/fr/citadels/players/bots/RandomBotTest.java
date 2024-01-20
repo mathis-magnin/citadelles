@@ -111,7 +111,7 @@ class RandomBotTest {
         events.reset();
 
         /*case 2 : takes gold and don't place*/
-        when(random.nextBoolean()).thenReturn(false, true, false);
+        when(random.nextBoolean()).thenReturn(true, false, false);
         playerSpy.play();
 
         // assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
@@ -146,7 +146,7 @@ class RandomBotTest {
 
 
         /*case 1 : take card and don't place*/
-        when(random.nextBoolean()).thenReturn(true, false, false);
+        when(random.nextBoolean()).thenReturn(false, true, false);
         playerSpy.play();
 
         // assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
@@ -171,7 +171,7 @@ class RandomBotTest {
         events.reset();
 
         /*case 3 : takes gold and don't place*/
-        when(random.nextBoolean()).thenReturn(false, true, false);
+        when(random.nextBoolean()).thenReturn(true, false, false);
         playerSpy.play();
 
         // assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
@@ -208,7 +208,7 @@ class RandomBotTest {
 
 
         playerSpy.addGold(2);
-        when(random.nextBoolean()).thenReturn(false, true, true);
+        when(random.nextBoolean()).thenReturn(true, false, true);
         playerSpy.play();
         assertEquals(1, playerSpy.getHand().size());
         assertEquals(1, playerSpy.getCity().size());

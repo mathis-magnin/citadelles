@@ -91,6 +91,10 @@ public abstract class Player implements Comparable<Player> {
         this.hand = hand;
     }
 
+    public Display getDisplay() {
+        return this.display;
+    }
+
     public void addGold(int amount) {
         this.bank.take(amount);
         this.gold += amount;
@@ -343,6 +347,17 @@ public abstract class Player implements Comparable<Player> {
      * play a round for the linked player
      */
     public abstract void play();
+
+
+    /**
+     * play the phase when the player takes resources for his turn
+     */
+    public abstract void playResourcesPhase();
+
+    /**
+     * play the phase when the player builds districts in his city
+     */
+    public abstract void playBuildingPhase();
 
 
     /**

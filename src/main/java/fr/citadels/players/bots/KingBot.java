@@ -4,13 +4,11 @@ import fr.citadels.engine.Display;
 import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
-import fr.citadels.gameelements.cards.charactercards.characters.MagicianCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
 
 import java.util.List;
-import java.util.Random;
 
 /*
  * This bot will try to take the king character every time it can
@@ -97,15 +95,28 @@ public class KingBot extends Player {
      */
     @Override
     public void play() {
+        playResourcesPhase();
+
+        playBuildingPhase();
+    }
+
+
+    @Override
+    public void playResourcesPhase() {
         int firstNotDuplicateIndex = getCity().getFirstNotDuplicateIndex(getHand());
         boolean draw = getHand().isEmpty() || firstNotDuplicateIndex == -1 || getHand().get(firstNotDuplicateIndex).getGoldCost() < getGold();
 
         takeCardsOrGold(draw);
 
-        if (!getHand().isEmpty()) {
-            if (draw)
-                sortHand(CardFamily.NOBLE);
+        if (draw) {
+            sortHand(CardFamily.NOBLE);
+        }
+    }
 
+
+    @Override
+    public void playBuildingPhase() {
+        if (!getHand().isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();
 
             placeCard(cardToPlace);

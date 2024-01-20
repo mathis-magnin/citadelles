@@ -80,15 +80,26 @@ public class RandomBot extends Player {
      */
     @Override
     public void play() {
+        playResourcesPhase();
+
+        playBuildingPhase();
+    }
+
+
+    @Override
+    public void playResourcesPhase() {
+        boolean draw;
+        draw = !RAND.nextBoolean();
+        takeCardsOrGold(draw);
+    }
+
+
+    @Override
+    public void playBuildingPhase() {
         boolean takeGoldFromFamily;
 
         takeGoldFromFamily = RAND.nextBoolean();
         if (takeGoldFromFamily) takeGoldFromCity();
-
-        boolean draw;
-        draw = !RAND.nextBoolean();
-        takeCardsOrGold(draw);
-
 
         boolean play;
         play = RAND.nextBoolean();

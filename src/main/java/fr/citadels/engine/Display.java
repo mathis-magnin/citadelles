@@ -3,6 +3,7 @@ package fr.citadels.engine;
 import fr.citadels.engine.score.Scoreboard;
 import fr.citadels.gameelements.cards.Card;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
+import fr.citadels.gameelements.cards.charactercards.characters.MerchantCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.Hand;
@@ -233,6 +234,11 @@ public class Display {
 
     private void addCityUpdate(City city) {
         this.events.append("\tSa cité comporte donc : ").append(city.toString()).append("\n");
+    }
+
+
+    public void addMerchantPower(MerchantCard merchantCard) {
+        this.events.append(merchantCard.getPlayer().getName()).append(" utilise son pouvoir pour gagner une pièce.\n");
     }
 
 

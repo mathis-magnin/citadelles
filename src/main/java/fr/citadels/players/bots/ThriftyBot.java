@@ -96,12 +96,23 @@ public class ThriftyBot extends Player {
 
 
     public void play() {
+        playResourcesPhase();
 
+        playBuildingPhase();
+    }
+
+
+    @Override
+    public void playResourcesPhase() {
         // Draw 2 cards or take 2 golds
         boolean draw = ((getGold() > 15) || (getHand().isEmpty()) || ((getGold() > 5) && (getMostExpensiveCardInHand()[1] < 4)));
         takeGoldFromCity();
         takeCardsOrGold(draw);
+    }
 
+
+    @Override
+    public void playBuildingPhase() {
         // Buy the most expensive card with a cost > 1 if possible
         if (!this.getHand().isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();
