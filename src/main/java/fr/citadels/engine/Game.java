@@ -139,7 +139,6 @@ public class Game {
         this.display.addSelectionPhaseTitle();
 
         CharacterCardsList characters = new CharacterCardsList();
-        Collections.shuffle(characters);
         CharacterCard[] removedCharactersFaceUp = characters.removeCharactersFaceUp();
         CharacterCard[] removedCharactersFaceDown = characters.removeCharactersFaceDown();
 
@@ -209,8 +208,10 @@ public class Game {
      */
     public void showCharacterKilled(CharacterCard characterKilled) {
         if (characterKilled != null) {
-            if (characterKilled.getPlayer() != null)
+            if (characterKilled.getPlayer() != null) {
                 this.display.wasKilled(characterKilled);
+                this.display.addBlankLine();
+            }
             characterKilled.setDead(false);
         }
     }

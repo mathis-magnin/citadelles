@@ -90,17 +90,6 @@ public class KingBot extends Player {
     }
 
 
-    /***
-     * play a round for the linked player
-     */
-    @Override
-    public void play() {
-        playResourcesPhase();
-
-        playBuildingPhase();
-    }
-
-
     @Override
     public void playResourcesPhase() {
         int firstNotDuplicateIndex = getCity().getFirstNotDuplicateIndex(getHand());
@@ -130,44 +119,60 @@ public class KingBot extends Player {
 
     @Override
     public void playAsAssassin() {
+        playResourcesPhase();
+        playBuildingPhase();
+
         setTarget(CharacterCardsList.allCharacterCards[3]);
         getCharacter().usePower();
-        this.play();
     }
 
     @Override
     public void playAsThief() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsMagician() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsKing() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsBishop() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsMerchant() {
-        this.play();
+        playResourcesPhase();
+        getCharacter().usePower();
+        playBuildingPhase();
     }
 
     @Override
     public void playAsArchitect() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsWarlord() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
 

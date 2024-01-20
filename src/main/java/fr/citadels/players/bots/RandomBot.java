@@ -2,7 +2,6 @@ package fr.citadels.players.bots;
 
 import fr.citadels.engine.Display;
 import fr.citadels.gameelements.Bank;
-import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
@@ -75,17 +74,6 @@ public class RandomBot extends Player {
     }
 
 
-    /***
-     * play a round for the linked player
-     */
-    @Override
-    public void play() {
-        playResourcesPhase();
-
-        playBuildingPhase();
-    }
-
-
     @Override
     public void playResourcesPhase() {
         boolean draw;
@@ -118,45 +106,61 @@ public class RandomBot extends Player {
 
     @Override
     public void playAsAssassin() {
+        playResourcesPhase();
+        playBuildingPhase();
+
         int randIndex = RAND.nextInt(CharacterCardsList.allCharacterCards.length - 1) + 1;
         setTarget(CharacterCardsList.allCharacterCards[randIndex]);
         getCharacter().usePower();
-        this.play();
     }
 
     @Override
     public void playAsThief() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsMagician() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsKing() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsBishop() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsMerchant() {
-        this.play();
+        playResourcesPhase();
+        getCharacter().usePower();
+        playBuildingPhase();
     }
 
     @Override
     public void playAsArchitect() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsWarlord() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
 }

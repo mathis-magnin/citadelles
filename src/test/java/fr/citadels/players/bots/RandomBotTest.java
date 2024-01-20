@@ -101,7 +101,8 @@ class RandomBotTest {
         Player playerSpy = spy(player);
 
         when(random.nextBoolean()).thenReturn(false, false);
-        playerSpy.play();
+        playerSpy.playResourcesPhase();
+        playerSpy.playBuildingPhase();
         // assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
 
         assertEquals(4, playerSpy.getHand().size());
@@ -112,7 +113,8 @@ class RandomBotTest {
 
         /*case 2 : takes gold and don't place*/
         when(random.nextBoolean()).thenReturn(true, false, false);
-        playerSpy.play();
+        playerSpy.playResourcesPhase();
+        playerSpy.playBuildingPhase();
 
         // assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
 
@@ -124,7 +126,8 @@ class RandomBotTest {
 
         /*case 3 : takes gold and place*/
         when(random.nextBoolean()).thenReturn(true, true, true);
-        playerSpy.play();
+        playerSpy.playResourcesPhase();
+        playerSpy.playBuildingPhase();
 
         // assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Temple\n"));
 
@@ -147,7 +150,8 @@ class RandomBotTest {
 
         /*case 1 : take card and don't place*/
         when(random.nextBoolean()).thenReturn(false, true, false);
-        playerSpy.play();
+        playerSpy.playResourcesPhase();
+        playerSpy.playBuildingPhase();
 
         // assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
 
@@ -160,7 +164,8 @@ class RandomBotTest {
         /*case 2 : doesn't take gold and place*/
 
         when(random.nextBoolean()).thenReturn(false, false, true);
-        playerSpy.play();
+        playerSpy.playResourcesPhase();
+        playerSpy.playBuildingPhase();
 
         // assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Temple\n"));
 
@@ -172,7 +177,8 @@ class RandomBotTest {
 
         /*case 3 : takes gold and don't place*/
         when(random.nextBoolean()).thenReturn(true, false, false);
-        playerSpy.play();
+        playerSpy.playResourcesPhase();
+        playerSpy.playBuildingPhase();
 
         // assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
 
@@ -184,7 +190,8 @@ class RandomBotTest {
 
         /*case 4 : takes gold and place*/
         when(random.nextBoolean()).thenReturn(true, true, true);
-        playerSpy.play();
+        playerSpy.playResourcesPhase();
+        playerSpy.playBuildingPhase();
 
         // assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Manoir\n"));
 
@@ -209,14 +216,16 @@ class RandomBotTest {
 
         playerSpy.addGold(2);
         when(random.nextBoolean()).thenReturn(true, false, true);
-        playerSpy.play();
+        playerSpy.playResourcesPhase();
+        playerSpy.playBuildingPhase();
         assertEquals(1, playerSpy.getHand().size());
         assertEquals(1, playerSpy.getCity().size());
         assertEquals(3, playerSpy.getGold());
 
         events.reset();
 
-        playerSpy.play();
+        playerSpy.playResourcesPhase();
+        playerSpy.playBuildingPhase();
         // assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
 
         assertEquals(1, playerSpy.getHand().size());
@@ -227,35 +236,6 @@ class RandomBotTest {
 
 
     }
-/*
-    @Test
-    void playWithWrongBooleanGenerated() {
-        DistrictCardsPile pile = new DistrictCardsPile();
-        pile.initializePile();
-        Player playerSpy = spy(player);
-
-        when(random.nextBoolean()).thenThrow(IllegalArgumentException.class);
-
-        playerSpy.play();
-        assertEquals(3, playerSpy.getHand().size());
-        assertEquals(0, playerSpy.getCity().size());
-        assertEquals(2, playerSpy.getGold()); //took money
-        assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
-        events.reset();
-
-<<<<<<< HEAD
-        playerSpy.addGold(bank.take(23)); //no money in bank anymore
-        playerSpy.play(pile, bank, events);
-=======
-        playerSpy.addGold(23); //no money in bank anymore
-        playerSpy.play();
->>>>>>> develop
-        assertEquals(4, playerSpy.getHand().size());
-        assertEquals(0, playerSpy.getCity().size());
-        assertEquals(25, playerSpy.getGold()); //took money
-
-        assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
-    }*/
 
     @Test
     void chooseCharacterTest() {
@@ -296,6 +276,18 @@ class RandomBotTest {
         when(random.nextInt(anyInt())).thenReturn(0);
         player.playAsAssassin();
         assertEquals(player.getTarget(), CharacterCardsList.allCharacterCards[1]);
+    }
+
+    @Test
+    void playAsMerchant() {
+        pile.initializePile();
+        player.setCharacter(CharacterCardsList.allCharacterCards[5]);
+
+        // Bot takes card and doesn't place
+        // At the end of its turn, it has 1 gold due to the merchant power
+        when(random.nextBoolean()).thenReturn(false, false);
+        player.playAsMerchant();
+        assertEquals(1, player.getGold());
     }
 
 }

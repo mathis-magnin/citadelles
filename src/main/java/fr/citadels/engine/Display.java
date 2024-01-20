@@ -237,8 +237,19 @@ public class Display {
     }
 
 
+    public void killed(CharacterCard character) {
+        this.events.append("\n").append(character.getCardName()).append(" a été tué par l'Assassin.\n");
+    }
+
+
+    public void wasKilled(CharacterCard character) {
+        this.events.append(character.getPlayer().getName()).append(" était ").append(character.getCardName()).append(" et a été tué par l'Assassin.\n");
+    }
+
+
     public void addMerchantPower(MerchantCard merchantCard) {
-        this.events.append(merchantCard.getPlayer().getName()).append(" utilise son pouvoir pour gagner une pièce.\n");
+        this.events.append(merchantCard.getPlayer().getName()).append(" utilise son pouvoir pour gagner une pièce d'or.\n");
+        this.addGoldUpdate(merchantCard.getPlayer().getGold());
     }
 
 
@@ -254,13 +265,5 @@ public class Display {
 
     public void addWinner(Player player) {
         this.events.append("Le gagnant est : ").append(player.getName()).append(" !\n");
-    }
-
-    public void killed(CharacterCard character) {
-        this.events.append("\n").append(character.getCardName()).append(" a été tué par l'Assassin !\n");
-    }
-
-    public void wasKilled(CharacterCard character) {
-        this.events.append(character.getPlayer().getName()).append(" était ").append(character.getCardName()).append(" et avait été tué par l'Assassin !\n");
     }
 }

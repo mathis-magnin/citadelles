@@ -1,10 +1,7 @@
 package fr.citadels.gameelements.cards.charactercards;
 
-import fr.citadels.engine.Display;
-import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.Card;
 import fr.citadels.gameelements.cards.CardFamily;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
 
 public abstract class CharacterCard extends Card implements Comparable<CharacterCard> {
@@ -48,14 +45,20 @@ public abstract class CharacterCard extends Card implements Comparable<Character
         return this.player;
     }
 
-
     public void setPlayer(Player player) {
         this.player = player;
     }
 
+    /**
+     * Let the player who embodies the character play his turn
+     */
     public abstract void bringIntoPlay();
 
+    /**
+     * Let the player who embodies the character use the power which comes from his role
+     */
     public abstract void usePower();
+
 
     /**
      * @return a string representation of a district card

@@ -16,12 +16,13 @@ import java.util.List;
 public abstract class Player implements Comparable<Player> {
 
     /* Attributes */
-    private CharacterCard target;
+
     private final String name;
     private Hand hand;
     private City city;
     private int gold;
     private CharacterCard character;
+    private CharacterCard target;
 
     protected final DistrictCardsPile pile;
 
@@ -42,7 +43,6 @@ public abstract class Player implements Comparable<Player> {
         this.target = null;
     }
 
-
     /* Basic methods */
 
     /**
@@ -54,6 +54,7 @@ public abstract class Player implements Comparable<Player> {
         return this.name;
     }
 
+
     /***
      * Set the target of the player
      * @param target
@@ -61,6 +62,7 @@ public abstract class Player implements Comparable<Player> {
     public void setTarget(CharacterCard target) {
         this.target = target;
     }
+
 
     /**
      * Get the target of the player
@@ -71,12 +73,14 @@ public abstract class Player implements Comparable<Player> {
         return target;
     }
 
+
     /**
      * @return true if the player has a target, false otherwise
      */
-    public Display getDisplay() {
-        return display;
+    public boolean hasTarget() {
+        return (this.target != null);
     }
+
 
     /**
      * Get a copy of the player's hand
@@ -87,18 +91,22 @@ public abstract class Player implements Comparable<Player> {
         return new Hand(new ArrayList<>(this.hand));
     }
 
+
     public void setHand(Hand hand) {
         this.hand = hand;
     }
+
 
     public Display getDisplay() {
         return this.display;
     }
 
+
     public void addGold(int amount) {
         this.bank.take(amount);
         this.gold += amount;
     }
+
 
     public void removeGold(int amount) {
         if (amount >= this.gold) {
@@ -110,6 +118,7 @@ public abstract class Player implements Comparable<Player> {
         }
     }
 
+
     /**
      * Sort the player's hand
      *
@@ -118,6 +127,7 @@ public abstract class Player implements Comparable<Player> {
     public void sortHand(CardFamily family) {
         this.hand.sortCards(family);
     }
+
 
     /**
      * Remove a card from the player's hand
@@ -162,6 +172,7 @@ public abstract class Player implements Comparable<Player> {
     public int getGold() {
         return this.gold;
     }
+
 
     /**
      * Get the player's character
@@ -341,12 +352,6 @@ public abstract class Player implements Comparable<Player> {
      * @param characters the list of characterCard.
      */
     public abstract void chooseCharacter(CharacterCardsList characters);
-
-
-    /**
-     * play a round for the linked player
-     */
-    public abstract void play();
 
 
     /**
