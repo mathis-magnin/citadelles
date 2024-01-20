@@ -86,6 +86,14 @@ class ScoreboardTest {
         }
 
         @Override
+        public void playResourcesPhase() {
+        }
+
+        @Override
+        public void playBuildingPhase() {
+        }
+
+        @Override
         public void playAsAssassin() {
             this.play();
         }
@@ -146,6 +154,14 @@ class ScoreboardTest {
         @Override
         public void play() {
             this.addCardsToCity(this.getHand());
+        }
+
+        @Override
+        public void playResourcesPhase() {
+        }
+
+        @Override
+        public void playBuildingPhase() {
         }
 
         @Override
@@ -212,6 +228,14 @@ class ScoreboardTest {
         }
 
         @Override
+        public void playResourcesPhase() {
+        }
+
+        @Override
+        public void playBuildingPhase() {
+        }
+
+        @Override
         public void playAsAssassin() {
             this.play();
         }
@@ -275,6 +299,14 @@ class ScoreboardTest {
         }
 
         @Override
+        public void playResourcesPhase() {
+        }
+
+        @Override
+        public void playBuildingPhase() {
+        }
+
+        @Override
         public void playAsAssassin() {
             this.play();
         }
@@ -334,31 +366,6 @@ class ScoreboardTest {
         player4.chooseCharacter(characters);
     }
 
-    /*@Test
-    void determineRanking() {
-        Score.setFirstPlayerWithCompleteCity(player1);
-        scoreboard.determineRanking();
-        assertEquals("1e place : Luk.\n" +
-                "    Score total : 41.\n" +
-                "    Quartiers construits : 39 points.\n" +
-                "    Cité complète : 2 points bonus.\n" +
-                "\n" +
-                "2e place : Tom.\n" +
-                "    Score total : 28.\n" +
-                "    Quartiers construits : 24 points.\n" +
-                "    Première cité complète : 4 points bonus.\n" +
-                "\n" +
-                "3e place : Noa.\n" +
-                "    Dernier personnage joué : Roi (4 - Royal).\n" +
-                "    Score total : 21.\n" +
-                "    Quartiers construits : 21 points.\n" +
-                "\n" +
-                "4e place : Bob.\n" +
-                "    Dernier personnage joué : Magicien (3 - Neutre).\n" +
-                "    Score total : 21.\n" +
-                "    Quartiers construits : 19 points.\n" +
-                "    Cité complète : 2 points bonus.\n\n", scoreboard.toString());
-    }*/
 
     @Test
     void getWinner() {

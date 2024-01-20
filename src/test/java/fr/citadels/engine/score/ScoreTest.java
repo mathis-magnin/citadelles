@@ -85,6 +85,14 @@ class ScoreTest {
         }
 
         @Override
+        public void playResourcesPhase() {
+        }
+
+        @Override
+        public void playBuildingPhase() {
+        }
+
+        @Override
         public void playAsAssassin() {
             this.play();
         }
@@ -146,6 +154,14 @@ class ScoreTest {
         @Override
         public void play() {
             this.addCardsToCity(this.getHand());
+        }
+
+        @Override
+        public void playResourcesPhase() {
+        }
+
+        @Override
+        public void playBuildingPhase() {
         }
 
         @Override
@@ -215,6 +231,14 @@ class ScoreTest {
         }
 
         @Override
+        public void playResourcesPhase() {
+        }
+
+        @Override
+        public void playBuildingPhase() {
+        }
+
+        @Override
         public void playAsAssassin() {
             this.play();
         }
@@ -278,6 +302,14 @@ class ScoreTest {
         @Override
         public void play() {
             this.addCardsToCity(this.getHand());
+        }
+
+        @Override
+        public void playResourcesPhase() {
+        }
+
+        @Override
+        public void playBuildingPhase() {
         }
 
         @Override
@@ -351,26 +383,6 @@ class ScoreTest {
         assertEquals(player3, score3.getPlayer());
         assertEquals(player4, score4.getPlayer());
     }
-
-
-    /*@Test
-    void testToString() {
-        assertEquals("    Score total : 0.\n" +
-                "    Quartiers construits : 0 points.\n", score1.toString());
-
-        Score.setFirstPlayerWithCompleteCity(player2);
-        score2.determinePoints(); // 18
-        assertEquals("    Score total : 18.\n" +
-                "    Quartiers construits : 18 points.\n", score2.toString());
-
-        assertEquals("    Score total : 0.\n" +
-                "    Quartiers construits : 0 points.\n", score3.toString());
-
-        score4.determinePoints(); // 39 + 2 = 41
-        assertEquals("    Score total : 41.\n" +
-                "    Quartiers construits : 39 points.\n" +
-                "    Cité complète : 2 points bonus.\n", score4.toString());
-    }*/
 
 
     @Test
