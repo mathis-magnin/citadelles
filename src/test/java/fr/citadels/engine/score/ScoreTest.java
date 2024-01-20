@@ -65,16 +65,89 @@ class ScoreTest {
 
     Player player1 = new KingBot("Tom", cardsPlayer1, game) {
         @Override
-        public void play() {
-            getActions().addCardsToCity(this.getHand());
+        public void playResourcesPhase() {
         }
+
+        @Override
+        public void playBuildingPhase() {
+            this.getActions().addCardsToCity(this.getHand());
+        }
+
+        @Override
+        public void playAsAssassin() {
+        }
+
+        @Override
+        public void playAsThief() {
+        }
+
+        @Override
+        public void playAsMagician() {
+        }
+
+        @Override
+        public void playAsKing() {
+        }
+
+        @Override
+        public void playAsBishop() {
+        }
+
+        @Override
+        public void playAsMerchant() {
+        }
+
+        @Override
+        public void playAsArchitect() {
+        }
+
+        @Override
+        public void playAsWarlord() {
+        }
+
     };
     Score score1 = new Score(player1);
 
     Player player2 = new KingBot("Bob", cardsPlayer2, game) {
         @Override
-        public void play() {
-            getActions().addCardsToCity(this.getHand());
+        public void playResourcesPhase() {
+        }
+
+        @Override
+        public void playBuildingPhase() {
+            this.getActions().addCardsToCity(this.getHand());
+        }
+
+        @Override
+        public void playAsAssassin() {
+        }
+
+        @Override
+        public void playAsThief() {
+        }
+
+        @Override
+        public void playAsMagician() {
+        }
+
+        @Override
+        public void playAsKing() {
+        }
+
+        @Override
+        public void playAsBishop() {
+        }
+
+        @Override
+        public void playAsMerchant() {
+        }
+
+        @Override
+        public void playAsArchitect() {
+        }
+
+        @Override
+        public void playAsWarlord() {
         }
     };
     Score score2 = new Score(player2);
@@ -83,8 +156,44 @@ class ScoreTest {
     /* Simulate an entire game (Only for this test class, the method play has been changed) */
     Player player3 = new KingBot("Noa", cardsPlayer3, game) {
         @Override
-        public void play() {
-            getActions().addCardsToCity(this.getHand());
+        public void playResourcesPhase() {
+        }
+
+        @Override
+        public void playBuildingPhase() {
+            this.getActions().addCardsToCity(this.getHand());
+        }
+
+        @Override
+        public void playAsAssassin() {
+        }
+
+        @Override
+        public void playAsThief() {
+        }
+
+        @Override
+        public void playAsMagician() {
+        }
+
+        @Override
+        public void playAsKing() {
+        }
+
+        @Override
+        public void playAsBishop() {
+        }
+
+        @Override
+        public void playAsMerchant() {
+        }
+
+        @Override
+        public void playAsArchitect() {
+        }
+
+        @Override
+        public void playAsWarlord() {
         }
 
     };
@@ -94,8 +203,44 @@ class ScoreTest {
     Score score3 = new Score(player3);
     Player player4 = new KingBot("Luk", cardsPlayer4, game) {
         @Override
-        public void play() {
-            getActions().addCardsToCity(this.getHand());
+        public void playResourcesPhase() {
+        }
+
+        @Override
+        public void playBuildingPhase() {
+            this.getActions().addCardsToCity(this.getHand());
+        }
+
+        @Override
+        public void playAsAssassin() {
+        }
+
+        @Override
+        public void playAsThief() {
+        }
+
+        @Override
+        public void playAsMagician() {
+        }
+
+        @Override
+        public void playAsKing() {
+        }
+
+        @Override
+        public void playAsBishop() {
+        }
+
+        @Override
+        public void playAsMerchant() {
+        }
+
+        @Override
+        public void playAsArchitect() {
+        }
+
+        @Override
+        public void playAsWarlord() {
         }
 
     };
@@ -103,13 +248,13 @@ class ScoreTest {
 
     @BeforeEach
     void setUp() {
-        player1.play();
+        player1.playBuildingPhase();
         player1.chooseCharacter(characters);
-        player2.play();
+        player2.playBuildingPhase();
         player2.chooseCharacter(characters);
-        player3.play();
+        player3.playBuildingPhase();
         player3.chooseCharacter(characters);
-        player4.play();
+        player4.playBuildingPhase();
         player4.chooseCharacter(characters);
     }
 
@@ -129,26 +274,6 @@ class ScoreTest {
         assertEquals(player3, score3.getPlayer());
         assertEquals(player4, score4.getPlayer());
     }
-
-
-    /*@Test
-    void testToString() {
-        assertEquals("    Score total : 0.\n" +
-                "    Quartiers construits : 0 points.\n", score1.toString());
-
-        Score.setFirstPlayerWithCompleteCity(player2);
-        score2.determinePoints(); // 18
-        assertEquals("    Score total : 18.\n" +
-                "    Quartiers construits : 18 points.\n", score2.toString());
-
-        assertEquals("    Score total : 0.\n" +
-                "    Quartiers construits : 0 points.\n", score3.toString());
-
-        score4.determinePoints(); // 39 + 2 = 41
-        assertEquals("    Score total : 41.\n" +
-                "    Quartiers construits : 39 points.\n" +
-                "    Cité complète : 2 points bonus.\n", score4.toString());
-    }*/
 
 
     @Test

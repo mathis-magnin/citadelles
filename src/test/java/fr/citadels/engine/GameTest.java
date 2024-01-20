@@ -39,19 +39,19 @@ class GameTest {
     }
 
     @Test
-    void showCharacterKilledTest() {
+    void showCharacterKilledTestAndRevive() {
         //no player has been killed
-        game.showCharacterKilled(null);
+        game.showCharacterKilledAndRevive(null);
 
         //the card was not attributed to any player
         CharacterCardsList.allCharacterCards[2].setDead(true);
-        game.showCharacterKilled(CharacterCardsList.allCharacterCards[2]);
+        game.showCharacterKilledAndRevive(CharacterCardsList.allCharacterCards[2]);
         assertFalse(CharacterCardsList.allCharacterCards[2].isDead());
 
         //the card was attributed to a player
         CharacterCardsList.allCharacterCards[6].setPlayer(new KingBot("MONARCHISTE", Arrays.asList(game.getPile().draw(4)), game));
         CharacterCardsList.allCharacterCards[6].setDead(true);
-        game.showCharacterKilled(CharacterCardsList.allCharacterCards[6]);
+        game.showCharacterKilledAndRevive(CharacterCardsList.allCharacterCards[6]);
         assertFalse(CharacterCardsList.allCharacterCards[2].isDead());
 
     }

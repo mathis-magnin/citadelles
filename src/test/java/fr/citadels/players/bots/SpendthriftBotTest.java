@@ -85,8 +85,11 @@ class SpendthriftBotTest {
 
     @Test
     void playWithNoMoney() {
-        game.getPile().initializePile();
-        player.play();
+
+        player.getInformation().getPile().initializePile();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
+
 
         assertEquals(1, player.getCity().size());
         assertEquals(2, player.getHand().size());
@@ -95,8 +98,11 @@ class SpendthriftBotTest {
                 "Hello a 2 pièces d'or.\n" +
                 "Hello a construit dans sa ville : Temple\n" +
                 "Hello a dans sa ville : Temple, \n", events.getEvents());*/
-        game.getDisplay().reset();
-        player.play();
+
+        player.getInformation().getDisplay().reset();
+
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(2, player.getCity().size());
         assertEquals(1, player.getHand().size());
         assertEquals(0, player.getGold());
@@ -106,7 +112,8 @@ class SpendthriftBotTest {
                 "Hello a dans sa ville : Temple, Manoir, \n", events.getEvents());*/
         game.getDisplay().reset();
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(2, player.getCity().size());
         assertEquals(2, player.getHand().size());
         assertEquals(0, player.getGold());
@@ -120,7 +127,8 @@ class SpendthriftBotTest {
 
         player.getActions().addGold(25);
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(1, player.getCity().size());
         assertEquals(3, player.getHand().size());
         assertEquals(24, player.getGold());
@@ -128,7 +136,8 @@ class SpendthriftBotTest {
         // assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Temple"));
         game.getDisplay().reset();
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(2, player.getCity().size());
         assertEquals(3, player.getHand().size());
         if (player.getHand().get(2).getGoldCost() < 3) {
@@ -148,6 +157,16 @@ class SpendthriftBotTest {
         assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[5]);
         player.playAsAssassin();
         assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[6]);
+    }
+
+    @Test
+    void playAsMerchant() {
+        player.setCharacter(CharacterCardsList.allCharacterCards[5]);
+        // Bot has in its hand a Temple that costs 1 gold.
+        // Its takes 2 gold coins at the beginning of its turn and then builds the Temple.
+        // At the end of its turn, as he has taken a gold due to the merchant power, he has 2 gold coins.
+        player.playAsMerchant();
+        assertEquals(2, player.getGold());
     }
 
 }

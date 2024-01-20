@@ -1,10 +1,7 @@
 package fr.citadels.gameelements.cards.charactercards.characters;
 
-import fr.citadels.engine.Display;
-import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 
 public class AssassinCard extends CharacterCard {
 
@@ -18,17 +15,13 @@ public class AssassinCard extends CharacterCard {
 
     @Override
     public void bringIntoPlay() {
-        if (this.getPlayer() != null) {
-            this.getPlayer().playAsAssassin();
-        }
-
+        this.getPlayer().playAsAssassin();
     }
 
     public void usePower() {
         getPlayer().getInformation().getTarget().setDead(true);
         getPlayer().getInformation().getDisplay().killed(getPlayer().getInformation().getTarget());
         getPlayer().getInformation().getDisplay().addBlankLine();
-
     }
 
 }

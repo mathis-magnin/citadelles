@@ -7,12 +7,12 @@ import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.Hand;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Player implements Comparable<Player>, CharacterStrategy {
+public abstract class Player implements Comparable<Player>, CharacterStrategies {
 
     /* Attributes */
+
     private final String name;
     private Hand hand;
     private final City city;
@@ -32,7 +32,6 @@ public abstract class Player implements Comparable<Player>, CharacterStrategy {
         this.information = new PlayerInformation(game);
         actions = new PlayerActions(this, information);
     }
-
 
     /* Basic methods */
 
@@ -64,6 +63,7 @@ public abstract class Player implements Comparable<Player>, CharacterStrategy {
         return actions;
     }
 
+
     /**
      * Get a copy of the player's city
      *
@@ -81,6 +81,7 @@ public abstract class Player implements Comparable<Player>, CharacterStrategy {
     public int getGold() {
         return this.gold;
     }
+
 
     /**
      * Get the player's character
@@ -213,9 +214,14 @@ public abstract class Player implements Comparable<Player>, CharacterStrategy {
 
 
     /**
-     * play a round for the linked player
+     * play the phase when the player takes resources for his turn
      */
-    public abstract void play();
+    public abstract void playResourcesPhase();
+
+    /**
+     * play the phase when the player builds districts in his city
+     */
+    public abstract void playBuildingPhase();
 
 
 }

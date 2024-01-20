@@ -139,7 +139,6 @@ public class Game {
         this.display.addSelectionPhaseTitle();
 
         CharacterCardsList characters = new CharacterCardsList();
-        Collections.shuffle(characters);
         CharacterCard[] removedCharactersFaceUp = characters.removeCharactersFaceUp();
         CharacterCard[] removedCharactersFaceDown = characters.removeCharactersFaceDown();
 
@@ -199,7 +198,7 @@ public class Game {
             this.display.addBlankLine();
 
         }
-        showCharacterKilled(characterKilled);
+        showCharacterKilledAndRevive(characterKilled);
     }
 
     /**
@@ -207,10 +206,12 @@ public class Game {
      *
      * @param characterKilled the character killed
      */
-    public void showCharacterKilled(CharacterCard characterKilled) {
+    public void showCharacterKilledAndRevive(CharacterCard characterKilled) {
         if (characterKilled != null) {
-            if (characterKilled.getPlayer() != null)
+            if (characterKilled.getPlayer() != null) {
                 this.display.wasKilled(characterKilled);
+                this.display.addBlankLine();
+            }
             characterKilled.setDead(false);
         }
     }

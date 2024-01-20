@@ -45,8 +45,12 @@ class PlayerTest {
             }
 
             @Override
-            public void play() {
+            public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList());
+            }
+
+            @Override
+            public void playBuildingPhase() {
                 getActions().addCardToCity(getHand().get(0));
                 getActions().removeCardFromHand(0);
             }
@@ -56,7 +60,19 @@ class PlayerTest {
             }
 
             @Override
-            public void playAsWarlord() {
+            public void playAsThief() {
+            }
+
+            @Override
+            public void playAsMagician() {
+            }
+
+            @Override
+            public void playAsKing() {
+            }
+
+            @Override
+            public void playAsBishop() {
             }
 
             @Override
@@ -68,20 +84,9 @@ class PlayerTest {
             }
 
             @Override
-            public void playAsBishop() {
+            public void playAsWarlord() {
             }
 
-            @Override
-            public void playAsKing() {
-            }
-
-            @Override
-            public void playAsMagician() {
-            }
-
-            @Override
-            public void playAsThief() {
-            }
         };
     }
 
@@ -104,15 +109,18 @@ class PlayerTest {
     void getCity() {
         assertTrue(player.getCity().isEmpty());
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(1, player.getCity().size());
         assertEquals("Temple", player.getCity().get(0).getCardName());
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(2, player.getCity().size());
         assertEquals("Manoir", player.getCity().get(1).getCardName());
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(3, player.getCity().size());
         assertEquals("Cathédrale", player.getCity().get(2).getCardName());
 
@@ -122,14 +130,16 @@ class PlayerTest {
     void hasCompleteCity() {
         while (player.getCity().size() < 7) {
             assertFalse(player.hasCompleteCity());
-            player.play();
+            player.playResourcesPhase();
+            player.playBuildingPhase();
         }
         assertTrue(player.hasCompleteCity());
     }
 
     @Test
     void hasCardInHand() {
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertTrue(player.hasCardInCity(DistrictCardsPile.allDistrictCards[12]));
         assertFalse(player.hasCardInCity(DistrictCardsPile.allDistrictCards[58]));
     }
@@ -160,8 +170,12 @@ class PlayerTest {
             }
 
             @Override
-            public void play() {
+            public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList());
+            }
+
+            @Override
+            public void playBuildingPhase() {
                 getActions().addCardToCity(getHand().get(0));
                 getActions().removeCardFromHand(0);
             }
@@ -171,7 +185,19 @@ class PlayerTest {
             }
 
             @Override
-            public void playAsWarlord() {
+            public void playAsThief() {
+            }
+
+            @Override
+            public void playAsMagician() {
+            }
+
+            @Override
+            public void playAsKing() {
+            }
+
+            @Override
+            public void playAsBishop() {
             }
 
             @Override
@@ -183,23 +209,13 @@ class PlayerTest {
             }
 
             @Override
-            public void playAsBishop() {
-            }
-
-            @Override
-            public void playAsKing() {
-            }
-
-            @Override
-            public void playAsMagician() {
-            }
-
-            @Override
-            public void playAsThief() {
+            public void playAsWarlord() {
             }
         };
-        player.play();
-        player2.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
+        player2.playResourcesPhase();
+        player2.playBuildingPhase();
 
         assertTrue(player.compareTo(player2) < 0);
         assertTrue(player2.compareTo(player) > 0);
@@ -226,8 +242,12 @@ class PlayerTest {
             }
 
             @Override
-            public void play() {
+            public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList());
+            }
+
+            @Override
+            public void playBuildingPhase() {
                 getActions().addCardToCity(getHand().get(0));
                 getActions().removeCardFromHand(0);
             }
@@ -237,7 +257,19 @@ class PlayerTest {
             }
 
             @Override
-            public void playAsWarlord() {
+            public void playAsThief() {
+            }
+
+            @Override
+            public void playAsMagician() {
+            }
+
+            @Override
+            public void playAsKing() {
+            }
+
+            @Override
+            public void playAsBishop() {
             }
 
             @Override
@@ -249,23 +281,13 @@ class PlayerTest {
             }
 
             @Override
-            public void playAsBishop() {
-            }
-
-            @Override
-            public void playAsKing() {
-            }
-
-            @Override
-            public void playAsMagician() {
-            }
-
-            @Override
-            public void playAsThief() {
+            public void playAsWarlord() {
             }
         };
-        player.play();
-        player2.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
+        player2.playResourcesPhase();
+        player2.playBuildingPhase();
         assertEquals(player, player2);
         assertEquals(player2, player);
 
@@ -287,8 +309,12 @@ class PlayerTest {
             }
 
             @Override
-            public void play() {
+            public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList());
+            }
+
+            @Override
+            public void playBuildingPhase() {
                 getActions().addCardToCity(getHand().get(0));
                 getActions().removeCardFromHand(0);
             }
@@ -298,7 +324,19 @@ class PlayerTest {
             }
 
             @Override
-            public void playAsWarlord() {
+            public void playAsThief() {
+            }
+
+            @Override
+            public void playAsMagician() {
+            }
+
+            @Override
+            public void playAsKing() {
+            }
+
+            @Override
+            public void playAsBishop() {
             }
 
             @Override
@@ -310,21 +348,8 @@ class PlayerTest {
             }
 
             @Override
-            public void playAsBishop() {
+            public void playAsWarlord() {
             }
-
-            @Override
-            public void playAsKing() {
-            }
-
-            @Override
-            public void playAsMagician() {
-            }
-
-            @Override
-            public void playAsThief() {
-            }
-
         };
 
 

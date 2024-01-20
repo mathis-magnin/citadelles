@@ -3,6 +3,7 @@ package fr.citadels.engine;
 import fr.citadels.engine.score.Scoreboard;
 import fr.citadels.gameelements.cards.Card;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
+import fr.citadels.gameelements.cards.charactercards.characters.MerchantCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.Hand;
@@ -236,6 +237,22 @@ public class Display {
     }
 
 
+    public void killed(CharacterCard character) {
+        this.events.append("\n").append(character.getCardName()).append(" a été tué par l'Assassin.\n");
+    }
+
+
+    public void wasKilled(CharacterCard character) {
+        this.events.append(character.getPlayer().getName()).append(" était ").append(character.getCardName()).append(" et a été tué par l'Assassin.\n");
+    }
+
+
+    public void addMerchantPower(MerchantCard merchantCard) {
+        this.events.append(merchantCard.getPlayer().getName()).append(" utilise son pouvoir pour gagner une pièce d'or.\n");
+        this.addGoldUpdate(merchantCard.getPlayer().getGold());
+    }
+
+
     public void addGameFinished(Player player) {
         this.events.append(player.getName()).append(" est le premier joueur à posséder une cité complète.\nLa partie se terminera donc à la fin de ce tour.\n");
     }
@@ -248,13 +265,5 @@ public class Display {
 
     public void addWinner(Player player) {
         this.events.append("Le gagnant est : ").append(player.getName()).append(" !\n");
-    }
-
-    public void killed(CharacterCard character) {
-        this.events.append("\n").append(character.getCardName()).append(" a été tué par l'Assassin !\n");
-    }
-
-    public void wasKilled(CharacterCard character) {
-        this.events.append(character.getPlayer().getName()).append(" était ").append(character.getCardName()).append(" et avait été tué par l'Assassin !\n");
     }
 }
