@@ -100,10 +100,10 @@ public class Game {
         this.display.addGameTitle();
 
         // Initialize the players
-        this.playerList[0] = new RandomBot("HASARDEUX", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display, RAND);
-        this.playerList[1] = new SpendthriftBot("DÉPENSIER", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display, RAND);
-        this.playerList[2] = new ThriftyBot("ÉCONOME", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display, RAND);
-        this.playerList[3] = new KingBot("MONARCHISTE", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display);
+        this.playerList[0] = new RandomBot("HASARDEUX", Arrays.asList(this.pile.draw(4)), this, RAND);
+        this.playerList[1] = new SpendthriftBot("DÉPENSIER", Arrays.asList(this.pile.draw(4)), this, RAND);
+        this.playerList[2] = new ThriftyBot("ÉCONOME", Arrays.asList(this.pile.draw(4)), this, RAND);
+        this.playerList[3] = new KingBot("MONARCHISTE", Arrays.asList(this.pile.draw(4)), this);
         this.display.addPlayers(this.playerList);
         this.display.addBlankLine();
 
@@ -114,7 +114,7 @@ public class Game {
 
         // Give 2 golds to every player
         for (Player player : this.playerList) {
-            player.addGold(2);
+            player.getActions().addGold(2);
         }
         this.display.addInitialGoldGiven(2);
         this.display.addBlankLine();

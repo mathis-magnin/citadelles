@@ -1,6 +1,6 @@
 package fr.citadels.players;
 
-public interface BotStrategy {
+public interface CharacterStrategy {
 
     /**
      * play a round for the linked player when he embodies the assassin

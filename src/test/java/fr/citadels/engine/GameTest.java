@@ -49,7 +49,7 @@ class GameTest {
         assertFalse(CharacterCardsList.allCharacterCards[2].isDead());
 
         //the card was attributed to a player
-        CharacterCardsList.allCharacterCards[6].setPlayer(new KingBot("MONARCHISTE", Arrays.asList(game.getPile().draw(4)), game.getPile(), game.getBank(), game.getDisplay()));
+        CharacterCardsList.allCharacterCards[6].setPlayer(new KingBot("MONARCHISTE", Arrays.asList(game.getPile().draw(4)), game));
         CharacterCardsList.allCharacterCards[6].setDead(true);
         game.showCharacterKilled(CharacterCardsList.allCharacterCards[6]);
         assertFalse(CharacterCardsList.allCharacterCards[2].isDead());

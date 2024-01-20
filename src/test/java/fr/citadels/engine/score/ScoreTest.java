@@ -1,6 +1,7 @@
 package fr.citadels.engine.score;
 
 import fr.citadels.engine.Display;
+import fr.citadels.engine.Game;
 import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
@@ -60,32 +61,30 @@ class ScoreTest {
 
     /* Initialize players */
 
-    DistrictCardsPile pile = new DistrictCardsPile();
-    Bank bank = new Bank();
-    Display events = new Display();
+    Game game = new Game();
 
-    Player player1 = new KingBot("Tom", cardsPlayer1, pile, bank, events) {
+    Player player1 = new KingBot("Tom", cardsPlayer1, game) {
         @Override
         public void play() {
-            this.addCardsToCity(this.getHand());
+            getActions().addCardsToCity(this.getHand());
         }
     };
     Score score1 = new Score(player1);
 
-    Player player2 = new KingBot("Bob", cardsPlayer2, pile, bank, events) {
+    Player player2 = new KingBot("Bob", cardsPlayer2, game) {
         @Override
         public void play() {
-            this.addCardsToCity(this.getHand());
+            getActions().addCardsToCity(this.getHand());
         }
     };
     Score score2 = new Score(player2);
 
 
     /* Simulate an entire game (Only for this test class, the method play has been changed) */
-    Player player3 = new KingBot("Noa", cardsPlayer3, pile, bank, events) {
+    Player player3 = new KingBot("Noa", cardsPlayer3, game) {
         @Override
         public void play() {
-            this.addCardsToCity(this.getHand());
+            getActions().addCardsToCity(this.getHand());
         }
 
     };
@@ -93,10 +92,10 @@ class ScoreTest {
 
     /* Create the score */
     Score score3 = new Score(player3);
-    Player player4 = new KingBot("Luk", cardsPlayer4, pile, bank, events) {
+    Player player4 = new KingBot("Luk", cardsPlayer4, game) {
         @Override
         public void play() {
-            this.addCardsToCity(this.getHand());
+            getActions().addCardsToCity(this.getHand());
         }
 
     };
