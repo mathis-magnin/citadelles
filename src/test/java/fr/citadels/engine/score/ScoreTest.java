@@ -80,57 +80,36 @@ class ScoreTest {
         }
 
         @Override
-        public void play() {
+        public void playResourcesPhase() { }
+
+        @Override
+        public void playBuildingPhase() {
             this.addCardsToCity(this.getHand());
         }
 
         @Override
-        public void playResourcesPhase() {
-        }
+        public void playAsAssassin() { }
 
         @Override
-        public void playBuildingPhase() {
-        }
+        public void playAsThief() { }
 
         @Override
-        public void playAsAssassin() {
-            this.play();
-        }
+        public void playAsMagician() { }
 
         @Override
-        public void playAsThief() {
-            this.play();
-        }
+        public void playAsKing() { }
 
         @Override
-        public void playAsMagician() {
-            this.play();
-        }
+        public void playAsBishop() { }
 
         @Override
-        public void playAsKing() {
-            this.play();
-        }
+        public void playAsMerchant() { }
 
         @Override
-        public void playAsBishop() {
-            this.play();
-        }
+        public void playAsArchitect() { }
 
         @Override
-        public void playAsMerchant() {
-            this.play();
-        }
-
-        @Override
-        public void playAsArchitect() {
-            this.play();
-        }
-
-        @Override
-        public void playAsWarlord() {
-            this.play();
-        }
+        public void playAsWarlord() { }
 
     };
     Score score1 = new Score(player1);
@@ -152,57 +131,36 @@ class ScoreTest {
         }
 
         @Override
-        public void play() {
+        public void playResourcesPhase() { }
+
+        @Override
+        public void playBuildingPhase() {
             this.addCardsToCity(this.getHand());
         }
 
         @Override
-        public void playResourcesPhase() {
-        }
+        public void playAsAssassin() { }
 
         @Override
-        public void playBuildingPhase() {
-        }
+        public void playAsThief() { }
 
         @Override
-        public void playAsAssassin() {
-            this.play();
-        }
+        public void playAsMagician() { }
 
         @Override
-        public void playAsThief() {
-            this.play();
-        }
+        public void playAsKing() { }
 
         @Override
-        public void playAsMagician() {
-            this.play();
-        }
+        public void playAsBishop() { }
 
         @Override
-        public void playAsKing() {
-            this.play();
-        }
+        public void playAsMerchant() { }
 
         @Override
-        public void playAsBishop() {
-            this.play();
-        }
+        public void playAsArchitect() { }
 
         @Override
-        public void playAsMerchant() {
-            this.play();
-        }
-
-        @Override
-        public void playAsArchitect() {
-            this.play();
-        }
-
-        @Override
-        public void playAsWarlord() {
-            this.play();
-        }
+        public void playAsWarlord() { }
 
     };
     Score score2 = new Score(player2);
@@ -226,57 +184,36 @@ class ScoreTest {
         }
 
         @Override
-        public void play() {
+        public void playResourcesPhase() { }
+
+        @Override
+        public void playBuildingPhase() {
             this.addCardsToCity(this.getHand());
         }
 
         @Override
-        public void playResourcesPhase() {
-        }
+        public void playAsAssassin() { }
 
         @Override
-        public void playBuildingPhase() {
-        }
+        public void playAsThief() { }
 
         @Override
-        public void playAsAssassin() {
-            this.play();
-        }
+        public void playAsMagician() { }
 
         @Override
-        public void playAsThief() {
-            this.play();
-        }
+        public void playAsKing() { }
 
         @Override
-        public void playAsMagician() {
-            this.play();
-        }
+        public void playAsBishop() { }
 
         @Override
-        public void playAsKing() {
-            this.play();
-        }
+        public void playAsMerchant() { }
 
         @Override
-        public void playAsBishop() {
-            this.play();
-        }
+        public void playAsArchitect() { }
 
         @Override
-        public void playAsMerchant() {
-            this.play();
-        }
-
-        @Override
-        public void playAsArchitect() {
-            this.play();
-        }
-
-        @Override
-        public void playAsWarlord() {
-            this.play();
-        }
+        public void playAsWarlord() { }
 
     };
 
@@ -300,70 +237,49 @@ class ScoreTest {
         }
 
         @Override
-        public void play() {
+        public void playResourcesPhase() { }
+
+        @Override
+        public void playBuildingPhase() {
             this.addCardsToCity(this.getHand());
         }
 
         @Override
-        public void playResourcesPhase() {
-        }
+        public void playAsAssassin() { }
 
         @Override
-        public void playBuildingPhase() {
-        }
+        public void playAsThief() { }
 
         @Override
-        public void playAsAssassin() {
-            this.play();
-        }
+        public void playAsMagician() { }
 
         @Override
-        public void playAsThief() {
-            this.play();
-        }
+        public void playAsKing() { }
 
         @Override
-        public void playAsMagician() {
-            this.play();
-        }
+        public void playAsBishop() { }
 
         @Override
-        public void playAsKing() {
-            this.play();
-        }
+        public void playAsMerchant() { }
 
         @Override
-        public void playAsBishop() {
-            this.play();
-        }
+        public void playAsArchitect() { }
 
         @Override
-        public void playAsMerchant() {
-            this.play();
-        }
-
-        @Override
-        public void playAsArchitect() {
-            this.play();
-        }
-
-        @Override
-        public void playAsWarlord() {
-            this.play();
-        }
+        public void playAsWarlord() { }
 
     };
     Score score4 = new Score(player4);
 
     @BeforeEach
     void setUp() {
-        player1.play();
+        player1.playBuildingPhase();
         player1.chooseCharacter(characters);
-        player2.play();
+        player2.playBuildingPhase();
         player2.chooseCharacter(characters);
-        player3.play();
+        player3.playBuildingPhase();
         player3.chooseCharacter(characters);
-        player4.play();
+        player4.playBuildingPhase();
         player4.chooseCharacter(characters);
     }
 

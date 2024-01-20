@@ -3,7 +3,6 @@ package fr.citadels.gameelements.cards.charactercards.characters;
 import fr.citadels.engine.Display;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.players.Player;
-import fr.citadels.players.bots.KingBot;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 

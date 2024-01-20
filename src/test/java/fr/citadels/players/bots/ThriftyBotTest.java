@@ -84,7 +84,8 @@ class ThriftyBotTest {
     @Test
     void playWithNoMoney() {
         pile.initializePile();
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
 
         assertEquals(0, player.getCity().size());
         assertEquals(3, player.getHand().size());
@@ -95,7 +96,8 @@ class ThriftyBotTest {
                 "Hello a dans sa ville : \n", events.getEvents());*/
         events.reset();
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(1, player.getCity().size());
         assertEquals(2, player.getHand().size());
 
@@ -106,7 +108,8 @@ class ThriftyBotTest {
                 "Hello a dans sa ville : Manoir, \n", events.getEvents());*/
         events.reset();
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(1, player.getCity().size());
         assertEquals(2, player.getHand().size());
         assertEquals(3, player.getGold());
@@ -122,14 +125,16 @@ class ThriftyBotTest {
         pile.initializePile();
         player.addGold(25);
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(1, player.getCity().size());
         assertEquals(3, player.getHand().size());
         assertEquals(20, player.getGold());
         // assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Cathédrale"));
         events.reset();
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(2, player.getCity().size());
         assertEquals(3, player.getHand().size());
 
@@ -150,6 +155,17 @@ class ThriftyBotTest {
         assertEquals(player.getTarget(), CharacterCardsList.allCharacterCards[5]);
         player.playAsAssassin();
         assertEquals(player.getTarget(), CharacterCardsList.allCharacterCards[6]);
+    }
+
+    @Test
+    void playAsMerchant() {
+        player.setCharacter(CharacterCardsList.allCharacterCards[5]);
+        // The most expensive district in the bot's hand is Cathedral, which costs 5.
+        // As hit doesn't have any money, it takes 2 gold coins.
+        // Then, the merchant power gives it a third gold.
+        // As it doesn't have enough money to build its most expensive district, it doesn't build.
+        player.playAsMerchant();
+        assertEquals(3, player.getGold());
     }
 
 }

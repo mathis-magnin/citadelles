@@ -15,14 +15,13 @@ public class MerchantCard extends CharacterCard {
 
     @Override
     public void bringIntoPlay() {
-        if(this.getPlayer() != null) {
-            this.getPlayer().playAsMerchant();
-        }
+        this.getPlayer().playAsMerchant();
     }
 
     public void usePower() {
         this.getPlayer().addGold(1);
         this.getPlayer().getDisplay().addMerchantPower(this);
+        this.getPlayer().getDisplay().addBlankLine();
     }
 
 }

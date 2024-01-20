@@ -92,16 +92,6 @@ public class SpendthriftBot extends Player {
     }
 
 
-    /**
-     * Play a round for the linked player
-     */
-    public void play() {
-        playResourcesPhase();
-
-        playBuildingPhase();
-    }
-
-
     @Override
     public void playResourcesPhase() {
         // Draw 2 cards or pick 2 golds
@@ -127,47 +117,65 @@ public class SpendthriftBot extends Player {
 
     @Override
     public void playAsAssassin() {
-        if (RAND.nextBoolean())
+        playResourcesPhase();
+        playBuildingPhase();
+
+        if (RAND.nextBoolean()) {
             setTarget(CharacterCardsList.allCharacterCards[5]);
-        else
+        }
+        else {
             setTarget(CharacterCardsList.allCharacterCards[6]);
+        }
         getCharacter().usePower();
-        this.play();
     }
 
     @Override
     public void playAsThief() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsMagician() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsKing() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsBishop() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsMerchant() {
-        this.play();
+        playResourcesPhase();
+        getCharacter().usePower();
+        playBuildingPhase();
     }
 
     @Override
     public void playAsArchitect() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsWarlord() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
 }

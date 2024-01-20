@@ -13,17 +13,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MerchantCardTest {
+class MerchantCardTest {
 
     MerchantCard merchantCard = new MerchantCard();
-
     List<DistrictCard> cardsPlayer = new ArrayList<>();
     DistrictCardsPile pile = new DistrictCardsPile();
-
     Bank bank = new Bank();
-
     Display display = new Display();
-
     Player player = new Player("Luk", cardsPlayer, pile, bank, display) {
         @Override
         public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
@@ -36,14 +32,7 @@ public class MerchantCardTest {
         }
 
         @Override
-        public void chooseCharacter(CharacterCardsList characters) {
-            return;
-        }
-
-        @Override
-        public void play() {
-            this.getCharacter().usePower();
-        }
+        public void chooseCharacter(CharacterCardsList characters) { }
 
         @Override
         public void playResourcesPhase() {
@@ -54,44 +43,30 @@ public class MerchantCardTest {
         }
 
         @Override
-        public void playAsAssassin() {
-            this.play();
-        }
+        public void playAsAssassin() { }
 
         @Override
-        public void playAsThief() {
-            this.play();
-        }
+        public void playAsThief() { }
 
         @Override
-        public void playAsMagician() {
-            this.play();
-        }
+        public void playAsMagician() { }
 
         @Override
-        public void playAsKing() {
-            this.play();
-        }
+        public void playAsKing() { }
 
         @Override
-        public void playAsBishop() {
-            this.play();
-        }
+        public void playAsBishop() { }
 
         @Override
         public void playAsMerchant() {
-            this.play();
+            this.getCharacter().usePower();
         }
 
         @Override
-        public void playAsArchitect() {
-            this.play();
-        }
+        public void playAsArchitect() { }
 
         @Override
-        public void playAsWarlord() {
-            this.play();
-        }
+        public void playAsWarlord() { }
 
     };
 
@@ -99,7 +74,7 @@ public class MerchantCardTest {
     void usePower() {
         merchantCard.setPlayer(player);
         player.setCharacter(merchantCard);
-        player.play();
+        player.playAsMerchant();
         assertEquals(1, player.getGold());
     }
 
