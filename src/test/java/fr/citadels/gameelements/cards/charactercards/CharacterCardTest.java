@@ -12,8 +12,10 @@ class CharacterCardTest {
     void isDead() {
         CharacterCard c = new AssassinCard();
         assertFalse(c.isDead());
-        c.getKilled();
+        c.setDead(true);
         assertTrue(c.isDead());
+        c.setDead(false);
+        assertFalse(c.isDead());
     }
 
     @Test

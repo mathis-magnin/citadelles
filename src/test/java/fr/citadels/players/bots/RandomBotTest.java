@@ -280,4 +280,22 @@ class RandomBotTest {
 
     }
 
+    @Test
+    void playAsAssassin() {
+        player.setCharacter(CharacterCardsList.allCharacterCards[0]);
+        when(random.nextInt(anyInt())).thenReturn(3);
+        player.playAsAssassin();
+        assertEquals(player.getTarget(), CharacterCardsList.allCharacterCards[4]);
+
+        player.setCharacter(CharacterCardsList.allCharacterCards[0]);
+        when(random.nextInt(anyInt())).thenReturn(6);
+        player.playAsAssassin();
+        assertEquals(player.getTarget(), CharacterCardsList.allCharacterCards[7]);
+
+        player.setCharacter(CharacterCardsList.allCharacterCards[0]);
+        when(random.nextInt(anyInt())).thenReturn(0);
+        player.playAsAssassin();
+        assertEquals(player.getTarget(), CharacterCardsList.allCharacterCards[1]);
+    }
+
 }

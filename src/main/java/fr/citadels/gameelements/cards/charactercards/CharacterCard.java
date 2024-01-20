@@ -40,8 +40,8 @@ public abstract class CharacterCard extends Card implements Comparable<Character
     /**
      * Set the dead attribute to true
      */
-    public void getKilled() {
-        this.dead = true;
+    public void setDead(boolean dead) {
+        this.dead = dead;
     }
 
     public Player getPlayer() {
