@@ -16,7 +16,7 @@ import java.util.List;
 public abstract class Player implements Comparable<Player> {
 
     /* Attributes */
-
+    private CharacterCard target;
     private final String name;
     private Hand hand;
     private City city;
@@ -39,6 +39,7 @@ public abstract class Player implements Comparable<Player> {
         this.pile = pile;
         this.bank = bank;
         this.display = display;
+        this.target = null;
     }
 
 
@@ -53,6 +54,29 @@ public abstract class Player implements Comparable<Player> {
         return this.name;
     }
 
+    /***
+     * Set the target of the player
+     * @param target
+     */
+    public void setTarget(CharacterCard target) {
+        this.target = target;
+    }
+
+    /**
+     * Get the target of the player
+     *
+     * @return the target
+     */
+    public CharacterCard getTarget() {
+        return target;
+    }
+
+    /**
+     * @return true if the player has a target, false otherwise
+     */
+    public Display getDisplay() {
+        return display;
+    }
 
     /**
      * Get a copy of the player's hand
@@ -147,6 +171,7 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * Set the player's character and the character's player.
+     *
      * @param character
      */
     public void setCharacter(CharacterCard character) {
