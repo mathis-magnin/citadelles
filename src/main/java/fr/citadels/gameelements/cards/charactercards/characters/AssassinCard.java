@@ -18,13 +18,17 @@ public class AssassinCard extends CharacterCard {
 
     @Override
     public void bringIntoPlay() {
-        if(this.getPlayer() != null) {
+        if (this.getPlayer() != null) {
             this.getPlayer().playAsAssassin();
         }
+
     }
 
-    public void usePower(){
-        return;
+    public void usePower() {
+        getPlayer().getTarget().setDead(true);
+        getPlayer().getDisplay().killed(getPlayer().getTarget());
+        getPlayer().getDisplay().addBlankLine();
+
     }
 
 }

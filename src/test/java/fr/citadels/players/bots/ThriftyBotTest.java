@@ -1,5 +1,6 @@
 package fr.citadels.players.bots;
 
+import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.gameelements.Bank;
@@ -15,6 +16,7 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class ThriftyBotTest {
     @Mock
@@ -138,6 +140,16 @@ class ThriftyBotTest {
             // assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Manoir"));
             events.reset();
         }
+    }
+
+    @Test
+    void playAsAssassin() {
+        player.setCharacter(CharacterCardsList.allCharacterCards[0]);
+        when(random.nextBoolean()).thenReturn(true, false);
+        player.playAsAssassin();
+        assertEquals(player.getTarget(), CharacterCardsList.allCharacterCards[5]);
+        player.playAsAssassin();
+        assertEquals(player.getTarget(), CharacterCardsList.allCharacterCards[6]);
     }
 
 }

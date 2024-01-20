@@ -130,6 +130,8 @@ public class KingBot extends Player {
 
     @Override
     public void playAsAssassin() {
+        setTarget(CharacterCardsList.allCharacterCards[3]);
+        getCharacter().usePower();
         this.play();
     }
 

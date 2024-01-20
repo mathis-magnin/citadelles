@@ -256,4 +256,11 @@ public class Display {
         this.events.append("Le gagnant est : ").append(player.getName()).append(" !\n");
     }
 
+    public void killed(CharacterCard character) {
+        this.events.append("\n").append(character.getCardName()).append(" a été tué par l'Assassin !\n");
+    }
+
+    public void wasKilled(CharacterCard character) {
+        this.events.append(character.getPlayer().getName()).append(" était ").append(character.getCardName()).append(" et avait été tué par l'Assassin !\n");
+    }
 }

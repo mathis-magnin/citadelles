@@ -12,7 +12,7 @@ public abstract class CharacterCard extends Card implements Comparable<Character
     /* Attribute */
 
     private final int rank;
-
+    private boolean dead;
     private Player player;
 
     /* Constructor */
@@ -21,6 +21,7 @@ public abstract class CharacterCard extends Card implements Comparable<Character
         super(cardName, cardFamily);
         this.rank = rank;
         this.player = null;
+        this.dead = false;
     }
 
     /* Methods */
@@ -29,6 +30,19 @@ public abstract class CharacterCard extends Card implements Comparable<Character
         return this.rank;
     }
 
+    /**
+     * @return true if the character is dead, false otherwise
+     */
+    public boolean isDead() {
+        return this.dead;
+    }
+
+    /**
+     * Set the dead attribute to true
+     */
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
 
     public Player getPlayer() {
         return this.player;
@@ -48,7 +62,7 @@ public abstract class CharacterCard extends Card implements Comparable<Character
      */
     @Override
     public String toString() {
-        return this.getCardName()+ " (" + this.getRank() + " - " + this.getCardFamily() + ")";
+        return this.getCardName() + " (" + this.getRank() + " - " + this.getCardFamily() + ")";
     }
 
 

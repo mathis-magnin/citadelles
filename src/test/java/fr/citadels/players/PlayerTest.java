@@ -1,6 +1,8 @@
 package fr.citadels.players;
 
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
+import fr.citadels.gameelements.cards.charactercards.characters.KingCard;
 import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
@@ -102,6 +104,14 @@ class PlayerTest {
             }
 
         };
+    }
+
+    @Test
+    void getTarget() {
+        assertNull(player.getTarget());
+        KingCard king = new KingCard();
+        player.setTarget(king);
+        assertEquals(king, player.getTarget());
     }
 
     @Test

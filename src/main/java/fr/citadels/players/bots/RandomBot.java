@@ -2,6 +2,7 @@ package fr.citadels.players.bots;
 
 import fr.citadels.engine.Display;
 import fr.citadels.gameelements.Bank;
+import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
@@ -117,6 +118,9 @@ public class RandomBot extends Player {
 
     @Override
     public void playAsAssassin() {
+        int randIndex = RAND.nextInt(CharacterCardsList.allCharacterCards.length - 1) + 1;
+        setTarget(CharacterCardsList.allCharacterCards[randIndex]);
+        getCharacter().usePower();
         this.play();
     }
 

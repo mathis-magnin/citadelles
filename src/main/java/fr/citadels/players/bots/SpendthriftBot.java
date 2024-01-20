@@ -127,6 +127,11 @@ public class SpendthriftBot extends Player {
 
     @Override
     public void playAsAssassin() {
+        if (RAND.nextBoolean())
+            setTarget(CharacterCardsList.allCharacterCards[5]);
+        else
+            setTarget(CharacterCardsList.allCharacterCards[6]);
+        getCharacter().usePower();
         this.play();
     }
 
