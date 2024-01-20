@@ -13,7 +13,7 @@ import fr.citadels.gameelements.cards.districtcards.Hand;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Player implements Comparable<Player> {
+public abstract class Player implements Comparable<Player>, BotStrategy {
 
     /* Attributes */
     private CharacterCard target;
@@ -344,52 +344,5 @@ public abstract class Player implements Comparable<Player> {
      */
     public abstract void play();
 
-
-    /**
-     * play a round for the linked player when he embodies the assassin
-     */
-    public abstract void playAsAssassin();
-
-
-    /**
-     * play a round for the linked player when he embodies the thief
-     */
-    public abstract void playAsThief();
-
-
-    /**
-     * play a round for the linked player when he embodies the magician
-     */
-    public abstract void playAsMagician();
-
-
-    /**
-     * play a round for the linked player when he embodies the king
-     */
-    public abstract void playAsKing();
-
-
-    /**
-     * play a round for the linked player when he embodies the bishop
-     */
-    public abstract void playAsBishop();
-
-
-    /**
-     * play a round for the linked player if he embodies the merchant
-     */
-    public abstract void playAsMerchant();
-
-
-    /**
-     * play a round for the linked player if he embodies the architect
-     */
-    public abstract void playAsArchitect();
-
-
-    /**
-     * play a round for the linked player if he embodies the warlord
-     */
-    public abstract void playAsWarlord();
 
 }

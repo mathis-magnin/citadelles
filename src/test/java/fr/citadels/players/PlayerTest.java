@@ -57,44 +57,35 @@ class PlayerTest {
 
             @Override
             public void playAsAssassin() {
-                this.play();
-            }
-
-            @Override
-            public void playAsThief() {
-                this.play();
-            }
-
-            @Override
-            public void playAsMagician() {
-                this.play();
-            }
-
-            @Override
-            public void playAsKing() {
-                this.play();
-            }
-
-            @Override
-            public void playAsBishop() {
-                this.play();
-            }
-
-            @Override
-            public void playAsMerchant() {
-                this.play();
-            }
-
-            @Override
-            public void playAsArchitect() {
-                this.play();
             }
 
             @Override
             public void playAsWarlord() {
-                this.play();
             }
 
+            @Override
+            public void playAsMerchant() {
+            }
+
+            @Override
+            public void playAsArchitect() {
+            }
+
+            @Override
+            public void playAsBishop() {
+            }
+
+            @Override
+            public void playAsKing() {
+            }
+
+            @Override
+            public void playAsMagician() {
+            }
+
+            @Override
+            public void playAsThief() {
+            }
         };
     }
 
@@ -228,44 +219,35 @@ class PlayerTest {
 
             @Override
             public void playAsAssassin() {
-                this.play();
-            }
-
-            @Override
-            public void playAsThief() {
-                this.play();
-            }
-
-            @Override
-            public void playAsMagician() {
-                this.play();
-            }
-
-            @Override
-            public void playAsKing() {
-                this.play();
-            }
-
-            @Override
-            public void playAsBishop() {
-                this.play();
-            }
-
-            @Override
-            public void playAsMerchant() {
-                this.play();
-            }
-
-            @Override
-            public void playAsArchitect() {
-                this.play();
             }
 
             @Override
             public void playAsWarlord() {
-                this.play();
             }
 
+            @Override
+            public void playAsMerchant() {
+            }
+
+            @Override
+            public void playAsArchitect() {
+            }
+
+            @Override
+            public void playAsBishop() {
+            }
+
+            @Override
+            public void playAsKing() {
+            }
+
+            @Override
+            public void playAsMagician() {
+            }
+
+            @Override
+            public void playAsThief() {
+            }
         };
         player.play();
         player2.play();
@@ -303,42 +285,34 @@ class PlayerTest {
 
             @Override
             public void playAsAssassin() {
-                this.play();
-            }
-
-            @Override
-            public void playAsThief() {
-                this.play();
-            }
-
-            @Override
-            public void playAsMagician() {
-                this.play();
-            }
-
-            @Override
-            public void playAsKing() {
-                this.play();
-            }
-
-            @Override
-            public void playAsBishop() {
-                this.play();
-            }
-
-            @Override
-            public void playAsMerchant() {
-                this.play();
-            }
-
-            @Override
-            public void playAsArchitect() {
-                this.play();
             }
 
             @Override
             public void playAsWarlord() {
-                this.play();
+            }
+
+            @Override
+            public void playAsMerchant() {
+            }
+
+            @Override
+            public void playAsArchitect() {
+            }
+
+            @Override
+            public void playAsBishop() {
+            }
+
+            @Override
+            public void playAsKing() {
+            }
+
+            @Override
+            public void playAsMagician() {
+            }
+
+            @Override
+            public void playAsThief() {
             }
         };
         player.play();
@@ -372,44 +346,39 @@ class PlayerTest {
 
             @Override
             public void playAsAssassin() {
-                this.play();
-            }
-
-            @Override
-            public void playAsThief() {
-                this.play();
-            }
-
-            @Override
-            public void playAsMagician() {
-                this.play();
-            }
-
-            @Override
-            public void playAsKing() {
-                this.play();
-            }
-
-            @Override
-            public void playAsBishop() {
-                this.play();
-            }
-
-            @Override
-            public void playAsMerchant() {
-                this.play();
-            }
-
-            @Override
-            public void playAsArchitect() {
-                this.play();
             }
 
             @Override
             public void playAsWarlord() {
-                this.play();
             }
+
+            @Override
+            public void playAsMerchant() {
+            }
+
+            @Override
+            public void playAsArchitect() {
+            }
+
+            @Override
+            public void playAsBishop() {
+            }
+
+            @Override
+            public void playAsKing() {
+            }
+
+            @Override
+            public void playAsMagician() {
+            }
+
+            @Override
+            public void playAsThief() {
+            }
+
         };
+
+
         assertNotEquals(player, player2);
         assertNotEquals(player2, player);
 

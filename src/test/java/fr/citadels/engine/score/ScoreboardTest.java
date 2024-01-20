@@ -6,6 +6,8 @@ import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
+import fr.citadels.players.bots.KingBot;
+import fr.citadels.players.bots.RandomBot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -64,254 +66,32 @@ class ScoreboardTest {
     Bank bank = new Bank();
     Display events = new Display();
 
-    Player player1 = new Player("Tom", cardsPlayer1, pile, bank, events) {
-        @Override
-        public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
-            return null;
-        }
-
-        @Override
-        public DistrictCard chooseCardInHand() {
-            return null;
-        }
-
-        @Override
-        public void chooseCharacter(CharacterCardsList characters) {
-            this.setCharacter(characters.get(1));
-        }
-
+    Player player1 = new KingBot("Tom", cardsPlayer1, pile, bank, events) {
         @Override
         public void play() {
             this.addCardsToCity(this.getHand());
-        }
-
-        @Override
-        public void playAsAssassin() {
-            this.play();
-        }
-
-        @Override
-        public void playAsThief() {
-            this.play();
-        }
-
-        @Override
-        public void playAsMagician() {
-            this.play();
-        }
-
-        @Override
-        public void playAsKing() {
-            this.play();
-        }
-
-        @Override
-        public void playAsBishop() {
-            this.play();
-        }
-
-        @Override
-        public void playAsMerchant() {
-            this.play();
-        }
-
-        @Override
-        public void playAsArchitect() {
-            this.play();
-        }
-
-        @Override
-        public void playAsWarlord() {
-            this.play();
         }
 
     };
 
-    Player player2 = new Player("Bob", cardsPlayer2, pile, bank, events) {
-        @Override
-        public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
-            return null;
-        }
-
-        @Override
-        public DistrictCard chooseCardInHand() {
-            return null;
-        }
-
-        @Override
-        public void chooseCharacter(CharacterCardsList characters) {
-            this.setCharacter(characters.get(2));
-        }
-
+    Player player2 = new KingBot("Bob", cardsPlayer2, pile, bank, events) {
         @Override
         public void play() {
             this.addCardsToCity(this.getHand());
         }
-
-        @Override
-        public void playAsAssassin() {
-            this.play();
-        }
-
-        @Override
-        public void playAsThief() {
-            this.play();
-        }
-
-        @Override
-        public void playAsMagician() {
-            this.play();
-        }
-
-        @Override
-        public void playAsKing() {
-            this.play();
-        }
-
-        @Override
-        public void playAsBishop() {
-            this.play();
-        }
-
-        @Override
-        public void playAsMerchant() {
-            this.play();
-        }
-
-        @Override
-        public void playAsArchitect() {
-            this.play();
-        }
-
-        @Override
-        public void playAsWarlord() {
-            this.play();
-        }
-
     };
 
-    Player player3 = new Player("Noa", cardsPlayer3, pile, bank, events) {
-        @Override
-        public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
-            return null;
-        }
-
-        @Override
-        public DistrictCard chooseCardInHand() {
-            return null;
-        }
-
-        @Override
-        public void chooseCharacter(CharacterCardsList characters) {
-            this.setCharacter(characters.get(3));
-        }
-
+    Player player3 = new KingBot("Noa", cardsPlayer3, pile, bank, events) {
         @Override
         public void play() {
             this.addCardsToCity(this.getHand());
         }
-
-        @Override
-        public void playAsAssassin() {
-            this.play();
-        }
-
-        @Override
-        public void playAsThief() {
-            this.play();
-        }
-
-        @Override
-        public void playAsMagician() {
-            this.play();
-        }
-
-        @Override
-        public void playAsKing() {
-            this.play();
-        }
-
-        @Override
-        public void playAsBishop() {
-            this.play();
-        }
-
-        @Override
-        public void playAsMerchant() {
-            this.play();
-        }
-
-        @Override
-        public void playAsArchitect() {
-            this.play();
-        }
-
-        @Override
-        public void playAsWarlord() {
-            this.play();
-        }
-
     };
 
-    Player player4 = new Player("Luk", cardsPlayer4, pile, bank, events) {
-        @Override
-        public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
-            return null;
-        }
-
-        @Override
-        public DistrictCard chooseCardInHand() {
-            return null;
-        }
-
-        @Override
-        public void chooseCharacter(CharacterCardsList characters) {
-            this.setCharacter(characters.get(4));
-        }
-
+    Player player4 = new KingBot("Luk", cardsPlayer4, pile, bank, events) {
         @Override
         public void play() {
             this.addCardsToCity(this.getHand());
-        }
-
-        @Override
-        public void playAsAssassin() {
-            this.play();
-        }
-
-        @Override
-        public void playAsThief() {
-            this.play();
-        }
-
-        @Override
-        public void playAsMagician() {
-            this.play();
-        }
-
-        @Override
-        public void playAsKing() {
-            this.play();
-        }
-
-        @Override
-        public void playAsBishop() {
-            this.play();
-        }
-
-        @Override
-        public void playAsMerchant() {
-            this.play();
-        }
-
-        @Override
-        public void playAsArchitect() {
-            this.play();
-        }
-
-        @Override
-        public void playAsWarlord() {
-            this.play();
         }
 
     };

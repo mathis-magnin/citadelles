@@ -7,6 +7,7 @@ import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.MagicianCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
+import fr.citadels.players.BotStrategy;
 import fr.citadels.players.Player;
 
 import java.util.List;
