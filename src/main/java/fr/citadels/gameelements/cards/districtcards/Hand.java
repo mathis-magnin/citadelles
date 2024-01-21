@@ -38,7 +38,7 @@ public class Hand extends ArrayList<DistrictCard> {
 
 
     /**
-     * sort the cards by NOBLE (first) and by cost (descending)
+     * sort the cards by preferred family (first) and by cost (descending)
      *
      * @param preferredFamily the family of cards to put first
      */

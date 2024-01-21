@@ -1,7 +1,10 @@
 package fr.citadels.players;
 
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
+import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
+import fr.citadels.gameelements.cards.charactercards.characters.KingCard;
 import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
@@ -21,18 +24,13 @@ import static org.mockito.Mockito.when;
 class PlayerTest {
 
     Player player;
-    DistrictCardsPile pile;
-    Bank bank;
-    Display display;
+    Game game;
 
     @BeforeEach
     void setUp() {
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[62]));
-        pile = new DistrictCardsPile();
-        pile.initializePile();
-        bank = new Bank();
-        display = new Display();
-        player = new Player("Hello", districts, pile, bank, display) {
+        game = new Game();
+        player = new Player("Hello", districts, game) {
             @Override
             public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
                 return drawnCards[0];
@@ -49,50 +47,46 @@ class PlayerTest {
             }
 
             @Override
-            public void play() {
+            public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList());
-                addCardToCity(getHand().get(0));
-                removeCardFromHand(0);
+            }
+
+            @Override
+            public void playBuildingPhase() {
+                getActions().addCardToCity(getHand().get(0));
+                getActions().removeCardFromHand(0);
             }
 
             @Override
             public void playAsAssassin() {
-                this.play();
             }
 
             @Override
             public void playAsThief() {
-                this.play();
             }
 
             @Override
             public void playAsMagician() {
-                this.play();
             }
 
             @Override
             public void playAsKing() {
-                this.play();
             }
 
             @Override
             public void playAsBishop() {
-                this.play();
             }
 
             @Override
             public void playAsMerchant() {
-                this.play();
             }
 
             @Override
             public void playAsArchitect() {
-                this.play();
             }
 
             @Override
             public void playAsWarlord() {
-                this.play();
             }
 
         };
@@ -117,36 +111,20 @@ class PlayerTest {
     void getCity() {
         assertTrue(player.getCity().isEmpty());
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(1, player.getCity().size());
         assertEquals("Temple", player.getCity().get(0).getCardName());
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(2, player.getCity().size());
         assertEquals("Manoir", player.getCity().get(1).getCardName());
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(3, player.getCity().size());
         assertEquals("Cathédrale", player.getCity().get(2).getCardName());
-
-    }
-
-    @Test
-    void putBack() {
-        DistrictCard[] drawnCards = new DistrictCard[3];
-        drawnCards[0] = DistrictCardsPile.allDistrictCards[12];
-        drawnCards[1] = DistrictCardsPile.allDistrictCards[0];
-        drawnCards[2] = DistrictCardsPile.allDistrictCards[22];
-        DistrictCardsPile pile = new DistrictCardsPile();
-        player.putBack(drawnCards, 1);
-        for (int i = 0; i < drawnCards.length; i++) {
-            if (i == 1) {
-                assertEquals("Manoir", drawnCards[i].getCardName());
-            } else {
-                assertNull(drawnCards[i]);
-            }
-        }
-
 
     }
 
@@ -154,14 +132,16 @@ class PlayerTest {
     void hasCompleteCity() {
         while (player.getCity().size() < 7) {
             assertFalse(player.hasCompleteCity());
-            player.play();
+            player.playResourcesPhase();
+            player.playBuildingPhase();
         }
         assertTrue(player.hasCompleteCity());
     }
 
     @Test
     void hasCardInHand() {
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertTrue(player.hasCardInCity(DistrictCardsPile.allDistrictCards[12]));
         assertFalse(player.hasCardInCity(DistrictCardsPile.allDistrictCards[58]));
     }
@@ -173,29 +153,9 @@ class PlayerTest {
 
 
     @Test
-    void takeCardsOrGold() {
-
-        player.takeCardsOrGold(false);
-        assertEquals(7, player.getHand().size());
-        assertEquals(2, player.getGold());
-
-        player.takeCardsOrGold(true);
-        assertEquals(8, player.getHand().size());
-        assertEquals(2, player.getGold());
-
-
-        player.addGold(23);
-        player.takeCardsOrGold(false);
-
-        assertEquals(9, player.getHand().size());
-        assertEquals(25, player.getGold());
-
-    }
-
-    @Test
     void compareToTest() {
         List<DistrictCard> districts2 = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[62]));
-        Player player2 = new Player("Hello", districts2, pile, bank, display) {
+        Player player2 = new Player("Hello", districts2, game) {
             @Override
             public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
                 return null;
@@ -212,55 +172,52 @@ class PlayerTest {
             }
 
             @Override
-            public void play() {
+            public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList());
-                addCardToCity(getHand().get(0));
-                removeCardFromHand(0);
+            }
+
+            @Override
+            public void playBuildingPhase() {
+                getActions().addCardToCity(getHand().get(0));
+                getActions().removeCardFromHand(0);
             }
 
             @Override
             public void playAsAssassin() {
-                this.play();
             }
 
             @Override
             public void playAsThief() {
-                this.play();
             }
 
             @Override
             public void playAsMagician() {
-                this.play();
             }
 
             @Override
             public void playAsKing() {
-                this.play();
             }
 
             @Override
             public void playAsBishop() {
-                this.play();
             }
 
             @Override
             public void playAsMerchant() {
-                this.play();
             }
 
             @Override
             public void playAsArchitect() {
-                this.play();
             }
 
             @Override
             public void playAsWarlord() {
-                this.play();
             }
-
         };
-        player.play();
-        player2.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
+        player2.playResourcesPhase();
+        player2.playBuildingPhase();
 
         assertTrue(player.compareTo(player2) < 0);
         assertTrue(player2.compareTo(player) > 0);
@@ -270,7 +227,7 @@ class PlayerTest {
     @Test
     void equals() {
         List<DistrictCard> districts2 = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[62]));
-        Player player2 = new Player("Hello", districts2, pile, bank, display) {
+        Player player2 = new Player("Hello", districts2, game) {
             @Override
             public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
                 return null;
@@ -287,59 +244,57 @@ class PlayerTest {
             }
 
             @Override
-            public void play() {
+            public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList());
-                addCardToCity(getHand().get(0));
-                removeCardFromHand(0);
+            }
+
+            @Override
+            public void playBuildingPhase() {
+                getActions().addCardToCity(getHand().get(0));
+                getActions().removeCardFromHand(0);
             }
 
             @Override
             public void playAsAssassin() {
-                this.play();
             }
 
             @Override
             public void playAsThief() {
-                this.play();
             }
 
             @Override
             public void playAsMagician() {
-                this.play();
             }
 
             @Override
             public void playAsKing() {
-                this.play();
             }
 
             @Override
             public void playAsBishop() {
-                this.play();
             }
 
             @Override
             public void playAsMerchant() {
-                this.play();
             }
 
             @Override
             public void playAsArchitect() {
-                this.play();
             }
 
             @Override
             public void playAsWarlord() {
-                this.play();
             }
         };
-        player.play();
-        player2.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
+        player2.playResourcesPhase();
+        player2.playBuildingPhase();
         assertEquals(player, player2);
         assertEquals(player2, player);
 
         //test with different name
-        player2 = new Player("Hello2", districts2, pile, bank, display) {
+        player2 = new Player("Hello2", districts2, game) {
             @Override
             public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
                 return null;
@@ -356,166 +311,52 @@ class PlayerTest {
             }
 
             @Override
-            public void play() {
+            public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList());
-                addCardToCity(getHand().get(0));
-                removeCardFromHand(0);
+            }
+
+            @Override
+            public void playBuildingPhase() {
+                getActions().addCardToCity(getHand().get(0));
+                getActions().removeCardFromHand(0);
             }
 
             @Override
             public void playAsAssassin() {
-                this.play();
             }
 
             @Override
             public void playAsThief() {
-                this.play();
             }
 
             @Override
             public void playAsMagician() {
-                this.play();
             }
 
             @Override
             public void playAsKing() {
-                this.play();
             }
 
             @Override
             public void playAsBishop() {
-                this.play();
             }
 
             @Override
             public void playAsMerchant() {
-                this.play();
             }
 
             @Override
             public void playAsArchitect() {
-                this.play();
             }
 
             @Override
             public void playAsWarlord() {
-                this.play();
             }
         };
+
+
         assertNotEquals(player, player2);
         assertNotEquals(player2, player);
 
     }
-
-    @Test
-    void takeGoldFromCity() {
-        Player playerSpy = spy(player);
-        //NOBLE card
-        when(playerSpy.getCity()).thenReturn(new City(new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[5], DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[25], DistrictCardsPile.allDistrictCards[30], DistrictCardsPile.allDistrictCards[45], DistrictCardsPile.allDistrictCards[60]))));
-
-        CharacterCardsList characters = new CharacterCardsList();
-        playerSpy.takeGoldFromCity();
-
-        //no character
-        assertEquals(0, playerSpy.getGold());
-
-        //choose NOBLE
-        playerSpy.setCharacter(characters.get(3));
-
-        playerSpy.takeGoldFromCity();
-        assertEquals(2, playerSpy.getGold());
-
-
-        //choose RELIGIOUS
-        playerSpy.setCharacter(characters.get(4));
-        playerSpy.takeGoldFromCity();
-        //+1
-        assertEquals(3, playerSpy.getGold());
-
-
-        //choose TRADE
-        playerSpy.setCharacter(characters.get(5));
-        playerSpy.takeGoldFromCity();
-        //+2
-        assertEquals(5, playerSpy.getGold());
-
-        //choose MILITARY
-        playerSpy.setCharacter(characters.get(7));
-        playerSpy.takeGoldFromCity();
-        //+1
-        assertEquals(6, playerSpy.getGold());
-
-        //choose NEUTRAL
-        playerSpy.setCharacter(characters.get(1));
-        playerSpy.takeGoldFromCity();
-        //+0
-        assertEquals(6, playerSpy.getGold());
-
-    }
-
-    @Test
-    void addGold() {
-        player.addGold(5);
-        assertEquals(5, player.getGold());
-        assertEquals(20, bank.getGold());
-        player.addGold(2);
-        assertEquals(7, player.getGold());
-        assertEquals(18, bank.getGold());
-    }
-
-
-    @Test
-    void removeGold() {
-        player.addGold(5);
-        assertEquals(5, player.getGold());
-        player.removeGold(2);
-        assertEquals(3, player.getGold());
-        assertEquals(22, bank.getGold());
-        player.removeGold(10);
-        assertEquals(0, player.getGold());
-        assertEquals(25, bank.getGold());
-
-    }
-
-    @Test
-    void placeCard() {
-        player.placeCard(null);
-        assertEquals(0, player.getCity().size());
-
-        player.placeCard(DistrictCardsPile.allDistrictCards[0]);
-        assertEquals(1, player.getCity().size());
-        assertEquals("Manoir", player.getCity().get(0).getCardName());
-
-        player.placeCard(DistrictCardsPile.allDistrictCards[66]);
-        assertEquals(2, player.getCity().size());
-        assertEquals("Dracoport", player.getCity().get(1).getCardName());
-    }
-
-    @Test
-    void getRobbed() {
-        Player player2 = new KingBot("Tom", new ArrayList<>(), pile, bank, display);
-        CharacterCard thief = CharacterCardsList.allCharacterCards[1];
-        CharacterCard king = CharacterCardsList.allCharacterCards[3];
-
-        thief.setPlayer(player);
-        player.setCharacter(thief);
-        player.setGold(10);
-
-        king.setPlayer(player2);
-        player2.setCharacter(king);
-        player2.setGold(8);
-
-        player.setTarget(king);
-        thief.usePower();
-
-        assertEquals(10, player.getGold());
-        assertEquals(8, player2.getGold());
-        assertTrue(player2.getCharacter().isRobbed());
-        player2.getRobbed();
-        assertEquals(18, player.getGold());
-        assertEquals(0, player2.getGold());
-        assertFalse(player.getCharacter().isRobbed());
-    }
-
-
 }

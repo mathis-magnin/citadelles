@@ -7,6 +7,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class CharacterCardTest {
 
+
+    @Test
+    void isDead() {
+        CharacterCard c = new AssassinCard();
+        assertFalse(c.isDead());
+        c.setDead(true);
+        assertTrue(c.isDead());
+        c.setDead(false);
+        assertFalse(c.isDead());
+    }
+
     @Test
     void testGetCardName() {
         assertEquals("Assassin", CharacterCardsList.allCharacterCards[0].getCardName());
@@ -22,7 +33,7 @@ class CharacterCardTest {
     @Test
     void testToString() {
         for (CharacterCard c : CharacterCardsList.allCharacterCards) {
-            assertEquals(c.getCardName()+ " (" + c.getRank() + " - " + c.getCardFamily() + ")", c.toString());
+            assertEquals(c.getCardName() + " (" + c.getRank() + " - " + c.getCardFamily() + ")", c.toString());
         }
     }
 

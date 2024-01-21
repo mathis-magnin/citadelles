@@ -17,16 +17,20 @@ public class CharacterCardsList extends ArrayList<CharacterCard> {
             new BishopCard(),
             new MerchantCard(),
             new ArchitectCard(),
-            new WarlordCard()};
+            new WarlordCard()
+    };
 
+    /**
+     * This Map indicates the number of character cards to remove face up (value index 0)
+     * and face down (value index 1) from the character cards deck at the beginning of the
+     * character selection phase according to the number of players in the game (key).
+     */
     public static final Map<Integer, Integer[]> characterCardsToRemove = Map.ofEntries(
             Map.entry(4, new Integer[]{2, 1}),
             Map.entry(5, new Integer[]{1, 1}),
             Map.entry(6, new Integer[]{0, 1}),
-            Map.entry(7, new Integer[]{0, 1}));
-    /* This Map indicates the number of character cards to remove face up (value index 0)
-    and face down (value index 1) from the character cards deck at the beginning of the
-    character selection phase according to the number of players in the game (key). */
+            Map.entry(7, new Integer[]{0, 1})
+    );
 
     /* Constructor */
 

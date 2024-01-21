@@ -1,5 +1,7 @@
 package fr.citadels.players.bots;
 
+import fr.citadels.engine.Game;
+import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.gameelements.Bank;
@@ -14,24 +16,22 @@ import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class SpendthriftBotTest {
 
     SpendthriftBot player;
     @Mock
     Random random = mock(Random.class);
-    DistrictCardsPile pile;
-    Bank bank;
-    Display events;
+    Game game = new Game();
 
     @BeforeEach
     void setUp() {
-        pile = new DistrictCardsPile();
-        bank = new Bank();
-        events = new Display();
+
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
-        player = new SpendthriftBot("Hello", districts, pile, bank, events, random);
+        player = new SpendthriftBot("Hello", districts, game, random);
     }
 
     @Test
@@ -56,7 +56,7 @@ class SpendthriftBotTest {
     @Test
     void chooseCardInHand() {
 
-        player.addGold(4);
+        player.getActions().addGold(4);
 
 
         DistrictCard card = player.chooseCardInHand();
@@ -73,7 +73,7 @@ class SpendthriftBotTest {
 
     @Test
     void chooseCardAmongDrawn() {
-        pile.initializePile();
+        game.getPile().initializePile();
         DistrictCard[] drawnCards = new DistrictCard[]{DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0]};
         DistrictCard cardToPlay = player.chooseCardAmongDrawn(drawnCards);
         assertEquals("Temple", cardToPlay.getCardName());
@@ -85,8 +85,11 @@ class SpendthriftBotTest {
 
     @Test
     void playWithNoMoney() {
-        pile.initializePile();
-        player.play();
+
+        player.getInformation().getPile().initializePile();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
+
 
         assertEquals(1, player.getCity().size());
         assertEquals(2, player.getHand().size());
@@ -95,9 +98,11 @@ class SpendthriftBotTest {
                 "Hello a 2 pièces d'or.\n" +
                 "Hello a construit dans sa ville : Temple\n" +
                 "Hello a dans sa ville : Temple, \n", events.getEvents());*/
-        events.reset();
 
-        player.play();
+        player.getInformation().getDisplay().reset();
+
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(2, player.getCity().size());
         assertEquals(1, player.getHand().size());
         assertEquals(0, player.getGold());
@@ -105,31 +110,34 @@ class SpendthriftBotTest {
                 "Hello a 3 pièces d'or.\n" +
                 "Hello a construit dans sa ville : Manoir\n" +
                 "Hello a dans sa ville : Temple, Manoir, \n", events.getEvents());*/
-        events.reset();
+        game.getDisplay().reset();
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(2, player.getCity().size());
         assertEquals(2, player.getHand().size());
         assertEquals(0, player.getGold());
         // assertTrue(events.getEvents().contains("Hello n'a rien construit"));
-        events.reset();
+        game.getDisplay().reset();
     }
 
     @Test
     void playWithGolds() {
-        pile.initializePile();
+        game.getPile().initializePile();
 
-        player.addGold(25);
+        player.getActions().addGold(25);
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(1, player.getCity().size());
         assertEquals(3, player.getHand().size());
         assertEquals(24, player.getGold());
 
         // assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Temple"));
-        events.reset();
+        game.getDisplay().reset();
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(2, player.getCity().size());
         assertEquals(3, player.getHand().size());
         if (player.getHand().get(2).getGoldCost() < 3) {
@@ -137,8 +145,28 @@ class SpendthriftBotTest {
         } else {
             assertEquals(21, player.getGold());
             // assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Manoir"));
-            events.reset();
+            game.getDisplay().reset();
         }
+    }
+
+    @Test
+    void playAsAssassin() {
+        player.setCharacter(CharacterCardsList.allCharacterCards[0]);
+        when(random.nextBoolean()).thenReturn(true, false);
+        player.playAsAssassin();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[5]);
+        player.playAsAssassin();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[6]);
+    }
+
+    @Test
+    void playAsMerchant() {
+        player.setCharacter(CharacterCardsList.allCharacterCards[5]);
+        // Bot has in its hand a Temple that costs 1 gold.
+        // Its takes 2 gold coins at the beginning of its turn and then builds the Temple.
+        // At the end of its turn, as he has taken a gold due to the merchant power, he has 2 gold coins.
+        player.playAsMerchant();
+        assertEquals(2, player.getGold());
     }
 
 }

@@ -3,6 +3,7 @@ package fr.citadels.engine;
 import fr.citadels.engine.score.Scoreboard;
 import fr.citadels.gameelements.cards.Card;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
+import fr.citadels.gameelements.cards.charactercards.characters.MerchantCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.Hand;
@@ -241,8 +242,24 @@ public class Display {
     }
 
 
-    public void addPlayerRobbed(Player thief, Player target, int gold) {
+    public void addRobbed(Player thief, Player target, int gold) {
         this.events.append(thief.getName()).append(" a volé ").append(gold).append(" pièces d'or à ").append(target.getName()).append(".\n");
+    }
+
+
+    public void addKilled(CharacterCard character) {
+        this.events.append("\n").append(character.getCardName()).append(" a été tué par l'Assassin.\n");
+    }
+
+
+    public void addWasKilled(CharacterCard character) {
+        this.events.append(character.getPlayer().getName()).append(" était ").append(character.getCardName()).append(" et a été tué par l'Assassin.\n");
+    }
+
+
+    public void addMerchantPower(MerchantCard merchantCard) {
+        this.events.append(merchantCard.getPlayer().getName()).append(" utilise son pouvoir pour gagner une pièce d'or.\n");
+        this.addGoldUpdate(merchantCard.getPlayer().getGold());
     }
 
 
@@ -259,5 +276,4 @@ public class Display {
     public void addWinner(Player player) {
         this.events.append("Le gagnant est : ").append(player.getName()).append(" !\n");
     }
-
 }

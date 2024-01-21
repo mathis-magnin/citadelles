@@ -1,6 +1,7 @@
 package fr.citadels.gameelements.cards.charactercards.characters;
 
 import fr.citadels.engine.Display;
+import fr.citadels.engine.Game;
 import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
@@ -21,14 +22,12 @@ class ThiefCardTest {
     CharacterCard thief = CharacterCardsList.allCharacterCards[1];
     CharacterCard king = CharacterCardsList.allCharacterCards[3];
 
-    DistrictCardsPile pile = new DistrictCardsPile();
-    Bank bank = new Bank();
-    Display events = new Display();
+    Game game = new Game();
     List<DistrictCard> hand1 = Arrays.asList(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[2]);
     List<DistrictCard> hand2 = Arrays.asList(DistrictCardsPile.allDistrictCards[3], DistrictCardsPile.allDistrictCards[4], DistrictCardsPile.allDistrictCards[5]);
 
-    Player player1 = new KingBot("Tom", hand1, pile, bank, events);
-    Player player2 = new KingBot("Bob", hand2, pile, bank, events);
+    Player player1 = new KingBot("Tom", hand1, game);
+    Player player2 = new KingBot("Bob", hand2, game);
 
     @BeforeEach
     void setUp() {
@@ -38,7 +37,7 @@ class ThiefCardTest {
         king.setPlayer(player2);
         player2.setCharacter(king);
 
-        player1.setTarget(king);
+        player1.getInformation().setTarget(king);
 
         player1.setGold(10);
         player2.setGold(10);
@@ -51,7 +50,7 @@ class ThiefCardTest {
         assertEquals("Neutre", thief.getCardFamily().toString());
         assertFalse(thief.isRobbed());
         assertEquals(player1, thief.getPlayer());
-        assertEquals(player1.getTarget(), king);
+        assertEquals(player1.getInformation().getTarget(), king);
     }
 
     @Test

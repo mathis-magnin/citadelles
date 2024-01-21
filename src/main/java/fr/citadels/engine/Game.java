@@ -100,10 +100,10 @@ public class Game {
         this.display.addGameTitle();
 
         // Initialize the players
-        this.playerList[0] = new RandomBot("HASARDEUX", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display, RAND);
-        this.playerList[1] = new SpendthriftBot("DÉPENSIER", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display, RAND);
-        this.playerList[2] = new ThriftyBot("ÉCONOME", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display, RAND);
-        this.playerList[3] = new KingBot("MONARCHISTE", Arrays.asList(this.pile.draw(4)), this.pile, this.bank, this.display);
+        this.playerList[0] = new RandomBot("HASARDEUX", Arrays.asList(this.pile.draw(4)), this, RAND);
+        this.playerList[1] = new SpendthriftBot("DÉPENSIER", Arrays.asList(this.pile.draw(4)), this, RAND);
+        this.playerList[2] = new ThriftyBot("ÉCONOME", Arrays.asList(this.pile.draw(4)), this, RAND);
+        this.playerList[3] = new KingBot("MONARCHISTE", Arrays.asList(this.pile.draw(4)), this);
         this.display.addPlayers(this.playerList);
         this.display.addBlankLine();
 
@@ -114,7 +114,7 @@ public class Game {
 
         // Give 2 golds to every player
         for (Player player : this.playerList) {
-            player.addGold(2);
+            player.getActions().addGold(2);
         }
         this.display.addInitialGoldGiven(2);
         this.display.addBlankLine();
@@ -139,7 +139,6 @@ public class Game {
         this.display.addSelectionPhaseTitle();
 
         CharacterCardsList characters = new CharacterCardsList();
-        Collections.shuffle(characters);
         CharacterCard[] removedCharactersFaceUp = characters.removeCharactersFaceUp();
         CharacterCard[] removedCharactersFaceDown = characters.removeCharactersFaceDown();
 
@@ -172,9 +171,10 @@ public class Game {
      */
     public void playTurnPhase() {
         this.display.addTurnPhaseTitle();
+        CharacterCard characterKilled = null;
 
         for (CharacterCard character : CharacterCardsList.allCharacterCards) {
-            if (character.getPlayer() != null) {
+            if (character.getPlayer() != null && !character.isDead()) {
                 this.display.addPlayerTurn(this.playerList[this.crown.getCrownedPlayerIndex()], character.getPlayer());
                 this.display.addBlankLine();
                 this.display.addPlayer(character.getPlayer());
@@ -188,16 +188,33 @@ public class Game {
                     this.display.addBlankLine();
                     this.isFinished = true;
                 }
-            }
-            else {
+            } else {
                 this.display.addNoPlayerTurn(this.playerList[this.crown.getCrownedPlayerIndex()], character);
                 this.display.addBlankLine();
+                if (character.isDead())
+                    characterKilled = character;
             }
 
             this.display.addBlankLine();
+
         }
+        showCharacterKilledAndRevive(characterKilled);
     }
 
+    /**
+     * Show the character killed
+     *
+     * @param characterKilled the character killed
+     */
+    public void showCharacterKilledAndRevive(CharacterCard characterKilled) {
+        if (characterKilled != null) {
+            if (characterKilled.getPlayer() != null) {
+                this.display.addWasKilled(characterKilled);
+                this.display.addBlankLine();
+            }
+            characterKilled.setDead(false);
+        }
+    }
 
     /**
      * Play the game until a player has a complete city and determine the ranking

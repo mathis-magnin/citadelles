@@ -1,10 +1,7 @@
 package fr.citadels.gameelements.cards.charactercards.characters;
 
-import fr.citadels.engine.Display;
-import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 
 public class ThiefCard extends CharacterCard {
 
@@ -18,9 +15,7 @@ public class ThiefCard extends CharacterCard {
 
     @Override
     public void bringIntoPlay() {
-        if(this.getPlayer() != null) {
-            this.getPlayer().playAsThief();
-        }
+        this.getPlayer().playAsThief();
     }
 
     /**
@@ -29,8 +24,8 @@ public class ThiefCard extends CharacterCard {
      */
     @Override
     public void usePower(){
-        this.getPlayer().getTarget().setRobbed(true);
-        this.getPlayer().getDisplay().addThiefPower(this.getPlayer(), this.getPlayer().getTarget());
+        this.getPlayer().getInformation().getTarget().setRobbed(true);
+        this.getPlayer().getInformation().getDisplay().addThiefPower(this.getPlayer(), this.getPlayer().getInformation().getTarget());
     }
 
 }
