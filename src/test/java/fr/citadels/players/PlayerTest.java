@@ -1,5 +1,6 @@
 package fr.citadels.players;
 
+import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
@@ -9,6 +10,7 @@ import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.gameelements.Bank;
 import fr.citadels.engine.Display;
+import fr.citadels.players.bots.KingBot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -357,6 +359,4 @@ class PlayerTest {
         assertNotEquals(player2, player);
 
     }
-
-
 }

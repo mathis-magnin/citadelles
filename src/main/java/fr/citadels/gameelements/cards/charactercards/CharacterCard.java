@@ -11,6 +11,7 @@ public abstract class CharacterCard extends Card implements Comparable<Character
     private final int rank;
     private boolean dead;
     private Player player;
+    private boolean isRobbed;
 
     /* Constructor */
 
@@ -18,6 +19,7 @@ public abstract class CharacterCard extends Card implements Comparable<Character
         super(cardName, cardFamily);
         this.rank = rank;
         this.player = null;
+        this.isRobbed = false;
         this.dead = false;
     }
 
@@ -47,6 +49,14 @@ public abstract class CharacterCard extends Card implements Comparable<Character
 
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    public boolean isRobbed() {
+        return this.isRobbed;
+    }
+
+    public void setRobbed(boolean robbed) {
+        this.isRobbed = robbed;
     }
 
     /**

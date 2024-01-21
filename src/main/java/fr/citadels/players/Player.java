@@ -55,7 +55,14 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
     }
 
     /**
-     * Get the player's actions
+     * Set the player's gold
+     * @param gold
+     */
+    public void setGold(int gold) {
+        this.gold = gold;
+    }
+
+    /**
      *
      * @return the player's actions
      */
@@ -95,19 +102,10 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
     /**
      * Get the player's information
      *
-     * @return
+     * @return information
      */
     public PlayerInformation getInformation() {
         return information;
-    }
-
-    /**
-     * Set the amount of gold of the player
-     *
-     * @param gold the amount of gold to set
-     */
-    public void setGold(int gold) {
-        this.gold = gold;
     }
 
     /**

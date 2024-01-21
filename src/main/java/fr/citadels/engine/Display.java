@@ -237,12 +237,22 @@ public class Display {
     }
 
 
-    public void killed(CharacterCard character) {
+    public void addThiefPower(Player player, CharacterCard target) {
+        this.events.append(player.getName()).append(" utilise le pouvoir du voleur sur le personnage ").append(target.getPlayer().getName()).append(".\n");
+    }
+
+
+    public void addRobbed(Player thief, Player target, int gold) {
+        this.events.append(thief.getName()).append(" a volé ").append(gold).append(" pièces d'or à ").append(target.getName()).append(".\n");
+    }
+
+
+    public void addKilled(CharacterCard character) {
         this.events.append("\n").append(character.getCardName()).append(" a été tué par l'Assassin.\n");
     }
 
 
-    public void wasKilled(CharacterCard character) {
+    public void addWasKilled(CharacterCard character) {
         this.events.append(character.getPlayer().getName()).append(" était ").append(character.getCardName()).append(" et a été tué par l'Assassin.\n");
     }
 

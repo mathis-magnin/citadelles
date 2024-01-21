@@ -18,8 +18,14 @@ public class ThiefCard extends CharacterCard {
         this.getPlayer().playAsThief();
     }
 
+    /**
+     * The thief steals all the gold of the character he chooses (the target).
+     * The target can be neither the thief nor the assassin nor dead.
+     */
+    @Override
     public void usePower(){
-        return;
+        this.getPlayer().getInformation().getTarget().setRobbed(true);
+        this.getPlayer().getInformation().getDisplay().addThiefPower(this.getPlayer(), this.getPlayer().getInformation().getTarget());
     }
 
 }

@@ -19,6 +19,7 @@ import static org.mockito.Mockito.when;
 
 class PlayerActionsTest {
     Player player;
+    Player player2;
     PlayerActions actions;
     PlayerInformation info;
 
@@ -28,6 +29,7 @@ class PlayerActionsTest {
         game.getPile().initializePile();
         info = new PlayerInformation(game);
         player = new KingBot("test", List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[62]), game);
+        player2 = new KingBot("bot", new ArrayList<>(), game);
         actions = new PlayerActions(player, info);
 
     }
@@ -154,6 +156,31 @@ class PlayerActionsTest {
         actions.placeCard(DistrictCardsPile.allDistrictCards[66]);
         assertEquals(2, player.getCity().size());
         assertEquals("Dracoport", player.getCity().get(1).getCardName());
+    }
+
+    @Test
+    void getRobbed() {
+        CharacterCard thief = CharacterCardsList.allCharacterCards[1];
+        CharacterCard king = CharacterCardsList.allCharacterCards[3];
+
+        thief.setPlayer(player);
+        player.setCharacter(thief);
+        player.setGold(10);
+
+        king.setPlayer(player2);
+        player2.setCharacter(king);
+        player2.setGold(8);
+
+        player.getInformation().setTarget(king);
+        thief.usePower();
+
+        assertEquals(10, player.getGold());
+        assertEquals(8, player2.getGold());
+        assertTrue(player2.getCharacter().isRobbed());
+        player2.getActions().getRobbed();
+        assertEquals(18, player.getGold());
+        assertEquals(0, player2.getGold());
+        assertFalse(player.getCharacter().isRobbed());
     }
 
 }

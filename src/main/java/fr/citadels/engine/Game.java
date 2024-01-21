@@ -209,7 +209,7 @@ public class Game {
     public void showCharacterKilledAndRevive(CharacterCard characterKilled) {
         if (characterKilled != null) {
             if (characterKilled.getPlayer() != null) {
-                this.display.wasKilled(characterKilled);
+                this.display.addWasKilled(characterKilled);
                 this.display.addBlankLine();
             }
             characterKilled.setDead(false);

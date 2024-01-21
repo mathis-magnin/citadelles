@@ -20,7 +20,7 @@ public class AssassinCard extends CharacterCard {
 
     public void usePower() {
         getPlayer().getInformation().getTarget().setDead(true);
-        getPlayer().getInformation().getDisplay().killed(getPlayer().getInformation().getTarget());
+        getPlayer().getInformation().getDisplay().addKilled(getPlayer().getInformation().getTarget());
         getPlayer().getInformation().getDisplay().addBlankLine();
     }
 
