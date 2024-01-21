@@ -1,10 +1,8 @@
 package fr.citadels.players.bots;
 
-import fr.citadels.engine.Display;
-import fr.citadels.gameelements.Bank;
+import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
 
 import java.util.List;
@@ -19,8 +17,8 @@ public class SpendthriftBot extends Player {
     private final Random RAND;
     /* Constructor */
 
-    public SpendthriftBot(String name, List<DistrictCard> cards, DistrictCardsPile pile, Bank bank, Display display, Random random) {
-        super(name, cards, pile, bank, display);
+    public SpendthriftBot(String name, List<DistrictCard> cards, Game game, Random random) {
+        super(name, cards, game);
         this.RAND = random;
     }
 
@@ -57,7 +55,7 @@ public class SpendthriftBot extends Player {
                 minIndex = i;
         }
         DistrictCard cardToPlay = drawnCards[minIndex];
-        putBack(drawnCards, minIndex);
+        getActions().putBack(drawnCards, minIndex);
         return cardToPlay;
     }
 
@@ -70,7 +68,7 @@ public class SpendthriftBot extends Player {
     public DistrictCard chooseCardInHand() {
         int minIndex = getCheapestCardInHand()[0];
         if (getHand().get(minIndex).getGoldCost() <= getGold())
-            return removeCardFromHand(minIndex);
+            return getActions().removeCardFromHand(minIndex);
         return null;
     }
 
@@ -88,7 +86,7 @@ public class SpendthriftBot extends Player {
             randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        this.display.addCharacterChosen(this, this.getCharacter());
+        getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
 
@@ -98,7 +96,7 @@ public class SpendthriftBot extends Player {
         // Draw if the player has less than 5 golds, if he has no cards in hand or if the cheapest card in hand costs more than 3
         // Else pick 2 golds
         boolean draw = ((getGold() > 5) || this.getHand().isEmpty() || (getCheapestCardInHand()[1] > 3));
-        takeCardsOrGold(draw);
+        getActions().takeCardsOrGold(draw);
     }
 
     @Override
@@ -106,12 +104,12 @@ public class SpendthriftBot extends Player {
         // Buy the cheapest card if possible
         if (!this.getHand().isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();
-            placeCard(cardToPlace);
+            getActions().placeCard(cardToPlace);
         } else {
-            this.display.addNoDistrictBuilt();
+            getInformation().getDisplay().addNoDistrictBuilt();
         }
-        this.display.addBlankLine();
-        takeGoldFromCity();
+        getInformation().getDisplay().addBlankLine();
+        getActions().takeGoldFromCity();
     }
 
 
@@ -121,10 +119,9 @@ public class SpendthriftBot extends Player {
         playBuildingPhase();
 
         if (RAND.nextBoolean()) {
-            setTarget(CharacterCardsList.allCharacterCards[5]);
-        }
-        else {
-            setTarget(CharacterCardsList.allCharacterCards[6]);
+            getInformation().setTarget(CharacterCardsList.allCharacterCards[5]);
+        } else {
+            getInformation().setTarget(CharacterCardsList.allCharacterCards[6]);
         }
         getCharacter().usePower();
     }

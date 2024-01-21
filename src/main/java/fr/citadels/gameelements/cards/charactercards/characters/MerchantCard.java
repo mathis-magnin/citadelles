@@ -19,9 +19,9 @@ public class MerchantCard extends CharacterCard {
     }
 
     public void usePower() {
-        this.getPlayer().addGold(1);
-        this.getPlayer().getDisplay().addMerchantPower(this);
-        this.getPlayer().getDisplay().addBlankLine();
+        this.getPlayer().getActions().addGold(1);
+        this.getPlayer().getInformation().getDisplay().addMerchantPower(this);
+        this.getPlayer().getInformation().getDisplay().addBlankLine();
     }
 
 }

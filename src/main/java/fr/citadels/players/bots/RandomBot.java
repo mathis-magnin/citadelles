@@ -1,10 +1,9 @@
 package fr.citadels.players.bots;
 
-import fr.citadels.engine.Display;
-import fr.citadels.gameelements.Bank;
+
+import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
 
 import java.util.List;
@@ -21,8 +20,8 @@ public class RandomBot extends Player {
     /*
      * Constructor
      */
-    public RandomBot(String name, List<DistrictCard> cards, DistrictCardsPile pile, Bank bank, Display display, Random random) {
-        super(name, cards, pile, bank, display);
+    public RandomBot(String name, List<DistrictCard> cards, Game game, Random random) {
+        super(name, cards, game);
         RAND = random;
     }
 
@@ -40,7 +39,7 @@ public class RandomBot extends Player {
     public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
         int randomIndex = RAND.nextInt(drawnCards.length);
         DistrictCard cardToPlay = drawnCards[randomIndex];
-        putBack(drawnCards, randomIndex);
+        getActions().putBack(drawnCards, randomIndex);
         return cardToPlay;
     }
 
@@ -51,7 +50,7 @@ public class RandomBot extends Player {
     public DistrictCard chooseCardInHand() {
         for (int i = 0; i < getHand().size(); i++) {
             if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i)))
-                return removeCardFromHand(i);
+                return getActions().removeCardFromHand(i);
         }
         return null;
     }
@@ -70,7 +69,7 @@ public class RandomBot extends Player {
             randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        this.display.addCharacterChosen(this, this.getCharacter());
+        getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
 
@@ -78,7 +77,7 @@ public class RandomBot extends Player {
     public void playResourcesPhase() {
         boolean draw;
         draw = !RAND.nextBoolean();
-        takeCardsOrGold(draw);
+        getActions().takeCardsOrGold(draw);
     }
 
 
@@ -87,21 +86,21 @@ public class RandomBot extends Player {
         boolean takeGoldFromFamily;
 
         takeGoldFromFamily = RAND.nextBoolean();
-        if (takeGoldFromFamily) takeGoldFromCity();
+        if (takeGoldFromFamily) getActions().takeGoldFromCity();
 
         boolean play;
         play = RAND.nextBoolean();
 
         if (play && !getHand().isEmpty()) {
             DistrictCard cardToPlace = chooseCardInHand();
-            placeCard(cardToPlace);
+            getActions().placeCard(cardToPlace);
         } else {
-            this.display.addNoDistrictBuilt();
+            getInformation().getDisplay().addNoDistrictBuilt();
         }
 
-        this.display.addBlankLine();
+        getInformation().getDisplay().addBlankLine();
         if (!takeGoldFromFamily)
-            takeGoldFromCity();
+            getActions().takeGoldFromCity();
     }
 
     @Override
@@ -110,7 +109,7 @@ public class RandomBot extends Player {
         playBuildingPhase();
 
         int randIndex = RAND.nextInt(CharacterCardsList.allCharacterCards.length - 1) + 1;
-        setTarget(CharacterCardsList.allCharacterCards[randIndex]);
+        getInformation().setTarget(CharacterCardsList.allCharacterCards[randIndex]);
         getCharacter().usePower();
     }
 
