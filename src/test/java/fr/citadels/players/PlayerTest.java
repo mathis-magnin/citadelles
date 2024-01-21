@@ -1,11 +1,13 @@
 package fr.citadels.players;
 
+import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.gameelements.Bank;
 import fr.citadels.engine.Display;
+import fr.citadels.players.bots.KingBot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -487,6 +489,32 @@ class PlayerTest {
         player.placeCard(DistrictCardsPile.allDistrictCards[66]);
         assertEquals(2, player.getCity().size());
         assertEquals("Dracoport", player.getCity().get(1).getCardName());
+    }
+
+    @Test
+    void getRobbed() {
+        Player player2 = new KingBot("Tom", new ArrayList<>(), pile, bank, display);
+        CharacterCard thief = CharacterCardsList.allCharacterCards[1];
+        CharacterCard king = CharacterCardsList.allCharacterCards[3];
+
+        thief.setPlayer(player);
+        player.setCharacter(thief);
+        player.setGold(10);
+
+        king.setPlayer(player2);
+        player2.setCharacter(king);
+        player2.setGold(8);
+
+        player.setTarget(king);
+        thief.usePower();
+
+        assertEquals(10, player.getGold());
+        assertEquals(8, player2.getGold());
+        assertTrue(player2.getCharacter().isRobbed());
+        player2.getRobbed();
+        assertEquals(18, player.getGold());
+        assertEquals(0, player2.getGold());
+        assertFalse(player.getCharacter().isRobbed());
     }
 
 

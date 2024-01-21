@@ -326,10 +326,10 @@ public abstract class Player implements Comparable<Player> {
      */
     public void getRobbed() {
         int goldToTake = this.getGold();
-        CharacterCardsList.allCharacterCards[2].getPlayer().addGold(goldToTake);
+        CharacterCardsList.allCharacterCards[1].getPlayer().addGold(goldToTake);
         this.setGold(0);
         this.character.setRobbed(false);
-        this.display.addPlayerRobbed(CharacterCardsList.allCharacterCards[2].getPlayer(), this, goldToTake);
+        this.display.addPlayerRobbed(CharacterCardsList.allCharacterCards[1].getPlayer(), this, goldToTake);
     }
 
     /**

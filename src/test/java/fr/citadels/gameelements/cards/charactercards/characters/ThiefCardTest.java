@@ -56,8 +56,10 @@ class ThiefCardTest {
 
     @Test
     void bringIntoPlay() {
+        assertEquals(0, player1.getCity().size());
         thief.bringIntoPlay();
-        assertEquals(thief, player1.getCharacter());
+        assertEquals(1, player1.getCity().size());
+
     }
 
     @Test
