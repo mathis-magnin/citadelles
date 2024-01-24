@@ -6,8 +6,6 @@ import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.KingCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.engine.Display;
 import fr.citadels.players.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,31 +50,31 @@ class RandomBotTest {
 
         player.getActions().addGold(4);
 
-        DistrictCard card = player.chooseCardInHand();
+        player.chooseDistrictToBuild();
         assertEquals(2, player.getHand().size());
-        assertEquals(DistrictCardsPile.allDistrictCards[12], card);
+        assertEquals(DistrictCardsPile.allDistrictCards[12], player.getInformation().getDistrictToBuild());
 
-        card = player.chooseCardInHand();
+        player.chooseDistrictToBuild();
         assertEquals(1, player.getHand().size());
-        assertEquals(DistrictCardsPile.allDistrictCards[0], card);
+        assertEquals(DistrictCardsPile.allDistrictCards[0], player.getInformation().getDistrictToBuild());
 
-        card = player.chooseCardInHand();
+        player.chooseDistrictToBuild();
         assertEquals(1, player.getHand().size());
-        assertNull(card);
+        assertNull(player.getInformation().getDistrictToBuild());
 
         /*test if the player has the card he wants in his city*/
 
         player.getActions().addGold(1);
         Player playerSpy = spy(player);
         when(playerSpy.hasCardInCity(any())).thenReturn(true);
-        card = playerSpy.chooseCardInHand();
+        playerSpy.chooseDistrictToBuild();
         assertEquals(1, playerSpy.getHand().size());
-        assertNull(card);
+        assertNull(playerSpy.getInformation().getDistrictToBuild());
 
-        player.chooseCardInHand();
-        card = player.chooseCardInHand();
+        player.chooseDistrictToBuild();
+        player.chooseDistrictToBuild();
         assertEquals(0, player.getHand().size());
-        assertNull(card);
+        assertNull(playerSpy.getInformation().getDistrictToBuild());
 
     }
 

@@ -5,8 +5,6 @@ import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.KingCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.engine.Display;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -81,8 +79,8 @@ class KingBotTest {
     @Test
     void chooseCardInHand() {
         //no money
-        DistrictCard cardToPlay = player1.chooseCardInHand();
-        assertNull(cardToPlay);
+        player1.chooseDistrictToBuild();
+        assertNull(player1.getInformation().getDistrictToBuild());
         assertEquals(3, player1.getHand().size());
         assertEquals("Manoir", player1.getHand().get(0).getCardName());
         assertEquals("Cathédrale", player1.getHand().get(1).getCardName());
@@ -92,8 +90,8 @@ class KingBotTest {
 
         player1.getActions().addGold(3);
 
-        cardToPlay = player1.chooseCardInHand();
-        assertEquals("Manoir", cardToPlay.getCardName());
+        player1.chooseDistrictToBuild();
+        assertEquals("Manoir", player1.getInformation().getDistrictToBuild().getCardName());
         assertEquals(2, player1.getHand().size());
         assertEquals("Cathédrale", player1.getHand().get(0).getCardName());
         assertEquals("Temple", player1.getHand().get(1).getCardName());

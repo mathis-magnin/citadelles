@@ -9,17 +9,21 @@ import fr.citadels.gameelements.cards.districtcards.Hand;
 import java.util.List;
 
 public class PlayerActions {
+
     /* Attributes */
+
     private final Player player;
     private final PlayerInformation information;
 
 
     /* Constructor */
+
     public PlayerActions(Player player, PlayerInformation information) {
         this.player = player;
         this.information = information;
 
     }
+
 
     /* Methods */
 
@@ -32,6 +36,7 @@ public class PlayerActions {
         player.getInformation().getBank().take(amount);
         player.setGold(player.getGold() + amount);
     }
+
 
     /**
      * remove gold from the player to the bank
@@ -47,6 +52,7 @@ public class PlayerActions {
             player.setGold(player.getGold() - amount);
         }
     }
+
 
     /**
      * Sort the player's hand
@@ -74,6 +80,7 @@ public class PlayerActions {
             }
         }
     }
+
 
     /**
      * takes 2 cards or 2 golds from the bank and add them to the player
@@ -109,7 +116,6 @@ public class PlayerActions {
     /**
      * take gold from the city if the family of the card is the same as the family of the character
      */
-
     public void takeGoldFromCity() {
         if (player.getCharacter() != null) {
             int goldToTake = 0;
@@ -127,21 +133,21 @@ public class PlayerActions {
         }
     }
 
+
     /**
-     * place the card as parameter in the city
-     *
-     * @param cardToPlace
+     * Build the district present in the attribute PlayerInformation's attribute districtToBuild.
      */
-    public void placeCard(DistrictCard cardToPlace) {
-        if (cardToPlace != null) {
-            addCardToCity(cardToPlace);
-            player.getInformation().getBank().give(cardToPlace.getGoldCost());
-            removeGold(cardToPlace.getGoldCost());
-            player.getInformation().getDisplay().addDistrictBuilt(player, cardToPlace);
+    public void build() {
+        if (this.information.getDistrictToBuild() != null) {
+            addCardToCity(this.information.getDistrictToBuild());
+            player.getInformation().getBank().give(this.information.getDistrictToBuild().getGoldCost());
+            removeGold(this.information.getDistrictToBuild().getGoldCost());
+            player.getInformation().getDisplay().addDistrictBuilt(player, this.information.getDistrictToBuild());
         } else {
             player.getInformation().getDisplay().addNoDistrictBuilt();
         }
     }
+
 
     /**
      * Give all the player's gold to the thief
@@ -173,10 +179,24 @@ public class PlayerActions {
         player.getCity().add(card);
     }
 
+
     /**
      * Add cards to the player's city
      */
     public void addCardsToCity(List<DistrictCard> cards) {
         player.getCity().addAll(cards);
     }
+
+
+    /**
+     * The player draw a certain number of card and place them in his hand.
+     * @param number of card to draw.
+     */
+    public void draw(int number) {
+        DistrictCard[] drawnCards = this.information.getPile().draw(number);
+        this.information.getDisplay().addDistrictDrawn(drawnCards);
+        this.player.getHand().addAll(List.of(drawnCards));
+        this.information.getDisplay().addHandUpdate(this.player.getHand());
+    }
+
 }

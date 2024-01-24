@@ -65,11 +65,12 @@ public class SpendthriftBot extends Player {
      * @return the card chosen or null if no card can be chosen
      * @precondition cardsInHand must contain at least 1 card
      */
-    public DistrictCard chooseCardInHand() {
+    public void chooseDistrictToBuild() {
         int minIndex = getCheapestCardInHand()[0];
         if (getHand().get(minIndex).getGoldCost() <= getGold())
-            return getActions().removeCardFromHand(minIndex);
-        return null;
+            this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(minIndex));
+        else
+            this.getInformation().setDistrictToBuild(null);
     }
 
 
@@ -99,12 +100,13 @@ public class SpendthriftBot extends Player {
         getActions().takeCardsOrGold(draw);
     }
 
+
     @Override
     public void playBuildingPhase() {
         // Buy the cheapest card if possible
         if (!this.getHand().isEmpty()) {
-            DistrictCard cardToPlace = chooseCardInHand();
-            getActions().placeCard(cardToPlace);
+            this.chooseDistrictToBuild();
+            this.getActions().build();
         } else {
             getInformation().getDisplay().addNoDistrictBuilt();
         }
@@ -126,33 +128,34 @@ public class SpendthriftBot extends Player {
         getCharacter().usePower();
     }
 
+
     @Override
     public void playAsThief() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsMagician() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsKing() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsBishop() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsMerchant() {
@@ -161,17 +164,10 @@ public class SpendthriftBot extends Player {
         playBuildingPhase();
     }
 
-    @Override
-    public void playAsArchitect() {
-        playResourcesPhase();
-
-        playBuildingPhase();
-    }
 
     @Override
     public void playAsWarlord() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
 

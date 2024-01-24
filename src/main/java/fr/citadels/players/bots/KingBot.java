@@ -13,19 +13,15 @@ import java.util.List;
  */
 public class KingBot extends Player {
 
-    /*
-     * Constructor
-     */
+    /* Constructor */
+
     public KingBot(String name, List<DistrictCard> cards, Game game) {
         super(name, cards, game);
         actions.sortHand(CardFamily.NOBLE);
     }
 
 
-    /*
-     * Methods
-     */
-
+    /* Methods */
 
     /***
      * choose a NOBLE card if possible or the first card
@@ -48,21 +44,20 @@ public class KingBot extends Player {
         return cardToPlay;
     }
 
+
     /***
      * take the most expensive card that he can place (preferred noble)
      * choose a card in hand
      * @return the card chosen or null if no card can be chosen
      */
-    public DistrictCard chooseCardInHand() {
-        DistrictCard cardToPlace = null;
+    public void chooseDistrictToBuild() {
         for (int i = 0; i < getHand().size(); i++) {
             if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i))) {
-                cardToPlace = getHand().get(i);
-                getActions().removeCardFromHand(i);
-                return cardToPlace;
+                this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(i));
+                return;
             }
         }
-        return cardToPlace;
+        this.getInformation().setDistrictToBuild(null);
     }
 
 
@@ -104,9 +99,8 @@ public class KingBot extends Player {
     @Override
     public void playBuildingPhase() {
         if (!getHand().isEmpty()) {
-            DistrictCard cardToPlace = chooseCardInHand();
-
-            getActions().placeCard(cardToPlace);
+            this.chooseDistrictToBuild();
+            this.getActions().build();
         } else {
             getInformation().getDisplay().addNoDistrictBuilt();
         }
@@ -123,33 +117,34 @@ public class KingBot extends Player {
         getCharacter().usePower();
     }
 
+
     @Override
     public void playAsThief() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsMagician() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsKing() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsBishop() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsMerchant() {
@@ -158,19 +153,11 @@ public class KingBot extends Player {
         playBuildingPhase();
     }
 
-    @Override
-    public void playAsArchitect() {
-        playResourcesPhase();
-
-        playBuildingPhase();
-    }
 
     @Override
     public void playAsWarlord() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
-
 
 }

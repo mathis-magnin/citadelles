@@ -15,12 +15,14 @@ public class ThriftyBot extends Player {
 
     private final Random RAND;
 
+
     /* Constructor */
 
     public ThriftyBot(String name, List<DistrictCard> cards, Game game, Random random) {
         super(name, cards, game);
         this.RAND = random;
     }
+
 
     /* Methods */
 
@@ -38,6 +40,7 @@ public class ThriftyBot extends Player {
         result[1] = getHand().get(maxIndex).getGoldCost();
         return result;
     }
+
 
     /**
      * Choose the most expensive card among the cards drawn
@@ -57,21 +60,23 @@ public class ThriftyBot extends Player {
         return cardToPlay;
     }
 
+
     /**
      * Choose the most expensive card in hand with a cost > 1 that can be bought
      *
      * @return the card chosen or null if no card can be chosen
      * @precondition cardsInHand must contain at least 1 card
      */
-    public DistrictCard chooseCardInHand() {
+    public void chooseDistrictToBuild() {
         int maxIndex = 0;
         for (int i = 1; i < getHand().size(); i++) {
             if ((getHand().get(i).getGoldCost() > getHand().get(maxIndex).getGoldCost()) && (!hasCardInCity(getHand().get(maxIndex))) && (getHand().get(i).getGoldCost() <= getGold()))
                 maxIndex = i;
         }
         if ((getHand().get(maxIndex).getGoldCost() < getGold()) && (getHand().get(maxIndex).getGoldCost() > 1))
-            return getActions().removeCardFromHand(maxIndex);
-        return null;
+            this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(maxIndex));
+        else
+            this.getInformation().setDistrictToBuild(null);
     }
 
 
@@ -107,13 +112,14 @@ public class ThriftyBot extends Player {
     public void playBuildingPhase() {
         // Buy the most expensive card with a cost > 1 if possible
         if (!this.getHand().isEmpty()) {
-            DistrictCard cardToPlace = chooseCardInHand();
-            getActions().placeCard(cardToPlace);
+            this.chooseDistrictToBuild();
+            this.getActions().build();
         } else {
             getInformation().getDisplay().addNoDistrictBuilt();
         }
         getInformation().getDisplay().addBlankLine();
     }
+
 
     @Override
     public void playAsAssassin() {
@@ -128,33 +134,34 @@ public class ThriftyBot extends Player {
         getCharacter().usePower();
     }
 
+
     @Override
     public void playAsThief() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsMagician() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsKing() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsBishop() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsMerchant() {
@@ -163,17 +170,10 @@ public class ThriftyBot extends Player {
         playBuildingPhase();
     }
 
-    @Override
-    public void playAsArchitect() {
-        playResourcesPhase();
-
-        playBuildingPhase();
-    }
 
     @Override
     public void playAsWarlord() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
 

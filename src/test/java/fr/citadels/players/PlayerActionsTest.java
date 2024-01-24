@@ -145,15 +145,18 @@ class PlayerActionsTest {
     }
 
     @Test
-    void placeCard() {
-        actions.placeCard(null);
+    void build() {
+        info.setDistrictToBuild(null);
+        actions.build();
         assertEquals(0, player.getCity().size());
 
-        actions.placeCard(DistrictCardsPile.allDistrictCards[0]);
+        info.setDistrictToBuild(DistrictCardsPile.allDistrictCards[0]);
+        actions.build();
         assertEquals(1, player.getCity().size());
         assertEquals("Manoir", player.getCity().get(0).getCardName());
 
-        actions.placeCard(DistrictCardsPile.allDistrictCards[66]);
+        info.setDistrictToBuild(DistrictCardsPile.allDistrictCards[66]);
+        actions.build();
         assertEquals(2, player.getCity().size());
         assertEquals("Dracoport", player.getCity().get(1).getCardName());
     }
@@ -181,6 +184,17 @@ class PlayerActionsTest {
         assertEquals(18, player.getGold());
         assertEquals(0, player2.getGold());
         assertFalse(player.getCharacter().isRobbed());
+    }
+
+
+    @Test
+    void draw() {
+        int handSize = player.getHand().size();
+        actions.draw(0);
+        assertEquals(handSize, player.getHand().size());
+
+        actions.draw(10);
+        assertEquals(handSize + 10, player.getHand().size());
     }
 
 }

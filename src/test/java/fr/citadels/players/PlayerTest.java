@@ -1,16 +1,9 @@
 package fr.citadels.players;
 
-import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
-import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
-import fr.citadels.gameelements.cards.charactercards.characters.KingCard;
-import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.engine.Display;
-import fr.citadels.players.bots.KingBot;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +12,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 class PlayerTest {
 
@@ -37,8 +29,7 @@ class PlayerTest {
             }
 
             @Override
-            public DistrictCard chooseCardInHand() {
-                return null;
+            public void chooseDistrictToBuild() {
             }
 
             @Override
@@ -162,8 +153,7 @@ class PlayerTest {
             }
 
             @Override
-            public DistrictCard chooseCardInHand() {
-                return null;
+            public void chooseDistrictToBuild() {
             }
 
             @Override
@@ -234,8 +224,7 @@ class PlayerTest {
             }
 
             @Override
-            public DistrictCard chooseCardInHand() {
-                return null;
+            public void chooseDistrictToBuild() {
             }
 
             @Override
@@ -301,8 +290,7 @@ class PlayerTest {
             }
 
             @Override
-            public DistrictCard chooseCardInHand() {
-                return null;
+            public void chooseDistrictToBuild() {
             }
 
             @Override

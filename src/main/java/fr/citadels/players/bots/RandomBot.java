@@ -11,24 +11,20 @@ import java.util.Random;
 
 public class RandomBot extends Player {
 
-    /*
-     * constants
-     */
+    /* Constant */
 
     private final Random RAND;
 
-    /*
-     * Constructor
-     */
+
+    /* Constructor */
+
     public RandomBot(String name, List<DistrictCard> cards, Game game, Random random) {
         super(name, cards, game);
         RAND = random;
     }
 
 
-    /*
-     * Methods
-     */
+    /* Methods */
 
     /***
      * choose a card to play among the cards drawn
@@ -43,16 +39,19 @@ public class RandomBot extends Player {
         return cardToPlay;
     }
 
+
     /***
      * choose a card in hand
      * @return the card chosen or null if no card can be chosen
      */
-    public DistrictCard chooseCardInHand() {
+    public void chooseDistrictToBuild() {
         for (int i = 0; i < getHand().size(); i++) {
-            if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i)))
-                return getActions().removeCardFromHand(i);
+            if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i))) {
+                this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(i));
+                return;
+            }
         }
-        return null;
+        this.getInformation().setDistrictToBuild(null);
     }
 
 
@@ -91,9 +90,9 @@ public class RandomBot extends Player {
         boolean play;
         play = RAND.nextBoolean();
 
-        if (play && !getHand().isEmpty()) {
-            DistrictCard cardToPlace = chooseCardInHand();
-            getActions().placeCard(cardToPlace);
+        if (play) {
+            this.chooseDistrictToBuild();
+            this.getActions().build();
         } else {
             getInformation().getDisplay().addNoDistrictBuilt();
         }
@@ -102,6 +101,7 @@ public class RandomBot extends Player {
         if (!takeGoldFromFamily)
             getActions().takeGoldFromCity();
     }
+
 
     @Override
     public void playAsAssassin() {
@@ -113,33 +113,34 @@ public class RandomBot extends Player {
         getCharacter().usePower();
     }
 
+
     @Override
     public void playAsThief() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsMagician() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsKing() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsBishop() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsMerchant() {
@@ -148,17 +149,10 @@ public class RandomBot extends Player {
         playBuildingPhase();
     }
 
-    @Override
-    public void playAsArchitect() {
-        playResourcesPhase();
-
-        playBuildingPhase();
-    }
 
     @Override
     public void playAsWarlord() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
 
