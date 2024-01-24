@@ -1,11 +1,9 @@
 package fr.citadels.players.bots;
 
-import fr.citadels.engine.Display;
-import fr.citadels.gameelements.Bank;
+import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
 
 import java.util.List;
@@ -15,19 +13,15 @@ import java.util.List;
  */
 public class KingBot extends Player {
 
-    /*
-     * Constructor
-     */
-    public KingBot(String name, List<DistrictCard> cards, DistrictCardsPile pile, Bank bank, Display display) {
-        super(name, cards, pile, bank, display);
-        sortHand(CardFamily.NOBLE);
+    /* Constructor */
+
+    public KingBot(String name, List<DistrictCard> cards, Game game) {
+        super(name, cards, game);
+        actions.sortHand(CardFamily.NOBLE);
     }
 
 
-    /*
-     * Methods
-     */
-
+    /* Methods */
 
     /***
      * choose a NOBLE card if possible or the first card
@@ -41,14 +35,15 @@ public class KingBot extends Player {
         for (int i = 0; i < drawnCards.length; i++) {
             if (drawnCards[i].getCardFamily().equals(CardFamily.NOBLE)) {
                 cardToPlay = drawnCards[i];
-                putBack(drawnCards, i);
+                getActions().putBack(drawnCards, i);
                 return cardToPlay;
             }
         }
 
-        putBack(drawnCards, 0);
+        getActions().putBack(drawnCards, 0);
         return cardToPlay;
     }
+
 
     /***
      * take the most expensive card that he can place (preferred noble)
@@ -58,11 +53,11 @@ public class KingBot extends Player {
     public void chooseCardInHand() {
         for (int i = 0; i < getHand().size(); i++) {
             if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i))) {
-                this.setDistrictToBuild(removeCardFromHand(i));
+                this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(i));
                 return;
             }
         }
-        this.setDistrictToBuild(null);
+        this.getInformation().setDistrictToBuild(null);
     }
 
 
@@ -75,7 +70,7 @@ public class KingBot extends Player {
         for (int i = 0; i < characters.size(); i++) {
             if (characters.get(i).getCardName().equals("Roi")) {
                 this.setCharacter(characters.remove(i));
-                this.display.addCharacterChosen(this, this.getCharacter());
+                getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
                 return;
             }
         }
@@ -84,7 +79,7 @@ public class KingBot extends Player {
          * Could happen if a player already took it
          */
         this.setCharacter(characters.remove(0));
-        this.display.addCharacterChosen(this, this.getCharacter());
+        getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
 
@@ -93,9 +88,10 @@ public class KingBot extends Player {
         int firstNotDuplicateIndex = getCity().getFirstNotDuplicateIndex(getHand());
         boolean draw = getHand().isEmpty() || firstNotDuplicateIndex == -1 || getHand().get(firstNotDuplicateIndex).getGoldCost() < getGold();
 
-        takeCardsOrGold(draw);
+        getActions().takeCardsOrGold(draw);
+
         if (draw) {
-            sortHand(CardFamily.NOBLE);
+            getActions().sortHand(CardFamily.NOBLE);
         }
     }
 
@@ -104,12 +100,12 @@ public class KingBot extends Player {
     public void playBuildingPhase() {
         if (!getHand().isEmpty()) {
             this.chooseCardInHand();
-            this.build();
+            this.getActions().build();
         } else {
-            this.display.addNoDistrictBuilt();
+            getInformation().getDisplay().addNoDistrictBuilt();
         }
-        this.display.addBlankLine();
-        takeGoldFromCity();
+        getInformation().getDisplay().addBlankLine();
+        getActions().takeGoldFromCity();
     }
 
 
@@ -117,38 +113,38 @@ public class KingBot extends Player {
     public void playAsAssassin() {
         playResourcesPhase();
         playBuildingPhase();
-
-        setTarget(CharacterCardsList.allCharacterCards[3]);
+        getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
         getCharacter().usePower();
     }
+
 
     @Override
     public void playAsThief() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsMagician() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsKing() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsBishop() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsMerchant() {
@@ -157,36 +153,11 @@ public class KingBot extends Player {
         playBuildingPhase();
     }
 
-    @Override
-    public void playAsArchitect() {
-        this.setPowerToUse(1);  // draw two cards
-        this.getCharacter().usePower();
-
-        this.playResourcesPhase();
-        this.playBuildingPhase();
-
-        this.setPowerToUse(2);  // build another district
-        this.chooseCardInHand();
-        if (this.getDistrictToBuild() != null) this.getCharacter().usePower();
-        else {
-            this.display.addNoArchitectPower();
-            this.display.addBlankLine();
-        }
-
-        this.chooseCardInHand();
-        if (this.getDistrictToBuild() != null) this.getCharacter().usePower();
-        else {
-            this.display.addNoArchitectPower();
-            this.display.addBlankLine();
-        }
-    }
 
     @Override
     public void playAsWarlord() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
-
 
 }

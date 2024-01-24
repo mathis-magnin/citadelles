@@ -1,10 +1,8 @@
 package fr.citadels.players.bots;
 
-import fr.citadels.engine.Display;
-import fr.citadels.gameelements.Bank;
+import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
 
 import java.util.List;
@@ -17,12 +15,14 @@ public class ThriftyBot extends Player {
 
     private final Random RAND;
 
+
     /* Constructor */
 
-    public ThriftyBot(String name, List<DistrictCard> cards, DistrictCardsPile pile, Bank bank, Display display, Random random) {
-        super(name, cards, pile, bank, display);
+    public ThriftyBot(String name, List<DistrictCard> cards, Game game, Random random) {
+        super(name, cards, game);
         this.RAND = random;
     }
+
 
     /* Methods */
 
@@ -41,6 +41,7 @@ public class ThriftyBot extends Player {
         return result;
     }
 
+
     /**
      * Choose the most expensive card among the cards drawn
      *
@@ -55,9 +56,10 @@ public class ThriftyBot extends Player {
                 maxIndex = i;
         }
         DistrictCard cardToPlay = drawnCards[maxIndex];
-        putBack(drawnCards, maxIndex);
+        getActions().putBack(drawnCards, maxIndex);
         return cardToPlay;
     }
+
 
     /**
      * Choose the most expensive card in hand with a cost > 1 that can be bought
@@ -72,9 +74,9 @@ public class ThriftyBot extends Player {
                 maxIndex = i;
         }
         if ((getHand().get(maxIndex).getGoldCost() < getGold()) && (getHand().get(maxIndex).getGoldCost() > 1))
-            this.setDistrictToBuild(removeCardFromHand(maxIndex));
+            this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(maxIndex));
         else
-            this.setDistrictToBuild(null);
+            this.getInformation().setDistrictToBuild(null);
     }
 
 
@@ -92,16 +94,17 @@ public class ThriftyBot extends Player {
         }
         this.setCharacter(characters.remove(randomIndex));
 
-        this.display.addCharacterChosen(this, this.getCharacter());
+        getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
 
     @Override
     public void playResourcesPhase() {
         // Draw 2 cards or take 2 golds
+
         boolean draw = ((getGold() > 6) || (getHand().isEmpty()) || ((getGold() > 5) && (getMostExpensiveCardInHand()[1] < 4)));
-        takeGoldFromCity();
-        takeCardsOrGold(draw);
+        getActions().takeGoldFromCity();
+        getActions().takeCardsOrGold(draw);
     }
 
 
@@ -110,12 +113,13 @@ public class ThriftyBot extends Player {
         // Buy the most expensive card with a cost > 1 if possible
         if (!this.getHand().isEmpty()) {
             this.chooseCardInHand();
-            this.build();
+            this.getActions().build();
         } else {
-            this.display.addNoDistrictBuilt();
+            getInformation().getDisplay().addNoDistrictBuilt();
         }
-        this.display.addBlankLine();
+        getInformation().getDisplay().addBlankLine();
     }
+
 
     @Override
     public void playAsAssassin() {
@@ -123,41 +127,41 @@ public class ThriftyBot extends Player {
         playBuildingPhase();
 
         if (RAND.nextBoolean()) {
-            setTarget(CharacterCardsList.allCharacterCards[5]);
-        }
-        else {
-            setTarget(CharacterCardsList.allCharacterCards[6]);
+            getInformation().setTarget(CharacterCardsList.allCharacterCards[5]);
+        } else {
+            getInformation().setTarget(CharacterCardsList.allCharacterCards[6]);
         }
         getCharacter().usePower();
     }
 
+
     @Override
     public void playAsThief() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsMagician() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsKing() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsBishop() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsMerchant() {
@@ -166,34 +170,10 @@ public class ThriftyBot extends Player {
         playBuildingPhase();
     }
 
-    @Override
-    public void playAsArchitect() {
-        this.setPowerToUse(1);  // draw two cards
-        this.getCharacter().usePower();
-
-        this.playResourcesPhase();
-        this.playBuildingPhase();
-
-        this.setPowerToUse(2);  // build another district
-        this.chooseCardInHand();
-        if (this.getDistrictToBuild() != null) this.getCharacter().usePower();
-        else {
-            this.display.addNoArchitectPower();
-            this.display.addBlankLine();
-        }
-
-        this.chooseCardInHand();
-        if (this.getDistrictToBuild() != null) this.getCharacter().usePower();
-        else {
-            this.display.addNoArchitectPower();
-            this.display.addBlankLine();
-        }
-    }
 
     @Override
     public void playAsWarlord() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
 

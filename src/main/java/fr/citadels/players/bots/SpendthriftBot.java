@@ -1,10 +1,8 @@
 package fr.citadels.players.bots;
 
-import fr.citadels.engine.Display;
-import fr.citadels.gameelements.Bank;
+import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
 
 import java.util.List;
@@ -19,8 +17,8 @@ public class SpendthriftBot extends Player {
     private final Random RAND;
     /* Constructor */
 
-    public SpendthriftBot(String name, List<DistrictCard> cards, DistrictCardsPile pile, Bank bank, Display display, Random random) {
-        super(name, cards, pile, bank, display);
+    public SpendthriftBot(String name, List<DistrictCard> cards, Game game, Random random) {
+        super(name, cards, game);
         this.RAND = random;
     }
 
@@ -57,7 +55,7 @@ public class SpendthriftBot extends Player {
                 minIndex = i;
         }
         DistrictCard cardToPlay = drawnCards[minIndex];
-        putBack(drawnCards, minIndex);
+        getActions().putBack(drawnCards, minIndex);
         return cardToPlay;
     }
 
@@ -70,9 +68,9 @@ public class SpendthriftBot extends Player {
     public void chooseCardInHand() {
         int minIndex = getCheapestCardInHand()[0];
         if (getHand().get(minIndex).getGoldCost() <= getGold())
-            this.setDistrictToBuild(this.removeCardFromHand(minIndex));
+            this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(minIndex));
         else
-            this.setDistrictToBuild(null);
+            this.getInformation().setDistrictToBuild(null);
     }
 
 
@@ -89,7 +87,7 @@ public class SpendthriftBot extends Player {
             randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        this.display.addCharacterChosen(this, this.getCharacter());
+        getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
 
@@ -99,20 +97,21 @@ public class SpendthriftBot extends Player {
         // Draw if the player has less than 5 golds, if he has no cards in hand or if the cheapest card in hand costs more than 3
         // Else pick 2 golds
         boolean draw = ((getGold() > 5) || this.getHand().isEmpty() || (getCheapestCardInHand()[1] > 3));
-        takeCardsOrGold(draw);
+        getActions().takeCardsOrGold(draw);
     }
+
 
     @Override
     public void playBuildingPhase() {
         // Buy the cheapest card if possible
         if (!this.getHand().isEmpty()) {
             this.chooseCardInHand();
-            this.build();
+            this.getActions().build();
         } else {
-            this.display.addNoDistrictBuilt();
+            getInformation().getDisplay().addNoDistrictBuilt();
         }
-        this.display.addBlankLine();
-        takeGoldFromCity();
+        getInformation().getDisplay().addBlankLine();
+        getActions().takeGoldFromCity();
     }
 
 
@@ -122,41 +121,41 @@ public class SpendthriftBot extends Player {
         playBuildingPhase();
 
         if (RAND.nextBoolean()) {
-            setTarget(CharacterCardsList.allCharacterCards[5]);
-        }
-        else {
-            setTarget(CharacterCardsList.allCharacterCards[6]);
+            getInformation().setTarget(CharacterCardsList.allCharacterCards[5]);
+        } else {
+            getInformation().setTarget(CharacterCardsList.allCharacterCards[6]);
         }
         getCharacter().usePower();
     }
 
+
     @Override
     public void playAsThief() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsMagician() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsKing() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsBishop() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
+
 
     @Override
     public void playAsMerchant() {
@@ -165,34 +164,10 @@ public class SpendthriftBot extends Player {
         playBuildingPhase();
     }
 
-    @Override
-    public void playAsArchitect() {
-        this.setPowerToUse(1);  // draw two cards
-        this.getCharacter().usePower();
-
-        this.playResourcesPhase();
-        this.playBuildingPhase();
-
-        this.setPowerToUse(2);  // build another district
-        this.chooseCardInHand();
-        if (this.getDistrictToBuild() != null) this.getCharacter().usePower();
-        else {
-            this.display.addNoArchitectPower();
-            this.display.addBlankLine();
-        }
-
-        this.chooseCardInHand();
-        if (this.getDistrictToBuild() != null) this.getCharacter().usePower();
-        else {
-            this.display.addNoArchitectPower();
-            this.display.addBlankLine();
-        }
-    }
 
     @Override
     public void playAsWarlord() {
         playResourcesPhase();
-
         playBuildingPhase();
     }
 
