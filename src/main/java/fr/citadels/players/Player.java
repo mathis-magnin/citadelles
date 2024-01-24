@@ -1,6 +1,5 @@
 package fr.citadels.players;
 
-import fr.citadels.engine.Display;
 import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
@@ -209,7 +208,7 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
      *
      * @return the card chosen or null if no card can be chosen
      */
-    public abstract void chooseCardInHand();
+    public abstract void chooseDistrictToBuild();
 
 
     /**
@@ -242,7 +241,7 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
 
         this.getInformation().setPowerToUse(2);  // build another district
         for (int i = 0; i < 2; i++) {
-            this.chooseCardInHand();
+            this.chooseDistrictToBuild();
             if (this.getInformation().getDistrictToBuild() != null) this.getCharacter().usePower();
             else {
                 this.getInformation().getDisplay().addNoArchitectPower();

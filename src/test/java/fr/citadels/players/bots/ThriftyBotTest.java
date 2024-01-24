@@ -4,8 +4,6 @@ import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.engine.Display;
 import fr.citadels.gameelements.cards.districtcards.Hand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,10 +55,10 @@ class ThriftyBotTest {
 
         player.getActions().addGold(4);
 
-        player.chooseCardInHand();
+        player.chooseDistrictToBuild();
         assertEquals(2, player.getHand().size());
         assertEquals("Manoir", player.getInformation().getDistrictToBuild().getCardName());
-        player.chooseCardInHand();
+        player.chooseDistrictToBuild();
         assertEquals(2, player.getHand().size());
 
         assertNull(player.getInformation().getDistrictToBuild());

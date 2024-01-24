@@ -50,7 +50,7 @@ public class KingBot extends Player {
      * choose a card in hand
      * @return the card chosen or null if no card can be chosen
      */
-    public void chooseCardInHand() {
+    public void chooseDistrictToBuild() {
         for (int i = 0; i < getHand().size(); i++) {
             if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i))) {
                 this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(i));
@@ -99,7 +99,7 @@ public class KingBot extends Player {
     @Override
     public void playBuildingPhase() {
         if (!getHand().isEmpty()) {
-            this.chooseCardInHand();
+            this.chooseDistrictToBuild();
             this.getActions().build();
         } else {
             getInformation().getDisplay().addNoDistrictBuilt();

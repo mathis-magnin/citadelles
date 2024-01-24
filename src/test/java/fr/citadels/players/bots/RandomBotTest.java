@@ -6,8 +6,6 @@ import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.KingCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.engine.Display;
 import fr.citadels.players.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,15 +50,15 @@ class RandomBotTest {
 
         player.getActions().addGold(4);
 
-        player.chooseCardInHand();
+        player.chooseDistrictToBuild();
         assertEquals(2, player.getHand().size());
         assertEquals(DistrictCardsPile.allDistrictCards[12], player.getInformation().getDistrictToBuild());
 
-        player.chooseCardInHand();
+        player.chooseDistrictToBuild();
         assertEquals(1, player.getHand().size());
         assertEquals(DistrictCardsPile.allDistrictCards[0], player.getInformation().getDistrictToBuild());
 
-        player.chooseCardInHand();
+        player.chooseDistrictToBuild();
         assertEquals(1, player.getHand().size());
         assertNull(player.getInformation().getDistrictToBuild());
 
@@ -69,12 +67,12 @@ class RandomBotTest {
         player.getActions().addGold(1);
         Player playerSpy = spy(player);
         when(playerSpy.hasCardInCity(any())).thenReturn(true);
-        playerSpy.chooseCardInHand();
+        playerSpy.chooseDistrictToBuild();
         assertEquals(1, playerSpy.getHand().size());
         assertNull(playerSpy.getInformation().getDistrictToBuild());
 
-        player.chooseCardInHand();
-        player.chooseCardInHand();
+        player.chooseDistrictToBuild();
+        player.chooseDistrictToBuild();
         assertEquals(0, player.getHand().size());
         assertNull(playerSpy.getInformation().getDistrictToBuild());
 

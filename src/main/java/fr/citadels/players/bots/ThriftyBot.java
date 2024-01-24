@@ -67,7 +67,7 @@ public class ThriftyBot extends Player {
      * @return the card chosen or null if no card can be chosen
      * @precondition cardsInHand must contain at least 1 card
      */
-    public void chooseCardInHand() {
+    public void chooseDistrictToBuild() {
         int maxIndex = 0;
         for (int i = 1; i < getHand().size(); i++) {
             if ((getHand().get(i).getGoldCost() > getHand().get(maxIndex).getGoldCost()) && (!hasCardInCity(getHand().get(maxIndex))) && (getHand().get(i).getGoldCost() <= getGold()))
@@ -112,7 +112,7 @@ public class ThriftyBot extends Player {
     public void playBuildingPhase() {
         // Buy the most expensive card with a cost > 1 if possible
         if (!this.getHand().isEmpty()) {
-            this.chooseCardInHand();
+            this.chooseDistrictToBuild();
             this.getActions().build();
         } else {
             getInformation().getDisplay().addNoDistrictBuilt();

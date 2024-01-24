@@ -65,7 +65,7 @@ public class SpendthriftBot extends Player {
      * @return the card chosen or null if no card can be chosen
      * @precondition cardsInHand must contain at least 1 card
      */
-    public void chooseCardInHand() {
+    public void chooseDistrictToBuild() {
         int minIndex = getCheapestCardInHand()[0];
         if (getHand().get(minIndex).getGoldCost() <= getGold())
             this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(minIndex));
@@ -105,7 +105,7 @@ public class SpendthriftBot extends Player {
     public void playBuildingPhase() {
         // Buy the cheapest card if possible
         if (!this.getHand().isEmpty()) {
-            this.chooseCardInHand();
+            this.chooseDistrictToBuild();
             this.getActions().build();
         } else {
             getInformation().getDisplay().addNoDistrictBuilt();
