@@ -93,22 +93,21 @@ public class SpendthriftBot extends Player {
     }
 
 
-    /**
-     * Play a round for the linked player
-     */
-    public void play() {
-
+    @Override
+    public void playResourcesPhase() {
         // Draw 2 cards or pick 2 golds
         // Draw if the player has less than 5 golds, if he has no cards in hand or if the cheapest card in hand costs more than 3
         // Else pick 2 golds
         boolean draw = ((getGold() > 5) || this.getHand().isEmpty() || (getCheapestCardInHand()[1] > 3));
         takeCardsOrGold(draw);
+    }
 
+    @Override
+    public void playBuildingPhase() {
         // Buy the cheapest card if possible
         if (!this.getHand().isEmpty()) {
             this.chooseCardInHand();
             this.build();
-
         } else {
             this.display.addNoDistrictBuilt();
         }
@@ -116,44 +115,85 @@ public class SpendthriftBot extends Player {
         takeGoldFromCity();
     }
 
+
     @Override
     public void playAsAssassin() {
-        this.play();
+        playResourcesPhase();
+        playBuildingPhase();
+
+        if (RAND.nextBoolean()) {
+            setTarget(CharacterCardsList.allCharacterCards[5]);
+        }
+        else {
+            setTarget(CharacterCardsList.allCharacterCards[6]);
+        }
+        getCharacter().usePower();
     }
 
     @Override
     public void playAsThief() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsMagician() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsKing() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsBishop() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsMerchant() {
-        this.play();
+        playResourcesPhase();
+        getCharacter().usePower();
+        playBuildingPhase();
     }
 
     @Override
     public void playAsArchitect() {
-        this.play();
+        this.setPowerToUse(1);  // draw two cards
+        this.getCharacter().usePower();
+
+        this.playResourcesPhase();
+        this.playBuildingPhase();
+
+        this.setPowerToUse(2);  // build another district
+        this.chooseCardInHand();
+        if (this.getDistrictToBuild() != null) this.getCharacter().usePower();
+        else {
+            this.display.addNoArchitectPower();
+            this.display.addBlankLine();
+        }
+
+        this.chooseCardInHand();
+        if (this.getDistrictToBuild() != null) this.getCharacter().usePower();
+        else {
+            this.display.addNoArchitectPower();
+            this.display.addBlankLine();
+        }
     }
 
     @Override
     public void playAsWarlord() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
 }

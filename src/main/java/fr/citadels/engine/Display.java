@@ -3,6 +3,7 @@ package fr.citadels.engine;
 import fr.citadels.engine.score.Scoreboard;
 import fr.citadels.gameelements.cards.Card;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
+import fr.citadels.gameelements.cards.charactercards.characters.MerchantCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.Hand;
@@ -36,7 +37,7 @@ public class Display {
     }
 
 
-    private void print() {
+    public void print() {
         System.out.print(this.events);
     }
 
@@ -46,7 +47,7 @@ public class Display {
         this.reset();
     }
 
-    private void removeLastComma() {
+    public void removeLastComma() {
         if (this.events.charAt(this.events.length() - 2) == ',') {
             this.events.delete(this.events.length() - 2, this.events.length());
         }
@@ -192,7 +193,7 @@ public class Display {
     }
 
 
-    private void addGoldUpdate(int gold) {
+    public void addGoldUpdate(int gold) {
         this.events.append("\tSa fortune s'élève donc à ").append(gold).append(" pièces d'or.\n");
     }
 
@@ -213,7 +214,7 @@ public class Display {
     }
 
 
-    private void addHandUpdate(Hand hand) {
+    public void addHandUpdate(Hand hand) {
         this.events.append("\tSa main comporte donc : ").append(hand.toString()).append("\n");
     }
 
@@ -231,8 +232,41 @@ public class Display {
     }
 
 
-    private void addCityUpdate(City city) {
+    public void addCityUpdate(City city) {
         this.events.append("\tSa cité comporte donc : ").append(city.toString()).append("\n");
+    }
+
+
+    public void killed(CharacterCard character) {
+        this.events.append("\n").append(character.getCardName()).append(" a été tué par l'Assassin.\n");
+    }
+
+
+    public void wasKilled(CharacterCard character) {
+        this.events.append(character.getPlayer().getName()).append(" était ").append(character.getCardName()).append(" et a été tué par l'Assassin.\n");
+    }
+
+
+    public void addMerchantPower(MerchantCard merchantCard) {
+        this.events.append(merchantCard.getPlayer().getName()).append(" utilise son pouvoir pour gagner une pièce d'or.\n");
+        this.addGoldUpdate(merchantCard.getPlayer().getGold());
+    }
+
+
+    public void addArchitectPower(int number, Player player) {
+        this.events.append("Le joueur utilise son pouvoir pour ");
+        switch (number) {
+            case 1:
+                this.events.append("piocher deux cartes.\n");
+                break;
+            case 2:
+                this.events.append("construire un quartier supplémentaire.\n");
+        }
+    }
+
+
+    public void addNoArchitectPower() {
+        this.events.append("Le joueur n'utilise pas son pouvoir permettant de construire un quartier supplémentaire.\n");
     }
 
 
@@ -249,5 +283,4 @@ public class Display {
     public void addWinner(Player player) {
         this.events.append("Le gagnant est : ").append(player.getName()).append(" !\n");
     }
-
 }

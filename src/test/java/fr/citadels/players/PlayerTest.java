@@ -1,6 +1,8 @@
 package fr.citadels.players;
 
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
+import fr.citadels.gameelements.cards.charactercards.characters.KingCard;
 import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
@@ -47,53 +49,49 @@ class PlayerTest {
             }
 
             @Override
-            public void play() {
+            public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList());
+            }
+
+            @Override
+            public void playBuildingPhase() {
                 addCardToCity(getHand().get(0));
                 removeCardFromHand(0);
             }
 
             @Override
-            public void playAsAssassin() {
-                this.play();
-            }
+            public void playAsAssassin() { }
 
             @Override
-            public void playAsThief() {
-                this.play();
-            }
+            public void playAsThief() { }
 
             @Override
-            public void playAsMagician() {
-                this.play();
-            }
+            public void playAsMagician() { }
 
             @Override
-            public void playAsKing() {
-                this.play();
-            }
+            public void playAsKing() { }
 
             @Override
-            public void playAsBishop() {
-                this.play();
-            }
+            public void playAsBishop() { }
 
             @Override
-            public void playAsMerchant() {
-                this.play();
-            }
+            public void playAsMerchant() { }
 
             @Override
-            public void playAsArchitect() {
-                this.play();
-            }
+            public void playAsArchitect() { }
 
             @Override
-            public void playAsWarlord() {
-                this.play();
-            }
+            public void playAsWarlord() { }
 
         };
+    }
+
+    @Test
+    void getTarget() {
+        assertNull(player.getTarget());
+        KingCard king = new KingCard();
+        player.setTarget(king);
+        assertEquals(king, player.getTarget());
     }
 
     @Test
@@ -115,15 +113,18 @@ class PlayerTest {
     void getCity() {
         assertTrue(player.getCity().isEmpty());
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(1, player.getCity().size());
         assertEquals("Temple", player.getCity().get(0).getCardName());
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(2, player.getCity().size());
         assertEquals("Manoir", player.getCity().get(1).getCardName());
 
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertEquals(3, player.getCity().size());
         assertEquals("Cathédrale", player.getCity().get(2).getCardName());
 
@@ -152,14 +153,16 @@ class PlayerTest {
     void hasCompleteCity() {
         while (player.getCity().size() < 7) {
             assertFalse(player.hasCompleteCity());
-            player.play();
+            player.playResourcesPhase();
+            player.playBuildingPhase();
         }
         assertTrue(player.hasCompleteCity());
     }
 
     @Test
     void hasCardInHand() {
-        player.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         assertTrue(player.hasCardInCity(DistrictCardsPile.allDistrictCards[12]));
         assertFalse(player.hasCardInCity(DistrictCardsPile.allDistrictCards[58]));
     }
@@ -210,55 +213,45 @@ class PlayerTest {
             }
 
             @Override
-            public void play() {
+            public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList());
+            }
+
+            @Override
+            public void playBuildingPhase() {
                 addCardToCity(getHand().get(0));
                 removeCardFromHand(0);
             }
 
             @Override
-            public void playAsAssassin() {
-                this.play();
-            }
+            public void playAsAssassin() { }
 
             @Override
-            public void playAsThief() {
-                this.play();
-            }
+            public void playAsThief() { }
 
             @Override
-            public void playAsMagician() {
-                this.play();
-            }
+            public void playAsMagician() { }
 
             @Override
-            public void playAsKing() {
-                this.play();
-            }
+            public void playAsKing() { }
 
             @Override
-            public void playAsBishop() {
-                this.play();
-            }
+            public void playAsBishop() { }
 
             @Override
-            public void playAsMerchant() {
-                this.play();
-            }
+            public void playAsMerchant() { }
 
             @Override
-            public void playAsArchitect() {
-                this.play();
-            }
+            public void playAsArchitect() { }
 
             @Override
-            public void playAsWarlord() {
-                this.play();
-            }
+            public void playAsWarlord() { }
 
         };
-        player.play();
-        player2.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
+        player2.playResourcesPhase();
+        player2.playBuildingPhase();
 
         assertTrue(player.compareTo(player2) < 0);
         assertTrue(player2.compareTo(player) > 0);
@@ -285,54 +278,44 @@ class PlayerTest {
             }
 
             @Override
-            public void play() {
+            public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList());
+            }
+
+            @Override
+            public void playBuildingPhase() {
                 addCardToCity(getHand().get(0));
                 removeCardFromHand(0);
             }
 
             @Override
-            public void playAsAssassin() {
-                this.play();
-            }
+            public void playAsAssassin() { }
 
             @Override
-            public void playAsThief() {
-                this.play();
-            }
+            public void playAsThief() { }
 
             @Override
-            public void playAsMagician() {
-                this.play();
-            }
+            public void playAsMagician() { }
 
             @Override
-            public void playAsKing() {
-                this.play();
-            }
+            public void playAsKing() { }
 
             @Override
-            public void playAsBishop() {
-                this.play();
-            }
+            public void playAsBishop() { }
 
             @Override
-            public void playAsMerchant() {
-                this.play();
-            }
+            public void playAsMerchant() { }
 
             @Override
-            public void playAsArchitect() {
-                this.play();
-            }
+            public void playAsArchitect() { }
 
             @Override
-            public void playAsWarlord() {
-                this.play();
-            }
+            public void playAsWarlord() { }
         };
-        player.play();
-        player2.play();
+        player.playResourcesPhase();
+        player.playBuildingPhase();
+        player2.playResourcesPhase();
+        player2.playBuildingPhase();
         assertEquals(player, player2);
         assertEquals(player2, player);
 
@@ -354,51 +337,39 @@ class PlayerTest {
             }
 
             @Override
-            public void play() {
+            public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList());
+            }
+
+            @Override
+            public void playBuildingPhase() {
                 addCardToCity(getHand().get(0));
                 removeCardFromHand(0);
             }
 
             @Override
-            public void playAsAssassin() {
-                this.play();
-            }
+            public void playAsAssassin() { }
 
             @Override
-            public void playAsThief() {
-                this.play();
-            }
+            public void playAsThief() { }
 
             @Override
-            public void playAsMagician() {
-                this.play();
-            }
+            public void playAsMagician() { }
 
             @Override
-            public void playAsKing() {
-                this.play();
-            }
+            public void playAsKing() { }
 
             @Override
-            public void playAsBishop() {
-                this.play();
-            }
+            public void playAsBishop() { }
 
             @Override
-            public void playAsMerchant() {
-                this.play();
-            }
+            public void playAsMerchant() { }
 
             @Override
-            public void playAsArchitect() {
-                this.play();
-            }
+            public void playAsArchitect() { }
 
             @Override
-            public void playAsWarlord() {
-                this.play();
-            }
+            public void playAsWarlord() { }
         };
         assertNotEquals(player, player2);
         assertNotEquals(player2, player);

@@ -1,10 +1,7 @@
 package fr.citadels.gameelements.cards.charactercards.characters;
 
-import fr.citadels.engine.Display;
-import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 
 public class ArchitectCard extends CharacterCard {
 
@@ -18,9 +15,7 @@ public class ArchitectCard extends CharacterCard {
 
     @Override
     public void bringIntoPlay() {
-        if(this.getPlayer() != null) {
-            this.getPlayer().playAsArchitect();
-        }
+        this.getPlayer().playAsArchitect();
     }
 
 
@@ -33,16 +28,18 @@ public class ArchitectCard extends CharacterCard {
                 this.build();
                 break;
         }
+        this.getPlayer().getDisplay().addBlankLine();
     }
 
 
     private void drawTwoCards() {
-        this.getPlayer().getDisplay().add;
+        this.getPlayer().getDisplay().addArchitectPower(1, this.getPlayer());
         this.getPlayer().draw(2);
     }
 
 
     private void build() {
+        this.getPlayer().getDisplay().addArchitectPower(2, this.getPlayer());
         this.getPlayer().build();
     }
 

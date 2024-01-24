@@ -4,13 +4,11 @@ import fr.citadels.engine.Display;
 import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
-import fr.citadels.gameelements.cards.charactercards.characters.MagicianCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
 
 import java.util.List;
-import java.util.Random;
 
 /*
  * This bot will try to take the king character every time it can
@@ -90,19 +88,21 @@ public class KingBot extends Player {
     }
 
 
-    /***
-     * play a round for the linked player
-     */
     @Override
-    public void play() {
+    public void playResourcesPhase() {
         int firstNotDuplicateIndex = getCity().getFirstNotDuplicateIndex(getHand());
         boolean draw = getHand().isEmpty() || firstNotDuplicateIndex == -1 || getHand().get(firstNotDuplicateIndex).getGoldCost() < getGold();
 
         takeCardsOrGold(draw);
+        if (draw) {
+            sortHand(CardFamily.NOBLE);
+        }
+    }
 
+
+    @Override
+    public void playBuildingPhase() {
         if (!getHand().isEmpty()) {
-            if (draw)
-                sortHand(CardFamily.NOBLE);
             this.chooseCardInHand();
             this.build();
         } else {
@@ -115,42 +115,77 @@ public class KingBot extends Player {
 
     @Override
     public void playAsAssassin() {
-        this.play();
+        playResourcesPhase();
+        playBuildingPhase();
+
+        setTarget(CharacterCardsList.allCharacterCards[3]);
+        getCharacter().usePower();
     }
 
     @Override
     public void playAsThief() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsMagician() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsKing() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsBishop() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
     @Override
     public void playAsMerchant() {
-        this.play();
+        playResourcesPhase();
+        getCharacter().usePower();
+        playBuildingPhase();
     }
 
     @Override
     public void playAsArchitect() {
-        this.play();
+        this.setPowerToUse(1);  // draw two cards
+        this.getCharacter().usePower();
+
+        this.playResourcesPhase();
+        this.playBuildingPhase();
+
+        this.setPowerToUse(2);  // build another district
+        this.chooseCardInHand();
+        if (this.getDistrictToBuild() != null) this.getCharacter().usePower();
+        else {
+            this.display.addNoArchitectPower();
+            this.display.addBlankLine();
+        }
+
+        this.chooseCardInHand();
+        if (this.getDistrictToBuild() != null) this.getCharacter().usePower();
+        else {
+            this.display.addNoArchitectPower();
+            this.display.addBlankLine();
+        }
     }
 
     @Override
     public void playAsWarlord() {
-        this.play();
+        playResourcesPhase();
+
+        playBuildingPhase();
     }
 
 

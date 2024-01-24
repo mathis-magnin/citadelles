@@ -139,7 +139,6 @@ public class Game {
         this.display.addSelectionPhaseTitle();
 
         CharacterCardsList characters = new CharacterCardsList();
-        Collections.shuffle(characters);
         CharacterCard[] removedCharactersFaceUp = characters.removeCharactersFaceUp();
         CharacterCard[] removedCharactersFaceDown = characters.removeCharactersFaceDown();
 
@@ -172,9 +171,10 @@ public class Game {
      */
     public void playTurnPhase() {
         this.display.addTurnPhaseTitle();
+        CharacterCard characterKilled = null;
 
         for (CharacterCard character : CharacterCardsList.allCharacterCards) {
-            if (character.getPlayer() != null) {
+            if (character.getPlayer() != null && !character.isDead()) {
                 this.display.addPlayerTurn(this.playerList[this.crown.getCrownedPlayerIndex()], character.getPlayer());
                 this.display.addBlankLine();
                 this.display.addPlayer(character.getPlayer());
@@ -188,16 +188,33 @@ public class Game {
                     this.display.addBlankLine();
                     this.isFinished = true;
                 }
-            }
-            else {
+            } else {
                 this.display.addNoPlayerTurn(this.playerList[this.crown.getCrownedPlayerIndex()], character);
                 this.display.addBlankLine();
+                if (character.isDead())
+                    characterKilled = character;
             }
 
             this.display.addBlankLine();
+
         }
+        showCharacterKilled(characterKilled);
     }
 
+    /**
+     * Show the character killed
+     *
+     * @param characterKilled the character killed
+     */
+    public void showCharacterKilled(CharacterCard characterKilled) {
+        if (characterKilled != null) {
+            if (characterKilled.getPlayer() != null) {
+                this.display.wasKilled(characterKilled);
+                this.display.addBlankLine();
+            }
+            characterKilled.setDead(false);
+        }
+    }
 
     /**
      * Play the game until a player has a complete city and determine the ranking

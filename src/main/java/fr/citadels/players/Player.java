@@ -22,6 +22,7 @@ public abstract class Player implements Comparable<Player> {
     private City city;
     private int gold;
     private CharacterCard character;
+    private CharacterCard target;
 
     protected final DistrictCardsPile pile;
 
@@ -45,8 +46,8 @@ public abstract class Player implements Comparable<Player> {
         this.bank = bank;
         this.display = display;
         this.powerToUse = 1;
+        this.target = null;
     }
-
 
     /* Basic methods */
 
@@ -60,6 +61,33 @@ public abstract class Player implements Comparable<Player> {
     }
 
 
+    /***
+     * Set the target of the player
+     * @param target
+     */
+    public void setTarget(CharacterCard target) {
+        this.target = target;
+    }
+
+
+    /**
+     * Get the target of the player
+     *
+     * @return the target
+     */
+    public CharacterCard getTarget() {
+        return target;
+    }
+
+
+    /**
+     * @return true if the player has a target, false otherwise
+     */
+    public boolean hasTarget() {
+        return (this.target != null);
+    }
+
+
     /**
      * Get a copy of the player's hand
      *
@@ -69,14 +97,17 @@ public abstract class Player implements Comparable<Player> {
         return new Hand(new ArrayList<>(this.hand));
     }
 
+
     public void setHand(Hand hand) {
         this.hand = hand;
     }
+
 
     public void addGold(int amount) {
         this.bank.take(amount);
         this.gold += amount;
     }
+
 
     public void removeGold(int amount) {
         if (amount >= this.gold) {
@@ -88,6 +119,7 @@ public abstract class Player implements Comparable<Player> {
         }
     }
 
+
     /**
      * Sort the player's hand
      *
@@ -96,6 +128,7 @@ public abstract class Player implements Comparable<Player> {
     public void sortHand(CardFamily family) {
         this.hand.sortCards(family);
     }
+
 
     /**
      * Remove a card from the player's hand
@@ -143,6 +176,7 @@ public abstract class Player implements Comparable<Player> {
         return this.gold;
     }
 
+
     /**
      * Get the player's character
      *
@@ -155,6 +189,7 @@ public abstract class Player implements Comparable<Player> {
 
     /**
      * Set the player's character and the character's player.
+     *
      * @param character
      */
     public void setCharacter(CharacterCard character) {
@@ -327,7 +362,10 @@ public abstract class Player implements Comparable<Player> {
      * @param number of card to draw.
      */
     public void draw(int number) {
-        this.hand.addAll(List.of(this.pile.draw(number)));
+        DistrictCard[] drawnCards = this.pile.draw(number);
+        this.display.addDistrictDrawn(drawnCards);
+        this.hand.addAll(List.of(drawnCards));
+        this.display.addHandUpdate(this.hand);
     }
 
 
@@ -357,9 +395,14 @@ public abstract class Player implements Comparable<Player> {
 
 
     /**
-     * play a round for the linked player
+     * play the phase when the player takes resources for his turn
      */
-    public abstract void play();
+    public abstract void playResourcesPhase();
+
+    /**
+     * play the phase when the player builds districts in his city
+     */
+    public abstract void playBuildingPhase();
 
 
     /**
