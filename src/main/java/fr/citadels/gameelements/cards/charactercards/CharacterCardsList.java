@@ -32,10 +32,12 @@ public class CharacterCardsList extends ArrayList<CharacterCard> {
             Map.entry(7, new Integer[]{0, 1})
     );
 
-    /* Constructor */
+    /* Constructors */
 
-    public CharacterCardsList() {
-        this.addAll(List.of(CharacterCardsList.allCharacterCards));
+    public CharacterCardsList() { }
+
+    public CharacterCardsList(CharacterCard[] characterCards) {
+        this.addAll(List.of(characterCards));
     }
 
     /* Methods */

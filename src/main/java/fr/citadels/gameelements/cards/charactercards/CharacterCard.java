@@ -9,9 +9,10 @@ public abstract class CharacterCard extends Card implements Comparable<Character
     /* Attribute */
 
     private final int rank;
-    private boolean dead;
     private Player player;
-    private boolean isRobbed;
+    private boolean dead;
+
+    private boolean robbed;
 
     /* Constructor */
 
@@ -19,7 +20,7 @@ public abstract class CharacterCard extends Card implements Comparable<Character
         super(cardName, cardFamily);
         this.rank = rank;
         this.player = null;
-        this.isRobbed = false;
+        this.robbed = false;
         this.dead = false;
     }
 
@@ -35,10 +36,6 @@ public abstract class CharacterCard extends Card implements Comparable<Character
     public boolean isDead() {
         return this.dead;
     }
-
-    /**
-     * Set the dead attribute to true
-     */
     public void setDead(boolean dead) {
         this.dead = dead;
     }
@@ -46,17 +43,25 @@ public abstract class CharacterCard extends Card implements Comparable<Character
     public Player getPlayer() {
         return this.player;
     }
-
     public void setPlayer(Player player) {
         this.player = player;
     }
 
+    /**
+     * @return true if the character is robbed, false otherwise
+     */
     public boolean isRobbed() {
-        return this.isRobbed;
+        return this.robbed;
+    }
+    public void setRobbed(boolean robbed) {
+        this.robbed = robbed;
     }
 
-    public void setRobbed(boolean robbed) {
-        this.isRobbed = robbed;
+    /**
+     * @return true if the character is embodied by a player, false otherwise
+     */
+    public boolean isPlayed() {
+        return this.getPlayer() != null;
     }
 
     /**
