@@ -180,6 +180,9 @@ public class Game {
                 this.display.addPlayer(character.getPlayer());
                 this.display.addBlankLine();
 
+                if (character.isRobbed()){
+                    character.getPlayer().getActions().getRobbed();
+                }
                 character.bringIntoPlay();
 
                 if (character.getPlayer().hasCompleteCity() && !this.isFinished) {

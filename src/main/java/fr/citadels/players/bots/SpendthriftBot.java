@@ -1,6 +1,7 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.engine.Game;
+import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.players.Player;
@@ -133,6 +134,22 @@ public class SpendthriftBot extends Player {
     public void playAsThief() {
         playResourcesPhase();
         playBuildingPhase();
+
+        List<CharacterCard> potentialTargets = Thief.getTargets();
+        if (RAND.nextBoolean()) {
+            if (potentialTargets.contains(CharacterCardsList.allCharacterCards[3])) {
+                getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
+            } else {
+                getInformation().setTarget(CharacterCardsList.allCharacterCards[7]);
+            }
+        } else {
+            if (potentialTargets.contains(CharacterCardsList.allCharacterCards[7])) {
+                getInformation().setTarget(CharacterCardsList.allCharacterCards[7]);
+            } else {
+                getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
+            }
+        }
+        getCharacter().usePower();
     }
 
 
