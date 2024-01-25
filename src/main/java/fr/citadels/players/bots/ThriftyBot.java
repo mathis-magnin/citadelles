@@ -166,6 +166,7 @@ public class ThriftyBot extends Player {
                 getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
             }
         }
+        getCharacter().usePower();
     }
 
 
