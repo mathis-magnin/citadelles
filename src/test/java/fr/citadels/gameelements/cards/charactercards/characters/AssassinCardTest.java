@@ -1,6 +1,5 @@
 package fr.citadels.gameelements.cards.charactercards.characters;
 
-import fr.citadels.engine.Display;
 import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
@@ -8,23 +7,30 @@ import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
 import fr.citadels.players.bots.KingBot;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AssassinCardTest {
     Player player = new KingBot("Hello1", List.of(DistrictCardsPile.allDistrictCards[0]), new Game());
     AssassinCard assassin;
+    KingCard king;
 
     @Test
     void usePower() {
         assassin = new AssassinCard();
+        king = new KingCard();
         assassin.setPlayer(player);
-        player.getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
+        player.getInformation().setTarget(king);
         assassin.usePower();
-        assertTrue(CharacterCardsList.allCharacterCards[3].isDead());
+        assertTrue(king.isDead());
+    }
+
+    @Test
+    void getPossibleTargets() {
+        CharacterCardsList targets = AssassinCard.getPossibleTargets();
+        assertEquals(new CharacterCardsList(new CharacterCard[]{new ThiefCard(), new MagicianCard(), new KingCard(), new BishopCard(), new MerchantCard(), new ArchitectCard(), new WarlordCard()}), targets);
     }
 }

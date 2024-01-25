@@ -1,14 +1,13 @@
 package fr.citadels.engine.score;
 
-import fr.citadels.engine.Display;
 import fr.citadels.engine.Game;
-import fr.citadels.gameelements.Bank;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.charactercards.characters.*;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
 import fr.citadels.players.bots.KingBot;
-import fr.citadels.players.bots.RandomBot;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ScoreboardTest {
 
-    CharacterCardsList characters = new CharacterCardsList();
+    CharacterCardsList characters = new CharacterCardsList(CharacterCardsList.allCharacterCards);
 
     /* Initialize cards */
 
@@ -264,4 +263,17 @@ class ScoreboardTest {
         scoreboard.determineRanking();
         assertEquals(player4, scoreboard.getWinner());
     }
+
+    @AfterAll
+    static void resetCharacterCards() {
+        CharacterCardsList.allCharacterCards[0] = new AssassinCard();
+        CharacterCardsList.allCharacterCards[1] = new ThiefCard();
+        CharacterCardsList.allCharacterCards[2] = new MagicianCard();
+        CharacterCardsList.allCharacterCards[3] = new KingCard();
+        CharacterCardsList.allCharacterCards[4] = new BishopCard();
+        CharacterCardsList.allCharacterCards[5] = new MerchantCard();
+        CharacterCardsList.allCharacterCards[6] = new ArchitectCard();
+        CharacterCardsList.allCharacterCards[7] = new WarlordCard();
+    }
+
 }

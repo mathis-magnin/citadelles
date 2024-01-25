@@ -3,6 +3,7 @@ package fr.citadels.players.bots;
 import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.players.Player;
 
@@ -83,6 +84,16 @@ public class KingBot extends Player {
     }
 
 
+    /**
+     * When the player embodies the assassin, choose the
+     * character to kill from the list of possibles targets
+     */
+    public void chooseTargetToKill() {
+        CharacterCardsList possibleTargets = AssassinCard.getPossibleTargets();
+        getInformation().setTarget(possibleTargets.get(2));
+    }
+
+
     @Override
     public void playResourcesPhase() {
         int firstNotDuplicateIndex = getCity().getFirstNotDuplicateIndex(getHand());
@@ -113,7 +124,7 @@ public class KingBot extends Player {
     public void playAsAssassin() {
         playResourcesPhase();
         playBuildingPhase();
-        getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
+        chooseTargetToKill();
         getCharacter().usePower();
     }
 
@@ -151,6 +162,29 @@ public class KingBot extends Player {
         playResourcesPhase();
         getCharacter().usePower();
         playBuildingPhase();
+    }
+
+
+    @Override
+    public void playAsArchitect() {
+        this.playResourcesPhase();
+
+        this.getInformation().setPowerToUse(1);  // draw two cards
+        this.getCharacter().usePower();
+
+        this.playBuildingPhase();
+
+        this.getInformation().setPowerToUse(2);  // build another district
+        for (int i = 0; i < 2; i++) {
+            this.chooseDistrictToBuild();
+            if (this.getInformation().getDistrictToBuild() != null) {
+                this.getCharacter().usePower();
+            }
+            else {
+                this.getInformation().getDisplay().addNoArchitectPower();
+                this.getInformation().getDisplay().addBlankLine();
+            }
+        }
     }
 
 

@@ -2,9 +2,11 @@ package fr.citadels.players.bots;
 
 import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.charactercards.characters.*;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.gameelements.cards.districtcards.Hand;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -163,6 +165,18 @@ class ThriftyBotTest {
         // As it doesn't have enough money to build its most expensive district, it doesn't build.
         player.playAsMerchant();
         assertEquals(3, player.getGold());
+    }
+
+    @AfterAll
+    static void resetCharacterCards() {
+        CharacterCardsList.allCharacterCards[0] = new AssassinCard();
+        CharacterCardsList.allCharacterCards[1] = new ThiefCard();
+        CharacterCardsList.allCharacterCards[2] = new MagicianCard();
+        CharacterCardsList.allCharacterCards[3] = new KingCard();
+        CharacterCardsList.allCharacterCards[4] = new BishopCard();
+        CharacterCardsList.allCharacterCards[5] = new MerchantCard();
+        CharacterCardsList.allCharacterCards[6] = new ArchitectCard();
+        CharacterCardsList.allCharacterCards[7] = new WarlordCard();
     }
 
 }

@@ -2,9 +2,10 @@ package fr.citadels.players.bots;
 
 import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
-import fr.citadels.gameelements.cards.charactercards.characters.KingCard;
+import fr.citadels.gameelements.cards.charactercards.characters.*;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -154,7 +155,7 @@ class KingBotTest {
 
     @Test
     void chooseCharacter() {
-        CharacterCardsList characters = new CharacterCardsList();
+        CharacterCardsList characters = new CharacterCardsList(CharacterCardsList.allCharacterCards);
         player1.chooseCharacter(characters);
         assertEquals("Roi", player1.getCharacter().getCardName());
         assertEquals(7, characters.size());
@@ -183,6 +184,18 @@ class KingBotTest {
         // He ends its turn with 0 gold.
         player1.playAsMerchant();
         assertEquals(0, player1.getGold());
+    }
+
+    @AfterAll
+    static void resetCharacterCards() {
+        CharacterCardsList.allCharacterCards[0] = new AssassinCard();
+        CharacterCardsList.allCharacterCards[1] = new ThiefCard();
+        CharacterCardsList.allCharacterCards[2] = new MagicianCard();
+        CharacterCardsList.allCharacterCards[3] = new KingCard();
+        CharacterCardsList.allCharacterCards[4] = new BishopCard();
+        CharacterCardsList.allCharacterCards[5] = new MerchantCard();
+        CharacterCardsList.allCharacterCards[6] = new ArchitectCard();
+        CharacterCardsList.allCharacterCards[7] = new WarlordCard();
     }
 
 }

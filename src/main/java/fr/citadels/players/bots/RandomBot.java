@@ -3,6 +3,7 @@ package fr.citadels.players.bots;
 
 import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.players.Player;
 
@@ -72,6 +73,17 @@ public class RandomBot extends Player {
     }
 
 
+    /**
+     * When the player embodies the assassin, choose the
+     * character to kill from the list of possibles targets
+     */
+    public void chooseTargetToKill() {
+        CharacterCardsList possibleTargets = AssassinCard.getPossibleTargets();
+        int randIndex = RAND.nextInt(possibleTargets.size());
+        getInformation().setTarget(possibleTargets.get(randIndex));
+    }
+
+
     @Override
     public void playResourcesPhase() {
         boolean draw;
@@ -107,9 +119,7 @@ public class RandomBot extends Player {
     public void playAsAssassin() {
         playResourcesPhase();
         playBuildingPhase();
-
-        int randIndex = RAND.nextInt(CharacterCardsList.allCharacterCards.length - 1) + 1;
-        getInformation().setTarget(CharacterCardsList.allCharacterCards[randIndex]);
+        chooseTargetToKill();
         getCharacter().usePower();
     }
 
@@ -147,6 +157,29 @@ public class RandomBot extends Player {
         playResourcesPhase();
         getCharacter().usePower();
         playBuildingPhase();
+    }
+
+
+    @Override
+    public void playAsArchitect() {
+        this.playResourcesPhase();
+
+        this.getInformation().setPowerToUse(1);  // draw two cards
+        this.getCharacter().usePower();
+
+        this.playBuildingPhase();
+
+        this.getInformation().setPowerToUse(2);  // build another district
+        for (int i = 0; i < 2; i++) {
+            this.chooseDistrictToBuild();
+            if (this.getInformation().getDistrictToBuild() != null) {
+                this.getCharacter().usePower();
+            }
+            else {
+                this.getInformation().getDisplay().addNoArchitectPower();
+                this.getInformation().getDisplay().addBlankLine();
+            }
+        }
     }
 
 

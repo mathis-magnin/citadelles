@@ -15,7 +15,7 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
 
     private final String name;
     private Hand hand;
-    private final City city;
+    private City city;
     private int gold;
     private CharacterCard character;
     protected final PlayerInformation information;
@@ -54,15 +54,6 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
      */
     public Hand getHand() {
         return this.hand;
-    }
-
-
-    /**
-     * Set the player's gold
-     * @param gold
-     */
-    public void setGold(int gold) {
-        this.gold = gold;
     }
 
 
@@ -126,6 +117,16 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
 
 
     /**
+     * Set the player's city
+     *
+     * @param city the hand to set
+     */
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+
+    /**
      * Set the player's character and the character's player.
      *
      * @param character the character to set
@@ -134,6 +135,18 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
         this.character = character;
         character.setPlayer(this);
     }
+
+
+    /**
+     * Set the player's gold
+     * @param gold the amount of gold coins that the player should have
+     */
+    public void setGold(int gold) {
+        this.gold = gold;
+    }
+
+
+
 
 
     /**
@@ -220,6 +233,13 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
 
 
     /**
+     * When the player embodies the assassin, choose the
+     * character to kill from the list of possibles targets
+     */
+    public abstract void chooseTargetToKill();
+
+
+    /**
      * play the phase when the player takes resources for his turn
      */
     public abstract void playResourcesPhase();
@@ -229,25 +249,5 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
      * play the phase when the player builds districts in his city
      */
     public abstract void playBuildingPhase();
-
-
-    @Override
-    public void playAsArchitect() {
-        this.getInformation().setPowerToUse(1);  // draw two cards
-        this.getCharacter().usePower();
-
-        this.playResourcesPhase();
-        this.playBuildingPhase();
-
-        this.getInformation().setPowerToUse(2);  // build another district
-        for (int i = 0; i < 2; i++) {
-            this.chooseDistrictToBuild();
-            if (this.getInformation().getDistrictToBuild() != null) this.getCharacter().usePower();
-            else {
-                this.getInformation().getDisplay().addNoArchitectPower();
-                this.getInformation().getDisplay().addBlankLine();
-            }
-        }
-    }
 
 }
