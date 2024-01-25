@@ -2,8 +2,10 @@ package fr.citadels.players;
 
 import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.charactercards.characters.*;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -11,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.spy;
 
 class PlayerTest {
 
@@ -38,8 +39,12 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseTargetToKill() {
+            }
+
+            @Override
             public void playResourcesPhase() {
-                this.chooseCharacter(new CharacterCardsList());
+                this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
             }
 
             @Override
@@ -162,8 +167,12 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseTargetToKill() {
+            }
+
+            @Override
             public void playResourcesPhase() {
-                this.chooseCharacter(new CharacterCardsList());
+                this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
             }
 
             @Override
@@ -233,8 +242,12 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseTargetToKill() {
+            }
+
+            @Override
             public void playResourcesPhase() {
-                this.chooseCharacter(new CharacterCardsList());
+                this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
             }
 
             @Override
@@ -299,8 +312,12 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseTargetToKill() {
+            }
+
+            @Override
             public void playResourcesPhase() {
-                this.chooseCharacter(new CharacterCardsList());
+                this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
             }
 
             @Override
@@ -347,4 +364,17 @@ class PlayerTest {
         assertNotEquals(player2, player);
 
     }
+
+    @AfterAll
+    static void resetCharacterCards() {
+        CharacterCardsList.allCharacterCards[0] = new AssassinCard();
+        CharacterCardsList.allCharacterCards[1] = new ThiefCard();
+        CharacterCardsList.allCharacterCards[2] = new MagicianCard();
+        CharacterCardsList.allCharacterCards[3] = new KingCard();
+        CharacterCardsList.allCharacterCards[4] = new BishopCard();
+        CharacterCardsList.allCharacterCards[5] = new MerchantCard();
+        CharacterCardsList.allCharacterCards[6] = new ArchitectCard();
+        CharacterCardsList.allCharacterCards[7] = new WarlordCard();
+    }
+
 }

@@ -138,7 +138,7 @@ public class Game {
 
         this.display.addSelectionPhaseTitle();
 
-        CharacterCardsList characters = new CharacterCardsList();
+        CharacterCardsList characters = new CharacterCardsList(CharacterCardsList.allCharacterCards);
         CharacterCard[] removedCharactersFaceUp = characters.removeCharactersFaceUp();
         CharacterCard[] removedCharactersFaceDown = characters.removeCharactersFaceDown();
 

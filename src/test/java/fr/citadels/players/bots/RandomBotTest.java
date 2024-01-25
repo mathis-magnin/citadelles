@@ -3,10 +3,11 @@ package fr.citadels.players.bots;
 import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.Card;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
-import fr.citadels.gameelements.cards.charactercards.characters.KingCard;
+import fr.citadels.gameelements.cards.charactercards.characters.*;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -234,7 +235,7 @@ class RandomBotTest {
 
     @Test
     void chooseCharacterTest() {
-        CharacterCardsList characters = new CharacterCardsList();
+        CharacterCardsList characters = new CharacterCardsList(CharacterCardsList.allCharacterCards);
         when(random.nextInt(anyInt())).thenReturn(3); // king
         player.chooseCharacter(characters);
         verify(random, times(1)).nextInt(anyInt());
@@ -278,6 +279,18 @@ class RandomBotTest {
         when(random.nextBoolean()).thenReturn(false, false);
         player.playAsMerchant();
         assertEquals(1, player.getGold());
+    }
+
+    @AfterAll
+    static void resetCharacterCards() {
+        CharacterCardsList.allCharacterCards[0] = new AssassinCard();
+        CharacterCardsList.allCharacterCards[1] = new ThiefCard();
+        CharacterCardsList.allCharacterCards[2] = new MagicianCard();
+        CharacterCardsList.allCharacterCards[3] = new KingCard();
+        CharacterCardsList.allCharacterCards[4] = new BishopCard();
+        CharacterCardsList.allCharacterCards[5] = new MerchantCard();
+        CharacterCardsList.allCharacterCards[6] = new ArchitectCard();
+        CharacterCardsList.allCharacterCards[7] = new WarlordCard();
     }
 
 }
