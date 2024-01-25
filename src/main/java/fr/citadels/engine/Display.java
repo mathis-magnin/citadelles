@@ -238,7 +238,7 @@ public class Display {
 
 
     public void addThiefPower(Player player, CharacterCard target) {
-        this.events.append(player.getName()).append(" utilise le pouvoir du voleur sur le personnage ").append(target.getPlayer().getName()).append(".\n");
+        this.events.append(player.getName()).append(" utilise le pouvoir du voleur sur le personnage ").append(target.getCardName()).append(".\n");
     }
 
 

@@ -173,6 +173,20 @@ class KingBotTest {
     }
 
     @Test
+    void playAsThief() {
+        player1.setCharacter(CharacterCardsList.allCharacterCards[1]);
+        player1.playAsThief();
+        assertEquals(player1.getInformation().getTarget(), CharacterCardsList.allCharacterCards[3]);
+        assertTrue(CharacterCardsList.allCharacterCards[3].isRobbed());
+
+        CharacterCardsList.allCharacterCards[3].setRobbed(false);
+        CharacterCardsList.allCharacterCards[3].setDead(true);
+        player1.playAsThief();
+        assertEquals(player1.getInformation().getTarget(), CharacterCardsList.allCharacterCards[6]);
+        assertTrue(CharacterCardsList.allCharacterCards[6].isRobbed());
+    }
+
+    @Test
     void playAsMerchant() {
         player1.getInformation().getPile().initializePile();
         player1.setCharacter(CharacterCardsList.allCharacterCards[5]);

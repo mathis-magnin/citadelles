@@ -2,7 +2,9 @@ package fr.citadels.players.bots;
 
 
 import fr.citadels.engine.Game;
+import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.charactercards.characters.ThiefCard;
 import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.players.Player;
@@ -128,6 +130,10 @@ public class RandomBot extends Player {
     public void playAsThief() {
         playResourcesPhase();
         playBuildingPhase();
+        List<CharacterCard> potentialTargets = ThiefCard.getPossibleTargets();
+        int randIndex = RAND.nextInt(potentialTargets.size());
+        getInformation().setTarget(potentialTargets.get(randIndex));
+        getCharacter().usePower();
     }
 
 

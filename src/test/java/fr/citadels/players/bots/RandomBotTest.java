@@ -270,6 +270,35 @@ class RandomBotTest {
     }
 
     @Test
+    void playAsThief() {
+        player.setCharacter(CharacterCardsList.allCharacterCards[1]);
+        when(random.nextInt(anyInt())).thenReturn(0);
+        player.playAsThief();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[2]);
+        assertTrue(CharacterCardsList.allCharacterCards[2].isRobbed());
+        CharacterCardsList.allCharacterCards[2].setRobbed(false);
+
+        when(random.nextInt(anyInt())).thenReturn(3);
+        player.playAsThief();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[5]);
+        assertTrue(CharacterCardsList.allCharacterCards[5].isRobbed());
+        CharacterCardsList.allCharacterCards[5].setRobbed(false);
+
+        when(random.nextInt(anyInt())).thenReturn(5);
+        player.playAsThief();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[7]);
+        assertTrue(CharacterCardsList.allCharacterCards[7].isRobbed());
+        CharacterCardsList.allCharacterCards[7].setRobbed(false);
+
+        CharacterCardsList.allCharacterCards[5].setDead(true);
+        when(random.nextInt(anyInt())).thenReturn(3);
+        player.playAsThief();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[6]);
+        assertTrue(CharacterCardsList.allCharacterCards[6].isRobbed());
+        CharacterCardsList.allCharacterCards[6].setRobbed(false);
+    }
+
+    @Test
     void playAsMerchant() {
         player.getInformation().getPile().initializePile();
         player.setCharacter(CharacterCardsList.allCharacterCards[5]);

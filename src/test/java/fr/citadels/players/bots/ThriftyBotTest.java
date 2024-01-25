@@ -157,6 +157,32 @@ class ThriftyBotTest {
     }
 
     @Test
+    void playAsThief() {
+        player.setCharacter(CharacterCardsList.allCharacterCards[1]);
+        when(random.nextBoolean()).thenReturn(true, false);
+        player.playAsThief();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[3]);
+        assertTrue(CharacterCardsList.allCharacterCards[3].isRobbed());
+        player.playAsThief();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[6]);
+        assertTrue(CharacterCardsList.allCharacterCards[3].isRobbed());
+
+        CharacterCardsList.allCharacterCards[3].setRobbed(false);
+        CharacterCardsList.allCharacterCards[6].setRobbed(false);
+        CharacterCardsList.allCharacterCards[3].setDead(true);
+        player.playAsThief();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[6]);
+        assertTrue(CharacterCardsList.allCharacterCards[6].isRobbed());
+
+        CharacterCardsList.allCharacterCards[6].setRobbed(false);
+        CharacterCardsList.allCharacterCards[6].setDead(true);
+        CharacterCardsList.allCharacterCards[3].setDead(false);
+        player.playAsThief();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[3]);
+        assertTrue(CharacterCardsList.allCharacterCards[3].isRobbed());
+    }
+
+    @Test
     void playAsMerchant() {
         player.setCharacter(CharacterCardsList.allCharacterCards[5]);
         // The most expensive district in the bot's hand is Cathedral, which costs 5.
