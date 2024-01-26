@@ -3,7 +3,6 @@ package fr.citadels.engine;
 import fr.citadels.engine.score.Score;
 import fr.citadels.engine.score.Scoreboard;
 import fr.citadels.gameelements.Bank;
-import fr.citadels.gameelements.Crown;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.KingCard;
@@ -31,7 +30,6 @@ public class Game {
     /* Attributes */
 
     private final Player[] playersTab;
-    private final Crown crown;
     private final Bank bank;
     private final Display display;
     private final DistrictCardsPile pile;
@@ -44,7 +42,6 @@ public class Game {
 
     public Game() {
         this.playersTab = new Player[NB_PLAYERS];
-        this.crown = new Crown();
         this.bank = new Bank();
         this.display = new Display();
         this.pile = new DistrictCardsPile();
@@ -59,11 +56,6 @@ public class Game {
     public Player[] getPlayerList() {
         return this.playersTab;
     }
-
-
-    // public Crown getCrown() {
-    //     return this.crown;
-    // }
 
 
     public Bank getBank() {
@@ -133,11 +125,13 @@ public class Game {
 
     /**
      * Get the index of the crowned player.
+     *
      * @return the index of the crowned player.
      * -1 if there is no crowned player (it should not happen !).
      */
     private int getCrownedPlayerIndex() {
-        for (int i = 0; i < this.playersTab.length; i++) {
+        int length = this.playersTab.length;
+        for (int i = 0; i < length; i++) {
             if (this.playersTab[i] == this.crownedPlayer) {
                 return i;
             }
@@ -150,12 +144,11 @@ public class Game {
      * Play the selection phase of the turn
      */
     public void playSelectionPhase() {
-        /* Retrieve the crowned player and set all character's player at null */
+        /* Reset character's attributes */
         for (CharacterCard character : CharacterCardsList.allCharacterCards) {
-            if (character.equals(new KingCard()) && (character.getPlayer() != null)) {
-                this.crownedPlayer = character.getPlayer();
-            }
             character.setPlayer(null);
+            character.setDead(false);
+            character.setRobbed(false);
         }
 
         this.display.addSelectionPhaseTitle();
@@ -167,10 +160,7 @@ public class Game {
         this.display.addRemovedCharacter(removedCharactersFaceUp, removedCharactersFaceDown);
         this.display.addBlankLine(2);
 
-        // this.crown.defineNextCrownedPlayer(this.playersTab, RAND);
-        // int crownedPlayerIndex = this.crown.getCrownedPlayerIndex();
         int crownedPlayerIndex = this.getCrownedPlayerIndex();
-
         this.display.addCrownedPlayer(this.crownedPlayer);
         this.display.addBlankLine();
 
@@ -203,13 +193,14 @@ public class Game {
                 this.display.addPlayer(character.getPlayer());
                 this.display.addBlankLine();
 
-                if (character.isRobbed()){
+                if (character.isRobbed()) {
                     character.getPlayer().getActions().getRobbed();
                 }
-                // if (character.equals(new KingCard())) {
-                    // this.crownedPlayer = character.getPlayer();
-                    // this.display.addCrownedPlayer(this.crownedPlayer);
-                // }
+                if (character.equals(new KingCard())) {
+                    this.crownedPlayer = character.getPlayer();
+                    this.display.addKingPower();
+                    this.display.addBlankLine();
+                }
                 character.bringIntoPlay();
 
                 if (character.getPlayer().hasCompleteCity() && !this.isFinished) {
@@ -224,30 +215,18 @@ public class Game {
                 if (character.isDead())
                     characterKilled = character;
             }
-
             this.display.addBlankLine();
-
         }
-        showCharacterKilledAndRevive(characterKilled);
-    }
-
-    /**
-     * Show the character killed
-     *
-     * @param characterKilled the character killed
-     */
-    public void showCharacterKilledAndRevive(CharacterCard characterKilled) {
-        if (characterKilled != null) {
-            if (characterKilled.getPlayer() != null) {
-                this.display.addWasKilled(characterKilled);
-                // if (characterKilled.getPlayer() == this.crownedPlayer) {
-                    // this.display.addCrownedPlayer(characterKilled.getPlayer());
-                // }
-                this.display.addBlankLine();
+        if ((characterKilled != null) && (characterKilled.getPlayer() != null)) {
+            this.display.addWasKilled(characterKilled);
+            if (characterKilled.equals(new KingCard())) {
+                this.display.addKingHeir();
             }
-            characterKilled.setDead(false);
+            this.display.addBlankLine();
         }
+        this.display.addBlankLine();
     }
+
 
     /**
      * Play the game until a player has a complete city and determine the ranking

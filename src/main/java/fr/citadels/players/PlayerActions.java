@@ -156,7 +156,6 @@ public class PlayerActions {
         int goldToTake = this.player.getGold();
         CharacterCardsList.allCharacterCards[1].getPlayer().getActions().addGold(goldToTake);
         this.player.setGold(0);
-        this.player.getCharacter().setRobbed(false);
         this.player.getInformation().getDisplay().addRobbed(CharacterCardsList.allCharacterCards[1].getPlayer(), this.player, goldToTake);
     }
 
