@@ -1,9 +1,11 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.engine.Game;
+import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
+import fr.citadels.gameelements.cards.charactercards.characters.MagicianCard;
 import fr.citadels.gameelements.cards.charactercards.characters.ThiefCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.players.Player;
@@ -172,6 +174,35 @@ public class ThriftyBot extends Player {
 
     @Override
     public void playAsMagician() {
+        Player playerWithMostCards = null;
+        for (CharacterCard character : MagicianCard.getPossibleTargets()) { // find the player with the most cards in hand
+            if (playerWithMostCards == null) {
+                playerWithMostCards = character.getPlayer();
+            } else {
+                if (character.getPlayer().getHand().size() > playerWithMostCards.getHand().size()) {
+                    playerWithMostCards = character.getPlayer();
+                }
+            }
+        }
+        if ((playerWithMostCards != null) && (playerWithMostCards.getHand().size() > this.getHand().size())) {
+            getInformation().setPowerToUse(1);
+            getInformation().setTarget(playerWithMostCards.getCharacter());
+        } else {
+            getInformation().setPowerToUse(2);
+            getHand().sortCards(CardFamily.NEUTRAL);
+            DistrictCard card;
+            int nbCardsToDiscard = 0;
+            for (int i = 0; i < getHand().size(); i++) {
+                card = getHand().get(i-nbCardsToDiscard);
+                if (getCity().contains(card)) {
+                    getHand().add(getHand().remove(i-nbCardsToDiscard));
+                    nbCardsToDiscard++;
+                }
+            }
+            getInformation().setCardsToDiscard(nbCardsToDiscard);
+        }
+        this.getCharacter().usePower();
+
         playResourcesPhase();
         playBuildingPhase();
     }

@@ -260,13 +260,13 @@ public class Display {
 
 
     public void addMagicianSwap(Player player, Player victim) {
-        this.events.append(player.getName()).append(" échange sa main avec ").append(victim.getName()).append(".\n");
+        this.events.append(player.getName()).append(" utilise son pouvoir pour échanger sa main avec ").append(victim.getName()).append(".\n");
         this.addHandUpdate(player.getHand());
     }
 
 
     public void addMagicianDiscard(Player player, List<DistrictCard> districtCards){
-        this.events.append(player.getName()).append(" défausse ");
+        this.events.append(player.getName()).append(" utilise son pouvoir pour défausser ");
         for (DistrictCard districtCard : districtCards) {
             this.events.append(districtCard.getCardName()).append(", ");
         }
