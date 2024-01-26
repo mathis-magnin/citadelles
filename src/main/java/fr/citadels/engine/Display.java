@@ -257,6 +257,12 @@ public class Display {
     }
 
 
+    public void addMagicianPower(Player player, Player victim) {
+        this.events.append(player.getName()).append(" échange sa main avec ").append(victim.getName()).append(".\n");
+        this.addHandUpdate(player.getHand());
+    }
+
+
     public void addMerchantPower(MerchantCard merchantCard) {
         this.events.append(merchantCard.getPlayer().getName()).append(" utilise son pouvoir pour gagner une pièce d'or.\n");
         this.addGoldUpdate(merchantCard.getPlayer().getGold());
