@@ -4,6 +4,7 @@ package fr.citadels.players.bots;
 import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.charactercards.characters.MagicianCard;
 import fr.citadels.gameelements.cards.charactercards.characters.ThiefCard;
 import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
@@ -139,8 +140,29 @@ public class RandomBot extends Player {
 
     @Override
     public void playAsMagician() {
+        int randPower = RAND.nextInt(2); // choose which power to use
+        if (randPower == 0) { // swap hands : choose a target
+            this.getInformation().setPowerToUse(1);
+            int randTarget = RAND.nextInt(MagicianCard.getPossibleTargets().size());
+            this.getInformation().setTarget(MagicianCard.getPossibleTargets().get(randTarget));
+        } else { // discard cards : choose how many cards to discard
+            this.getInformation().setPowerToUse(2);
+            this.getInformation().setCardsToDiscard(RAND.nextInt(this.getHand().size()));
+        }
+
+        int randIndex = RAND.nextInt(3); // choose the moment to use the power
+        if (randIndex == 0){
+            this.getCharacter().usePower();
+        }
         playResourcesPhase();
+        if (randIndex == 1){
+            this.getCharacter().usePower();
+        }
         playBuildingPhase();
+        if (randIndex == 2){
+            this.getCharacter().usePower();
+        }
+
     }
 
 

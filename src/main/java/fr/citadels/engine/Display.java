@@ -9,6 +9,8 @@ import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.Hand;
 import fr.citadels.players.Player;
 
+import java.util.List;
+
 public class Display {
 
     /* Attribute */
@@ -257,9 +259,18 @@ public class Display {
     }
 
 
-    public void addMagicianPower(Player player, Player victim) {
+    public void addMagicianSwap(Player player, Player victim) {
         this.events.append(player.getName()).append(" échange sa main avec ").append(victim.getName()).append(".\n");
         this.addHandUpdate(player.getHand());
+    }
+
+
+    public void addMagicianDiscard(Player player, List<DistrictCard> districtCards){
+        this.events.append(player.getName()).append(" défausse ");
+        for (DistrictCard districtCard : districtCards) {
+            this.events.append(districtCard.getCardName()).append(", ");
+        }
+        this.events.append(".\n");
     }
 
 
