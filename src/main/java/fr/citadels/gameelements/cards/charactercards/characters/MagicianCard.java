@@ -5,6 +5,7 @@ import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.Hand;
+import fr.citadels.players.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +17,21 @@ public class MagicianCard extends CharacterCard {
     public static CharacterCardsList getPossibleTargets() {
         CharacterCardsList targets = new CharacterCardsList();
         for(CharacterCard characterCard : CharacterCardsList.allCharacterCards) {
-            if(characterCard.isPlayed() && !(characterCard.getCardName() == "Magicien")) {
+            if(characterCard.isPlayed() && (characterCard.getCardName() != "Magicien")) {
                 targets.add(characterCard);
             }
         }
         return targets;
+    }
+
+    public static Player getPlayerWithMostCards() {
+        Player playerWithMostCards = null;
+        for(CharacterCard character : getPossibleTargets()) {
+            if ((playerWithMostCards == null) || (character.getPlayer().getHand().size() > playerWithMostCards.getHand().size())) {
+                playerWithMostCards = character.getPlayer();
+            }
+        }
+        return playerWithMostCards;
     }
 
     /* Constructor */

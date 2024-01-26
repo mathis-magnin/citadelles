@@ -174,31 +174,15 @@ public class ThriftyBot extends Player {
 
     @Override
     public void playAsMagician() {
-        Player playerWithMostCards = null;
-        for (CharacterCard character : MagicianCard.getPossibleTargets()) { // find the player with the most cards in hand
-            if (playerWithMostCards == null) {
-                playerWithMostCards = character.getPlayer();
-            } else {
-                if (character.getPlayer().getHand().size() > playerWithMostCards.getHand().size()) {
-                    playerWithMostCards = character.getPlayer();
-                }
-            }
-        }
+        Player playerWithMostCards = MagicianCard.getPlayerWithMostCards();
+
         if ((playerWithMostCards != null) && (playerWithMostCards.getHand().size() > this.getHand().size())) {
             getInformation().setPowerToUse(1);
             getInformation().setTarget(playerWithMostCards.getCharacter());
         } else {
             getInformation().setPowerToUse(2);
             getHand().sortCards(CardFamily.NEUTRAL);
-            DistrictCard card;
-            int nbCardsToDiscard = 0;
-            for (int i = 0; i < getHand().size(); i++) {
-                card = getHand().get(i-nbCardsToDiscard);
-                if (getCity().contains(card)) {
-                    getHand().add(getHand().remove(i-nbCardsToDiscard));
-                    nbCardsToDiscard++;
-                }
-            }
+            int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
             getInformation().setCardsToDiscard(nbCardsToDiscard+1);
         }
         this.getCharacter().usePower();
