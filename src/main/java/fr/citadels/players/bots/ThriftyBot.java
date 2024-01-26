@@ -10,6 +10,7 @@ import fr.citadels.gameelements.cards.charactercards.characters.ThiefCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.players.Player;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -117,6 +118,26 @@ public class ThriftyBot extends Player {
     }
 
 
+    /**
+     * Choose the power to use as a magician
+     * @return an int depending on the moment to use the power
+     */
+    public int chooseMagicianPower() {
+        Player playerWithMostCards = MagicianCard.getPlayerWithMostCards();
+
+        if ((playerWithMostCards != null) && (playerWithMostCards.getHand().size() > this.getHand().size())) {
+            getInformation().setPowerToUse(1);
+            getInformation().setTarget(playerWithMostCards.getCharacter());
+        } else {
+            getInformation().setPowerToUse(2);
+            getHand().sortCards(CardFamily.NEUTRAL);
+            int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
+            getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
+        }
+        return 0;
+    }
+
+
     @Override
     public void playResourcesPhase() {
         // Draw 2 cards or take 2 golds
@@ -174,21 +195,19 @@ public class ThriftyBot extends Player {
 
     @Override
     public void playAsMagician() {
-        Player playerWithMostCards = MagicianCard.getPlayerWithMostCards();
+        int momentToUsePower = chooseMagicianPower();
 
-        if ((playerWithMostCards != null) && (playerWithMostCards.getHand().size() > this.getHand().size())) {
-            getInformation().setPowerToUse(1);
-            getInformation().setTarget(playerWithMostCards.getCharacter());
-        } else {
-            getInformation().setPowerToUse(2);
-            getHand().sortCards(CardFamily.NEUTRAL);
-            int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
-            getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
+        if (momentToUsePower == 0) {
+            this.getCharacter().usePower();
         }
-        this.getCharacter().usePower();
-
         playResourcesPhase();
+        if (momentToUsePower == 1) {
+            this.getCharacter().usePower();
+        }
         playBuildingPhase();
+        if (momentToUsePower == 2) {
+            this.getCharacter().usePower();
+        }
     }
 
 

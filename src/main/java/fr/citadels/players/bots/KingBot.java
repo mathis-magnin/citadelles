@@ -96,6 +96,25 @@ public class KingBot extends Player {
         getInformation().setTarget(possibleTargets.get(2));
     }
 
+    /**
+     * Choose the power to use as a magician
+     * @return an int depending on the moment to use the power
+     */
+    public int chooseMagicianPower() {
+        Player playerWithMostCards = MagicianCard.getPlayerWithMostCards();
+
+        if ((playerWithMostCards != null) && (playerWithMostCards.getHand().size() > this.getHand().size())) {
+            getInformation().setPowerToUse(1);
+            getInformation().setTarget(playerWithMostCards.getCharacter());
+        } else {
+            getInformation().setPowerToUse(2);
+            getHand().sortCards(CardFamily.NOBLE);
+            int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
+            getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
+        }
+        return 0;
+    }
+
 
     @Override
     public void playResourcesPhase() {
@@ -149,21 +168,18 @@ public class KingBot extends Player {
 
     @Override
     public void playAsMagician() {
-        Player playerWithMostCards = MagicianCard.getPlayerWithMostCards();
-
-        if ((playerWithMostCards != null) && (playerWithMostCards.getHand().size() > this.getHand().size())) {
-            getInformation().setPowerToUse(1);
-            getInformation().setTarget(playerWithMostCards.getCharacter());
-        } else {
-            getInformation().setPowerToUse(2);
-            getHand().sortCards(CardFamily.NOBLE);
-            int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
-            getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
+        int momentToUsePower = chooseMagicianPower();
+        if (momentToUsePower == 0) {
+            this.getCharacter().usePower();
         }
-        this.getCharacter().usePower();
-
         playResourcesPhase();
+        if (momentToUsePower == 1) {
+            this.getCharacter().usePower();
+        }
         playBuildingPhase();
+        if (momentToUsePower == 2) {
+            this.getCharacter().usePower();
+        }
     }
 
 
