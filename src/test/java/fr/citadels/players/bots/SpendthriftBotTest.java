@@ -6,6 +6,7 @@ import fr.citadels.gameelements.cards.charactercards.characters.*;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.gameelements.cards.districtcards.Hand;
+import fr.citadels.players.Player;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -182,6 +183,55 @@ class SpendthriftBotTest {
         player.playAsThief();
         assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[3]);
         assertTrue(CharacterCardsList.allCharacterCards[3].isRobbed());
+    }
+
+    @Test
+    void playAsMagician() {
+        game.getPile().initializePile();
+
+        player.setCharacter(CharacterCardsList.allCharacterCards[2]);
+        Hand hand1 = new Hand(List.of(DistrictCardsPile.allDistrictCards[15]));
+        player.setHand(hand1);
+
+        Player player2 = new KingBot("Bob", new ArrayList<>(), game);
+        player2.setCharacter(CharacterCardsList.allCharacterCards[3]);
+        Hand hand2 = new Hand(List.of(DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[2]));
+        player2.setHand(hand2);
+
+        Player player3 = new KingBot("Tom", new ArrayList<>(), game);
+        player3.setCharacter(CharacterCardsList.allCharacterCards[4]);
+        Hand hand3 = new Hand(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[3], DistrictCardsPile.allDistrictCards[4], DistrictCardsPile.allDistrictCards[5]));
+        player3.setHand(hand3);
+
+        player.playAsMagician();
+        assertEquals(1, player.getInformation().getPowerToUse());
+        assertEquals(player3.getCharacter(), player.getInformation().getTarget());
+        assertEquals(hand1, player3.getHand());
+        assertEquals(hand2, player2.getHand());
+        assertEquals(hand3, player.getHand());
+
+        player.playAsMagician();
+        assertEquals(2, player.getInformation().getPowerToUse());
+        assertEquals(hand1, player3.getHand());
+        assertEquals(hand2, player2.getHand());
+        assertEquals(3, player.getHand().size());
+        assertEquals("Manoir", player.getHand().get(0).getCardName());
+        assertEquals("Manoir", player.getHand().get(1).getCardName());
+        assertEquals("Manoir", player.getHand().get(2).getCardName());
+        assertEquals(1, player.getCity().size());
+        assertEquals(1, player.getInformation().getCardsToDiscard());
+
+        player.playAsMagician();
+        assertEquals(2, player.getInformation().getPowerToUse());
+        assertEquals(hand1, player3.getHand());
+        assertEquals(hand2, player2.getHand());
+        assertEquals(2, player.getHand().size());
+        assertEquals("Manoir", player.getHand().get(0).getCardName());
+        assertEquals("Manoir", player.getHand().get(1).getCardName());
+        assertEquals(2, player.getCity().size());
+        assertEquals("Manoir", player.getCity().get(0).getCardName());
+        assertEquals("Manoir", player.getCity().get(1).getCardName());
+        assertEquals(4, player.getInformation().getCardsToDiscard());
     }
 
     @Test

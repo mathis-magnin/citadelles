@@ -199,7 +199,7 @@ public class ThriftyBot extends Player {
                     nbCardsToDiscard++;
                 }
             }
-            getInformation().setCardsToDiscard(nbCardsToDiscard);
+            getInformation().setCardsToDiscard(nbCardsToDiscard+1);
         }
         this.getCharacter().usePower();
 
