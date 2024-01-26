@@ -2,10 +2,12 @@ package fr.citadels.players.bots;
 
 import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.Card;
+import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.*;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
+import fr.citadels.gameelements.cards.districtcards.Hand;
 import fr.citadels.players.Player;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +33,10 @@ class RandomBotTest {
         game = new Game();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
         player = new RandomBot("Hello", districts, game, random);
+
+        for (CharacterCard characterCard : CharacterCardsList.allCharacterCards) {
+            characterCard.setPlayer(null);
+        }
     }
 
     @Test
@@ -296,6 +302,36 @@ class RandomBotTest {
         assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[6]);
         assertTrue(CharacterCardsList.allCharacterCards[6].isRobbed());
         CharacterCardsList.allCharacterCards[6].setRobbed(false);
+    }
+
+    @Test
+    void playAsMagician() {
+        Player player2 = new KingBot("Bob", new ArrayList<>(), game);
+        Hand hand1 = new Hand(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[2]));
+        Hand hand2 = new Hand(List.of(DistrictCardsPile.allDistrictCards[10], DistrictCardsPile.allDistrictCards[11]));
+        player.setCharacter(CharacterCardsList.allCharacterCards[2]);
+        player2.setCharacter(CharacterCardsList.allCharacterCards[3]);
+        player.setHand(hand1);
+        player2.setHand(hand2);
+
+        when(random.nextInt(anyInt())).thenReturn(0, 0, 0);
+        player.playAsMagician();
+        assertEquals(1, player.getInformation().getPowerToUse());
+        assertEquals(CharacterCardsList.allCharacterCards[3], player.getInformation().getTarget());
+        assertEquals(player.getHand(), hand2);
+        assertEquals(player2.getHand(), hand1);
+
+        when(random.nextInt(anyInt())).thenReturn(1, 2, 1);
+        player.playAsMagician();
+        assertEquals(2, player.getInformation().getPowerToUse());
+        assertEquals(2, player.getInformation().getCardsToDiscard());
+        assertEquals(2, player.getHand().size());
+
+        when(random.nextInt(anyInt())).thenReturn(1, 10, 2);
+        player.playAsMagician();
+        assertEquals(2, player.getInformation().getPowerToUse());
+        assertEquals(10, player.getInformation().getCardsToDiscard());
+        assertEquals(2, player.getHand().size());
     }
 
     @Test

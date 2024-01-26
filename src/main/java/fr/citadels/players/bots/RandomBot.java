@@ -2,8 +2,10 @@ package fr.citadels.players.bots;
 
 
 import fr.citadels.engine.Game;
+import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.charactercards.characters.MagicianCard;
 import fr.citadels.gameelements.cards.charactercards.characters.ThiefCard;
 import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
@@ -86,6 +88,26 @@ public class RandomBot extends Player {
     }
 
 
+    /**
+     * Choose the power to use as a magician
+     * @return an int depending on the moment to use the power
+     */
+    public int chooseMagicianPower() {
+        Player playerWithMostCards = MagicianCard.getPlayerWithMostCards();
+        int randPower = RAND.nextInt(2); // choose which power to use
+
+        if (randPower == 0) { // swap hands : choose a target
+            this.getInformation().setPowerToUse(1);
+            int randTarget = RAND.nextInt(MagicianCard.getPossibleTargets().size());
+            this.getInformation().setTarget(MagicianCard.getPossibleTargets().get(randTarget));
+        } else { // discard cards : choose how many cards to discard
+            this.getInformation().setPowerToUse(2);
+            this.getInformation().setCardsToDiscard(RAND.nextInt(this.getHand().size()));
+        }
+        return RAND.nextInt(3);
+    }
+
+
     @Override
     public void playResourcesPhase() {
         boolean draw;
@@ -139,8 +161,19 @@ public class RandomBot extends Player {
 
     @Override
     public void playAsMagician() {
+        int momentToUsePower = chooseMagicianPower();
+
+        if (momentToUsePower == 0) {
+            this.getCharacter().usePower();
+        }
         playResourcesPhase();
+        if (momentToUsePower == 1) {
+            this.getCharacter().usePower();
+        }
         playBuildingPhase();
+        if (momentToUsePower == 2) {
+            this.getCharacter().usePower();
+        }
     }
 
 
@@ -180,8 +213,7 @@ public class RandomBot extends Player {
             this.chooseDistrictToBuild();
             if (this.getInformation().getDistrictToBuild() != null) {
                 this.getCharacter().usePower();
-            }
-            else {
+            } else {
                 this.getInformation().getDisplay().addNoArchitectPower();
                 this.getInformation().getDisplay().addBlankLine();
             }
