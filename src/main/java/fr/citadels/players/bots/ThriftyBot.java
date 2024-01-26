@@ -183,7 +183,7 @@ public class ThriftyBot extends Player {
             getInformation().setPowerToUse(2);
             getHand().sortCards(CardFamily.NEUTRAL);
             int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
-            getInformation().setCardsToDiscard(nbCardsToDiscard+1);
+            getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
         }
         this.getCharacter().usePower();
 
@@ -228,8 +228,7 @@ public class ThriftyBot extends Player {
             this.chooseDistrictToBuild();
             if (this.getInformation().getDistrictToBuild() != null) {
                 this.getCharacter().usePower();
-            }
-            else {
+            } else {
                 this.getInformation().getDisplay().addNoArchitectPower();
                 this.getInformation().getDisplay().addBlankLine();
             }

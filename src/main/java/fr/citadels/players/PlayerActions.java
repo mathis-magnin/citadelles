@@ -202,6 +202,7 @@ public class PlayerActions {
 
     /**
      * The player draw a certain number of card and place them in his hand.
+     *
      * @param number of card to draw.
      */
     public void draw(int number) {

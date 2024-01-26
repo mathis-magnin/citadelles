@@ -314,20 +314,20 @@ class RandomBotTest {
         player.setHand(hand1);
         player2.setHand(hand2);
 
-        when(random.nextInt(anyInt())).thenReturn(0,0,0);
+        when(random.nextInt(anyInt())).thenReturn(0, 0, 0);
         player.playAsMagician();
         assertEquals(1, player.getInformation().getPowerToUse());
         assertEquals(CharacterCardsList.allCharacterCards[3], player.getInformation().getTarget());
         assertEquals(player.getHand(), hand2);
         assertEquals(player2.getHand(), hand1);
 
-        when(random.nextInt(anyInt())).thenReturn(1,2,1);
+        when(random.nextInt(anyInt())).thenReturn(1, 2, 1);
         player.playAsMagician();
         assertEquals(2, player.getInformation().getPowerToUse());
         assertEquals(2, player.getInformation().getCardsToDiscard());
         assertEquals(2, player.getHand().size());
 
-        when(random.nextInt(anyInt())).thenReturn(1,10,2);
+        when(random.nextInt(anyInt())).thenReturn(1, 10, 2);
         player.playAsMagician();
         assertEquals(2, player.getInformation().getPowerToUse());
         assertEquals(10, player.getInformation().getCardsToDiscard());

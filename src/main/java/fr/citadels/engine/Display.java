@@ -265,7 +265,7 @@ public class Display {
     }
 
 
-    public void addMagicianDiscard(Player player, List<DistrictCard> districtCards){
+    public void addMagicianDiscard(Player player, List<DistrictCard> districtCards) {
         this.events.append(player.getName()).append(" utilise son pouvoir pour défausser ");
         for (DistrictCard districtCard : districtCards) {
             this.events.append(districtCard.getCardName()).append(", ");

@@ -16,8 +16,8 @@ public class MagicianCard extends CharacterCard {
 
     public static CharacterCardsList getPossibleTargets() {
         CharacterCardsList targets = new CharacterCardsList();
-        for(CharacterCard characterCard : CharacterCardsList.allCharacterCards) {
-            if(characterCard.isPlayed() && (characterCard.getCardName() != "Magicien")) {
+        for (CharacterCard characterCard : CharacterCardsList.allCharacterCards) {
+            if (characterCard.isPlayed() && (characterCard.getCardName() != "Magicien")) {
                 targets.add(characterCard);
             }
         }
@@ -26,7 +26,7 @@ public class MagicianCard extends CharacterCard {
 
     public static Player getPlayerWithMostCards() {
         Player playerWithMostCards = null;
-        for(CharacterCard character : getPossibleTargets()) {
+        for (CharacterCard character : getPossibleTargets()) {
             if ((playerWithMostCards == null) || (character.getPlayer().getHand().size() > playerWithMostCards.getHand().size())) {
                 playerWithMostCards = character.getPlayer();
             }
@@ -48,9 +48,9 @@ public class MagicianCard extends CharacterCard {
         this.getPlayer().playAsMagician();
     }
 
-    public void usePower(){
+    public void usePower() {
         switch (this.getPlayer().getInformation().getPowerToUse()) {
-            case 1 :
+            case 1:
                 Hand hand = this.getPlayer().getInformation().getTarget().getPlayer().getHand();
                 this.getPlayer().getInformation().getTarget().getPlayer().setHand(this.getPlayer().getHand());
                 this.getPlayer().setHand(hand);

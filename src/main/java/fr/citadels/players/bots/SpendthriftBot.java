@@ -180,7 +180,7 @@ public class SpendthriftBot extends Player {
             Collections.reverse(getHand());
 
             int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
-            getInformation().setCardsToDiscard(nbCardsToDiscard+1);
+            getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
         }
         this.getCharacter().usePower();
 
@@ -225,8 +225,7 @@ public class SpendthriftBot extends Player {
             this.chooseDistrictToBuild();
             if (this.getInformation().getDistrictToBuild() != null) {
                 this.getCharacter().usePower();
-            }
-            else {
+            } else {
                 this.getInformation().getDisplay().addNoArchitectPower();
                 this.getInformation().getDisplay().addBlankLine();
             }

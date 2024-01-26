@@ -158,7 +158,7 @@ public class KingBot extends Player {
             getInformation().setPowerToUse(2);
             getHand().sortCards(CardFamily.NOBLE);
             int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
-            getInformation().setCardsToDiscard(nbCardsToDiscard+1);
+            getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
         }
         this.getCharacter().usePower();
 
@@ -203,8 +203,7 @@ public class KingBot extends Player {
             this.chooseDistrictToBuild();
             if (this.getInformation().getDistrictToBuild() != null) {
                 this.getCharacter().usePower();
-            }
-            else {
+            } else {
                 this.getInformation().getDisplay().addNoArchitectPower();
                 this.getInformation().getDisplay().addBlankLine();
             }

@@ -151,15 +151,15 @@ public class RandomBot extends Player {
         }
 
         int randIndex = RAND.nextInt(3); // choose the moment to use the power
-        if (randIndex == 0){
+        if (randIndex == 0) {
             this.getCharacter().usePower();
         }
         playResourcesPhase();
-        if (randIndex == 1){
+        if (randIndex == 1) {
             this.getCharacter().usePower();
         }
         playBuildingPhase();
-        if (randIndex == 2){
+        if (randIndex == 2) {
             this.getCharacter().usePower();
         }
     }
@@ -201,8 +201,7 @@ public class RandomBot extends Player {
             this.chooseDistrictToBuild();
             if (this.getInformation().getDistrictToBuild() != null) {
                 this.getCharacter().usePower();
-            }
-            else {
+            } else {
                 this.getInformation().getDisplay().addNoArchitectPower();
                 this.getInformation().getDisplay().addBlankLine();
             }
