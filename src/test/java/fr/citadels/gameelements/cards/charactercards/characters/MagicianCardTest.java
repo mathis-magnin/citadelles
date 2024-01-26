@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MagicianCardTest {
 
@@ -66,6 +67,7 @@ class MagicianCardTest {
 
     @Test
     void usePower() {
+        player1.getInformation().setPowerToUse(1);
         player1.setCharacter(CharacterCardsList.allCharacterCards[2]);
         player2.setCharacter(CharacterCardsList.allCharacterCards[3]);
         Hand hand1 = new Hand(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[2]));
@@ -81,6 +83,26 @@ class MagicianCardTest {
 
         assertEquals(hand2, player1.getHand());
         assertEquals(hand1, player2.getHand());
+    }
+
+    @Test
+    void usePower2() {
+        player1.getInformation().setPowerToUse(2);
+        player1.setCharacter(CharacterCardsList.allCharacterCards[2]);
+        Hand hand1 = new Hand(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[10], DistrictCardsPile.allDistrictCards[20], DistrictCardsPile.allDistrictCards[30]));
+        player1.setHand(hand1);
+
+        player1.getInformation().setCardsToDiscard(0);
+        assertEquals(hand1, player1.getHand());
+        player1.getCharacter().usePower();
+        assertEquals(hand1, player1.getHand());
+        assertEquals(4, player1.getHand().size());
+
+        player1.getInformation().setCardsToDiscard(2);
+        player1.getCharacter().usePower();
+        assertEquals(4, player1.getHand().size());
+        assertTrue(player1.getHand().contains(DistrictCardsPile.allDistrictCards[0]));
+        assertTrue(player1.getHand().contains(DistrictCardsPile.allDistrictCards[10]));
     }
 
 }

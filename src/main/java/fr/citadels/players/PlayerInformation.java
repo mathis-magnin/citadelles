@@ -17,6 +17,7 @@ public class PlayerInformation {
     private DistrictCard districtToBuild;
     private int powerToUse;
     private CharacterCard target;
+    private int cardsToDiscard;
 
     public PlayerInformation(Game game) {
         this.pile = game.getPile();
@@ -25,6 +26,7 @@ public class PlayerInformation {
         this.districtToBuild = null;
         this.powerToUse = -1;
         this.target = null;
+        this.cardsToDiscard = 0;
     }
 
 
@@ -75,6 +77,14 @@ public class PlayerInformation {
     }
 
 
+    /**
+     * @return the number of cards to discard when the magician's power is used
+     */
+    public int getCardsToDiscard() {
+        return this.cardsToDiscard;
+    }
+
+
     /* Setters */
 
     /**
@@ -95,6 +105,14 @@ public class PlayerInformation {
      */
     public void setTarget(CharacterCard target) {
         this.target = target;
+    }
+
+
+    /**
+     * @param number the number of cards to discard when the magician's power is used
+     */
+    public void setCardsToDiscard(int number) {
+        this.cardsToDiscard = number;
     }
 
 }
