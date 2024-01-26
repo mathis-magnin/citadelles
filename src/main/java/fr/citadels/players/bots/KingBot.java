@@ -125,7 +125,7 @@ public class KingBot extends Player {
     @Override
     public void playAsAssassin() {
         playResourcesPhase();
-        ();
+        playBuildingPhase();
         chooseTargetToKill();
         getCharacter().usePower();
     }
