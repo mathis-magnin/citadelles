@@ -162,7 +162,6 @@ public class RandomBot extends Player {
         if (randIndex == 2){
             this.getCharacter().usePower();
         }
-
     }
 
 
