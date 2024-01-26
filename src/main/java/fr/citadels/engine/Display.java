@@ -237,6 +237,16 @@ public class Display {
     }
 
 
+    public void addKingPower() {
+        this.events.append("Le joueur utilise son pouvoir pour prendre la couronne.\n");
+    }
+
+
+    public void addKingHeir() {
+        this.events.append("Le joueur prend la couronne en tant qu'héritier du roi.\n");
+    }
+
+
     public void addThiefPower(Player player, CharacterCard target) {
         this.events.append(player.getName()).append(" utilise le pouvoir du voleur sur le personnage ").append(target.getCardName()).append(".\n");
     }
@@ -299,4 +309,5 @@ public class Display {
     public void addWinner(Player player) {
         this.events.append("Le gagnant est : ").append(player.getName()).append(" !\n");
     }
+
 }
