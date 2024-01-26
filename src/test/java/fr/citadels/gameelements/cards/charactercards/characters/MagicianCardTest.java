@@ -22,6 +22,7 @@ class MagicianCardTest {
 
     KingBot player1;
     KingBot player2;
+    KingBot player3;
 
     @BeforeEach
     void setUp() {
@@ -30,6 +31,7 @@ class MagicianCardTest {
 
         player1 = new KingBot("Tom", new ArrayList<>(), game);
         player2 = new KingBot("Bob", new ArrayList<>(), game);
+        player3 = new KingBot("Mat", new ArrayList<>(), game);
 
         for (CharacterCard characterCard : CharacterCardsList.allCharacterCards) {
             characterCard.setPlayer(null);
@@ -103,6 +105,26 @@ class MagicianCardTest {
         assertEquals(4, player1.getHand().size());
         assertTrue(player1.getHand().contains(DistrictCardsPile.allDistrictCards[0]));
         assertTrue(player1.getHand().contains(DistrictCardsPile.allDistrictCards[10]));
+    }
+
+    @Test
+    void getPlayerWithMostCards() {
+        player1.setCharacter(CharacterCardsList.allCharacterCards[2]);
+        player2.setCharacter(CharacterCardsList.allCharacterCards[3]);
+        player3.setCharacter(CharacterCardsList.allCharacterCards[4]);
+        Hand hand1 = new Hand(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[2]));
+        Hand hand2 = new Hand(List.of(DistrictCardsPile.allDistrictCards[10], DistrictCardsPile.allDistrictCards[11]));
+        Hand hand3 = new Hand(List.of(DistrictCardsPile.allDistrictCards[20]));
+        player1.setHand(hand1);
+        player2.setHand(hand2);
+        player3.setHand(hand3);
+
+        assertEquals(player2, MagicianCard.getPlayerWithMostCards());
+
+        player1.setCharacter(CharacterCardsList.allCharacterCards[3]);
+        player2.setCharacter(CharacterCardsList.allCharacterCards[2]);
+
+        assertEquals(player1, MagicianCard.getPlayerWithMostCards());
     }
 
 }

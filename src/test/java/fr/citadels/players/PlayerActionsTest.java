@@ -7,6 +7,7 @@ import fr.citadels.gameelements.cards.charactercards.characters.*;
 import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
+import fr.citadels.gameelements.cards.districtcards.Hand;
 import fr.citadels.players.bots.KingBot;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +35,25 @@ class PlayerActionsTest {
         player2 = new KingBot("bot", new ArrayList<>(), game);
         actions = new PlayerActions(player, info);
 
+    }
+
+    @Test
+    void putRedundantCardAtTheEnd() {
+        player.setHand(new Hand(List.of(DistrictCardsPile.allDistrictCards[24], DistrictCardsPile.allDistrictCards[35], DistrictCardsPile.allDistrictCards[25], DistrictCardsPile.allDistrictCards[26], DistrictCardsPile.allDistrictCards[30])));
+        player.setCity(new City(List.of(DistrictCardsPile.allDistrictCards[27])));
+
+        assertEquals("Taverne", player.getHand().get(0).getCardName());
+        assertEquals("Marché", player.getHand().get(1).getCardName());
+        assertEquals("Taverne", player.getHand().get(2).getCardName());
+        assertEquals("Taverne", player.getHand().get(3).getCardName());
+        assertEquals("Échoppe", player.getHand().get(4).getCardName());
+
+        player.getActions().putRedundantCardsAtTheEnd();
+        assertEquals("Marché", player.getHand().get(0).getCardName());
+        assertEquals("Échoppe", player.getHand().get(1).getCardName());
+        assertEquals("Taverne", player.getHand().get(2).getCardName());
+        assertEquals("Taverne", player.getHand().get(3).getCardName());
+        assertEquals("Taverne", player.getHand().get(4).getCardName());
     }
 
 
