@@ -115,10 +115,31 @@ public class ThriftyBot extends Player {
     }
 
 
+    /**
+     * When the player embodies the assassin, choose the
+     * character to kill from the list of possibles targets
+     */
+    public void chooseTargetToRob() {
+        List<CharacterCard> potentialTargets = ThiefCard.getPossibleTargets();
+        if (RAND.nextBoolean()) {
+            if (potentialTargets.contains(CharacterCardsList.allCharacterCards[3])) {
+                getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
+            } else {
+                getInformation().setTarget(CharacterCardsList.allCharacterCards[6]);
+            }
+        } else {
+            if (potentialTargets.contains(CharacterCardsList.allCharacterCards[6])) {
+                getInformation().setTarget(CharacterCardsList.allCharacterCards[6]);
+            } else {
+                getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
+            }
+        }
+    }
+
+
     @Override
     public void playResourcesPhase() {
         // Draw 2 cards or take 2 golds
-
         boolean draw = ((getGold() > 6) || (getHand().isEmpty()) || ((getGold() > 5) && (getMostExpensiveCardInHand()[1] < 4)));
         getActions().takeGoldFromCity();
         getActions().takeCardsOrGold(draw);
@@ -151,21 +172,7 @@ public class ThriftyBot extends Player {
     public void playAsThief() {
         playResourcesPhase();
         playBuildingPhase();
-
-        List<CharacterCard> potentialTargets = ThiefCard.getPossibleTargets();
-        if (RAND.nextBoolean()) {
-            if (potentialTargets.contains(CharacterCardsList.allCharacterCards[3])) {
-                getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
-            } else {
-                getInformation().setTarget(CharacterCardsList.allCharacterCards[6]);
-            }
-        } else {
-            if (potentialTargets.contains(CharacterCardsList.allCharacterCards[6])) {
-                getInformation().setTarget(CharacterCardsList.allCharacterCards[6]);
-            } else {
-                getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
-            }
-        }
+        chooseTargetToRob();
         getCharacter().usePower();
     }
 

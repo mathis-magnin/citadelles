@@ -96,6 +96,20 @@ public class KingBot extends Player {
     }
 
 
+    /**
+     * When the player embodies the assassin, choose the
+     * character to kill from the list of possibles targets
+     */
+    public void chooseTargetToRob() {
+        List<CharacterCard> potentialTargets = ThiefCard.getPossibleTargets();
+        if (potentialTargets.contains(CharacterCardsList.allCharacterCards[3])) {
+            getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
+        } else {
+            getInformation().setTarget(CharacterCardsList.allCharacterCards[6]);
+        }
+    }
+
+
     @Override
     public void playResourcesPhase() {
         int firstNotDuplicateIndex = getCity().getFirstNotDuplicateIndex(getHand());
@@ -135,13 +149,7 @@ public class KingBot extends Player {
     public void playAsThief() {
         playResourcesPhase();
         playBuildingPhase();
-
-        List<CharacterCard> potentialTargets = ThiefCard.getPossibleTargets();
-        if (potentialTargets.contains(CharacterCardsList.allCharacterCards[3])) {
-            getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
-        } else {
-            getInformation().setTarget(CharacterCardsList.allCharacterCards[6]);
-        }
+        chooseTargetToRob();
         getCharacter().usePower();
     }
 

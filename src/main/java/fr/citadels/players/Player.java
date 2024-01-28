@@ -146,9 +146,6 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
     }
 
 
-
-
-
     /**
      * Player comparison is based on their characterCard's rank (natural ordering of integer).
      * Note : this class has a natural ordering that is inconsistent with equals.
@@ -237,6 +234,13 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
      * character to kill from the list of possibles targets
      */
     public abstract void chooseTargetToKill();
+
+
+    /**
+     * When the player embodies the thief, choose the
+     * character to rob from the list of possibles targets
+     */
+    public abstract void chooseTargetToRob();
 
 
     /**

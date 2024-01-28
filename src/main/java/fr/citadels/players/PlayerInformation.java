@@ -18,6 +18,7 @@ public class PlayerInformation {
     private int powerToUse;
     private CharacterCard target;
     private int cardsToDiscard;
+    private DistrictCard districtToDestroy;
 
     public PlayerInformation(Game game) {
         this.pile = game.getPile();
@@ -27,6 +28,7 @@ public class PlayerInformation {
         this.powerToUse = -1;
         this.target = null;
         this.cardsToDiscard = 0;
+        this.districtToDestroy = null;
     }
 
 
@@ -85,6 +87,14 @@ public class PlayerInformation {
     }
 
 
+    /**
+     * @return the district to destroy when the warlord's power is used
+     */
+    public DistrictCard getDistrictToDestroy() {
+        return this.districtToDestroy;
+    }
+
+
     /* Setters */
 
     /**
@@ -113,6 +123,13 @@ public class PlayerInformation {
      */
     public void setCardsToDiscard(int number) {
         this.cardsToDiscard = number;
+    }
+
+    /**
+     * @param districtToDestroy the district card to destroy when the warlord's power is used
+     */
+    public void setDistrictToDestroy(DistrictCard districtToDestroy) {
+        this.districtToDestroy = districtToDestroy;
     }
 
 }

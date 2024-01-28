@@ -86,6 +86,17 @@ public class RandomBot extends Player {
     }
 
 
+    /**
+     * When the player embodies the assassin, choose the
+     * character to kill from the list of possibles targets
+     */
+    public void chooseTargetToRob() {
+        List<CharacterCard> potentialTargets = ThiefCard.getPossibleTargets();
+        int randIndex = RAND.nextInt(potentialTargets.size());
+        getInformation().setTarget(potentialTargets.get(randIndex));
+    }
+
+
     @Override
     public void playResourcesPhase() {
         boolean draw;
@@ -130,9 +141,7 @@ public class RandomBot extends Player {
     public void playAsThief() {
         playResourcesPhase();
         playBuildingPhase();
-        List<CharacterCard> potentialTargets = ThiefCard.getPossibleTargets();
-        int randIndex = RAND.nextInt(potentialTargets.size());
-        getInformation().setTarget(potentialTargets.get(randIndex));
+        chooseTargetToRob();
         getCharacter().usePower();
     }
 

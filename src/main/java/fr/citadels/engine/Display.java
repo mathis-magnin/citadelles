@@ -4,8 +4,8 @@ import fr.citadels.engine.score.Scoreboard;
 import fr.citadels.gameelements.cards.Card;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.characters.MerchantCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.City;
+import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.Hand;
 import fr.citadels.players.Player;
 
@@ -237,18 +237,8 @@ public class Display {
     }
 
 
-    public void addThiefPower(Player player, CharacterCard target) {
-        this.events.append(player.getName()).append(" utilise le pouvoir du voleur sur le personnage ").append(target.getCardName()).append(".\n");
-    }
-
-
-    public void addRobbed(Player thief, Player target, int gold) {
-        this.events.append(thief.getName()).append(" a volé ").append(gold).append(" pièces d'or à ").append(target.getName()).append(".\n");
-    }
-
-
-    public void addKilled(CharacterCard character) {
-        this.events.append("\n").append(character.getCardName()).append(" a été tué par l'Assassin.\n");
+    public void addAssassinPower(CharacterCard target) {
+        this.events.append("Le joueur utilise son pouvoir pour tuer ").append(target.getCardName()).append(".\n");
     }
 
 
@@ -257,19 +247,30 @@ public class Display {
     }
 
 
-    public void addMagicianPower(Player player, Player victim) {
-        this.events.append(player.getName()).append(" échange sa main avec ").append(victim.getName()).append(".\n");
+    public void addThiefPower(CharacterCard target) {
+        this.events.append("Le joueur utilise son pouvoir pour voler ").append(target.getCardName()).append(".\n");
+    }
+
+
+    public void addRobbed(Player thief, int gold) {
+        this.events.append("Le joueur s'est fait volé sa fortune de ").append(gold).append(" pièces d'or par ").append(thief.getName()).append(".\n");
+        this.events.append("\tLa fortune de ").append(thief.getName()).append(" s'élève donc à ").append(thief.getGold()).append(" pièces d'or.\n");
+    }
+
+
+    public void addMagicianPower(Player player, Player target) {
+        this.events.append("Le joueur utilise son pouvoir pour échanger sa main avec ").append(target.getName()).append(".\n");
         this.addHandUpdate(player.getHand());
     }
 
 
     public void addMerchantPower(MerchantCard merchantCard) {
-        this.events.append(merchantCard.getPlayer().getName()).append(" utilise son pouvoir pour gagner une pièce d'or.\n");
+        this.events.append("Le joueur utilise son pouvoir pour gagner une pièce d'or.\n");
         this.addGoldUpdate(merchantCard.getPlayer().getGold());
     }
 
 
-    public void addArchitectPower(int number, Player player) {
+    public void addArchitectPower(int number) {
         this.events.append("Le joueur utilise son pouvoir pour ");
         switch (number) {
             case 1:
@@ -283,6 +284,13 @@ public class Display {
 
     public void addNoArchitectPower() {
         this.events.append("Le joueur n'utilise pas son pouvoir permettant de construire un quartier supplémentaire.\n");
+    }
+
+
+    public void addWarlordPower(Player player, CharacterCard target, DistrictCard districtToDestroy) {
+        this.events.append("Le joueur utilise son pouvoir pour détruire le quartier ").append(districtToDestroy).append(" dans la cité de ").append(target.getPlayer().getName()).append(".\n");
+        this.addGoldUpdate(player.getGold());
+        this.addCityUpdate(target.getPlayer().getCity());
     }
 
 

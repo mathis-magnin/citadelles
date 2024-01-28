@@ -43,6 +43,10 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseTargetToRob() {
+            }
+
+            @Override
             public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
             }
@@ -171,6 +175,10 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseTargetToRob() {
+            }
+
+            @Override
             public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
             }
@@ -246,6 +254,10 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseTargetToRob() {
+            }
+
+            @Override
             public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
             }
@@ -313,6 +325,10 @@ class PlayerTest {
 
             @Override
             public void chooseTargetToKill() {
+            }
+
+            @Override
+            public void chooseTargetToRob() {
             }
 
             @Override
