@@ -47,6 +47,11 @@ class PlayerTest {
             }
 
             @Override
+            public int chooseMagicianPower() {
+                return 0;
+            }
+
+            @Override
             public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
             }
@@ -179,6 +184,11 @@ class PlayerTest {
             }
 
             @Override
+            public int chooseMagicianPower() {
+                return 0;
+            }
+
+            @Override
             public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
             }
@@ -258,6 +268,11 @@ class PlayerTest {
             }
 
             @Override
+            public int chooseMagicianPower() {
+                return 0;
+            }
+
+            @Override
             public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
             }
@@ -329,6 +344,11 @@ class PlayerTest {
 
             @Override
             public void chooseTargetToRob() {
+            }
+
+            @Override
+            public int chooseMagicianPower() {
+                return 0;
             }
 
             @Override

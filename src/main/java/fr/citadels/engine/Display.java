@@ -9,6 +9,8 @@ import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.Hand;
 import fr.citadels.players.Player;
 
+import java.util.List;
+
 public class Display {
 
     /* Attribute */
@@ -258,9 +260,30 @@ public class Display {
     }
 
 
-    public void addMagicianPower(Player player, Player target) {
-        this.events.append("Le joueur utilise son pouvoir pour échanger sa main avec ").append(target.getName()).append(".\n");
+    public void addMagicianSwap(Player player, Player target) {
+        this.events.append("Le joueur utilise son pouvoir pour échanger sa main avec celle de ").append(target.getName()).append(".\n");
         this.addHandUpdate(player.getHand());
+    }
+
+
+    public void addMagicianDiscard(Player player, List<DistrictCard> discarded) {
+        this.events.append("Le joueur utilise son pouvoir pour défausser de sa main ");
+        for (DistrictCard districtCard : discarded) {
+            this.events.append(districtCard.getCardName()).append(", ");
+        }
+        this.removeLastComma();
+        this.events.append(" et piocher autant de nouvelles cartes.\n");
+        this.addHandUpdate(player.getHand());
+    }
+
+
+    public void addKingPower() {
+        this.events.append("Le joueur utilise son pouvoir pour prendre la couronne.\n");
+    }
+
+
+    public void addKingHeir() {
+        this.events.append("Le joueur prend la couronne en tant qu'héritier du roi.\n");
     }
 
 
@@ -307,4 +330,5 @@ public class Display {
     public void addWinner(Player player) {
         this.events.append("Le gagnant est : ").append(player.getName()).append(" !\n");
     }
+
 }

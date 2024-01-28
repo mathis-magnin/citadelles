@@ -244,6 +244,14 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
 
 
     /**
+     * When the player embodies the magician, choose the which power he should use,
+     * and consequently either the character to exchange his hand with from the list of possibles targets
+     * or the cards from his hands he should and replace by cards from the pile
+     */
+    public abstract int chooseMagicianPower();
+
+
+    /**
      * play the phase when the player takes resources for his turn
      */
     public abstract void playResourcesPhase();

@@ -5,6 +5,7 @@ import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
+import fr.citadels.gameelements.cards.charactercards.characters.MagicianCard;
 import fr.citadels.gameelements.cards.charactercards.characters.ThiefCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.players.Player;
@@ -50,8 +51,7 @@ public class KingBot extends Player {
 
     /***
      * take the most expensive card that he can place (preferred noble)
-     * choose a card in hand
-     * @return the card chosen or null if no card can be chosen
+     * set its districtToBuild attribute with the card chosen or null if no card can be chosen
      */
     public void chooseDistrictToBuild() {
         for (int i = 0; i < getHand().size(); i++) {
@@ -95,10 +95,29 @@ public class KingBot extends Player {
         getInformation().setTarget(possibleTargets.get(2));
     }
 
+    /**
+     * Choose the power to use as a magician
+     * @return an int depending on the moment to use the power
+     */
+    public int chooseMagicianPower() {
+        Player playerWithMostCards = MagicianCard.getPlayerWithMostCards();
+
+        if ((playerWithMostCards != null) && (playerWithMostCards.getHand().size() > this.getHand().size())) {
+            getInformation().setPowerToUse(1);
+            getInformation().setTarget(playerWithMostCards.getCharacter());
+        } else {
+            getInformation().setPowerToUse(2);
+            getHand().sortCards(CardFamily.NOBLE);
+            int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
+            getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
+        }
+        return 0;
+    }
+
 
     /**
-     * When the player embodies the assassin, choose the
-     * character to kill from the list of possibles targets
+     * When the player embodies the thief, choose the
+     * character to rob from the list of possibles targets
      */
     public void chooseTargetToRob() {
         List<CharacterCard> potentialTargets = ThiefCard.getPossibleTargets();
@@ -156,8 +175,18 @@ public class KingBot extends Player {
 
     @Override
     public void playAsMagician() {
+        int momentToUsePower = chooseMagicianPower();
+        if (momentToUsePower == 0) {
+            this.getCharacter().usePower();
+        }
         playResourcesPhase();
+        if (momentToUsePower == 1) {
+            this.getCharacter().usePower();
+        }
         playBuildingPhase();
+        if (momentToUsePower == 2) {
+            this.getCharacter().usePower();
+        }
     }
 
 
@@ -197,8 +226,7 @@ public class KingBot extends Player {
             this.chooseDistrictToBuild();
             if (this.getInformation().getDistrictToBuild() != null) {
                 this.getCharacter().usePower();
-            }
-            else {
+            } else {
                 this.getInformation().getDisplay().addNoArchitectPower();
                 this.getInformation().getDisplay().addBlankLine();
             }

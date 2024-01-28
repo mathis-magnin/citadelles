@@ -1,13 +1,16 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.engine.Game;
+import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
+import fr.citadels.gameelements.cards.charactercards.characters.MagicianCard;
 import fr.citadels.gameelements.cards.charactercards.characters.ThiefCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.players.Player;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -64,8 +67,8 @@ public class SpendthriftBot extends Player {
 
     /**
      * Choose the cheapest card in hand that can be bought
+     * set its districtToBuild attribute with the card chosen or null if no card can be chosen
      *
-     * @return the card chosen or null if no card can be chosen
      * @precondition cardsInHand must contain at least 1 card
      */
     public void chooseDistrictToBuild() {
@@ -109,8 +112,8 @@ public class SpendthriftBot extends Player {
 
 
     /**
-     * When the player embodies the assassin, choose the
-     * character to kill from the list of possibles targets
+     * When the player embodies the thief, choose the
+     * character to rob from the list of possibles targets
      */
     public void chooseTargetToRob() {
         List<CharacterCard> potentialTargets = ThiefCard.getPossibleTargets();
@@ -127,6 +130,28 @@ public class SpendthriftBot extends Player {
                 getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
             }
         }
+    }
+
+
+    /**
+     * Choose the power to use as a magician
+     * @return an int depending on the moment to use the power
+     */
+    public int chooseMagicianPower() {
+        Player playerWithMostCards = MagicianCard.getPlayerWithMostCards();
+
+        if ((playerWithMostCards != null) && (playerWithMostCards.getHand().size() > this.getHand().size())) { // The magician will exchange his hand with the player with the most cards if this latter has more cards than the magician
+            getInformation().setPowerToUse(1);
+            getInformation().setTarget(playerWithMostCards.getCharacter());
+        } else { // else, the magician will discard cards he already has in his city
+            getInformation().setPowerToUse(2);
+            getHand().sortCards(CardFamily.NEUTRAL);
+            Collections.reverse(getHand());
+
+            int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
+            getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
+        }
+        return 0;
     }
 
 
@@ -174,8 +199,19 @@ public class SpendthriftBot extends Player {
 
     @Override
     public void playAsMagician() {
+        int momentToUsePower = chooseMagicianPower();
+
+        if (momentToUsePower == 0) {
+            this.getCharacter().usePower();
+        }
         playResourcesPhase();
+        if (momentToUsePower == 1) {
+            this.getCharacter().usePower();
+        }
         playBuildingPhase();
+        if (momentToUsePower == 2) {
+            this.getCharacter().usePower();
+        }
     }
 
 
@@ -215,8 +251,7 @@ public class SpendthriftBot extends Player {
             this.chooseDistrictToBuild();
             if (this.getInformation().getDistrictToBuild() != null) {
                 this.getCharacter().usePower();
-            }
-            else {
+            } else {
                 this.getInformation().getDisplay().addNoArchitectPower();
                 this.getInformation().getDisplay().addBlankLine();
             }

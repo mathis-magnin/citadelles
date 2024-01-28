@@ -29,7 +29,7 @@ public class PlayerActions {
     /**
      * add gold to the player from the bank
      *
-     * @param amount
+     * @param amount the amount of gold earned by the player
      */
     public void addGold(int amount) {
         player.getInformation().getBank().take(amount);
@@ -62,6 +62,18 @@ public class PlayerActions {
         Hand hand = player.getHand();
         hand.sortCards(family);
         player.setHand(hand);
+    }
+
+    public int putRedundantCardsAtTheEnd() {
+        int redundantCards = 0;
+        Hand hand = player.getHand();
+        for (int i = 0; i < hand.size(); i++) {
+            if (player.getCity().contains(hand.get(i - redundantCards))) {
+                hand.add(hand.remove(i - redundantCards));
+                redundantCards++;
+            }
+        }
+        return redundantCards;
     }
 
 
@@ -189,6 +201,7 @@ public class PlayerActions {
 
     /**
      * The player draw a certain number of card and place them in his hand.
+     *
      * @param number of card to draw.
      */
     public void draw(int number) {
