@@ -7,6 +7,7 @@ import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
 import fr.citadels.gameelements.cards.charactercards.characters.MagicianCard;
 import fr.citadels.gameelements.cards.charactercards.characters.ThiefCard;
+import fr.citadels.gameelements.cards.charactercards.characters.WarlordCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.players.Player;
 
@@ -95,25 +96,6 @@ public class KingBot extends Player {
         getInformation().setTarget(possibleTargets.get(2));
     }
 
-    /**
-     * Choose the power to use as a magician
-     * @return an int depending on the moment to use the power
-     */
-    public int chooseMagicianPower() {
-        Player playerWithMostCards = MagicianCard.getPlayerWithMostCards();
-
-        if ((playerWithMostCards != null) && (playerWithMostCards.getHand().size() > this.getHand().size())) {
-            getInformation().setPowerToUse(1);
-            getInformation().setTarget(playerWithMostCards.getCharacter());
-        } else {
-            getInformation().setPowerToUse(2);
-            getHand().sortCards(CardFamily.NOBLE);
-            int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
-            getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
-        }
-        return 0;
-    }
-
 
     /**
      * When the player embodies the thief, choose the
@@ -126,6 +108,47 @@ public class KingBot extends Player {
         } else {
             getInformation().setTarget(CharacterCardsList.allCharacterCards[6]);
         }
+    }
+
+    /**
+     * Choose the power to use as a magician
+     * @return an int depending on the moment to use the power
+     */
+    public int chooseMagicianPower() {
+        CharacterCard characterWithMostCards = MagicianCard.getCharacterWithMostCards();
+
+        if ((characterWithMostCards != null) && (characterWithMostCards.getPlayer().getHand().size() > this.getHand().size())) {
+            getInformation().setPowerToUse(1);
+            getInformation().setTarget(characterWithMostCards);
+        } else {
+            getInformation().setPowerToUse(2);
+            getHand().sortCards(CardFamily.NOBLE);
+            int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
+            getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
+        }
+        return 0;
+    }
+
+
+    /**
+     * When the player embodies the warlord, choose the character and the
+     * district in city to destroy from the list of possibles targets
+     */
+    public void chooseTargetToDestroy() {
+        CharacterCard target = WarlordCard.getCharacterWithBiggestCity();
+        getInformation().setTarget(target);
+        DistrictCard districtToDestroy = null;
+        if (target != null) {
+            for (DistrictCard districtCard : target.getPlayer().getCity()) {
+                if ((districtToDestroy == null) || (districtCard.getGoldCost() < districtToDestroy.getGoldCost())) {
+                    districtToDestroy = districtCard;
+                }
+            }
+            if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() > this.getGold())) {
+                districtToDestroy = null;
+            }
+        }
+        getInformation().setDistrictToDestroy(districtToDestroy);
     }
 
 
@@ -238,6 +261,8 @@ public class KingBot extends Player {
     public void playAsWarlord() {
         playResourcesPhase();
         playBuildingPhase();
+        chooseTargetToDestroy();
+        getCharacter().usePower();
     }
 
 }

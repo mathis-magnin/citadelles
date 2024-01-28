@@ -18,6 +18,16 @@ public class WarlordCard extends CharacterCard {
         return targets;
     }
 
+    public static CharacterCard getCharacterWithBiggestCity() {
+        CharacterCard characterWithBiggestCity = null;
+        for (CharacterCard character : getPossibleTargets()) {
+            if ((characterWithBiggestCity == null) || (character.getPlayer().getCity().size() > characterWithBiggestCity.getPlayer().getCity().size())) {
+                characterWithBiggestCity = character;
+            }
+        }
+        return characterWithBiggestCity;
+    }
+
     /* Constructor */
 
     public WarlordCard() {
@@ -33,9 +43,14 @@ public class WarlordCard extends CharacterCard {
 
     @Override
     public void usePower() {
-        getPlayer().getActions().removeGold(getPlayer().getInformation().getDistrictToDestroy().getGoldCost()-1);
-        getPlayer().getInformation().getTarget().getPlayer().getCity().remove(getPlayer().getInformation().getDistrictToDestroy());
-        getPlayer().getInformation().getDisplay().addWarlordPower(this.getPlayer(), this.getPlayer().getInformation().getTarget(), this.getPlayer().getInformation().getDistrictToDestroy());
+        if ((getPlayer().getInformation().getTarget() != null) && (getPlayer().getInformation().getDistrictToDestroy() != null)) {
+            getPlayer().getInformation().getTarget().getPlayer().getCity().remove(getPlayer().getInformation().getDistrictToDestroy());
+            getPlayer().getActions().removeGold(getPlayer().getInformation().getDistrictToDestroy().getGoldCost() - 1);
+            getPlayer().getInformation().getDisplay().addWarlordPower(this.getPlayer(), this.getPlayer().getInformation().getTarget(), this.getPlayer().getInformation().getDistrictToDestroy());
+        }
+        else {
+            getPlayer().getInformation().getDisplay().addNoWarlordPower();
+        }
     }
 
 }

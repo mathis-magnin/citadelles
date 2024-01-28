@@ -7,6 +7,7 @@ import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
 import fr.citadels.gameelements.cards.charactercards.characters.MagicianCard;
 import fr.citadels.gameelements.cards.charactercards.characters.ThiefCard;
+import fr.citadels.gameelements.cards.charactercards.characters.WarlordCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.players.Player;
 
@@ -138,11 +139,12 @@ public class SpendthriftBot extends Player {
      * @return an int depending on the moment to use the power
      */
     public int chooseMagicianPower() {
-        Player playerWithMostCards = MagicianCard.getPlayerWithMostCards();
+        CharacterCard characterWithMostCards = MagicianCard.getCharacterWithMostCards();
 
-        if ((playerWithMostCards != null) && (playerWithMostCards.getHand().size() > this.getHand().size())) { // The magician will exchange his hand with the player with the most cards if this latter has more cards than the magician
+        // The magician will exchange his hand with the player with the most cards if this latter has more cards than the magician
+        if ((characterWithMostCards != null) && (characterWithMostCards.getPlayer().getHand().size() > this.getHand().size())) {
             getInformation().setPowerToUse(1);
-            getInformation().setTarget(playerWithMostCards.getCharacter());
+            getInformation().setTarget(characterWithMostCards);
         } else { // else, the magician will discard cards he already has in his city
             getInformation().setPowerToUse(2);
             getHand().sortCards(CardFamily.NEUTRAL);
@@ -152,6 +154,28 @@ public class SpendthriftBot extends Player {
             getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
         }
         return 0;
+    }
+
+
+    /**
+     * When the player embodies the warlord, choose the character and the
+     * district in city to destroy from the list of possibles targets
+     */
+    public void chooseTargetToDestroy() {
+        CharacterCard target = WarlordCard.getCharacterWithBiggestCity();
+        getInformation().setTarget(target);
+        DistrictCard districtToDestroy = null;
+        if (target != null) {
+            for (DistrictCard districtCard : target.getPlayer().getCity()) {
+                if ((districtToDestroy == null) || (districtCard.getGoldCost() < districtToDestroy.getGoldCost())) {
+                    districtToDestroy = districtCard;
+                }
+            }
+            if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() > this.getGold())) {
+                districtToDestroy = null;
+            }
+        }
+        getInformation().setDistrictToDestroy(districtToDestroy);
     }
 
 
@@ -263,6 +287,8 @@ public class SpendthriftBot extends Player {
     public void playAsWarlord() {
         playResourcesPhase();
         playBuildingPhase();
+        chooseTargetToDestroy();
+        getCharacter().usePower();
     }
 
 }

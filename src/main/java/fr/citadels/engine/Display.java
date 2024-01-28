@@ -313,7 +313,11 @@ public class Display {
     public void addWarlordPower(Player player, CharacterCard target, DistrictCard districtToDestroy) {
         this.events.append("Le joueur utilise son pouvoir pour détruire le quartier ").append(districtToDestroy).append(" dans la cité de ").append(target.getPlayer().getName()).append(".\n");
         this.addGoldUpdate(player.getGold());
-        this.addCityUpdate(target.getPlayer().getCity());
+        this.events.append("\tLa cité de ").append(target.getPlayer().getName()).append((" comporte donc : ")).append((target.getPlayer().getCity().toString()));
+    }
+
+    public void addNoWarlordPower() {
+        this.events.append("Le joueur n'utilise pas son pouvoir permettant de détruire un quartier d'un autre joueur.\n");
     }
 
 

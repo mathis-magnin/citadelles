@@ -244,11 +244,18 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
 
 
     /**
-     * When the player embodies the magician, choose the which power he should use,
+     * When the player embodies the magician, choose which power he should use, when he should use it,
      * and consequently either the character to exchange his hand with from the list of possibles targets
      * or the cards from his hands he should and replace by cards from the pile
      */
     public abstract int chooseMagicianPower();
+
+
+    /**
+     * When the player embodies the warlord, choose the character and the
+     * district in city to destroy from the list of possibles targets
+     */
+    public abstract void chooseTargetToDestroy();
 
 
     /**

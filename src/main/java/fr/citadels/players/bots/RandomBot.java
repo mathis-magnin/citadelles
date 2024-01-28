@@ -2,12 +2,12 @@ package fr.citadels.players.bots;
 
 
 import fr.citadels.engine.Game;
-import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
 import fr.citadels.gameelements.cards.charactercards.characters.MagicianCard;
 import fr.citadels.gameelements.cards.charactercards.characters.ThiefCard;
-import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
+import fr.citadels.gameelements.cards.charactercards.characters.WarlordCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.players.Player;
 
@@ -115,6 +115,23 @@ public class RandomBot extends Player {
             this.getInformation().setCardsToDiscard(RAND.nextInt(this.getHand().size()));
         }
         return RAND.nextInt(3);
+    }
+
+
+    /**
+     * When the player embodies the warlord, choose the character and the
+     * district in city to destroy from the list of possibles targets
+     */
+    public void chooseTargetToDestroy() {
+        int randTarget = RAND.nextInt(WarlordCard.getPossibleTargets().size());
+        CharacterCard target = WarlordCard.getPossibleTargets().get(randTarget);
+        this.getInformation().setTarget(target);
+        DistrictCard districtToDestroy = null;
+        if (!target.getPlayer().getCity().isEmpty()) {
+            randTarget = RAND.nextInt(target.getPlayer().getCity().size());
+            districtToDestroy = target.getPlayer().getCity().get(randTarget);
+        }
+        this.getInformation().setDistrictToDestroy(districtToDestroy);
     }
 
 
@@ -233,6 +250,8 @@ public class RandomBot extends Player {
     public void playAsWarlord() {
         playResourcesPhase();
         playBuildingPhase();
+        chooseTargetToDestroy();
+        getCharacter().usePower();
     }
 
 }
