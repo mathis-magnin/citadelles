@@ -240,7 +240,7 @@ public class Display {
 
 
     public void addAssassinPower(CharacterCard target) {
-        this.events.append("Le joueur utilise son pouvoir pour tuer ").append(target.getCardName()).append(".\n");
+        this.events.append("Le joueur utilise son pouvoir pour tuer : ").append(target.getCardName()).append(".\n");
     }
 
 
@@ -265,6 +265,7 @@ public class Display {
     public void addMagicianSwap(Player player, Player target) {
         this.events.append("Le joueur utilise son pouvoir pour échanger sa main avec celle de ").append(target.getName()).append(".\n");
         this.addHandUpdate(player.getHand());
+        this.addBlankLine();
     }
 
 
@@ -276,6 +277,7 @@ public class Display {
         this.removeLastComma();
         this.events.append(" et piocher autant de nouvelles cartes.\n");
         this.addHandUpdate(player.getHand());
+        this.addBlankLine();
     }
 
 
@@ -314,8 +316,8 @@ public class Display {
 
     public void addWarlordPower(Player player, CharacterCard target, DistrictCard districtToDestroy) {
         this.events.append("Le joueur utilise son pouvoir pour détruire le quartier ").append(districtToDestroy).append(" dans la cité de ").append(target.getPlayer().getName()).append(".\n");
-        this.addGoldUpdate(player.getGold());
-        this.events.append("\tLa cité de ").append(target.getPlayer().getName()).append((" comporte donc : ")).append((target.getPlayer().getCity().toString()));
+        this.events.append("\tLa fortune de ").append(player.getName()).append(" s'élève donc à ").append(player.getGold()).append(" pièces d'or.\n");
+        this.events.append("\tLa cité de ").append(target.getPlayer().getName()).append((" comporte donc : ")).append((target.getPlayer().getCity().toString())).append(".\n");
     }
 
     public void addNoWarlordPower() {
