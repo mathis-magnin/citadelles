@@ -1,15 +1,14 @@
 package fr.citadels.players;
 
+import fr.citadels.cards.charactercards.characters.*;
 import fr.citadels.engine.Game;
-import fr.citadels.gameelements.cards.charactercards.CharacterCard;
-import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
-import fr.citadels.gameelements.cards.charactercards.characters.*;
-import fr.citadels.gameelements.cards.districtcards.City;
-import fr.citadels.gameelements.cards.districtcards.DistrictCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
-import fr.citadels.gameelements.cards.districtcards.Hand;
+import fr.citadels.cards.charactercards.CharacterCard;
+import fr.citadels.cards.charactercards.CharacterCardsList;
+import fr.citadels.cards.districtcards.City;
+import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.districtcards.Hand;
 import fr.citadels.players.bots.KingBot;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,7 +63,6 @@ class PlayerActionsTest {
         drawnCards[0] = DistrictCardsPile.allDistrictCards[12];
         drawnCards[1] = DistrictCardsPile.allDistrictCards[0];
         drawnCards[2] = DistrictCardsPile.allDistrictCards[22];
-        DistrictCardsPile pile = new DistrictCardsPile();
         actions.putBack(drawnCards, 1);
         for (int i = 0; i < drawnCards.length; i++) {
             if (i == 1) {
@@ -87,13 +85,6 @@ class PlayerActionsTest {
         actions.takeCardsOrGold(true);
         assertEquals(8, player.getHand().size());
         assertEquals(2, player.getGold());
-
-
-        actions.addGold(23);
-        actions.takeCardsOrGold(false);
-
-        assertEquals(9, player.getHand().size());
-        assertEquals(25, player.getGold());
 
     }
 
@@ -148,10 +139,8 @@ class PlayerActionsTest {
     void addGold() {
         actions.addGold(5);
         assertEquals(5, player.getGold());
-        assertEquals(20, player.getInformation().getBank().getGold());
         actions.addGold(2);
         assertEquals(7, player.getGold());
-        assertEquals(18, player.getInformation().getBank().getGold());
     }
 
     @Test
@@ -160,11 +149,8 @@ class PlayerActionsTest {
         assertEquals(5, player.getGold());
         actions.removeGold(2);
         assertEquals(3, player.getGold());
-        assertEquals(22, player.getInformation().getBank().getGold());
         actions.removeGold(10);
         assertEquals(0, player.getGold());
-        assertEquals(25, player.getInformation().getBank().getGold());
-
     }
 
     @Test

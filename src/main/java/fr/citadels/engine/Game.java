@@ -2,11 +2,10 @@ package fr.citadels.engine;
 
 import fr.citadels.engine.score.Score;
 import fr.citadels.engine.score.Scoreboard;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.gameelements.cards.charactercards.CharacterCard;
-import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
-import fr.citadels.gameelements.cards.charactercards.characters.KingCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.charactercards.CharacterCard;
+import fr.citadels.cards.charactercards.CharacterCardsList;
+import fr.citadels.cards.charactercards.characters.KingCard;
+import fr.citadels.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.*;
 import fr.citadels.players.bots.KingBot;
 import fr.citadels.players.bots.RandomBot;
@@ -30,7 +29,6 @@ public class Game {
     /* Attributes */
 
     private final Player[] playersTab;
-    private final Bank bank;
     private final Display display;
     private final DistrictCardsPile pile;
     private final Scoreboard scoreboard;
@@ -42,7 +40,6 @@ public class Game {
 
     public Game() {
         this.playersTab = new Player[NB_PLAYERS];
-        this.bank = new Bank();
         this.display = new Display();
         this.pile = new DistrictCardsPile();
         this.isFinished = false;
@@ -58,11 +55,6 @@ public class Game {
     }
 
 
-    public Bank getBank() {
-        return this.bank;
-    }
-
-
     public Display getDisplay() {
         return this.display;
     }
@@ -70,16 +62,6 @@ public class Game {
 
     public DistrictCardsPile getPile() {
         return this.pile;
-    }
-
-
-    public boolean isFinished() {
-        return this.isFinished;
-    }
-
-
-    public Scoreboard getScoreboard() {
-        return this.scoreboard;
     }
 
 
@@ -114,7 +96,6 @@ public class Game {
         this.display.addInitialGoldGiven(2);
         this.display.addBlankLine();
 
-        // this.crown.initializeCrown(RAND);
         this.crownedPlayer = this.playersTab[RAND.nextInt(NB_PLAYERS)];
         this.display.addFirstCrownedPlayer(this.crownedPlayer);
         this.display.addBlankLine(3);

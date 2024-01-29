@@ -1,10 +1,10 @@
 package fr.citadels.players;
 
 import fr.citadels.engine.Game;
-import fr.citadels.gameelements.cards.charactercards.CharacterCard;
-import fr.citadels.gameelements.cards.districtcards.City;
-import fr.citadels.gameelements.cards.districtcards.DistrictCard;
-import fr.citadels.gameelements.cards.districtcards.Hand;
+import fr.citadels.cards.charactercards.CharacterCard;
+import fr.citadels.cards.districtcards.City;
+import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.Hand;
 
 import java.util.List;
 
@@ -267,8 +267,8 @@ public abstract class Player implements Comparable<Player>, PlayerChoices {
      * play a round for the linked player if he embodies the merchant
      */
     public void playAsMerchant() {
-        playResourcesPhase();
         getCharacter().usePower();
+        playResourcesPhase();
         playBuildingPhase();
     }
 
@@ -277,11 +277,10 @@ public abstract class Player implements Comparable<Player>, PlayerChoices {
      * play a round for the linked player if he embodies the architect
      */
     public void playAsArchitect() {
-        this.playResourcesPhase();
-
         this.getInformation().setPowerToUse(1);  // draw two cards
         this.getCharacter().usePower();
 
+        this.playResourcesPhase();
         this.playBuildingPhase();
 
         this.getInformation().setPowerToUse(2);  // build another district

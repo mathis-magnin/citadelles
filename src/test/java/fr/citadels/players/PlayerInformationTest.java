@@ -1,7 +1,7 @@
 package fr.citadels.players;
 
 import fr.citadels.engine.Game;
-import fr.citadels.gameelements.cards.charactercards.characters.KingCard;
+import fr.citadels.cards.charactercards.characters.KingCard;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -13,11 +13,6 @@ class PlayerInformationTest {
     @Test
     void getPile() {
         assertEquals(game.getPile(), info.getPile());
-    }
-
-    @Test
-    void getBank() {
-        assertEquals(game.getBank(), info.getBank());
     }
 
     @Test

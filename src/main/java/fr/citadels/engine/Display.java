@@ -1,12 +1,12 @@
 package fr.citadels.engine;
 
 import fr.citadels.engine.score.Scoreboard;
-import fr.citadels.gameelements.cards.Card;
-import fr.citadels.gameelements.cards.charactercards.CharacterCard;
-import fr.citadels.gameelements.cards.charactercards.characters.MerchantCard;
-import fr.citadels.gameelements.cards.districtcards.City;
-import fr.citadels.gameelements.cards.districtcards.DistrictCard;
-import fr.citadels.gameelements.cards.districtcards.Hand;
+import fr.citadels.cards.Card;
+import fr.citadels.cards.charactercards.CharacterCard;
+import fr.citadels.cards.charactercards.characters.MerchantCard;
+import fr.citadels.cards.districtcards.City;
+import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.Hand;
 import fr.citadels.players.Player;
 
 import java.util.List;
@@ -184,7 +184,7 @@ public class Display {
 
 
     public void addGoldTakenFromCity(Player player, int gold) {
-        this.events.append("Le joueur prend ").append(gold).append(" pièces d'or grâce à ses quartiers : ").append(player.getCharacter().getCardFamily()).append("\n");
+        this.events.append("Le joueur utilise son pouvoir pour prendre ").append(gold).append(" pièces d'or grâce à ses quartiers : ").append(player.getCharacter().getCardFamily()).append("\n");
         this.addGoldUpdate(player.getGold());
     }
 

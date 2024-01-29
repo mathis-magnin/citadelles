@@ -1,12 +1,12 @@
 package fr.citadels.players.bots;
 
+import fr.citadels.cards.charactercards.characters.*;
 import fr.citadels.engine.Game;
-import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
-import fr.citadels.gameelements.cards.charactercards.characters.*;
-import fr.citadels.gameelements.cards.districtcards.City;
-import fr.citadels.gameelements.cards.districtcards.DistrictCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
-import fr.citadels.gameelements.cards.districtcards.Hand;
+import fr.citadels.cards.charactercards.CharacterCardsList;
+import fr.citadels.cards.districtcards.City;
+import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.districtcards.Hand;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

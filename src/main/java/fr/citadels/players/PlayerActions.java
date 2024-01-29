@@ -1,9 +1,9 @@
 package fr.citadels.players;
 
-import fr.citadels.gameelements.cards.CardFamily;
-import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
-import fr.citadels.gameelements.cards.districtcards.DistrictCard;
-import fr.citadels.gameelements.cards.districtcards.Hand;
+import fr.citadels.cards.CardFamily;
+import fr.citadels.cards.charactercards.CharacterCardsList;
+import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.Hand;
 
 import java.util.List;
 
@@ -30,9 +30,9 @@ public class PlayerActions {
      * add gold to the player from the bank
      *
      * @param amount the amount of gold earned by the player
+     * @precondition amount should be positive
      */
     public void addGold(int amount) {
-        player.getInformation().getBank().take(amount);
         player.setGold(player.getGold() + amount);
     }
 
@@ -40,14 +40,13 @@ public class PlayerActions {
     /**
      * remove gold from the player to the bank
      *
-     * @param amount
+     * @param amount the amount of gold paid by the player
+     * @precondition amount should be positive
      */
     public void removeGold(int amount) {
         if (amount >= player.getGold()) {
-            player.getInformation().getBank().give(player.getGold());
             player.setGold(0);
         } else {
-            player.getInformation().getBank().give(amount);
             player.setGold(player.getGold() - amount);
         }
     }
@@ -63,6 +62,7 @@ public class PlayerActions {
         hand.sortCards(family);
         player.setHand(hand);
     }
+
 
     public int putRedundantCardsAtTheEnd() {
         int redundantCards = 0;
@@ -99,14 +99,6 @@ public class PlayerActions {
      * @param draw true if the player has to draw cards
      */
     public void takeCardsOrGold(boolean draw) {
-        if (!draw) {
-            if (!player.getInformation().getBank().isEmpty())
-                addGold(2);
-            else draw = true;
-
-            player.getInformation().getDisplay().addGoldTaken(player, 2);
-            player.getInformation().getDisplay().addBlankLine();
-        }
         if (draw) {
             DistrictCard[] drawnCards = player.getInformation().getPile().draw(2);
             player.getInformation().getDisplay().addDistrictDrawn(drawnCards);
@@ -120,12 +112,21 @@ public class PlayerActions {
                 player.getInformation().getDisplay().addDistrictChosen(player, cardToPlay);
                 player.getInformation().getDisplay().addBlankLine();
             }
+            else {
+                draw = false;
+            }
+        }
+        if (!draw) {
+            addGold(2);
+
+            player.getInformation().getDisplay().addGoldTaken(player, 2);
+            player.getInformation().getDisplay().addBlankLine();
         }
     }
 
 
     /**
-     * take gold from the city if the family of the card is the same as the family of the character
+     * Take gold from the city if the family of the card is the same as the family of the character
      */
     public void takeGoldFromCity() {
         if (player.getCharacter() != null) {
@@ -137,7 +138,6 @@ public class PlayerActions {
             }
             if (goldToTake > 0) {
                 addGold(goldToTake);
-                player.getInformation().getBank().take(goldToTake);
                 player.getInformation().getDisplay().addGoldTakenFromCity(player, goldToTake);
                 player.getInformation().getDisplay().addBlankLine();
             }
@@ -151,7 +151,6 @@ public class PlayerActions {
     public void build() {
         if (this.information.getDistrictToBuild() != null) {
             addCardToCity(this.information.getDistrictToBuild());
-            player.getInformation().getBank().give(this.information.getDistrictToBuild().getGoldCost());
             removeGold(this.information.getDistrictToBuild().getGoldCost());
             player.getInformation().getDisplay().addDistrictBuilt(player, this.information.getDistrictToBuild());
         } else {
