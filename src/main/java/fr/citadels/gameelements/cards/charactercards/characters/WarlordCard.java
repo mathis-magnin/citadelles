@@ -11,17 +11,17 @@ public class WarlordCard extends CharacterCard {
     public static CharacterCardsList getPossibleTargets() {
         CharacterCardsList targets = new CharacterCardsList();
         for(CharacterCard characterCard : CharacterCardsList.allCharacterCards) {
-            if(!characterCard.equals(new BishopCard()) && !characterCard.equals(new WarlordCard()) && characterCard.isPlayed() && !characterCard.getPlayer().hasCompleteCity()) {
+            if(!characterCard.equals(new BishopCard()) && characterCard.isPlayed() && !characterCard.getPlayer().hasCompleteCity()) {
                 targets.add(characterCard);
             }
         }
         return targets;
     }
 
-    public static CharacterCard getCharacterWithBiggestCity() {
+    public static CharacterCard getOtherCharacterWithBiggestCity() {
         CharacterCard characterWithBiggestCity = null;
         for (CharacterCard character : getPossibleTargets()) {
-            if ((characterWithBiggestCity == null) || (character.getPlayer().getCity().size() > characterWithBiggestCity.getPlayer().getCity().size())) {
+            if (!character.equals(new WarlordCard()) && ((characterWithBiggestCity == null) || (character.getPlayer().getCity().size() > characterWithBiggestCity.getPlayer().getCity().size()))) {
                 characterWithBiggestCity = character;
             }
         }
@@ -43,14 +43,10 @@ public class WarlordCard extends CharacterCard {
 
     @Override
     public void usePower() {
-        if ((getPlayer().getInformation().getTarget() != null) && (getPlayer().getInformation().getDistrictToDestroy() != null)) {
-            getPlayer().getInformation().getTarget().getPlayer().getCity().remove(getPlayer().getInformation().getDistrictToDestroy());
-            getPlayer().getActions().removeGold(getPlayer().getInformation().getDistrictToDestroy().getGoldCost() - 1);
-            getPlayer().getInformation().getDisplay().addWarlordPower(this.getPlayer(), this.getPlayer().getInformation().getTarget(), this.getPlayer().getInformation().getDistrictToDestroy());
-        }
-        else {
-            getPlayer().getInformation().getDisplay().addNoWarlordPower();
-        }
+        getPlayer().getInformation().getTarget().getPlayer().getCity().remove(getPlayer().getInformation().getDistrictToDestroy());
+        getPlayer().getInformation().getPile().placeBelowPile(getPlayer().getInformation().getDistrictToDestroy());
+        getPlayer().getActions().removeGold(getPlayer().getInformation().getDistrictToDestroy().getGoldCost() - 1);
+        getPlayer().getInformation().getDisplay().addWarlordPower(this.getPlayer(), this.getPlayer().getInformation().getTarget(), this.getPlayer().getInformation().getDistrictToDestroy());
     }
 
 }

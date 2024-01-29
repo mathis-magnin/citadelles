@@ -3,14 +3,12 @@ package fr.citadels.engine;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.*;
 import fr.citadels.players.Player;
-import fr.citadels.players.bots.KingBot;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class GameTest {
 
@@ -40,8 +38,8 @@ class GameTest {
     }
 
 
-    @AfterAll
-    static void resetCharacterCards() {
+    @AfterEach
+    void resetCharacterCards() {
         CharacterCardsList.allCharacterCards[0] = new AssassinCard();
         CharacterCardsList.allCharacterCards[1] = new ThiefCard();
         CharacterCardsList.allCharacterCards[2] = new MagicianCard();

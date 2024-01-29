@@ -3,36 +3,34 @@ package fr.citadels.players.bots;
 import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.*;
+import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.gameelements.cards.districtcards.Hand;
-import fr.citadels.players.Player;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 class KingBotTest {
-    /*same as random bot for now*/
 
-    @Mock
-    Random random = mock(Random.class);
     KingBot player1;
+    KingBot player2;
+    KingBot player3;
 
-    Game game = new Game();
+    Game game;
 
     @BeforeEach
     void setUp() {
         game = new Game();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
         player1 = new KingBot("Hello1", districts, game);
+        player2 = new KingBot("Bob", new ArrayList<>(), game);
+        player3 = new KingBot("Tom", new ArrayList<>(), game);
     }
 
     @Test
@@ -42,12 +40,12 @@ class KingBotTest {
         assertEquals("Manoir", player1.getHand().get(0).getCardName());
         assertEquals("Cathédrale", player1.getHand().get(1).getCardName());
         assertEquals("Temple", player1.getHand().get(2).getCardName());
-
     }
 
 
     @Test
     void chooseCardAmongDrawn() {
+
         //two NOBLE cards
         DistrictCard[] drawnCards = new DistrictCard[2];
         drawnCards[0] = DistrictCardsPile.allDistrictCards[0];
@@ -76,7 +74,6 @@ class KingBotTest {
         assertEquals("Échoppe", game.getPile().get(1).getCardName());
         assertEquals("Université", game.getPile().get(2).getCardName());
 
-
     }
 
     @Test
@@ -98,8 +95,6 @@ class KingBotTest {
         assertEquals(2, player1.getHand().size());
         assertEquals("Cathédrale", player1.getHand().get(0).getCardName());
         assertEquals("Temple", player1.getHand().get(1).getCardName());
-
-
     }
 
     @Test
@@ -151,8 +146,6 @@ class KingBotTest {
         assertEquals("Temple", player1.getCity().get(0).getCardName());
         assertEquals("Manoir", player1.getCity().get(1).getCardName());
         assertEquals("Cathédrale", player1.getCity().get(2).getCardName());
-
-
     }
 
     @Test
@@ -196,12 +189,10 @@ class KingBotTest {
         Hand hand1 = new Hand(List.of(DistrictCardsPile.allDistrictCards[15]));
         player1.setHand(hand1);
 
-        Player player2 = new KingBot("Bob", new ArrayList<>(), game);
         player2.setCharacter(CharacterCardsList.allCharacterCards[3]);
         Hand hand2 = new Hand(List.of(DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[2]));
         player2.setHand(hand2);
 
-        Player player3 = new KingBot("Tom", new ArrayList<>(), game);
         player3.setCharacter(CharacterCardsList.allCharacterCards[4]);
         Hand hand3 = new Hand(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[3], DistrictCardsPile.allDistrictCards[4], DistrictCardsPile.allDistrictCards[1]));
         player3.setHand(hand3);
@@ -248,7 +239,7 @@ class KingBotTest {
         player1.setCharacter(CharacterCardsList.allCharacterCards[5]);
 
         // First, the bot takes 2 gold coins because it hasn't money.
-        // It has 3 cards in hand with a manor that is its only noble district and cost 3.
+        // It has 3 cards in hand with a manor that is its only noble district and costs 3.
         // Finally, as it has 3 gold coins with the merchant power, it builds it.
         // Since he doesn't embody the king, its noble district doesn't give it gold.
         // He ends its turn with 0 gold.
@@ -256,8 +247,32 @@ class KingBotTest {
         assertEquals(0, player1.getGold());
     }
 
-    @AfterAll
-    static void resetCharacterCards() {
+    @Test
+    void playAsWarlord() {
+        player1.setCharacter(CharacterCardsList.allCharacterCards[7]);
+        player2.setCharacter(CharacterCardsList.allCharacterCards[0]);
+        player3.setCharacter(CharacterCardsList.allCharacterCards[1]);
+
+        player1.setGold(3);
+        player1.setHand(new Hand(List.of(DistrictCardsPile.allDistrictCards[0])));
+        player2.setCity(new City(List.of(DistrictCardsPile.allDistrictCards[1])));
+
+        // First, the bot takes 2 gold coins because it has a card in hand that it can build.
+        // It has 1 card in hand with a manor that costs 3.
+        // It builds the manor and has 2 remaining gold coins.
+        // The other player with the biggest city is the assassin, with 1 district.
+        // The assassin cheapest district is a manor that costs 3, so 2 for the warlord to destroy it.
+        // As he has 2 gold coins, he destroys the assassin's manor, who doesn't have any district left.
+        // Since he doesn't embody the king, its noble district doesn't give it gold.
+        // He ends its turn with 0 gold.
+        player1.playAsWarlord();
+
+        assertEquals(0, player1.getGold());
+        assertEquals(new City(), player2.getCity());
+    }
+
+    @AfterEach
+    void resetCharacterCards() {
         CharacterCardsList.allCharacterCards[0] = new AssassinCard();
         CharacterCardsList.allCharacterCards[1] = new ThiefCard();
         CharacterCardsList.allCharacterCards[2] = new MagicianCard();

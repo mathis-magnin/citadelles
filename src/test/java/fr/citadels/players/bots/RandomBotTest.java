@@ -5,11 +5,13 @@ import fr.citadels.gameelements.cards.Card;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.*;
+import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.gameelements.cards.districtcards.Hand;
 import fr.citadels.players.Player;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -26,6 +28,8 @@ class RandomBotTest {
     @Mock
     Random random = mock(Random.class);
     RandomBot player;
+    RandomBot player2;
+    RandomBot player3;
     Game game;
 
     @BeforeEach
@@ -33,10 +37,8 @@ class RandomBotTest {
         game = new Game();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
         player = new RandomBot("Hello", districts, game, random);
-
-        for (CharacterCard characterCard : CharacterCardsList.allCharacterCards) {
-            characterCard.setPlayer(null);
-        }
+        player2 = new RandomBot("Bob", new ArrayList<>(), game, random);
+        player3 = new RandomBot("Bob", new ArrayList<>(), game, random);
     }
 
     @Test
@@ -306,7 +308,6 @@ class RandomBotTest {
 
     @Test
     void playAsMagician() {
-        Player player2 = new KingBot("Bob", new ArrayList<>(), game);
         Hand hand1 = new Hand(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[2]));
         Hand hand2 = new Hand(List.of(DistrictCardsPile.allDistrictCards[10], DistrictCardsPile.allDistrictCards[11]));
         player.setCharacter(CharacterCardsList.allCharacterCards[2]);
@@ -339,15 +340,37 @@ class RandomBotTest {
         player.getInformation().getPile().initializePile();
         player.setCharacter(CharacterCardsList.allCharacterCards[5]);
 
-        // Bot takes card and doesn't place
+        // Bot takes cards and doesn't build
         // At the end of its turn, it has 1 gold due to the merchant power
         when(random.nextBoolean()).thenReturn(false, false);
         player.playAsMerchant();
         assertEquals(1, player.getGold());
     }
 
-    @AfterAll
-    static void resetCharacterCards() {
+    @Test
+    void playAsWarlord() {
+        player.setCharacter(CharacterCardsList.allCharacterCards[7]);
+        player2.setCharacter(CharacterCardsList.allCharacterCards[0]);
+        player3.setCharacter(CharacterCardsList.allCharacterCards[1]);
+
+        player2.setCity(new City(List.of(DistrictCardsPile.allDistrictCards[1])));
+
+        when(random.nextBoolean()).thenReturn(true, true, false);
+        when(random.nextInt(anyInt())).thenReturn(0, 0);
+
+        // Bot takes 2 gold coins and doesn't build
+        // It chooses the assassin as target, and his first district as district to destroy
+        // The assassin first district is a manor that costs 3, so 2 for the warlord to destroy it.
+        // As he has 2 gold coins, he destroys the assassin's manor, who doesn't have any district left.
+        // He ends its turn with 0 gold.
+        player.playAsWarlord();
+
+        assertEquals(0, player.getGold());
+        assertEquals(new City(), player2.getCity());
+    }
+
+    @AfterEach
+    void resetCharacterCards() {
         CharacterCardsList.allCharacterCards[0] = new AssassinCard();
         CharacterCardsList.allCharacterCards[1] = new ThiefCard();
         CharacterCardsList.allCharacterCards[2] = new MagicianCard();

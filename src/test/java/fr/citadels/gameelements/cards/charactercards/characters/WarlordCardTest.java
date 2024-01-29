@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class WarlordCardTest {
 
@@ -21,6 +22,7 @@ class WarlordCardTest {
 
     KingBot player1;
     KingBot player2;
+    KingBot player3;
 
     @BeforeEach
     void setUp() {
@@ -28,20 +30,35 @@ class WarlordCardTest {
 
         player1 = new KingBot("Tom", new ArrayList<>(), game);
         player2 = new KingBot("Bob", new ArrayList<>(), game);
+        player3 = new KingBot("Sam", new ArrayList<>(), game);
 
         player1.setCharacter(CharacterCardsList.allCharacterCards[0]);
         player2.setCharacter(CharacterCardsList.allCharacterCards[7]);
+        player3.setCharacter(CharacterCardsList.allCharacterCards[1]);
     }
 
     @Test
     void getPossibleTargets() {
         CharacterCardsList targets = WarlordCard.getPossibleTargets();
-        assertEquals(new CharacterCardsList(new CharacterCard[]{new AssassinCard()}), targets);
+        assertEquals(new CharacterCardsList(new CharacterCard[]{new AssassinCard(), new ThiefCard(), new WarlordCard()}), targets);
 
-        player1.setCity(new City(new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[10], DistrictCardsPile.allDistrictCards[20], DistrictCardsPile.allDistrictCards[30], DistrictCardsPile.allDistrictCards[40], DistrictCardsPile.allDistrictCards[50], DistrictCardsPile.allDistrictCards[60]))));
+        player1.setCity(new City(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[10], DistrictCardsPile.allDistrictCards[20], DistrictCardsPile.allDistrictCards[30], DistrictCardsPile.allDistrictCards[40], DistrictCardsPile.allDistrictCards[50], DistrictCardsPile.allDistrictCards[60])));
 
         targets = WarlordCard.getPossibleTargets();
-        assertEquals(new CharacterCardsList(new CharacterCard[]{}), targets);
+        assertEquals(new CharacterCardsList(new CharacterCard[]{new ThiefCard(), new WarlordCard()}), targets);
+    }
+
+    @Test
+    void getCharacterWithBiggestCity() {
+        player1.setCity(new City(List.of(DistrictCardsPile.allDistrictCards[5], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[25], DistrictCardsPile.allDistrictCards[35], DistrictCardsPile.allDistrictCards[45], DistrictCardsPile.allDistrictCards[55], DistrictCardsPile.allDistrictCards[65])));
+        player3.setCity(new City(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[10], DistrictCardsPile.allDistrictCards[20], DistrictCardsPile.allDistrictCards[30], DistrictCardsPile.allDistrictCards[40], DistrictCardsPile.allDistrictCards[50], DistrictCardsPile.allDistrictCards[60])));
+        CharacterCard characterWithBiggestCity = WarlordCard.getOtherCharacterWithBiggestCity();
+        assertNull(characterWithBiggestCity);
+
+        player1.setCity(new City());
+        player3.setCity(new City(List.of(DistrictCardsPile.allDistrictCards[1])));
+        characterWithBiggestCity = WarlordCard.getOtherCharacterWithBiggestCity();
+        assertEquals(new ThiefCard(), characterWithBiggestCity);
     }
 
     @Test

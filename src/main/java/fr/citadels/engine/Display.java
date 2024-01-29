@@ -250,13 +250,15 @@ public class Display {
 
 
     public void addThiefPower(CharacterCard target) {
-        this.events.append("Le joueur utilise son pouvoir pour voler ").append(target.getCardName()).append(".\n");
+        this.events.append("Le joueur utilise son pouvoir pour voler : ").append(target.getCardName()).append(".\n");
+        this.addBlankLine();
     }
 
 
     public void addRobbed(Player thief, int gold) {
         this.events.append("Le joueur s'est fait volé sa fortune de ").append(gold).append(" pièces d'or par ").append(thief.getName()).append(".\n");
         this.events.append("\tLa fortune de ").append(thief.getName()).append(" s'élève donc à ").append(thief.getGold()).append(" pièces d'or.\n");
+        this.addBlankLine();
     }
 
 

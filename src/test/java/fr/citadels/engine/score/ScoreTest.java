@@ -7,7 +7,7 @@ import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
 import fr.citadels.players.bots.KingBot;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -73,38 +73,6 @@ class ScoreTest {
             this.getActions().addCardsToCity(this.getHand());
         }
 
-        @Override
-        public void playAsAssassin() {
-        }
-
-        @Override
-        public void playAsThief() {
-        }
-
-        @Override
-        public void playAsMagician() {
-        }
-
-        @Override
-        public void playAsKing() {
-        }
-
-        @Override
-        public void playAsBishop() {
-        }
-
-        @Override
-        public void playAsMerchant() {
-        }
-
-        @Override
-        public void playAsArchitect() {
-        }
-
-        @Override
-        public void playAsWarlord() {
-        }
-
     };
     Score score1 = new Score(player1);
 
@@ -118,37 +86,6 @@ class ScoreTest {
             this.getActions().addCardsToCity(this.getHand());
         }
 
-        @Override
-        public void playAsAssassin() {
-        }
-
-        @Override
-        public void playAsThief() {
-        }
-
-        @Override
-        public void playAsMagician() {
-        }
-
-        @Override
-        public void playAsKing() {
-        }
-
-        @Override
-        public void playAsBishop() {
-        }
-
-        @Override
-        public void playAsMerchant() {
-        }
-
-        @Override
-        public void playAsArchitect() {
-        }
-
-        @Override
-        public void playAsWarlord() {
-        }
     };
     Score score2 = new Score(player2);
 
@@ -164,38 +101,6 @@ class ScoreTest {
             this.getActions().addCardsToCity(this.getHand());
         }
 
-        @Override
-        public void playAsAssassin() {
-        }
-
-        @Override
-        public void playAsThief() {
-        }
-
-        @Override
-        public void playAsMagician() {
-        }
-
-        @Override
-        public void playAsKing() {
-        }
-
-        @Override
-        public void playAsBishop() {
-        }
-
-        @Override
-        public void playAsMerchant() {
-        }
-
-        @Override
-        public void playAsArchitect() {
-        }
-
-        @Override
-        public void playAsWarlord() {
-        }
-
     };
 
 
@@ -209,38 +114,6 @@ class ScoreTest {
         @Override
         public void playBuildingPhase() {
             this.getActions().addCardsToCity(this.getHand());
-        }
-
-        @Override
-        public void playAsAssassin() {
-        }
-
-        @Override
-        public void playAsThief() {
-        }
-
-        @Override
-        public void playAsMagician() {
-        }
-
-        @Override
-        public void playAsKing() {
-        }
-
-        @Override
-        public void playAsBishop() {
-        }
-
-        @Override
-        public void playAsMerchant() {
-        }
-
-        @Override
-        public void playAsArchitect() {
-        }
-
-        @Override
-        public void playAsWarlord() {
         }
 
     };
@@ -311,8 +184,8 @@ class ScoreTest {
         assertEquals(43, score4.getPoints());
     }
 
-    @AfterAll
-    static void resetCharacterCards() {
+    @AfterEach
+    void resetCharacterCards() {
         CharacterCardsList.allCharacterCards[0] = new AssassinCard();
         CharacterCardsList.allCharacterCards[1] = new ThiefCard();
         CharacterCardsList.allCharacterCards[2] = new MagicianCard();

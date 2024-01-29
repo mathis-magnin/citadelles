@@ -17,7 +17,7 @@ import java.util.Random;
 
 /*
  * This bot has a more spending strategy
- * It will choose cheaper cards and buy cards as soon as it can to fill its city
+ * It will choose the cheapest cards and build districts as soon as it can to be the first to fill its city
  */
 public class SpendthriftBot extends Player {
 
@@ -55,6 +55,7 @@ public class SpendthriftBot extends Player {
      * @return the card to play
      * @precondition drawnCards must contain at least 1 card
      */
+    @Override
     public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
         int minIndex = 0;
         for (int i = 1; i < drawnCards.length; i++) {
@@ -72,6 +73,7 @@ public class SpendthriftBot extends Player {
      *
      * @precondition cardsInHand must contain at least 1 card
      */
+    @Override
     public void chooseDistrictToBuild() {
         int minIndex = getCheapestCardInHand()[0];
         if (getHand().get(minIndex).getGoldCost() <= getGold())
@@ -86,6 +88,7 @@ public class SpendthriftBot extends Player {
      *
      * @param characters the list of characterCard.
      */
+    @Override
     public void chooseCharacter(CharacterCardsList characters) {
 
         int randomIndex = -1;
@@ -102,6 +105,7 @@ public class SpendthriftBot extends Player {
      * When the player embodies the assassin, choose the
      * character to kill from the list of possibles targets
      */
+    @Override
     public void chooseTargetToKill() {
         CharacterCardsList possibleTargets = AssassinCard.getPossibleTargets();
         if (RAND.nextBoolean()) {
@@ -116,6 +120,7 @@ public class SpendthriftBot extends Player {
      * When the player embodies the thief, choose the
      * character to rob from the list of possibles targets
      */
+    @Override
     public void chooseTargetToRob() {
         List<CharacterCard> potentialTargets = ThiefCard.getPossibleTargets();
         if (RAND.nextBoolean()) {
@@ -136,8 +141,10 @@ public class SpendthriftBot extends Player {
 
     /**
      * Choose the power to use as a magician
+     *
      * @return an int depending on the moment to use the power
      */
+    @Override
     public int chooseMagicianPower() {
         CharacterCard characterWithMostCards = MagicianCard.getCharacterWithMostCards();
 
@@ -161,8 +168,9 @@ public class SpendthriftBot extends Player {
      * When the player embodies the warlord, choose the character and the
      * district in city to destroy from the list of possibles targets
      */
+    @Override
     public void chooseTargetToDestroy() {
-        CharacterCard target = WarlordCard.getCharacterWithBiggestCity();
+        CharacterCard target = WarlordCard.getOtherCharacterWithBiggestCity();
         getInformation().setTarget(target);
         DistrictCard districtToDestroy = null;
         if (target != null) {
@@ -171,7 +179,7 @@ public class SpendthriftBot extends Player {
                     districtToDestroy = districtCard;
                 }
             }
-            if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() > this.getGold())) {
+            if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
                 districtToDestroy = null;
             }
         }
@@ -200,95 +208,6 @@ public class SpendthriftBot extends Player {
         }
         getInformation().getDisplay().addBlankLine();
         getActions().takeGoldFromCity();
-    }
-
-
-    @Override
-    public void playAsAssassin() {
-        playResourcesPhase();
-        playBuildingPhase();
-        chooseTargetToKill();
-        getCharacter().usePower();
-    }
-
-
-    @Override
-    public void playAsThief() {
-        playResourcesPhase();
-        playBuildingPhase();
-        chooseTargetToRob();
-        getCharacter().usePower();
-    }
-
-
-    @Override
-    public void playAsMagician() {
-        int momentToUsePower = chooseMagicianPower();
-
-        if (momentToUsePower == 0) {
-            this.getCharacter().usePower();
-        }
-        playResourcesPhase();
-        if (momentToUsePower == 1) {
-            this.getCharacter().usePower();
-        }
-        playBuildingPhase();
-        if (momentToUsePower == 2) {
-            this.getCharacter().usePower();
-        }
-    }
-
-
-    @Override
-    public void playAsKing() {
-        playResourcesPhase();
-        playBuildingPhase();
-    }
-
-
-    @Override
-    public void playAsBishop() {
-        playResourcesPhase();
-        playBuildingPhase();
-    }
-
-
-    @Override
-    public void playAsMerchant() {
-        playResourcesPhase();
-        getCharacter().usePower();
-        playBuildingPhase();
-    }
-
-
-    @Override
-    public void playAsArchitect() {
-        this.playResourcesPhase();
-
-        this.getInformation().setPowerToUse(1);  // draw two cards
-        this.getCharacter().usePower();
-
-        this.playBuildingPhase();
-
-        this.getInformation().setPowerToUse(2);  // build another district
-        for (int i = 0; i < 2; i++) {
-            this.chooseDistrictToBuild();
-            if (this.getInformation().getDistrictToBuild() != null) {
-                this.getCharacter().usePower();
-            } else {
-                this.getInformation().getDisplay().addNoArchitectPower();
-                this.getInformation().getDisplay().addBlankLine();
-            }
-        }
-    }
-
-
-    @Override
-    public void playAsWarlord() {
-        playResourcesPhase();
-        playBuildingPhase();
-        chooseTargetToDestroy();
-        getCharacter().usePower();
     }
 
 }
