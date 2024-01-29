@@ -2,12 +2,12 @@ package fr.citadels.players.bots;
 
 
 import fr.citadels.engine.Game;
-import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
+import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
 import fr.citadels.gameelements.cards.charactercards.characters.MagicianCard;
 import fr.citadels.gameelements.cards.charactercards.characters.ThiefCard;
-import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
+import fr.citadels.gameelements.cards.charactercards.characters.WarlordCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.players.Player;
 
@@ -33,10 +33,12 @@ public class RandomBot extends Player {
 
     /***
      * choose a card to play among the cards drawn
-     * drawnCards must contain at least 1 card
+     *
+     * @precondition drawnCards must contain at least 1 card
      * @param drawnCards cards drawn
      * @return the card to play
      */
+    @Override
     public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
         int randomIndex = RAND.nextInt(drawnCards.length);
         DistrictCard cardToPlay = drawnCards[randomIndex];
@@ -47,8 +49,9 @@ public class RandomBot extends Player {
 
     /***
      * choose a card in hand
-     * @return the card chosen or null if no card can be chosen
+     * set the card chosen or null if no card can be chosen in the districtToBuild attribute
      */
+    @Override
     public void chooseDistrictToBuild() {
         for (int i = 0; i < getHand().size(); i++) {
             if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i))) {
@@ -65,6 +68,7 @@ public class RandomBot extends Player {
      *
      * @param characters the list of characterCard.
      */
+    @Override
     public void chooseCharacter(CharacterCardsList characters) {
 
         int randomIndex = -1;
@@ -81,6 +85,7 @@ public class RandomBot extends Player {
      * When the player embodies the assassin, choose the
      * character to kill from the list of possibles targets
      */
+    @Override
     public void chooseTargetToKill() {
         CharacterCardsList possibleTargets = AssassinCard.getPossibleTargets();
         int randIndex = RAND.nextInt(possibleTargets.size());
@@ -89,11 +94,24 @@ public class RandomBot extends Player {
 
 
     /**
+     * When the player embodies the thief, choose the
+     * character to rob from the list of possibles targets
+     */
+    @Override
+    public void chooseTargetToRob() {
+        List<CharacterCard> potentialTargets = ThiefCard.getPossibleTargets();
+        int randIndex = RAND.nextInt(potentialTargets.size());
+        getInformation().setTarget(potentialTargets.get(randIndex));
+    }
+
+
+    /**
      * Choose the power to use as a magician
+     *
      * @return an int depending on the moment to use the power
      */
+    @Override
     public int chooseMagicianPower() {
-        Player playerWithMostCards = MagicianCard.getPlayerWithMostCards();
         int randPower = RAND.nextInt(2); // choose which power to use
 
         if (randPower == 0) { // swap hands : choose a target
@@ -105,6 +123,27 @@ public class RandomBot extends Player {
             this.getInformation().setCardsToDiscard(RAND.nextInt(this.getHand().size()));
         }
         return RAND.nextInt(3);
+    }
+
+
+    /**
+     * When the player embodies the warlord, choose the character and the
+     * district in city to destroy from the list of possibles targets
+     */
+    @Override
+    public void chooseTargetToDestroy() {
+        int randTarget = RAND.nextInt(WarlordCard.getPossibleTargets().size());
+        CharacterCard target = WarlordCard.getPossibleTargets().get(randTarget);
+        this.getInformation().setTarget(target);
+        DistrictCard districtToDestroy = null;
+        if (!target.getPlayer().getCity().isEmpty()) {
+            randTarget = RAND.nextInt(target.getPlayer().getCity().size());
+            districtToDestroy = target.getPlayer().getCity().get(randTarget);
+            if (districtToDestroy.getGoldCost() - 1 > this.getGold()) {
+                districtToDestroy = null;
+            }
+        }
+        this.getInformation().setDistrictToDestroy(districtToDestroy);
     }
 
 
@@ -136,95 +175,6 @@ public class RandomBot extends Player {
         getInformation().getDisplay().addBlankLine();
         if (!takeGoldFromFamily)
             getActions().takeGoldFromCity();
-    }
-
-
-    @Override
-    public void playAsAssassin() {
-        playResourcesPhase();
-        playBuildingPhase();
-        chooseTargetToKill();
-        getCharacter().usePower();
-    }
-
-
-    @Override
-    public void playAsThief() {
-        playResourcesPhase();
-        playBuildingPhase();
-        List<CharacterCard> potentialTargets = ThiefCard.getPossibleTargets();
-        int randIndex = RAND.nextInt(potentialTargets.size());
-        getInformation().setTarget(potentialTargets.get(randIndex));
-        getCharacter().usePower();
-    }
-
-
-    @Override
-    public void playAsMagician() {
-        int momentToUsePower = chooseMagicianPower();
-
-        if (momentToUsePower == 0) {
-            this.getCharacter().usePower();
-        }
-        playResourcesPhase();
-        if (momentToUsePower == 1) {
-            this.getCharacter().usePower();
-        }
-        playBuildingPhase();
-        if (momentToUsePower == 2) {
-            this.getCharacter().usePower();
-        }
-    }
-
-
-    @Override
-    public void playAsKing() {
-        playResourcesPhase();
-        playBuildingPhase();
-    }
-
-
-    @Override
-    public void playAsBishop() {
-        playResourcesPhase();
-        playBuildingPhase();
-    }
-
-
-    @Override
-    public void playAsMerchant() {
-        playResourcesPhase();
-        getCharacter().usePower();
-        playBuildingPhase();
-    }
-
-
-    @Override
-    public void playAsArchitect() {
-        this.playResourcesPhase();
-
-        this.getInformation().setPowerToUse(1);  // draw two cards
-        this.getCharacter().usePower();
-
-        this.playBuildingPhase();
-
-        this.getInformation().setPowerToUse(2);  // build another district
-        for (int i = 0; i < 2; i++) {
-            this.chooseDistrictToBuild();
-            if (this.getInformation().getDistrictToBuild() != null) {
-                this.getCharacter().usePower();
-            } else {
-                this.getInformation().getDisplay().addNoArchitectPower();
-                this.getInformation().getDisplay().addBlankLine();
-            }
-        }
-    }
-
-
-    @Override
-    public void playAsWarlord() {
-        playResourcesPhase();
-        playBuildingPhase();
     }
 
 }

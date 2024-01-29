@@ -119,12 +119,12 @@ class MagicianCardTest {
         player2.setHand(hand2);
         player3.setHand(hand3);
 
-        assertEquals(player2, MagicianCard.getPlayerWithMostCards());
+        assertEquals(CharacterCardsList.allCharacterCards[3], MagicianCard.getCharacterWithMostCards());
 
         player1.setCharacter(CharacterCardsList.allCharacterCards[3]);
         player2.setCharacter(CharacterCardsList.allCharacterCards[2]);
 
-        assertEquals(player1, MagicianCard.getPlayerWithMostCards());
+        assertEquals(CharacterCardsList.allCharacterCards[3], MagicianCard.getCharacterWithMostCards());
     }
 
 }

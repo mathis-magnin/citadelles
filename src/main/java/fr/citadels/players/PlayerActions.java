@@ -2,7 +2,6 @@ package fr.citadels.players;
 
 import fr.citadels.gameelements.cards.CardFamily;
 import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
-import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.Hand;
 
@@ -30,7 +29,7 @@ public class PlayerActions {
     /**
      * add gold to the player from the bank
      *
-     * @param amount
+     * @param amount the amount of gold earned by the player
      */
     public void addGold(int amount) {
         player.getInformation().getBank().take(amount);
@@ -168,7 +167,8 @@ public class PlayerActions {
         int goldToTake = this.player.getGold();
         CharacterCardsList.allCharacterCards[1].getPlayer().getActions().addGold(goldToTake);
         this.player.setGold(0);
-        this.player.getInformation().getDisplay().addRobbed(CharacterCardsList.allCharacterCards[1].getPlayer(), this.player, goldToTake);
+        this.player.getCharacter().setRobbed(false);
+        this.player.getInformation().getDisplay().addRobbed(CharacterCardsList.allCharacterCards[1].getPlayer(), goldToTake);
     }
 
 

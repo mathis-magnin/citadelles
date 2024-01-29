@@ -46,7 +46,7 @@ public class ArchitectCard extends CharacterCard {
      * 1. The player gain two extra cards. He can use this ability regardless of what resource he gathered this turn.
      */
     private void drawCard() {
-        this.getPlayer().getInformation().getDisplay().addArchitectPower(1, this.getPlayer());
+        this.getPlayer().getInformation().getDisplay().addArchitectPower(1);
         this.getPlayer().getActions().draw(2);
     }
 
@@ -57,7 +57,7 @@ public class ArchitectCard extends CharacterCard {
      * @precondition The player must have chosen which district he wants to build.
      */
     private void build() {
-        this.getPlayer().getInformation().getDisplay().addArchitectPower(2, this.getPlayer());
+        this.getPlayer().getInformation().getDisplay().addArchitectPower(2);
         this.getPlayer().getActions().build();
     }
 

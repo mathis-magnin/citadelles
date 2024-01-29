@@ -5,7 +5,7 @@ import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.*;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,6 +43,19 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseTargetToRob() {
+            }
+
+            @Override
+            public int chooseMagicianPower() {
+                return 0;
+            }
+
+            @Override
+            public void chooseTargetToDestroy() {
+            }
+
+            @Override
             public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
             }
@@ -51,38 +64,6 @@ class PlayerTest {
             public void playBuildingPhase() {
                 getActions().addCardToCity(getHand().get(0));
                 getActions().removeCardFromHand(0);
-            }
-
-            @Override
-            public void playAsAssassin() {
-            }
-
-            @Override
-            public void playAsThief() {
-            }
-
-            @Override
-            public void playAsMagician() {
-            }
-
-            @Override
-            public void playAsKing() {
-            }
-
-            @Override
-            public void playAsBishop() {
-            }
-
-            @Override
-            public void playAsMerchant() {
-            }
-
-            @Override
-            public void playAsArchitect() {
-            }
-
-            @Override
-            public void playAsWarlord() {
             }
 
         };
@@ -171,6 +152,19 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseTargetToRob() {
+            }
+
+            @Override
+            public int chooseMagicianPower() {
+                return 0;
+            }
+
+            @Override
+            public void chooseTargetToDestroy() {
+            }
+
+            @Override
             public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
             }
@@ -181,37 +175,6 @@ class PlayerTest {
                 getActions().removeCardFromHand(0);
             }
 
-            @Override
-            public void playAsAssassin() {
-            }
-
-            @Override
-            public void playAsThief() {
-            }
-
-            @Override
-            public void playAsMagician() {
-            }
-
-            @Override
-            public void playAsKing() {
-            }
-
-            @Override
-            public void playAsBishop() {
-            }
-
-            @Override
-            public void playAsMerchant() {
-            }
-
-            @Override
-            public void playAsArchitect() {
-            }
-
-            @Override
-            public void playAsWarlord() {
-            }
         };
         player.playResourcesPhase();
         player.playBuildingPhase();
@@ -246,6 +209,19 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseTargetToRob() {
+            }
+
+            @Override
+            public int chooseMagicianPower() {
+                return 0;
+            }
+
+            @Override
+            public void chooseTargetToDestroy() {
+            }
+
+            @Override
             public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
             }
@@ -256,37 +232,6 @@ class PlayerTest {
                 getActions().removeCardFromHand(0);
             }
 
-            @Override
-            public void playAsAssassin() {
-            }
-
-            @Override
-            public void playAsThief() {
-            }
-
-            @Override
-            public void playAsMagician() {
-            }
-
-            @Override
-            public void playAsKing() {
-            }
-
-            @Override
-            public void playAsBishop() {
-            }
-
-            @Override
-            public void playAsMerchant() {
-            }
-
-            @Override
-            public void playAsArchitect() {
-            }
-
-            @Override
-            public void playAsWarlord() {
-            }
         };
         player.playResourcesPhase();
         player.playBuildingPhase();
@@ -316,6 +261,19 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseTargetToRob() {
+            }
+
+            @Override
+            public int chooseMagicianPower() {
+                return 0;
+            }
+
+            @Override
+            public void chooseTargetToDestroy() {
+            }
+
+            @Override
             public void playResourcesPhase() {
                 this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
             }
@@ -326,37 +284,6 @@ class PlayerTest {
                 getActions().removeCardFromHand(0);
             }
 
-            @Override
-            public void playAsAssassin() {
-            }
-
-            @Override
-            public void playAsThief() {
-            }
-
-            @Override
-            public void playAsMagician() {
-            }
-
-            @Override
-            public void playAsKing() {
-            }
-
-            @Override
-            public void playAsBishop() {
-            }
-
-            @Override
-            public void playAsMerchant() {
-            }
-
-            @Override
-            public void playAsArchitect() {
-            }
-
-            @Override
-            public void playAsWarlord() {
-            }
         };
 
 
@@ -365,8 +292,8 @@ class PlayerTest {
 
     }
 
-    @AfterAll
-    static void resetCharacterCards() {
+    @AfterEach
+    void resetCharacterCards() {
         CharacterCardsList.allCharacterCards[0] = new AssassinCard();
         CharacterCardsList.allCharacterCards[1] = new ThiefCard();
         CharacterCardsList.allCharacterCards[2] = new MagicianCard();

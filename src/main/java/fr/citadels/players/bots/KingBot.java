@@ -7,6 +7,7 @@ import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.charactercards.characters.AssassinCard;
 import fr.citadels.gameelements.cards.charactercards.characters.MagicianCard;
 import fr.citadels.gameelements.cards.charactercards.characters.ThiefCard;
+import fr.citadels.gameelements.cards.charactercards.characters.WarlordCard;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.players.Player;
 
@@ -29,10 +30,12 @@ public class KingBot extends Player {
 
     /***
      * choose a NOBLE card if possible or the first card
-     * drawnCards must contain at least 1 card
+     *
+     * @precondition drawnCards must contain at least 1 card
      * @param drawnCards cards drawn
      * @return the card to play
      */
+    @Override
     public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
         DistrictCard cardToPlay = drawnCards[0];
         //take the card that is noble if possible
@@ -51,9 +54,9 @@ public class KingBot extends Player {
 
     /***
      * take the most expensive card that he can place (preferred noble)
-     * choose a card in hand
-     * @return the card chosen or null if no card can be chosen
+     * set its districtToBuild attribute with the card chosen or null if no card can be chosen
      */
+    @Override
     public void chooseDistrictToBuild() {
         for (int i = 0; i < getHand().size(); i++) {
             if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i))) {
@@ -70,6 +73,7 @@ public class KingBot extends Player {
      *
      * @param characters the list of characterCard.
      */
+    @Override
     public void chooseCharacter(CharacterCardsList characters) {
         for (int i = 0; i < characters.size(); i++) {
             if (characters.get(i).getCardName().equals("Roi")) {
@@ -91,21 +95,39 @@ public class KingBot extends Player {
      * When the player embodies the assassin, choose the
      * character to kill from the list of possibles targets
      */
+    @Override
     public void chooseTargetToKill() {
         CharacterCardsList possibleTargets = AssassinCard.getPossibleTargets();
         getInformation().setTarget(possibleTargets.get(2));
     }
 
+
+    /**
+     * When the player embodies the thief, choose the
+     * character to rob from the list of possibles targets
+     */
+    @Override
+    public void chooseTargetToRob() {
+        List<CharacterCard> potentialTargets = ThiefCard.getPossibleTargets();
+        if (potentialTargets.contains(CharacterCardsList.allCharacterCards[3])) {
+            getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
+        } else {
+            getInformation().setTarget(CharacterCardsList.allCharacterCards[6]);
+        }
+    }
+
     /**
      * Choose the power to use as a magician
+     *
      * @return an int depending on the moment to use the power
      */
+    @Override
     public int chooseMagicianPower() {
-        Player playerWithMostCards = MagicianCard.getPlayerWithMostCards();
+        CharacterCard characterWithMostCards = MagicianCard.getCharacterWithMostCards();
 
-        if ((playerWithMostCards != null) && (playerWithMostCards.getHand().size() > this.getHand().size())) {
+        if ((characterWithMostCards != null) && (characterWithMostCards.getPlayer().getHand().size() > this.getHand().size())) {
             getInformation().setPowerToUse(1);
-            getInformation().setTarget(playerWithMostCards.getCharacter());
+            getInformation().setTarget(characterWithMostCards);
         } else {
             getInformation().setPowerToUse(2);
             getHand().sortCards(CardFamily.NOBLE);
@@ -113,6 +135,29 @@ public class KingBot extends Player {
             getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
         }
         return 0;
+    }
+
+
+    /**
+     * When the player embodies the warlord, choose the character and the
+     * district in city to destroy from the list of possibles targets
+     */
+    @Override
+    public void chooseTargetToDestroy() {
+        CharacterCard target = WarlordCard.getOtherCharacterWithBiggestCity();
+        getInformation().setTarget(target);
+        DistrictCard districtToDestroy = null;
+        if (target != null) {
+            for (DistrictCard districtCard : target.getPlayer().getCity()) {
+                if ((districtToDestroy == null) || (districtCard.getGoldCost() < districtToDestroy.getGoldCost())) {
+                    districtToDestroy = districtCard;
+                }
+            }
+            if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
+                districtToDestroy = null;
+            }
+        }
+        getInformation().setDistrictToDestroy(districtToDestroy);
     }
 
 
@@ -139,98 +184,6 @@ public class KingBot extends Player {
         }
         getInformation().getDisplay().addBlankLine();
         getActions().takeGoldFromCity();
-    }
-
-
-    @Override
-    public void playAsAssassin() {
-        playResourcesPhase();
-        playBuildingPhase();
-        chooseTargetToKill();
-        getCharacter().usePower();
-    }
-
-
-    @Override
-    public void playAsThief() {
-        playResourcesPhase();
-        playBuildingPhase();
-
-        List<CharacterCard> potentialTargets = ThiefCard.getPossibleTargets();
-        if (potentialTargets.contains(CharacterCardsList.allCharacterCards[3])) {
-            getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
-        } else {
-            getInformation().setTarget(CharacterCardsList.allCharacterCards[6]);
-        }
-        getCharacter().usePower();
-    }
-
-
-    @Override
-    public void playAsMagician() {
-        int momentToUsePower = chooseMagicianPower();
-        if (momentToUsePower == 0) {
-            this.getCharacter().usePower();
-        }
-        playResourcesPhase();
-        if (momentToUsePower == 1) {
-            this.getCharacter().usePower();
-        }
-        playBuildingPhase();
-        if (momentToUsePower == 2) {
-            this.getCharacter().usePower();
-        }
-    }
-
-
-    @Override
-    public void playAsKing() {
-        playResourcesPhase();
-        playBuildingPhase();
-    }
-
-
-    @Override
-    public void playAsBishop() {
-        playResourcesPhase();
-        playBuildingPhase();
-    }
-
-
-    @Override
-    public void playAsMerchant() {
-        playResourcesPhase();
-        getCharacter().usePower();
-        playBuildingPhase();
-    }
-
-
-    @Override
-    public void playAsArchitect() {
-        this.playResourcesPhase();
-
-        this.getInformation().setPowerToUse(1);  // draw two cards
-        this.getCharacter().usePower();
-
-        this.playBuildingPhase();
-
-        this.getInformation().setPowerToUse(2);  // build another district
-        for (int i = 0; i < 2; i++) {
-            this.chooseDistrictToBuild();
-            if (this.getInformation().getDistrictToBuild() != null) {
-                this.getCharacter().usePower();
-            } else {
-                this.getInformation().getDisplay().addNoArchitectPower();
-                this.getInformation().getDisplay().addBlankLine();
-            }
-        }
-    }
-
-
-    @Override
-    public void playAsWarlord() {
-        playResourcesPhase();
-        playBuildingPhase();
     }
 
 }

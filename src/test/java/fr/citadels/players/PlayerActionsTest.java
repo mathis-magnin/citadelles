@@ -10,6 +10,7 @@ import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
 import fr.citadels.gameelements.cards.districtcards.Hand;
 import fr.citadels.players.bots.KingBot;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -219,8 +220,8 @@ class PlayerActionsTest {
         assertEquals(handSize + 10, player.getHand().size());
     }
 
-    @AfterAll
-    static void resetCharacterCards() {
+    @AfterEach
+    void resetCharacterCards() {
         CharacterCardsList.allCharacterCards[0] = new AssassinCard();
         CharacterCardsList.allCharacterCards[1] = new ThiefCard();
         CharacterCardsList.allCharacterCards[2] = new MagicianCard();

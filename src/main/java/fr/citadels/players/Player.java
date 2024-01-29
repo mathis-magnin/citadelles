@@ -2,14 +2,13 @@ package fr.citadels.players;
 
 import fr.citadels.engine.Game;
 import fr.citadels.gameelements.cards.charactercards.CharacterCard;
-import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
 import fr.citadels.gameelements.cards.districtcards.City;
 import fr.citadels.gameelements.cards.districtcards.DistrictCard;
 import fr.citadels.gameelements.cards.districtcards.Hand;
 
 import java.util.List;
 
-public abstract class Player implements Comparable<Player>, CharacterStrategies {
+public abstract class Player implements Comparable<Player>, PlayerChoices {
 
     /* Attributes */
 
@@ -146,9 +145,6 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
     }
 
 
-
-
-
     /**
      * Player comparison is based on their characterCard's rank (natural ordering of integer).
      * Note : this class has a natural ordering that is inconsistent with equals.
@@ -186,6 +182,7 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
 
     /* Methods */
 
+
     /**
      * Check if the player has a complete city
      *
@@ -208,46 +205,111 @@ public abstract class Player implements Comparable<Player>, CharacterStrategies 
 
 
     /**
-     * choose a card to take among the cards drawn
-     *
-     * @param drawnCards cards drawn
-     * @return the card to play
+     * play a round for the linked player when he embodies the assassin
      */
-    public abstract DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards);
+    public void playAsAssassin() {
+        playResourcesPhase();
+        playBuildingPhase();
+        chooseTargetToKill();
+        getCharacter().usePower();
+    }
 
 
     /**
-     * choose a card in hand
-     *
-     * @return the card chosen or null if no card can be chosen
+     * play a round for the linked player when he embodies the thief
      */
-    public abstract void chooseDistrictToBuild();
+    public void playAsThief() {
+        playResourcesPhase();
+        playBuildingPhase();
+        chooseTargetToRob();
+        getCharacter().usePower();
+    }
 
 
     /**
-     * Choose and take a characterCard from the list of character.
-     *
-     * @param characters the list of characterCard.
+     * play a round for the linked player when he embodies the magician
      */
-    public abstract void chooseCharacter(CharacterCardsList characters);
+    public void playAsMagician() {
+        int momentToUsePower = chooseMagicianPower();
+        if (momentToUsePower == 0) {
+            this.getCharacter().usePower();
+        }
+        playResourcesPhase();
+        if (momentToUsePower == 1) {
+            this.getCharacter().usePower();
+        }
+        playBuildingPhase();
+        if (momentToUsePower == 2) {
+            this.getCharacter().usePower();
+        }
+    }
 
 
     /**
-     * When the player embodies the assassin, choose the
-     * character to kill from the list of possibles targets
+     * play a round for the linked player when he embodies the king
      */
-    public abstract void chooseTargetToKill();
+    public void playAsKing() {
+        playResourcesPhase();
+        playBuildingPhase();
+    }
 
 
     /**
-     * play the phase when the player takes resources for his turn
+     * play a round for the linked player when he embodies the bishop
      */
-    public abstract void playResourcesPhase();
+    public void playAsBishop() {
+        playResourcesPhase();
+        playBuildingPhase();
+    }
 
 
     /**
-     * play the phase when the player builds districts in his city
+     * play a round for the linked player if he embodies the merchant
      */
-    public abstract void playBuildingPhase();
+    public void playAsMerchant() {
+        playResourcesPhase();
+        getCharacter().usePower();
+        playBuildingPhase();
+    }
+
+
+    /**
+     * play a round for the linked player if he embodies the architect
+     */
+    public void playAsArchitect() {
+        this.playResourcesPhase();
+
+        this.getInformation().setPowerToUse(1);  // draw two cards
+        this.getCharacter().usePower();
+
+        this.playBuildingPhase();
+
+        this.getInformation().setPowerToUse(2);  // build another district
+        for (int i = 0; i < 2; i++) {
+            this.chooseDistrictToBuild();
+            if (this.getInformation().getDistrictToBuild() != null) {
+                this.getCharacter().usePower();
+            } else {
+                this.getInformation().getDisplay().addNoArchitectPower();
+                this.getInformation().getDisplay().addBlankLine();
+            }
+        }
+    }
+
+
+    /**
+     * play a round for the linked player if he embodies the warlord
+     */
+    public void playAsWarlord() {
+        playResourcesPhase();
+        playBuildingPhase();
+        chooseTargetToDestroy();
+        if ((getInformation().getTarget() != null) && (getInformation().getDistrictToDestroy() != null)) {
+            getCharacter().usePower();
+        }
+        else {
+            getInformation().getDisplay().addNoWarlordPower();
+        }
+    }
 
 }
