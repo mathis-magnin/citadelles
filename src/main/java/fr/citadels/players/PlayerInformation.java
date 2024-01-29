@@ -2,16 +2,14 @@ package fr.citadels.players;
 
 import fr.citadels.engine.Display;
 import fr.citadels.engine.Game;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.gameelements.cards.charactercards.CharacterCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.charactercards.CharacterCard;
+import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.DistrictCardsPile;
 
 public class PlayerInformation {
 
     /* Attributes */
     private final DistrictCardsPile pile;
-    private final Bank bank;
     private final Display display;
 
     private DistrictCard districtToBuild;
@@ -22,7 +20,6 @@ public class PlayerInformation {
 
     public PlayerInformation(Game game) {
         this.pile = game.getPile();
-        this.bank = game.getBank();
         this.display = game.getDisplay();
         this.districtToBuild = null;
         this.powerToUse = -1;
@@ -39,14 +36,6 @@ public class PlayerInformation {
      */
     public DistrictCardsPile getPile() {
         return pile;
-    }
-
-
-    /**
-     * @return the bank
-     */
-    public Bank getBank() {
-        return bank;
     }
 
 

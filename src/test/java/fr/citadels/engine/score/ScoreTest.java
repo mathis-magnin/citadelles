@@ -1,10 +1,10 @@
 package fr.citadels.engine.score;
 
+import fr.citadels.cards.charactercards.characters.*;
 import fr.citadels.engine.Game;
-import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
-import fr.citadels.gameelements.cards.charactercards.characters.*;
-import fr.citadels.gameelements.cards.districtcards.DistrictCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.charactercards.CharacterCardsList;
+import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
 import fr.citadels.players.bots.KingBot;
 import org.junit.jupiter.api.AfterEach;

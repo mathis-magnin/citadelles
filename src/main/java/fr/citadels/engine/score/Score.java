@@ -1,6 +1,6 @@
 package fr.citadels.engine.score;
 
-import fr.citadels.gameelements.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.DistrictCard;
 import fr.citadels.players.Player;
 
 public class Score implements Comparable<Score> {
