@@ -1,107 +1,70 @@
 package fr.citadels.players.bots;
 
-import fr.citadels.gameelements.cards.CardFamily;
-import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
-import fr.citadels.gameelements.cards.districtcards.DistrictCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.engine.Display;
+import fr.citadels.engine.Game;
+import fr.citadels.cards.CardFamily;
+import fr.citadels.cards.charactercards.CharacterCard;
+import fr.citadels.cards.charactercards.CharacterCardsList;
+import fr.citadels.cards.charactercards.characters.AssassinCard;
+import fr.citadels.cards.charactercards.characters.MagicianCard;
+import fr.citadels.cards.charactercards.characters.ThiefCard;
+import fr.citadels.cards.charactercards.characters.WarlordCard;
+import fr.citadels.cards.districtcards.DistrictCard;
 import fr.citadels.players.Player;
 
 import java.util.List;
-import java.util.Random;
 
 /*
  * This bot will try to take the king character every time it can
  */
 public class KingBot extends Player {
 
-    private final Random RAND;
+    /* Constructor */
 
-    private boolean canPlaceCard;
-
-    /*
-     * Constructor
-     */
-    public KingBot(String name, List<DistrictCard> cards, Random random) {
-        super(name, cards);
-        sortHand(CardFamily.NOBLE);
-        RAND = random;
+    public KingBot(String name, List<DistrictCard> cards, Game game) {
+        super(name, cards, game);
+        actions.sortHand(CardFamily.NOBLE);
     }
 
 
-    /*
-     * Methods
-     */
-
+    /* Methods */
 
     /***
      * choose a NOBLE card if possible or the first card
-     * drawnCards must contain at least 1 card
-     * @param pile pile of cards
+     *
+     * @precondition drawnCards must contain at least 1 card
      * @param drawnCards cards drawn
      * @return the card to play
      */
-    public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
+    @Override
+    public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
         DistrictCard cardToPlay = drawnCards[0];
         //take the card that is noble if possible
         for (int i = 0; i < drawnCards.length; i++) {
             if (drawnCards[i].getCardFamily().equals(CardFamily.NOBLE)) {
                 cardToPlay = drawnCards[i];
-                putBack(drawnCards, pile, i);
+                getActions().putBack(drawnCards, i);
                 return cardToPlay;
             }
         }
 
-        putBack(drawnCards, pile, 0);
+        getActions().putBack(drawnCards, 0);
         return cardToPlay;
     }
 
+
     /***
      * take the most expensive card that he can place (preferred noble)
-     * choose a card in hand
-     * @return the card chosen or null if no card can be chosen
-     */
-    public DistrictCard chooseCardInHand() {
-        DistrictCard cardToPlace = null;
-        for (int i = 0; i < getHand().size(); i++) {
-            if (getHand().get(i).getGoldCost() <= getGold()) {
-                cardToPlace = getHand().get(i);
-                removeCardFromHand(i);
-                return cardToPlace;
-            }
-        }
-        return cardToPlace;
-    }
-
-    /***
-     * play a round for the linked player
-     * @param  pile of cards
+     * set its districtToBuild attribute with the card chosen or null if no card can be chosen
      */
     @Override
-    public void play(DistrictCardsPile pile, Bank bank, Display display) {
-        boolean draw = getHand().isEmpty() || getHand().get(0).getGoldCost() < getGold();
-
-        takeCardsOrGold(pile, bank, draw, display);
-
-        if (!getHand().isEmpty()) {
-            if (draw)
-                sortHand(CardFamily.NOBLE);
-
-            DistrictCard cardToPlace = chooseCardInHand();
-
-            if (cardToPlace != null) {
-                addCardToCity(cardToPlace);
-                pay(cardToPlace.getGoldCost(), bank);
-                display.addDistrictBuilt(this, cardToPlace);
-            } else {
-                display.addNoDistrictBuilt();
+    public void chooseDistrictToBuild() {
+        for (int i = 0; i < getHand().size(); i++) {
+            if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i))) {
+                this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(i));
+                return;
             }
-        } else {
-            display.addNoDistrictBuilt();
         }
-        display.addBlankLine();
-        takeGoldFromCity(bank, display);
+        this.getInformation().setDistrictToBuild(null);
     }
 
 
@@ -110,11 +73,12 @@ public class KingBot extends Player {
      *
      * @param characters the list of characterCard.
      */
-    public void chooseCharacter(CharacterCardsList characters, Display display) {
+    @Override
+    public void chooseCharacter(CharacterCardsList characters) {
         for (int i = 0; i < characters.size(); i++) {
             if (characters.get(i).getCardName().equals("Roi")) {
                 this.setCharacter(characters.remove(i));
-                display.addCharacterChosen(this, this.getCharacter());
+                getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
                 return;
             }
         }
@@ -123,8 +87,103 @@ public class KingBot extends Player {
          * Could happen if a player already took it
          */
         this.setCharacter(characters.remove(0));
-        display.addCharacterChosen(this, this.getCharacter());
+        getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
+
+    /**
+     * When the player embodies the assassin, choose the
+     * character to kill from the list of possibles targets
+     */
+    @Override
+    public void chooseTargetToKill() {
+        CharacterCardsList possibleTargets = AssassinCard.getPossibleTargets();
+        getInformation().setTarget(possibleTargets.get(2));
+    }
+
+
+    /**
+     * When the player embodies the thief, choose the
+     * character to rob from the list of possibles targets
+     */
+    @Override
+    public void chooseTargetToRob() {
+        List<CharacterCard> potentialTargets = ThiefCard.getPossibleTargets();
+        if (potentialTargets.contains(CharacterCardsList.allCharacterCards[3])) {
+            getInformation().setTarget(CharacterCardsList.allCharacterCards[3]);
+        } else {
+            getInformation().setTarget(CharacterCardsList.allCharacterCards[6]);
+        }
+    }
+
+    /**
+     * Choose the power to use as a magician
+     *
+     * @return an int depending on the moment to use the power
+     */
+    @Override
+    public int chooseMagicianPower() {
+        CharacterCard characterWithMostCards = MagicianCard.getCharacterWithMostCards();
+
+        if ((characterWithMostCards != null) && (characterWithMostCards.getPlayer().getHand().size() > this.getHand().size())) {
+            getInformation().setPowerToUse(1);
+            getInformation().setTarget(characterWithMostCards);
+        } else {
+            getInformation().setPowerToUse(2);
+            getHand().sortCards(CardFamily.NOBLE);
+            int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
+            getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
+        }
+        return 0;
+    }
+
+
+    /**
+     * When the player embodies the warlord, choose the character and the
+     * district in city to destroy from the list of possibles targets
+     */
+    @Override
+    public void chooseTargetToDestroy() {
+        CharacterCard target = WarlordCard.getOtherCharacterWithBiggestCity();
+        getInformation().setTarget(target);
+        DistrictCard districtToDestroy = null;
+        if (target != null) {
+            for (DistrictCard districtCard : target.getPlayer().getCity()) {
+                if ((districtToDestroy == null) || (districtCard.getGoldCost() < districtToDestroy.getGoldCost())) {
+                    districtToDestroy = districtCard;
+                }
+            }
+            if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
+                districtToDestroy = null;
+            }
+        }
+        getInformation().setDistrictToDestroy(districtToDestroy);
+    }
+
+
+    @Override
+    public void playResourcesPhase() {
+        int firstNotDuplicateIndex = getCity().getFirstNotDuplicateIndex(getHand());
+        boolean draw = getHand().isEmpty() || firstNotDuplicateIndex == -1 || getHand().get(firstNotDuplicateIndex).getGoldCost() < getGold();
+
+        getActions().takeCardsOrGold(draw);
+
+        if (draw) {
+            getActions().sortHand(CardFamily.NOBLE);
+        }
+    }
+
+
+    @Override
+    public void playBuildingPhase() {
+        if (!getHand().isEmpty()) {
+            this.chooseDistrictToBuild();
+            this.getActions().build();
+        } else {
+            getInformation().getDisplay().addNoDistrictBuilt();
+        }
+        getInformation().getDisplay().addBlankLine();
+        getActions().takeGoldFromCity();
+    }
 
 }

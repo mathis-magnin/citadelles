@@ -1,13 +1,15 @@
 package fr.citadels.players.bots;
 
-import fr.citadels.gameelements.cards.Card;
-import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
-import fr.citadels.gameelements.cards.charactercards.characters.KingCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.engine.Display;
+import fr.citadels.cards.charactercards.characters.*;
+import fr.citadels.engine.Game;
+import fr.citadels.cards.Card;
+import fr.citadels.cards.charactercards.CharacterCardsList;
+import fr.citadels.cards.districtcards.City;
+import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.districtcards.Hand;
 import fr.citadels.players.Player;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -24,15 +26,17 @@ class RandomBotTest {
     @Mock
     Random random = mock(Random.class);
     RandomBot player;
-    Bank bank;
-    Display events = new Display();
+    RandomBot player2;
+    RandomBot player3;
+    Game game;
 
     @BeforeEach
     void setUp() {
-        bank = new Bank();
+        game = new Game();
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22]));
-        player = new RandomBot("Hello", districts, random);
-        events.reset();
+        player = new RandomBot("Hello", districts, game, random);
+        player2 = new RandomBot("Bob", new ArrayList<>(), game, random);
+        player3 = new RandomBot("Bob", new ArrayList<>(), game, random);
     }
 
     @Test
@@ -50,40 +54,42 @@ class RandomBotTest {
     @Test
     void chooseCardInHand() {
 
-        player.addGold(4, bank);
-        DistrictCard card = player.chooseCardInHand();
+
+        player.getActions().addGold(4);
+
+        player.chooseDistrictToBuild();
         assertEquals(2, player.getHand().size());
-        assertEquals(DistrictCardsPile.allDistrictCards[12], card);
+        assertEquals(DistrictCardsPile.allDistrictCards[12], player.getInformation().getDistrictToBuild());
 
-        card = player.chooseCardInHand();
+        player.chooseDistrictToBuild();
         assertEquals(1, player.getHand().size());
-        assertEquals(DistrictCardsPile.allDistrictCards[0], card);
+        assertEquals(DistrictCardsPile.allDistrictCards[0], player.getInformation().getDistrictToBuild());
 
-        card = player.chooseCardInHand();
+        player.chooseDistrictToBuild();
         assertEquals(1, player.getHand().size());
-        assertNull(card);
+        assertNull(player.getInformation().getDistrictToBuild());
 
         /*test if the player has the card he wants in his city*/
-        player.addGold(1, bank);
+
+        player.getActions().addGold(1);
         Player playerSpy = spy(player);
         when(playerSpy.hasCardInCity(any())).thenReturn(true);
-        card = playerSpy.chooseCardInHand();
+        playerSpy.chooseDistrictToBuild();
         assertEquals(1, playerSpy.getHand().size());
-        assertNull(card);
+        assertNull(playerSpy.getInformation().getDistrictToBuild());
 
-        player.chooseCardInHand();
-        card = player.chooseCardInHand();
+        player.chooseDistrictToBuild();
+        player.chooseDistrictToBuild();
         assertEquals(0, player.getHand().size());
-        assertNull(card);
+        assertNull(playerSpy.getInformation().getDistrictToBuild());
 
     }
 
     @Test
     void chooseCardAmongDrawn() {
-        DistrictCardsPile pile = new DistrictCardsPile();
-        pile.initializePile();
-        DistrictCard[] drawnCards = pile.draw(2);
-        DistrictCard cardToPlay = player.chooseCardAmongDrawn(pile, drawnCards);
+        player.getInformation().getPile().initializePile();
+        DistrictCard[] drawnCards = game.getPile().draw(2);
+        DistrictCard cardToPlay = player.chooseCardAmongDrawn(drawnCards);
         for (Card card : drawnCards)
             if (card != null) assertEquals(cardToPlay, card);
 
@@ -92,183 +98,285 @@ class RandomBotTest {
     @Test
     void playWithNoMoney() {
         /*case 1 : take card and don't place*/
-        DistrictCardsPile pile = new DistrictCardsPile();
-        pile.initializePile();
-
-        Player playerSpy = spy(player);
+        game.getPile().initializePile();
 
         when(random.nextBoolean()).thenReturn(false, false);
-        playerSpy.play(pile, bank, events);
+
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         // assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
 
-        assertEquals(4, playerSpy.getHand().size());
-        assertEquals(0, playerSpy.getCity().size());
-        assertEquals(0, playerSpy.getGold());
+        assertEquals(4, player.getHand().size());
+        assertEquals(0, player.getCity().size());
+        assertEquals(0, player.getGold());
 
-        events.reset();
+        game.getDisplay().reset();
 
         /*case 2 : takes gold and don't place*/
-        when(random.nextBoolean()).thenReturn(false, true, false);
-        playerSpy.play(pile, bank, events);
+
+        when(random.nextBoolean()).thenReturn(true, false, false);
+        player.playResourcesPhase();
+        player.playBuildingPhase();
 
         // assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
 
-        assertEquals(4, playerSpy.getHand().size());
-        assertEquals(0, playerSpy.getCity().size());
-        assertEquals(2, playerSpy.getGold());
+        assertEquals(4, player.getHand().size());
+        assertEquals(0, player.getCity().size());
+        assertEquals(2, player.getGold());
 
-        events.reset();
+        game.getDisplay().reset();
 
         /*case 3 : takes gold and place*/
         when(random.nextBoolean()).thenReturn(true, true, true);
-        playerSpy.play(pile, bank, events);
+
+        player.playResourcesPhase();
+        player.playBuildingPhase();
 
         // assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Temple\n"));
 
-        assertEquals(3, playerSpy.getHand().size());
-        assertEquals(1, playerSpy.getCity().size());
-        assertEquals(3, playerSpy.getGold());
+        assertEquals(3, player.getHand().size());
+        assertEquals(1, player.getCity().size());
+        assertEquals(3, player.getGold());
 
-        events.reset();
+        game.getDisplay().reset();
 
-        verify(playerSpy, times(3)).takeGoldFromCity(any(), eq(events));
     }
 
     @Test
     void playWith2GoldsTemple() {
-        DistrictCardsPile pile = new DistrictCardsPile();
-        pile.initializePile();
-        Player playerSpy = spy(player);
-        playerSpy.addGold(2, bank);
+        game.getPile().initializePile();
+
+        player.getActions().addGold(2);
+
 
         /*case 1 : take card and don't place*/
-        when(random.nextBoolean()).thenReturn(true, false, false);
-        playerSpy.play(pile, bank, events);
+
+        when(random.nextBoolean()).thenReturn(false, true, false);
+        player.playResourcesPhase();
+        player.playBuildingPhase();
 
         // assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
 
-        assertEquals(4, playerSpy.getHand().size());
-        assertEquals(0, playerSpy.getCity().size());
-        assertEquals(2, playerSpy.getGold());
+        assertEquals(4, player.getHand().size());
+        assertEquals(0, player.getCity().size());
+        assertEquals(2, player.getGold());
 
-        events.reset();
+        game.getDisplay().reset();
 
         /*case 2 : doesn't take gold and place*/
 
         when(random.nextBoolean()).thenReturn(false, false, true);
-        playerSpy.play(pile, bank, events);
+        player.playResourcesPhase();
+        player.playBuildingPhase();
 
         // assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Temple\n"));
 
-        assertEquals(4, playerSpy.getHand().size());
-        assertEquals(1, playerSpy.getCity().size());
-        assertEquals(1, playerSpy.getGold());
+        assertEquals(4, player.getHand().size());
+        assertEquals(1, player.getCity().size());
+        assertEquals(1, player.getGold());
 
-        events.reset();
+        player.getInformation().getDisplay().reset();
 
         /*case 3 : takes gold and don't place*/
-        when(random.nextBoolean()).thenReturn(false, true, false);
-        playerSpy.play(pile, bank, events);
+
+        when(random.nextBoolean()).thenReturn(true, false, false);
+        player.playResourcesPhase();
+        player.playBuildingPhase();
 
         // assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
 
-        assertEquals(4, playerSpy.getHand().size());
-        assertEquals(1, playerSpy.getCity().size());
-        assertEquals(3, playerSpy.getGold());
+        assertEquals(4, player.getHand().size());
+        assertEquals(1, player.getCity().size());
+        assertEquals(3, player.getGold());
 
-        events.reset();
+        player.getInformation().getDisplay().reset();
 
         /*case 4 : takes gold and place*/
         when(random.nextBoolean()).thenReturn(true, true, true);
-        playerSpy.play(pile, bank, events);
+
+        player.playResourcesPhase();
+        player.playBuildingPhase();
+
 
         // assertTrue(events.getEvents().contains("Hello a construit dans sa ville : Manoir\n"));
 
-        assertEquals(3, playerSpy.getHand().size());
-        assertEquals(2, playerSpy.getCity().size());
-        assertEquals(2, playerSpy.getGold());
+        assertEquals(3, player.getHand().size());
+        assertEquals(2, player.getCity().size());
+        assertEquals(2, player.getGold());
 
-        events.reset();
+        player.getInformation().getDisplay().reset();
 
-        verify(playerSpy, times(4)).takeGoldFromCity(any(), eq(events));
 
     }
 
     @Test
     void playWith2GoldsCardAlreadyIn() {
         List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[13]));
-        player = new RandomBot("Hello", districts, random);
-        Player playerSpy = spy(player);
+        player = new RandomBot("Hello", districts, game, random);
 
-        DistrictCardsPile pile = new DistrictCardsPile();
-        pile.initializePile();
+        player.getInformation().getDisplay().reset();
 
-        playerSpy.addGold(2, bank);
-        when(random.nextBoolean()).thenReturn(false, true, true);
-        playerSpy.play(pile, bank, events);
-        assertEquals(1, playerSpy.getHand().size());
-        assertEquals(1, playerSpy.getCity().size());
-        assertEquals(3, playerSpy.getGold());
 
-        events.reset();
+        player.getActions().addGold(2);
+        when(random.nextBoolean()).thenReturn(true, false, true);
+        player.playResourcesPhase();
+        player.playBuildingPhase();
+        assertEquals(1, player.getHand().size());
+        assertEquals(1, player.getCity().size());
+        assertEquals(3, player.getGold());
 
-        playerSpy.play(pile, bank, events);
+        player.getInformation().getDisplay().reset();
+
+
+        player.playResourcesPhase();
+        player.playBuildingPhase();
         // assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
 
-        assertEquals(1, playerSpy.getHand().size());
-        assertEquals(1, playerSpy.getCity().size());
-        assertEquals(5, playerSpy.getGold());
-
-        verify(playerSpy, times(2)).takeGoldFromCity(any(), eq(events));
+        assertEquals(1, player.getHand().size());
+        assertEquals(1, player.getCity().size());
+        assertEquals(5, player.getGold());
 
 
-    }
-
-    @Test
-    void playWithWrongBooleanGenerated() {
-        DistrictCardsPile pile = new DistrictCardsPile();
-        pile.initializePile();
-        Player playerSpy = spy(player);
-
-        when(random.nextBoolean()).thenThrow(IllegalArgumentException.class);
-
-        playerSpy.play(pile, bank, events);
-        assertEquals(3, playerSpy.getHand().size());
-        assertEquals(0, playerSpy.getCity().size());
-        assertEquals(2, playerSpy.getGold()); //took money
-        // assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
-        events.reset();
-
-        playerSpy.addGold(23, bank); //no money in bank anymore
-        playerSpy.play(pile, bank, events);
-        assertEquals(4, playerSpy.getHand().size());
-        assertEquals(0, playerSpy.getCity().size());
-        assertEquals(25, playerSpy.getGold()); //took money
-
-        // assertTrue(events.getEvents().contains("Hello n'a rien construit.\n"));
     }
 
     @Test
     void chooseCharacterTest() {
-        CharacterCardsList characters = new CharacterCardsList();
+        CharacterCardsList characters = new CharacterCardsList(CharacterCardsList.allCharacterCards);
         when(random.nextInt(anyInt())).thenReturn(3); // king
-        player.chooseCharacter(characters, events);
+        player.chooseCharacter(characters);
         verify(random, times(1)).nextInt(anyInt());
         assertEquals("Roi", player.getCharacter().getCardName());
         assertFalse(characters.contains(new KingCard()));
         // assertEquals("Hello a choisi le personnage : Roi\n", events.getEvents());
-        events.reset();
+        player.getInformation().getDisplay().reset();
 
         when(random.nextInt(anyInt())).thenReturn(20, 3);
-        player.chooseCharacter(characters, events);
+        player.chooseCharacter(characters);
         verify(random, times(3)).nextInt(anyInt());
 
 
-        //throw exception
-        when(random.nextInt(anyInt())).thenThrow(IllegalStateException.class).thenReturn(3);
-        player.chooseCharacter(characters, events);
-        verify(random, times(5)).nextInt(anyInt());
+    }
 
+    @Test
+    void playAsAssassin() {
+        player.setCharacter(CharacterCardsList.allCharacterCards[0]);
+        when(random.nextInt(anyInt())).thenReturn(3);
+        player.playAsAssassin();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[4]);
+
+        player.setCharacter(CharacterCardsList.allCharacterCards[0]);
+        when(random.nextInt(anyInt())).thenReturn(6);
+        player.playAsAssassin();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[7]);
+
+        player.setCharacter(CharacterCardsList.allCharacterCards[0]);
+        when(random.nextInt(anyInt())).thenReturn(0);
+        player.playAsAssassin();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[1]);
+    }
+
+    @Test
+    void playAsThief() {
+        player.setCharacter(CharacterCardsList.allCharacterCards[1]);
+        when(random.nextInt(anyInt())).thenReturn(0);
+        player.playAsThief();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[2]);
+        assertTrue(CharacterCardsList.allCharacterCards[2].isRobbed());
+        CharacterCardsList.allCharacterCards[2].setRobbed(false);
+
+        when(random.nextInt(anyInt())).thenReturn(3);
+        player.playAsThief();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[5]);
+        assertTrue(CharacterCardsList.allCharacterCards[5].isRobbed());
+        CharacterCardsList.allCharacterCards[5].setRobbed(false);
+
+        when(random.nextInt(anyInt())).thenReturn(5);
+        player.playAsThief();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[7]);
+        assertTrue(CharacterCardsList.allCharacterCards[7].isRobbed());
+        CharacterCardsList.allCharacterCards[7].setRobbed(false);
+
+        CharacterCardsList.allCharacterCards[5].setDead(true);
+        when(random.nextInt(anyInt())).thenReturn(3);
+        player.playAsThief();
+        assertEquals(player.getInformation().getTarget(), CharacterCardsList.allCharacterCards[6]);
+        assertTrue(CharacterCardsList.allCharacterCards[6].isRobbed());
+        CharacterCardsList.allCharacterCards[6].setRobbed(false);
+    }
+
+    @Test
+    void playAsMagician() {
+        Hand hand1 = new Hand(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[2]));
+        Hand hand2 = new Hand(List.of(DistrictCardsPile.allDistrictCards[10], DistrictCardsPile.allDistrictCards[11]));
+        player.setCharacter(CharacterCardsList.allCharacterCards[2]);
+        player2.setCharacter(CharacterCardsList.allCharacterCards[3]);
+        player.setHand(hand1);
+        player2.setHand(hand2);
+
+        when(random.nextInt(anyInt())).thenReturn(0, 0, 0);
+        player.playAsMagician();
+        assertEquals(1, player.getInformation().getPowerToUse());
+        assertEquals(CharacterCardsList.allCharacterCards[3], player.getInformation().getTarget());
+        assertEquals(player.getHand(), hand2);
+        assertEquals(player2.getHand(), hand1);
+
+        when(random.nextInt(anyInt())).thenReturn(1, 2, 1);
+        player.playAsMagician();
+        assertEquals(2, player.getInformation().getPowerToUse());
+        assertEquals(2, player.getInformation().getCardsToDiscard());
+        assertEquals(2, player.getHand().size());
+
+        when(random.nextInt(anyInt())).thenReturn(1, 10, 2);
+        player.playAsMagician();
+        assertEquals(2, player.getInformation().getPowerToUse());
+        assertEquals(10, player.getInformation().getCardsToDiscard());
+        assertEquals(2, player.getHand().size());
+    }
+
+    @Test
+    void playAsMerchant() {
+        player.getInformation().getPile().initializePile();
+        player.setCharacter(CharacterCardsList.allCharacterCards[5]);
+
+        // Bot takes cards and doesn't build
+        // At the end of its turn, it has 1 gold due to the merchant power
+        when(random.nextBoolean()).thenReturn(false, false);
+        player.playAsMerchant();
+        assertEquals(1, player.getGold());
+    }
+
+    @Test
+    void playAsWarlord() {
+        player.setCharacter(CharacterCardsList.allCharacterCards[7]);
+        player2.setCharacter(CharacterCardsList.allCharacterCards[0]);
+        player3.setCharacter(CharacterCardsList.allCharacterCards[1]);
+
+        player2.setCity(new City(List.of(DistrictCardsPile.allDistrictCards[1])));
+
+        when(random.nextBoolean()).thenReturn(true, true, false);
+        when(random.nextInt(anyInt())).thenReturn(0, 0);
+
+        // Bot takes 2 gold coins and doesn't build
+        // It chooses the assassin as target, and his first district as district to destroy
+        // The assassin first district is a manor that costs 3, so 2 for the warlord to destroy it.
+        // As he has 2 gold coins, he destroys the assassin's manor, who doesn't have any district left.
+        // He ends its turn with 0 gold.
+        player.playAsWarlord();
+
+        assertEquals(0, player.getGold());
+        assertEquals(new City(), player2.getCity());
+    }
+
+    @AfterEach
+    void resetCharacterCards() {
+        CharacterCardsList.allCharacterCards[0] = new AssassinCard();
+        CharacterCardsList.allCharacterCards[1] = new ThiefCard();
+        CharacterCardsList.allCharacterCards[2] = new MagicianCard();
+        CharacterCardsList.allCharacterCards[3] = new KingCard();
+        CharacterCardsList.allCharacterCards[4] = new BishopCard();
+        CharacterCardsList.allCharacterCards[5] = new MerchantCard();
+        CharacterCardsList.allCharacterCards[6] = new ArchitectCard();
+        CharacterCardsList.allCharacterCards[7] = new WarlordCard();
     }
 
 }

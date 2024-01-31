@@ -1,19 +1,14 @@
 package fr.citadels.players;
 
-import fr.citadels.gameelements.cards.CardFamily;
-import fr.citadels.gameelements.cards.charactercards.CharacterCard;
-import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
-import fr.citadels.gameelements.cards.districtcards.City;
-import fr.citadels.gameelements.cards.districtcards.DistrictCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.engine.Display;
-import fr.citadels.gameelements.cards.districtcards.Hand;
+import fr.citadels.engine.Game;
+import fr.citadels.cards.charactercards.CharacterCard;
+import fr.citadels.cards.districtcards.City;
+import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.Hand;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Player implements Comparable<Player> {
+public abstract class Player implements Comparable<Player>, PlayerChoices {
 
     /* Attributes */
 
@@ -21,17 +16,21 @@ public abstract class Player implements Comparable<Player> {
     private Hand hand;
     private City city;
     private int gold;
-
     private CharacterCard character;
+    protected final PlayerInformation information;
+    protected final PlayerActions actions;
 
 
     /* Constructor */
 
-    public Player(String name, List<DistrictCard> cards) {
+    protected Player(String name, List<DistrictCard> cards, Game game) {
         this.name = name;
         this.hand = new Hand(cards);
         this.city = new City();
         this.character = null;
+
+        this.information = new PlayerInformation(game);
+        actions = new PlayerActions(this, information);
     }
 
 
@@ -53,28 +52,16 @@ public abstract class Player implements Comparable<Player> {
      * @return the hand
      */
     public Hand getHand() {
-        return new Hand(new ArrayList<>(this.hand));
+        return this.hand;
     }
 
-    public void setHand(Hand hand) {
-        this.hand = hand;
-    }
 
     /**
-     * Sort the player's hand
-     * @param family the family of the cards to put first
+     *
+     * @return the player's actions
      */
-    public void sortHand(CardFamily family) {
-        this.hand.sortCards(family);
-    }
-
-    /**
-     * Remove a card from the player's hand
-     * @param index the index of the card to remove
-     * @return the card removed
-     */
-    public DistrictCard removeCardFromHand(int index) {
-        return this.hand.removeCard(index);
+    public PlayerActions getActions() {
+        return actions;
     }
 
 
@@ -84,21 +71,7 @@ public abstract class Player implements Comparable<Player> {
      * @return the city
      */
     public City getCity() {
-        return new City(new ArrayList<>(this.city));
-    }
-
-    /**
-     * Add a card to the player's city
-     */
-    public void addCardToCity(DistrictCard card) {
-        this.city.add(card);
-    }
-
-    /**
-     * Add cards to the player's city
-     */
-    public void addCardsToCity(List<DistrictCard> cards) {
-        this.city.addAll(cards);
+        return this.city;
     }
 
 
@@ -111,17 +84,64 @@ public abstract class Player implements Comparable<Player> {
         return this.gold;
     }
 
+
     /**
-     * Get a copy of the player's character
+     * Get the player's character
+     *
      * @return the character
      */
     public CharacterCard getCharacter() {
-        if (this.character == null) return null; // if the player has no character (first round
-        return new CharacterCard(this.character.getCardName(), this.character.getCardFamily(), this.character.getRank());
+        return this.character;
     }
 
+
+    /**
+     * Get the player's information
+     *
+     * @return information
+     */
+    public PlayerInformation getInformation() {
+        return information;
+    }
+
+
+    /**
+     * Set the player's hand
+     *
+     * @param hand the hand to set
+     */
+    public void setHand(Hand hand) {
+        this.hand = hand;
+    }
+
+
+    /**
+     * Set the player's city
+     *
+     * @param city the hand to set
+     */
+    public void setCity(City city) {
+        this.city = city;
+    }
+
+
+    /**
+     * Set the player's character and the character's player.
+     *
+     * @param character the character to set
+     */
     public void setCharacter(CharacterCard character) {
         this.character = character;
+        character.setPlayer(this);
+    }
+
+
+    /**
+     * Set the player's gold
+     * @param gold the amount of gold coins that the player should have
+     */
+    public void setGold(int gold) {
+        this.gold = gold;
     }
 
 
@@ -156,11 +176,12 @@ public abstract class Player implements Comparable<Player> {
 
     @Override
     public String toString() {
-        return this.name + "\n\tPersonnage : " +  this.character + "\n\tFortune : " + this.gold + "\n\tMain : " + this.hand + "\n\tCité : " + this.city;
+        return this.name + "\n\tPersonnage : " + this.character + "\n\tFortune : " + this.gold + "\n\tMain : " + this.hand + "\n\tCité : " + this.city;
     }
 
 
     /* Methods */
+
 
     /**
      * Check if the player has a complete city
@@ -169,23 +190,6 @@ public abstract class Player implements Comparable<Player> {
      */
     public boolean hasCompleteCity() {
         return city.isComplete();
-    }
-
-
-    /**
-     * put back the cards drawn except the one played
-     *
-     * @param drawnCards  cards drawn
-     * @param pile        pile of cards
-     * @param randomIndex index of the card played
-     */
-    public void putBack(DistrictCard[] drawnCards, DistrictCardsPile pile, int randomIndex) {
-        for (int i = 0; i < drawnCards.length; i++) {
-            if (i != randomIndex) {
-                pile.placeBelowPile(drawnCards[i]);
-                drawnCards[i] = null;
-            }
-        }
     }
 
 
@@ -201,112 +205,110 @@ public abstract class Player implements Comparable<Player> {
 
 
     /**
-     * add amount to the gold of the player
-     *
-     * @param amount that represents the amount to add
+     * play a round for the linked player when he embodies the assassin
      */
-    public void addGold(int amount, Bank bank) {
-        if (bank.getGold() >= amount)
-            gold += bank.take(amount);
-        else throw new IllegalArgumentException("Not enough money in bank");
+    public void playAsAssassin() {
+        playResourcesPhase();
+        playBuildingPhase();
+        chooseTargetToKill();
+        getCharacter().usePower();
     }
 
 
     /**
-     * decrease the gold of "amount"
-     *
-     * @param amount the amount to remove from the player's wallet
-     * @throws IllegalArgumentException if the amount exceeds the money owned
-     * @precondition amount must be less or equal to the gold amount of the player
+     * play a round for the linked player when he embodies the thief
      */
-    public void pay(int amount, Bank bank) throws IllegalArgumentException {
-        if (amount > gold || amount < 0)
-            throw new IllegalArgumentException("Not enough money\n" + "expected : " + amount + "\nactual : " + gold);
-        gold -= amount;
-        bank.give(amount);
+    public void playAsThief() {
+        playResourcesPhase();
+        playBuildingPhase();
+        chooseTargetToRob();
+        getCharacter().usePower();
     }
 
-    /**
-     * takes 2 cards or 2 golds from the bank and add them to the player
-     *
-     * @param pile pile of cards
-     * @param draw true if the player has to draw cards
-     */
-    public void takeCardsOrGold(DistrictCardsPile pile, Bank bank, boolean draw, Display display) {
-        if (!draw) {
-            try {
-                addGold(2, bank);
 
-                display.addGoldTaken(this,2);
-                display.addBlankLine();
-            } catch (IllegalArgumentException e) {
-                draw = true;
-            }
+    /**
+     * play a round for the linked player when he embodies the magician
+     */
+    public void playAsMagician() {
+        int momentToUsePower = chooseMagicianPower();
+        if (momentToUsePower == 0) {
+            this.getCharacter().usePower();
         }
-        if (draw) {
-            DistrictCard[] drawnCards = pile.draw(2);
-            display.addDistrictDrawn(drawnCards);
-            if (drawnCards.length != 0) { // if there is at least 1 card
-                DistrictCard cardToPlay = chooseCardAmongDrawn(pile, drawnCards);
-                hand.add(cardToPlay);
-
-                display.addDistrictChosen(this, cardToPlay);
-                display.addBlankLine();
-            }
+        playResourcesPhase();
+        if (momentToUsePower == 1) {
+            this.getCharacter().usePower();
+        }
+        playBuildingPhase();
+        if (momentToUsePower == 2) {
+            this.getCharacter().usePower();
         }
     }
 
+
     /**
-     * take gold from the city if the family of the card is the same as the family of the character
+     * play a round for the linked player when he embodies the king
      */
-    public void takeGoldFromCity(Bank bank, Display display){
-        if(character != null) {
-            int goldToTake = 0;
-            for(DistrictCard card : getCity()) {
-                if(card.getCardFamily().equals(character.getCardFamily())) {
-                    goldToTake++;
-                }
-            }
-            if (goldToTake > 0) {
-                addGold(goldToTake, bank);
-                display.addGoldTakenFromCity(this, goldToTake);
-                display.addBlankLine();
+    public void playAsKing() {
+        playResourcesPhase();
+        playBuildingPhase();
+    }
+
+
+    /**
+     * play a round for the linked player when he embodies the bishop
+     */
+    public void playAsBishop() {
+        playResourcesPhase();
+        playBuildingPhase();
+    }
+
+
+    /**
+     * play a round for the linked player if he embodies the merchant
+     */
+    public void playAsMerchant() {
+        getCharacter().usePower();
+        playResourcesPhase();
+        playBuildingPhase();
+    }
+
+
+    /**
+     * play a round for the linked player if he embodies the architect
+     */
+    public void playAsArchitect() {
+        this.getInformation().setPowerToUse(1);  // draw two cards
+        this.getCharacter().usePower();
+
+        this.playResourcesPhase();
+        this.playBuildingPhase();
+
+        this.getInformation().setPowerToUse(2);  // build another district
+        for (int i = 0; i < 2; i++) {
+            this.chooseDistrictToBuild();
+            if (this.getInformation().getDistrictToBuild() != null) {
+                this.getCharacter().usePower();
+            } else {
+                this.getInformation().getDisplay().addNoArchitectPower();
+                this.getInformation().getDisplay().addBlankLine();
             }
         }
     }
 
-    /**
-     * choose a card to play among the cards drawn
-     *
-     * @param pile       pile of cards
-     * @param drawnCards cards drawn
-     * @return the card to play
-     */
-    public abstract DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards);
-
 
     /**
-     * choose a card in hand
-     *
-     * @return the card chosen or null if no card can be chosen
+     * play a round for the linked player if he embodies the warlord
      */
-    public abstract DistrictCard chooseCardInHand();
-
-
-    /**
-     * play a round for the linked player
-     *
-     * @param pile of cards
-     * @return the actions of the player
-     */
-    public abstract void play(DistrictCardsPile pile, Bank bank, Display display);
-
-
-    /**
-     * Choose and take a characterCard from the list of character.
-     *
-     * @param characters the list of characterCard.
-     */
-    public abstract void chooseCharacter(CharacterCardsList characters, Display display);
+    public void playAsWarlord() {
+        playResourcesPhase();
+        playBuildingPhase();
+        chooseTargetToDestroy();
+        if ((getInformation().getTarget() != null) && (getInformation().getDistrictToDestroy() != null)) {
+            getCharacter().usePower();
+        }
+        else {
+            getInformation().getDisplay().addNoWarlordPower();
+        }
+    }
 
 }

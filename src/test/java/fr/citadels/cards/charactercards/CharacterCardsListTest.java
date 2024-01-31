@@ -1,42 +1,24 @@
-package fr.citadels.engine;
+package fr.citadels.cards.charactercards;
 
-import fr.citadels.cards.charactercards.CharacterCardsList;
 import fr.citadels.cards.charactercards.characters.*;
-import fr.citadels.players.Player;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-class GameTest {
+class CharacterCardsListTest {
 
-    Game game = new Game();
-
-    @BeforeEach
-    void setUp() {
-        game.initializeGame();
-    }
-
+    CharacterCardsList characterCards = new CharacterCardsList(CharacterCardsList.allCharacterCards);
 
     @Test
-    void initializeGameTest() {
-        assertEquals(51, game.getPile().size());
-        for (Player player : game.getPlayerList()) {
-            assertEquals(4, player.getHand().size());
-            assertEquals(2, player.getGold());
-        }
+    void testRemoveCharactersFaceUp() {
+        assertEquals(2, characterCards.removeCharactersFaceUp().length);
     }
 
     @Test
-    void playSelectionPhaseTest() {
-        game.playSelectionPhase();
-        for (Player player : game.getPlayerList()) {
-            assertNotNull(player.getCharacter());
-        }
+    void testRemoveCharactersFaceDown() {
+        assertEquals(1, characterCards.removeCharactersFaceDown().length);
     }
-
 
     @AfterEach
     void resetCharacterCards() {

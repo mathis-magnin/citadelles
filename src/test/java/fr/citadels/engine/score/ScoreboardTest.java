@@ -1,13 +1,13 @@
 package fr.citadels.engine.score;
 
-import fr.citadels.engine.Display;
-import fr.citadels.engine.score.Score;
-import fr.citadels.engine.score.Scoreboard;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
-import fr.citadels.gameelements.cards.districtcards.DistrictCard;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.charactercards.characters.*;
+import fr.citadels.engine.Game;
+import fr.citadels.cards.charactercards.CharacterCardsList;
+import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
+import fr.citadels.players.bots.KingBot;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ScoreboardTest {
 
-    CharacterCardsList characters = new CharacterCardsList();
+    CharacterCardsList characters = new CharacterCardsList(CharacterCardsList.allCharacterCards);
 
     /* Initialize cards */
 
@@ -62,96 +62,54 @@ class ScoreboardTest {
 
     /* Initialize players */
 
-    DistrictCardsPile pile = new DistrictCardsPile();
-    Bank bank;
-    Display events = new Display();
+    Game game = new Game();
 
-    Player player1 = new Player("Tom", cardsPlayer1) {
+    Player player1 = new KingBot("Tom", cardsPlayer1, game) {
         @Override
-        public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
-            return null;
+        public void playResourcesPhase() {
         }
 
         @Override
-        public DistrictCard chooseCardInHand() {
-            return null;
+        public void playBuildingPhase() {
+            this.getActions().addCardsToCity(this.getHand());
         }
 
-        @Override
-        public void play(DistrictCardsPile pile, Bank bank, Display events) {
-            this.addCardsToCity(this.getHand());
-        }
-
-        @Override
-        public void chooseCharacter(CharacterCardsList characters, Display events) {
-            this.setCharacter(characters.get(1));
-        }
     };
 
-    Player player2 = new Player("Bob", cardsPlayer2) {
+    Player player2 = new KingBot("Bob", cardsPlayer2, game) {
         @Override
-        public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
-            return null;
+        public void playResourcesPhase() {
         }
 
         @Override
-        public DistrictCard chooseCardInHand() {
-            return null;
+        public void playBuildingPhase() {
+            this.getActions().addCardsToCity(this.getHand());
         }
 
-        @Override
-        public void play(DistrictCardsPile pile, Bank bank, Display events) {
-            this.addCardsToCity(this.getHand());
-        }
-
-        @Override
-        public void chooseCharacter(CharacterCardsList characters, Display events) {
-            this.setCharacter(characters.get(2));
-        }
     };
 
-    Player player3 = new Player("Noa", cardsPlayer3) {
+    Player player3 = new KingBot("Noa", cardsPlayer3, game) {
         @Override
-        public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
-            return null;
+        public void playResourcesPhase() {
         }
 
         @Override
-        public DistrictCard chooseCardInHand() {
-            return null;
+        public void playBuildingPhase() {
+            this.getActions().addCardsToCity(this.getHand());
         }
 
-        @Override
-        public void play(DistrictCardsPile pile, Bank bank, Display events) {
-            this.addCardsToCity(this.getHand());
-        }
-
-        @Override
-        public void chooseCharacter(CharacterCardsList characters, Display events) {
-            this.setCharacter(characters.get(3));
-        }
     };
 
-    Player player4 = new Player("Luk", cardsPlayer4) {
+    Player player4 = new KingBot("Luk", cardsPlayer4, game) {
         @Override
-        public DistrictCard chooseCardAmongDrawn(DistrictCardsPile pile, DistrictCard[] drawnCards) {
-            return null;
+        public void playResourcesPhase() {
         }
 
         @Override
-        public DistrictCard chooseCardInHand() {
-            return null;
+        public void playBuildingPhase() {
+            this.getActions().addCardsToCity(this.getHand());
         }
 
-        @Override
-        public void play(DistrictCardsPile pile, Bank bank, Display events) {
-            this.addCardsToCity(this.getHand());
-        }
-
-        @Override
-        public void chooseCharacter(CharacterCardsList characters, Display events) {
-            this.setCharacter(characters.get(4));
-        }
     };
     Scoreboard scoreboard = new Scoreboard(new Player[]{player1, player2, player3, player4});
 
@@ -162,41 +120,16 @@ class ScoreboardTest {
     /* Simulate an entire game (Only for this test class, the method play has been changed) */
     @BeforeEach
     void setUp() {
-        player1.play(pile, bank, events);
-        player1.chooseCharacter(characters, events);
-        player2.play(pile, bank, events);
-        player2.chooseCharacter(characters, events);
-        player3.play(pile, bank, events);
-        player3.chooseCharacter(characters, events);
-        player4.play(pile, bank, events);
-        player4.chooseCharacter(characters, events);
+        player1.playBuildingPhase();
+        player1.chooseCharacter(characters);
+        player2.playBuildingPhase();
+        player2.chooseCharacter(characters);
+        player3.playBuildingPhase();
+        player3.chooseCharacter(characters);
+        player4.playBuildingPhase();
+        player4.chooseCharacter(characters);
     }
 
-    /*@Test
-    void determineRanking() {
-        Score.setFirstPlayerWithCompleteCity(player1);
-        scoreboard.determineRanking();
-        assertEquals("1e place : Luk.\n" +
-                "    Score total : 41.\n" +
-                "    Quartiers construits : 39 points.\n" +
-                "    Cité complète : 2 points bonus.\n" +
-                "\n" +
-                "2e place : Tom.\n" +
-                "    Score total : 28.\n" +
-                "    Quartiers construits : 24 points.\n" +
-                "    Première cité complète : 4 points bonus.\n" +
-                "\n" +
-                "3e place : Noa.\n" +
-                "    Dernier personnage joué : Roi (4 - Royal).\n" +
-                "    Score total : 21.\n" +
-                "    Quartiers construits : 21 points.\n" +
-                "\n" +
-                "4e place : Bob.\n" +
-                "    Dernier personnage joué : Magicien (3 - Neutre).\n" +
-                "    Score total : 21.\n" +
-                "    Quartiers construits : 19 points.\n" +
-                "    Cité complète : 2 points bonus.\n\n", scoreboard.toString());
-    }*/
 
     @Test
     void getWinner() {
@@ -204,4 +137,17 @@ class ScoreboardTest {
         scoreboard.determineRanking();
         assertEquals(player4, scoreboard.getWinner());
     }
+
+    @AfterEach
+    void resetCharacterCards() {
+        CharacterCardsList.allCharacterCards[0] = new AssassinCard();
+        CharacterCardsList.allCharacterCards[1] = new ThiefCard();
+        CharacterCardsList.allCharacterCards[2] = new MagicianCard();
+        CharacterCardsList.allCharacterCards[3] = new KingCard();
+        CharacterCardsList.allCharacterCards[4] = new BishopCard();
+        CharacterCardsList.allCharacterCards[5] = new MerchantCard();
+        CharacterCardsList.allCharacterCards[6] = new ArchitectCard();
+        CharacterCardsList.allCharacterCards[7] = new WarlordCard();
+    }
+
 }

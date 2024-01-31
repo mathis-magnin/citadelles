@@ -2,11 +2,10 @@ package fr.citadels.engine;
 
 import fr.citadels.engine.score.Score;
 import fr.citadels.engine.score.Scoreboard;
-import fr.citadels.gameelements.Bank;
-import fr.citadels.gameelements.Crown;
-import fr.citadels.gameelements.cards.charactercards.CharacterCard;
-import fr.citadels.gameelements.cards.charactercards.CharacterCardsList;
-import fr.citadels.gameelements.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.charactercards.CharacterCard;
+import fr.citadels.cards.charactercards.CharacterCardsList;
+import fr.citadels.cards.charactercards.characters.KingCard;
+import fr.citadels.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.*;
 import fr.citadels.players.bots.KingBot;
 import fr.citadels.players.bots.RandomBot;
@@ -17,67 +16,52 @@ import java.util.*;
 
 public class Game {
 
-    private static final Random RAND = new Random();
+    /* Constant values */
+
     public static final int NB_PLAYERS = 4;
+
+
+    /* Static attributes */
+
+    private static final Random RAND = new Random();
+
 
     /* Attributes */
 
-    private final Player[] playerList;
-    private final DistrictCardsPile districtCardsPile;
-    private final Crown crown;
-    private final Bank bank;
+    private final Player[] playersTab;
     private final Display display;
+    private final DistrictCardsPile pile;
     private final Scoreboard scoreboard;
     private boolean isFinished;
+    private Player crownedPlayer;
 
 
     /* Constructor */
 
     public Game() {
-        this.playerList = new Player[NB_PLAYERS];
-        this.districtCardsPile = new DistrictCardsPile();
-        this.crown = new Crown();
-        this.bank = new Bank();
+        this.playersTab = new Player[NB_PLAYERS];
         this.display = new Display();
+        this.pile = new DistrictCardsPile();
         this.isFinished = false;
         this.scoreboard = new Scoreboard(NB_PLAYERS);
+        this.crownedPlayer = null;
     }
 
 
     /* Getters */
 
     public Player[] getPlayerList() {
-        return this.playerList;
-    }
-
-
-    public DistrictCardsPile getDistrictCardsPile() {
-        return this.districtCardsPile;
-    }
-
-
-    public Crown getCrown() {
-        return this.crown;
-    }
-
-
-    public Bank getBank() {
-        return this.bank;
-    }
-
-
-    public boolean isFinished() {
-        return this.isFinished;
-    }
-
-
-    public Scoreboard getScoreboard() {
-        return this.scoreboard;
+        return this.playersTab;
     }
 
 
     public Display getDisplay() {
         return this.display;
+    }
+
+
+    public DistrictCardsPile getPile() {
+        return this.pile;
     }
 
 
@@ -87,33 +71,33 @@ public class Game {
      * Initialize the game
      */
     void initializeGame() {
-        this.districtCardsPile.initializePile();
-        this.districtCardsPile.shufflePile();
+        this.pile.initializePile();
+        this.pile.shufflePile();
 
         this.display.addGameTitle();
 
         // Initialize the players
-        this.playerList[0] = new RandomBot("HASARDEUX", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
-        this.playerList[1] = new SpendthriftBot("DÉPENSIER", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
-        this.playerList[2] = new ThriftyBot("ÉCONOME", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
-        this.playerList[3] = new KingBot("MONARCHISTE", new ArrayList<>(Arrays.asList(districtCardsPile.draw(4))), RAND);
-        this.display.addPlayers(this.playerList);
+        this.playersTab[0] = new RandomBot("HASARDEUX", Arrays.asList(this.pile.draw(4)), this, RAND);
+        this.playersTab[1] = new SpendthriftBot("DÉPENSIER", Arrays.asList(this.pile.draw(4)), this, RAND);
+        this.playersTab[2] = new ThriftyBot("ÉCONOME", Arrays.asList(this.pile.draw(4)), this, RAND);
+        this.playersTab[3] = new KingBot("MONARCHISTE", Arrays.asList(this.pile.draw(4)), this);
+        this.display.addPlayers(this.playersTab);
         this.display.addBlankLine();
 
-        for (Player player : this.playerList) {
+        for (Player player : this.playersTab) {
             this.display.addFirstDistrictsDrawn(player);
         }
         this.display.addBlankLine();
 
         // Give 2 golds to every player
-        for (Player player : this.playerList) {
-            player.addGold(2, this.bank);
+        for (Player player : this.playersTab) {
+            player.getActions().addGold(2);
         }
         this.display.addInitialGoldGiven(2);
         this.display.addBlankLine();
 
-        this.crown.initializeCrown(RAND);
-        this.display.addFirstCrownedPlayer(this.playerList[this.crown.getCrownedPlayerIndex()]);
+        this.crownedPlayer = this.playersTab[RAND.nextInt(NB_PLAYERS)];
+        this.display.addFirstCrownedPlayer(this.crownedPlayer);
         this.display.addBlankLine(3);
 
         this.display.printAndReset();
@@ -121,32 +105,56 @@ public class Game {
 
 
     /**
+     * Get the index of the crowned player.
+     *
+     * @return the index of the crowned player.
+     * -1 if there is no crowned player (it should not happen !).
+     */
+    private int getCrownedPlayerIndex() {
+        int length = this.playersTab.length;
+        for (int i = 0; i < length; i++) {
+            if (this.playersTab[i] == this.crownedPlayer) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+    /**
      * Play the selection phase of the turn
      */
     public void playSelectionPhase() {
+        /* Reset character's attributes */
+        for (CharacterCard character : CharacterCardsList.allCharacterCards) {
+            character.setPlayer(null);
+            character.setDead(false);
+            character.setRobbed(false);
+        }
+
         this.display.addSelectionPhaseTitle();
 
-        CharacterCardsList characters = new CharacterCardsList();
-        Collections.shuffle(characters);
+        CharacterCardsList characters = new CharacterCardsList(CharacterCardsList.allCharacterCards);
         CharacterCard[] removedCharactersFaceUp = characters.removeCharactersFaceUp();
         CharacterCard[] removedCharactersFaceDown = characters.removeCharactersFaceDown();
 
         this.display.addRemovedCharacter(removedCharactersFaceUp, removedCharactersFaceDown);
         this.display.addBlankLine(2);
 
-        this.crown.defineNextCrownedPlayer(this.playerList, RAND);
-        int crownedPlayerIndex = this.crown.getCrownedPlayerIndex();
-
-        this.display.addCrownedPlayer(this.playerList[crownedPlayerIndex]);
+        int crownedPlayerIndex = this.getCrownedPlayerIndex();
+        this.display.addCrownedPlayer(this.crownedPlayer);
         this.display.addBlankLine();
 
-        int length = this.playerList.length;
+        int length = this.playersTab.length;
         int index;
 
         for (int i = 0; i < length; i++) {
             index = (i + crownedPlayerIndex) % length;
-            playerList[index].chooseCharacter(characters, display);
+            this.playersTab[index].chooseCharacter(characters);
         }
+
+        this.display.addBlankLine();
+        this.display.addCharacterNotChosen(characters.remove(0)); // Only one character is not chosen
 
         this.display.addBlankLine();
     }
@@ -157,27 +165,47 @@ public class Game {
      */
     public void playTurnPhase() {
         this.display.addTurnPhaseTitle();
+        CharacterCard characterKilled = null;
 
-        Player[] orderedPlayers = new Player[playerList.length];
-        System.arraycopy(this.playerList, 0, orderedPlayers, 0, this.playerList.length);
-        Arrays.sort(orderedPlayers);   // Sort the player based on their character's rank.
+        for (CharacterCard character : CharacterCardsList.allCharacterCards) {
+            if (character.getPlayer() != null && !character.isDead()) {
+                this.display.addPlayerTurn(this.crownedPlayer, character.getPlayer());
+                this.display.addBlankLine();
+                this.display.addPlayer(character.getPlayer());
+                this.display.addBlankLine();
 
-        for (Player player : orderedPlayers) {
-            this.display.addPlayerTurn(player);
-            this.display.addBlankLine();
-            this.display.addPlayer(player);
-            this.display.addBlankLine();
-            player.play(this.districtCardsPile, this.bank, this.display);
-            if (player.hasCompleteCity()) {
-                if (!this.isFinished) {
-                    Score.setFirstPlayerWithCompleteCity(player);
-                    this.display.addGameFinished(player);
+                if (character.isRobbed()) {
+                    character.getPlayer().getActions().getRobbed();
+                }
+                if (character.equals(new KingCard())) {
+                    this.crownedPlayer = character.getPlayer();
+                    this.display.addKingPower();
                     this.display.addBlankLine();
                 }
-                this.isFinished = true;
+                character.bringIntoPlay();
+
+                if (character.getPlayer().hasCompleteCity() && !this.isFinished) {
+                    Score.setFirstPlayerWithCompleteCity(character.getPlayer());
+                    this.display.addGameFinished(character.getPlayer());
+                    this.display.addBlankLine();
+                    this.isFinished = true;
+                }
+            } else {
+                this.display.addNoPlayerTurn(this.crownedPlayer, character);
+                this.display.addBlankLine();
+                if (character.isDead())
+                    characterKilled = character;
             }
             this.display.addBlankLine();
         }
+        if ((characterKilled != null) && (characterKilled.getPlayer() != null)) {
+            this.display.addWasKilled(characterKilled);
+            if (characterKilled.equals(new KingCard())) {
+                this.display.addKingHeir();
+            }
+            this.display.addBlankLine();
+        }
+        this.display.addBlankLine();
     }
 
 
@@ -197,7 +225,7 @@ public class Game {
             this.display.printAndReset();
         }
 
-        this.scoreboard.initializeScoreboard(this.playerList);
+        this.scoreboard.initializeScoreboard(this.playersTab);
         this.scoreboard.determineRanking();
         this.display.addScoreTitle();
         this.display.addScoreboard(this.scoreboard);
