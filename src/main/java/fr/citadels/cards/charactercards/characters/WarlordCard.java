@@ -10,8 +10,8 @@ public class WarlordCard extends CharacterCard {
 
     public static CharacterCardsList getPossibleTargets() {
         CharacterCardsList targets = new CharacterCardsList();
-        for(CharacterCard characterCard : CharacterCardsList.allCharacterCards) {
-            if(!characterCard.equals(new BishopCard()) && characterCard.isPlayed() && !characterCard.getPlayer().hasCompleteCity()) {
+        for (CharacterCard characterCard : CharacterCardsList.allCharacterCards) {
+            if (!characterCard.equals(new BishopCard()) && characterCard.isPlayed() && !characterCard.getPlayer().hasCompleteCity()) {
                 targets.add(characterCard);
             }
         }
@@ -43,6 +43,7 @@ public class WarlordCard extends CharacterCard {
 
     @Override
     public void usePower() {
+        getPlayer().getInformation().getDistrictToDestroy().build(false, getPlayer());
         getPlayer().getInformation().getTarget().getPlayer().getCity().remove(getPlayer().getInformation().getDistrictToDestroy());
         getPlayer().getInformation().getPile().placeBelowPile(getPlayer().getInformation().getDistrictToDestroy());
         getPlayer().getActions().removeGold(getPlayer().getInformation().getDistrictToDestroy().getGoldCost() - 1);

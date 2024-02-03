@@ -273,6 +273,14 @@ class ThriftyBotTest {
         assertEquals(new City(), player2.getCity());
     }
 
+    @Test
+    void activateFactoryEffect() {
+        player.setGold(6);
+        assertTrue(player.activateFactoryEffect());
+        player2.setGold(5);
+        assertFalse(player2.activateFactoryEffect());
+    }
+
     @AfterEach
     void resetCharacterCards() {
         CharacterCardsList.allCharacterCards[0] = new AssassinCard();

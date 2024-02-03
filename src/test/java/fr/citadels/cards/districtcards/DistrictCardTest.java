@@ -1,8 +1,12 @@
 package fr.citadels.cards.districtcards;
 
 import fr.citadels.cards.CardFamily;
+import fr.citadels.engine.Game;
+import fr.citadels.players.bots.KingBot;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -32,5 +36,13 @@ class DistrictCardTest {
         assertEquals(DistrictCardsPile.allDistrictCards[0], (DistrictCardsPile.allDistrictCards[0]));
         assertNotEquals(DistrictCardsPile.allDistrictCards[0], (DistrictCardsPile.allDistrictCards[DistrictCardsPile.allDistrictCards.length - 1]));
         assertEquals(DistrictCardsPile.allDistrictCards[0], (new DistrictCard("Manoir", CardFamily.NOBLE, 3)));
+    }
+
+    @Test
+    void testIsBuilt() {
+        DistrictCard d = new DistrictCard("Manoir", CardFamily.NOBLE, 3);
+        assertFalse(d.isBuilt());
+        d.build(true, null);
+        assertTrue(d.isBuilt());
     }
 }

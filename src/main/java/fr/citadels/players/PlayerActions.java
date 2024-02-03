@@ -111,8 +111,7 @@ public class PlayerActions {
 
                 player.getInformation().getDisplay().addDistrictChosen(player, cardToPlay);
                 player.getInformation().getDisplay().addBlankLine();
-            }
-            else {
+            } else {
                 draw = false;
             }
         }
@@ -150,6 +149,7 @@ public class PlayerActions {
      */
     public void build() {
         if (this.information.getDistrictToBuild() != null) {
+            this.information.getDistrictToBuild().build(true, player);
             addCardToCity(this.information.getDistrictToBuild());
             removeGold(this.information.getDistrictToBuild().getGoldCost());
             player.getInformation().getDisplay().addDistrictBuilt(player, this.information.getDistrictToBuild());
