@@ -193,4 +193,9 @@ public class KingBot extends Player {
         return getHand().size() < 2 && getGold() >= 3;
     }
 
+    @Override
+    public boolean activateLaboratoryEffect() {
+        return false;
+    }
+
 }

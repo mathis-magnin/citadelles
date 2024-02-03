@@ -213,8 +213,14 @@ public class ThriftyBot extends Player {
         DistrictCardsPile.allDistrictCards[61].useEffect();
     }
 
+    @Override
     public boolean activateFactoryEffect() {
         return getGold() >= 6;
+    }
+
+    @Override
+    public boolean activateLaboratoryEffect() {
+        return false;
     }
 
 }
