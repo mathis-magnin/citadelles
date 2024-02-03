@@ -343,11 +343,4 @@ public class Display {
         this.events.append("Le joueur utilise le pouvoir de la Manufacture\n");
     }
 
-    public void addLaboratoryEffectActivated(Player player, DistrictCard card) {
-        this.events.append("Le joueur utilise le pouvoir du Laboratoire pour défausser \n");
-        this.events.append(card.getCardName()).append(" et gagner une pièce d'or.\n");
-        this.addGoldUpdate(player.getGold());
-        this.addHandUpdate(player.getHand());
-    }
-
 }

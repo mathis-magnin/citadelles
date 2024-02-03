@@ -179,14 +179,8 @@ public class RandomBot extends Player {
         DistrictCardsPile.allDistrictCards[61].useEffect();
     }
 
-    @Override
     public boolean activateFactoryEffect() {
         return RAND.nextBoolean() && getGold() >= 3;
-    }
-
-    @Override
-    public boolean activateLaboratoryEffect() {
-        return false;
     }
 
 }

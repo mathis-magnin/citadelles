@@ -212,14 +212,8 @@ public class SpendthriftBot extends Player {
         DistrictCardsPile.allDistrictCards[61].useEffect();
     }
 
-    @Override
     public boolean activateFactoryEffect() {
         return getGold() >= 3;
-    }
-
-    @Override
-    public boolean activateLaboratoryEffect() {
-        return false;
     }
 
 }
