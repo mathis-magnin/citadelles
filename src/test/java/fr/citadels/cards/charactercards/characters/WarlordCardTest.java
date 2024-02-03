@@ -14,8 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class WarlordCardTest {
 
@@ -65,12 +64,12 @@ class WarlordCardTest {
     @Test
     void usePower() {
         player1.setCity(new City(new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[0]))));
-
+        DistrictCardsPile.allDistrictCards[0].build(true, player1);
         player2.getActions().addGold(2);
         player2.getInformation().setTarget(CharacterCardsList.allCharacterCards[0]);
         player2.getInformation().setDistrictToDestroy(DistrictCardsPile.allDistrictCards[0]);
         player2.getCharacter().usePower();
-
+        assertFalse(DistrictCardsPile.allDistrictCards[0].isBuilt());
         assertEquals(0, player2.getGold());
         Assertions.assertEquals(new City(), player1.getCity());
     }

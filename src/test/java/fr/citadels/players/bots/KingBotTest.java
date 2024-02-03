@@ -271,6 +271,14 @@ class KingBotTest {
         assertEquals(new City(), player2.getCity());
     }
 
+    @Test
+    void activateFactoryEffect() {
+        player1.setGold(3);
+        assertFalse(player1.activateFactoryEffect());
+        player2.setGold(3);
+        assertTrue(player2.activateFactoryEffect());
+    }
+
     @AfterEach
     void resetCharacterCards() {
         CharacterCardsList.allCharacterCards[0] = new AssassinCard();

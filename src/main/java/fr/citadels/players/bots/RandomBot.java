@@ -1,6 +1,7 @@
 package fr.citadels.players.bots;
 
 
+import fr.citadels.cards.districtcards.DistrictCardsPile;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.CharacterCard;
 import fr.citadels.cards.charactercards.CharacterCardsList;
@@ -175,6 +176,11 @@ public class RandomBot extends Player {
         getInformation().getDisplay().addBlankLine();
         if (!takeGoldFromFamily)
             getActions().takeGoldFromCity();
+        DistrictCardsPile.allDistrictCards[61].useEffect();
+    }
+
+    public boolean activateFactoryEffect() {
+        return RAND.nextBoolean() && getGold() >= 3;
     }
 
 }

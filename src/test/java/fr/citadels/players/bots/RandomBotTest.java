@@ -367,6 +367,20 @@ class RandomBotTest {
         assertEquals(new City(), player2.getCity());
     }
 
+    @Test
+    void activateFactoryEffect() {
+        when(random.nextBoolean()).thenReturn(true, true);
+        player.setGold(0);
+        assertFalse(player.activateFactoryEffect());
+
+        player.setGold(3);
+        assertTrue(player.activateFactoryEffect());
+
+        when(random.nextBoolean()).thenReturn(false);
+        player.setGold(3);
+        assertFalse(player.activateFactoryEffect());
+    }
+
     @AfterEach
     void resetCharacterCards() {
         CharacterCardsList.allCharacterCards[0] = new AssassinCard();
