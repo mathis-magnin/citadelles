@@ -320,8 +320,27 @@ public class Display {
         this.events.append("\tLa cité de ").append(target.getPlayer().getName()).append((" comporte donc : ")).append((target.getPlayer().getCity().toString())).append(".\n");
     }
 
+
     public void addNoWarlordPower() {
         this.events.append("Le joueur n'utilise pas son pouvoir permettant de détruire un quartier d'un autre joueur.\n");
+    }
+
+
+    public void addGraveyardPower(Player player) {
+        this.events.append(player.getName()).append(" utilise le pouvoir de la carte Cimetière pour prendre en main le quartier détruit en payant 1 pièces d'or.\n");
+        this.events.append("\tLa fortune de ").append(player.getName()).append(" s'élève donc à ").append(player.getGold()).append(" pièces d'or.\n");
+        this.events.append("\tLa main de ").append(player.getName()).append((" comporte donc : ")).append((player.getHand().toString())).append(".\n");
+    }
+
+
+
+    public void addNoGraveyardPower(Player player) {
+        this.events.append(player.getName()).append(" n'utilise pas le pouvoir de la carte quartier Cimetière.\n");
+    }
+
+
+    public void addDistrictPlacedBelow() {
+        this.events.append("Le quartier détruit est donc placé sous la pile.\n");
     }
 
 

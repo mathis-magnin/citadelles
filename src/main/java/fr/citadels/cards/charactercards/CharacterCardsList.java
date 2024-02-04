@@ -1,6 +1,8 @@
 package fr.citadels.cards.charactercards;
 
 import fr.citadels.cards.charactercards.characters.*;
+import fr.citadels.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.districtcards.uniques.Graveyard;
 import fr.citadels.engine.Game;
 
 import java.util.*;
@@ -17,7 +19,7 @@ public class CharacterCardsList extends ArrayList<CharacterCard> {
             new BishopCard(),
             new MerchantCard(),
             new ArchitectCard(),
-            new WarlordCard()
+            new WarlordCard((Graveyard) (DistrictCardsPile.allDistrictCards[62]))
     };
 
     /**

@@ -17,6 +17,7 @@ public class PlayerInformation {
     private CharacterCard target;
     private int cardsToDiscard;
     private DistrictCard districtToDestroy;
+    private boolean recoverDistrictDecision;
 
     public PlayerInformation(Game game) {
         this.pile = game.getPile();
@@ -26,6 +27,7 @@ public class PlayerInformation {
         this.target = null;
         this.cardsToDiscard = 0;
         this.districtToDestroy = null;
+        this.recoverDistrictDecision = false;
     }
 
 
@@ -84,6 +86,11 @@ public class PlayerInformation {
     }
 
 
+    public boolean getRecoverDistrictDecision() {
+        return this.recoverDistrictDecision;
+    }
+
+
     /* Setters */
 
     /**
@@ -119,6 +126,11 @@ public class PlayerInformation {
      */
     public void setDistrictToDestroy(DistrictCard districtToDestroy) {
         this.districtToDestroy = districtToDestroy;
+    }
+
+
+    public void setRecoverDistrictDecision(boolean b) {
+        this.recoverDistrictDecision = b;
     }
 
 }

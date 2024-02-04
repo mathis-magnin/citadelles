@@ -58,6 +58,9 @@ public interface PlayerChoices {
     void chooseTargetToDestroy();
 
 
+    void chooseToRecoverDistrict();
+
+
     /**
      * play the phase when the player takes resources for his turn
      */

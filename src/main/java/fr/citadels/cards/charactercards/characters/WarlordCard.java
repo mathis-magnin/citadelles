@@ -3,8 +3,14 @@ package fr.citadels.cards.charactercards.characters;
 import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.charactercards.CharacterCard;
 import fr.citadels.cards.charactercards.CharacterCardsList;
+import fr.citadels.cards.districtcards.uniques.Graveyard;
 
 public class WarlordCard extends CharacterCard {
+
+    /* Attribute */
+
+    private Graveyard graveyard;
+
 
     /* Static content */
 
@@ -18,6 +24,7 @@ public class WarlordCard extends CharacterCard {
         return targets;
     }
 
+
     public static CharacterCard getOtherCharacterWithBiggestCity() {
         CharacterCard characterWithBiggestCity = null;
         for (CharacterCard character : getPossibleTargets()) {
@@ -28,11 +35,19 @@ public class WarlordCard extends CharacterCard {
         return characterWithBiggestCity;
     }
 
-    /* Constructor */
+
+    /* Constructors */
+
+    public WarlordCard(Graveyard graveyard) {
+        super("Condottiere", CardFamily.MILITARY, 8);
+        this.graveyard = graveyard;
+    }
+
 
     public WarlordCard() {
-        super("Condottiere", CardFamily.MILITARY, 8);
+        this(null);
     }
+
 
     /* Methods */
 
@@ -41,12 +56,22 @@ public class WarlordCard extends CharacterCard {
         this.getPlayer().playAsWarlord();
     }
 
+
     @Override
     public void usePower() {
         getPlayer().getInformation().getTarget().getPlayer().getCity().remove(getPlayer().getInformation().getDistrictToDestroy());
-        getPlayer().getInformation().getPile().placeBelowPile(getPlayer().getInformation().getDistrictToDestroy());
+
+        if (getPlayer().getInformation().getDistrictToDestroy().equals(new Graveyard(getPlayer()))) { // Temporary
+            ((Graveyard)(getPlayer().getInformation().getDistrictToDestroy())).setPlayer(null);
+        }
+
         getPlayer().getActions().removeGold(getPlayer().getInformation().getDistrictToDestroy().getGoldCost() - 1);
         getPlayer().getInformation().getDisplay().addWarlordPower(this.getPlayer(), this.getPlayer().getInformation().getTarget(), this.getPlayer().getInformation().getDistrictToDestroy());
+
+        if (!graveyard.usePower(getPlayer().getInformation().getDistrictToDestroy())) { // Graveyard power
+            getPlayer().getInformation().getPile().placeBelowPile(getPlayer().getInformation().getDistrictToDestroy());
+            getPlayer().getInformation().getDisplay().addDistrictPlacedBelow();
+        }
     }
 
 }

@@ -4,6 +4,7 @@ import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.charactercards.CharacterCardsList;
 import fr.citadels.cards.districtcards.DistrictCard;
 import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.cards.districtcards.uniques.Graveyard;
 
 import java.util.List;
 
@@ -151,6 +152,9 @@ public class PlayerActions {
     public void build() {
         if (this.information.getDistrictToBuild() != null) {
             addCardToCity(this.information.getDistrictToBuild());
+            if (this.information.getDistrictToBuild().equals(new Graveyard(this.player))) { // Temporary
+                ((Graveyard)(this.information.getDistrictToBuild())).setPlayer(this.player);
+            }
             removeGold(this.information.getDistrictToBuild().getGoldCost());
             player.getInformation().getDisplay().addDistrictBuilt(player, this.information.getDistrictToBuild());
         } else {
