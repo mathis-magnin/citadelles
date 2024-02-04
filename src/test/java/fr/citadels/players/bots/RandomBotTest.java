@@ -1,6 +1,7 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.cards.charactercards.characters.*;
+import fr.citadels.cards.districtcards.unique.Unique;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.Card;
 import fr.citadels.cards.charactercards.CharacterCardsList;
@@ -369,16 +370,27 @@ class RandomBotTest {
 
     @Test
     void activateFactoryEffect() {
+        player.setGold(6);
+        player2.setGold(0);
+        player.setHand(new Hand(List.of(DistrictCardsPile.allDistrictCards[61])));
+        player.getInformation().setDistrictToBuild(DistrictCardsPile.allDistrictCards[61]);
+        player.getActions().build();
+
         when(random.nextBoolean()).thenReturn(true, true);
-        player.setGold(0);
-        assertFalse(player.activateFactoryEffect());
+        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
 
+        when(random.nextBoolean()).thenReturn(true, true);
         player.setGold(3);
-        assertTrue(player.activateFactoryEffect());
+        player2.setGold(3);
+        assertTrue(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
 
-        when(random.nextBoolean()).thenReturn(false);
+        when(random.nextBoolean()).thenReturn(false, false);
         player.setGold(3);
-        assertFalse(player.activateFactoryEffect());
+        player2.setGold(3);
+        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
     }
 
     @AfterEach

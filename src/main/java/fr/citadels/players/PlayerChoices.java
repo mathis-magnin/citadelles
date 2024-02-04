@@ -70,8 +70,10 @@ public interface PlayerChoices {
     void playBuildingPhase();
 
     /**
+     * activate the effect of the factory if the player can
+     *
      * @return a boolean true if we want to activate the effect, else otherwise
      */
-    boolean activateFactoryEffect();
+    boolean activateFactoryEffect(Player player);
 
 }
