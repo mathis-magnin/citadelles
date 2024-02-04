@@ -1,4 +1,4 @@
-package fr.citadels.cards.districtcards.unique;
+package fr.citadels.cards.districtcards.uniques;
 
 import fr.citadels.cards.charactercards.characters.KingCard;
 import fr.citadels.engine.Game;
@@ -6,7 +6,6 @@ import fr.citadels.players.Player;
 import fr.citadels.players.bots.KingBot;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

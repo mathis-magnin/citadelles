@@ -1,4 +1,4 @@
-package fr.citadels.cards.districtcards.unique;
+package fr.citadels.cards.districtcards.uniques;
 
 import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.districtcards.DistrictCard;
@@ -29,12 +29,12 @@ public class Unique extends DistrictCard {
     }
 
     /**
-     * Set the isBuilt attribute of the district card
+     * Set the owner attribute of the district card
      *
      * @param owner the player who built the district card
      */
     @Override
-    public void build(Player owner) {
+    public void setOwner(Player owner) {
         this.owner = owner;
     }
 

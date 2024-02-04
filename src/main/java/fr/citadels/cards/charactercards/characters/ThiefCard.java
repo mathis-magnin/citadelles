@@ -39,6 +39,7 @@ public class ThiefCard extends CharacterCard {
     public void usePower(){
         this.getPlayer().getInformation().getTarget().setRobbed(true);
         this.getPlayer().getInformation().getDisplay().addThiefPower(this.getPlayer().getInformation().getTarget());
+        this.getPlayer().getInformation().getDisplay().addBlankLine();
     }
 
 }

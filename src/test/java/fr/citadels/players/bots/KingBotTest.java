@@ -1,7 +1,7 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.cards.charactercards.characters.*;
-import fr.citadels.cards.districtcards.unique.Unique;
+import fr.citadels.cards.districtcards.uniques.Unique;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.CharacterCardsList;
 import fr.citadels.cards.districtcards.City;
@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 class KingBotTest {
 
@@ -285,6 +286,16 @@ class KingBotTest {
         assertTrue(player1.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
         player2.getActions().addGold(3);
         assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+    }
+
+    @Test
+    void activateGraveyardEffect() {
+        player1.setGold(1);
+        player1.setCity(new City(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[5])));
+
+        assertTrue(player1.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[10]));
+        assertFalse(player1.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[5]));
+        assertFalse(player1.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[15]));
     }
 
     @AfterEach

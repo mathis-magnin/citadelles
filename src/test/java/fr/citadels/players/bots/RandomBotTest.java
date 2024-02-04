@@ -1,7 +1,7 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.cards.charactercards.characters.*;
-import fr.citadels.cards.districtcards.unique.Unique;
+import fr.citadels.cards.districtcards.uniques.Unique;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.Card;
 import fr.citadels.cards.charactercards.CharacterCardsList;
@@ -391,6 +391,16 @@ class RandomBotTest {
         player2.setGold(3);
         assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
         assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+    }
+
+    @Test
+    void activateGraveyardEffect() {
+        player.setGold(1);
+        player.setCity(new City(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[5])));
+        when(random.nextBoolean()).thenReturn(true, true);
+
+        assertTrue(player.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[10]));
+        assertFalse(player.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[5]));
     }
 
     @AfterEach

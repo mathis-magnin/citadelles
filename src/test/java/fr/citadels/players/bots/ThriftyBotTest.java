@@ -1,7 +1,7 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.cards.charactercards.characters.*;
-import fr.citadels.cards.districtcards.unique.Unique;
+import fr.citadels.cards.districtcards.uniques.Unique;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.CharacterCardsList;
 import fr.citadels.cards.districtcards.City;
@@ -293,6 +293,23 @@ class ThriftyBotTest {
         assertTrue(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
         player2.getActions().addGold(6);
         assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+    }
+
+
+    @Test
+    void activateGraveyardEffect() {
+        player.setGold(1);
+        player.setCity(new City(List.of(DistrictCardsPile.allDistrictCards[18]))); // cost 3 and 4
+        assertFalse(player.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[18]));
+
+        player.setHand(new Hand(new ArrayList<>()));
+        assertTrue(player.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[25]));
+
+        player.setHand(new Hand(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[5]))); // cost 3 and 4
+
+        assertFalse(player.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[12])); // cost 1 + 1
+        assertFalse(player.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[30])); // cost 2 + 1
+        assertTrue(player.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[10])); // cost 5 + 1
     }
 
 

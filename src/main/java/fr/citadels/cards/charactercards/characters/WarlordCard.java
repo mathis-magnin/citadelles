@@ -3,6 +3,9 @@ package fr.citadels.cards.charactercards.characters;
 import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.charactercards.CharacterCard;
 import fr.citadels.cards.charactercards.CharacterCardsList;
+import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.districtcards.uniques.Graveyard;
 
 public class WarlordCard extends CharacterCard {
 
@@ -18,6 +21,7 @@ public class WarlordCard extends CharacterCard {
         return targets;
     }
 
+
     public static CharacterCard getOtherCharacterWithBiggestCity() {
         CharacterCard characterWithBiggestCity = null;
         for (CharacterCard character : getPossibleTargets()) {
@@ -28,11 +32,13 @@ public class WarlordCard extends CharacterCard {
         return characterWithBiggestCity;
     }
 
-    /* Constructor */
+
+    /* Constructors */
 
     public WarlordCard() {
         super("Condottiere", CardFamily.MILITARY, 8);
     }
+
 
     /* Methods */
 
@@ -41,13 +47,20 @@ public class WarlordCard extends CharacterCard {
         this.getPlayer().playAsWarlord();
     }
 
+
     @Override
     public void usePower() {
-        getPlayer().getInformation().getDistrictToDestroy().build(null);
-        getPlayer().getInformation().getTarget().getPlayer().getCity().remove(getPlayer().getInformation().getDistrictToDestroy());
-        getPlayer().getInformation().getPile().placeBelowPile(getPlayer().getInformation().getDistrictToDestroy());
-        getPlayer().getActions().removeGold(getPlayer().getInformation().getDistrictToDestroy().getGoldCost() - 1);
-        getPlayer().getInformation().getDisplay().addWarlordPower(this.getPlayer(), this.getPlayer().getInformation().getTarget(), this.getPlayer().getInformation().getDistrictToDestroy());
+        DistrictCard districtToDestroy = this.getPlayer().getInformation().getDistrictToDestroy();
+
+        getPlayer().getInformation().getTarget().getPlayer().getActions().removeCardFromCity(districtToDestroy);
+        getPlayer().getActions().removeGold(districtToDestroy.getGoldCost() - 1);
+        getPlayer().getInformation().getDisplay().addWarlordPower(this.getPlayer(), this.getPlayer().getInformation().getTarget(), districtToDestroy);
+
+        if (!((Graveyard)(DistrictCardsPile.allDistrictCards[62])).useEffect(districtToDestroy)) { // Graveyard power
+            getPlayer().getInformation().getPile().placeBelowPile(districtToDestroy);
+            getPlayer().getInformation().getDisplay().addDistrictPlacedBelow();
+        }
+        getPlayer().getInformation().getDisplay().addBlankLine();
     }
 
 }

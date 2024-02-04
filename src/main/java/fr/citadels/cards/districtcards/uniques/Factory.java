@@ -1,5 +1,4 @@
-package fr.citadels.cards.districtcards.unique;
-
+package fr.citadels.cards.districtcards.uniques;
 
 public class Factory extends Unique {
     public Factory() {

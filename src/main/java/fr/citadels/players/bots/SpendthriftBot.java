@@ -1,7 +1,6 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.cards.districtcards.DistrictCardsPile;
-import fr.citadels.cards.districtcards.unique.Unique;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.charactercards.CharacterCard;
@@ -213,8 +212,23 @@ public class SpendthriftBot extends Player {
         DistrictCardsPile.allDistrictCards[61].useEffect();
     }
 
+
+    @Override
     public boolean activateFactoryEffect(Player player) {
         return getGold() >= 3 && this.equals(player);
+    }
+
+
+    /**
+     * This bot wants to activate the graveyard's effect if the removed district's is cheaper than each district of his hand
+     *
+     * @param removedDistrict the district removed by the Warlord
+     * @return a boolean value
+     */
+    @Override
+    public boolean activateGraveyardEffect(DistrictCard removedDistrict) {
+        return (1 <= this.getGold()) && !this.hasCardInCity(removedDistrict) &&
+                (this.getHand().isEmpty() || (!this.getHand().isEmpty() && (removedDistrict.getGoldCost() + 1 <= this.getCheapestCardInHand()[1]))); // + 1 is to take into account the effect's cost.
     }
 
 }
