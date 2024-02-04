@@ -1,9 +1,7 @@
 package fr.citadels.cards.districtcards;
 
 import fr.citadels.cards.CardFamily;
-import fr.citadels.cards.districtcards.unique.Factory;
-import fr.citadels.cards.districtcards.unique.Laboratory;
-import fr.citadels.cards.districtcards.unique.Library;
+import fr.citadels.cards.districtcards.uniques.*;
 
 import java.util.*;
 
@@ -95,11 +93,12 @@ public class DistrictCardsPile extends LinkedList<DistrictCard> {
             new DistrictCard("Observatoire", CardFamily.UNIQUE, 5),
             new Laboratory(), //60
             new Factory(),
-            new DistrictCard("Cimetière", CardFamily.UNIQUE, 5),
+            new Graveyard(),
             new DistrictCard("École de magie", CardFamily.UNIQUE, 6),
             new Library(),
             new DistrictCard("Université", CardFamily.UNIQUE, 6), //65
-            new DistrictCard("Dracoport", CardFamily.UNIQUE, 6)};
+            new DistrictCard("Dracoport", CardFamily.UNIQUE, 6)
+    };
 
     /* Methods */
 

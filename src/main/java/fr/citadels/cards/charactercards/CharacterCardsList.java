@@ -1,6 +1,8 @@
 package fr.citadels.cards.charactercards;
 
 import fr.citadels.cards.charactercards.characters.*;
+import fr.citadels.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.districtcards.uniques.Graveyard;
 import fr.citadels.engine.Game;
 
 import java.util.*;
@@ -10,12 +12,12 @@ public class CharacterCardsList extends ArrayList<CharacterCard> {
     /* Static Content */
 
     public static final CharacterCard[] allCharacterCards = new CharacterCard[]{
-            new AssassinCard(),
+            new AssassinCard(), // 0
             new ThiefCard(),
             new MagicianCard(),
             new KingCard(),
             new BishopCard(),
-            new MerchantCard(),
+            new MerchantCard(), // 5
             new ArchitectCard(),
             new WarlordCard()
     };
@@ -34,7 +36,8 @@ public class CharacterCardsList extends ArrayList<CharacterCard> {
 
     /* Constructors */
 
-    public CharacterCardsList() { }
+    public CharacterCardsList() {
+    }
 
     public CharacterCardsList(CharacterCard[] characterCards) {
         this.addAll(List.of(characterCards));

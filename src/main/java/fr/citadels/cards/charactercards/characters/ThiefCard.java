@@ -10,8 +10,8 @@ public class ThiefCard extends CharacterCard {
 
     public static CharacterCardsList getPossibleTargets() {
         CharacterCardsList targets = new CharacterCardsList();
-        for(CharacterCard characterCard : CharacterCardsList.allCharacterCards) {
-            if(!characterCard.equals(new AssassinCard()) && !characterCard.equals(new ThiefCard()) && !characterCard.isDead()) {
+        for (CharacterCard characterCard : CharacterCardsList.allCharacterCards) {
+            if (!characterCard.equals(new AssassinCard()) && !characterCard.equals(new ThiefCard()) && !characterCard.isDead()) {
                 targets.add(characterCard);
             }
         }
@@ -36,9 +36,10 @@ public class ThiefCard extends CharacterCard {
      * The target can be neither the thief nor the assassin nor dead.
      */
     @Override
-    public void usePower(){
+    public void usePower() {
         this.getPlayer().getInformation().getTarget().setRobbed(true);
         this.getPlayer().getInformation().getDisplay().addThiefPower(this.getPlayer().getInformation().getTarget());
+        this.getPlayer().getInformation().getDisplay().addBlankLine();
     }
 
 }

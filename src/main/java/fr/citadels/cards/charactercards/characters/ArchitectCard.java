@@ -29,9 +29,9 @@ public class ArchitectCard extends CharacterCard {
      * @precondition About the second power, the player must have chosen which district he wants to build,
      * and he should not use it more than two times per turn.
      */
-    public void usePower(){
+    public void usePower() {
         switch (this.getPlayer().getInformation().getPowerToUse()) {
-            case 1 :
+            case 1:
                 this.drawCard();
                 break;
             case 2:
@@ -53,6 +53,7 @@ public class ArchitectCard extends CharacterCard {
 
     /**
      * 2. The player can build up to three districts.
+     *
      * @precondition This procedure should not be called more than two times this method per turn.
      * @precondition The player must have chosen which district he wants to build.
      */

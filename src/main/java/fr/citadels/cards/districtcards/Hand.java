@@ -29,6 +29,7 @@ public class Hand extends ArrayList<DistrictCard> {
 
     /**
      * Remove a card from the hand
+     *
      * @param index the index of the card to remove
      * @return the card removed
      */

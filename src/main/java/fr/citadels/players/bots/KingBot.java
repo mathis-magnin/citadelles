@@ -85,7 +85,7 @@ public class KingBot extends Player {
         }
         /*
          * cannot find the king character
-         * Could happen if a player already took it
+         * Could happen if a player already took it or if it is placed face down
          */
         this.setCharacter(characters.remove(0));
         getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
@@ -192,6 +192,7 @@ public class KingBot extends Player {
             DistrictCardsPile.allDistrictCards[61].useEffect();
     }
 
+
     @Override
     public boolean activateFactoryEffect() {
         return getHand().size() < 2 && getGold() >= 3;
@@ -200,6 +201,18 @@ public class KingBot extends Player {
     @Override
     public boolean activateLaboratoryEffect() {
         return this.getActions().putRedundantCardsAtTheEnd() > 0 || getHand().size() > 4 || (getHand().size() > 2 && getGold() < 2);
+    }
+
+
+    /**
+     * This bot wants to activate the graveyard's effect if the removed district is NOBLE
+     *
+     * @param removedDistrict the district removed by the Warlord
+     * @return a boolean value
+     */
+    @Override
+    public boolean activateGraveyardEffect(DistrictCard removedDistrict) {
+        return (1 <= this.getGold()) && !this.hasCardInCity(removedDistrict) && removedDistrict.getCardFamily().equals(CardFamily.NOBLE);
     }
 
 }

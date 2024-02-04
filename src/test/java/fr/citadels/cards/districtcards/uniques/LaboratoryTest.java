@@ -1,4 +1,4 @@
-package fr.citadels.cards.districtcards.unique;
+package fr.citadels.cards.districtcards.uniques;
 
 import fr.citadels.cards.charactercards.CharacterCard;
 import fr.citadels.cards.charactercards.characters.KingCard;
@@ -19,7 +19,7 @@ class LaboratoryTest {
 
     @Test
     void build() {
-        laboratory.build(new KingBot("KingBot", List.of(laboratory), new Game()));
+        laboratory.setOwner(new KingBot("KingBot", List.of(laboratory), new Game()));
         assertTrue(laboratory.isBuilt());
         assertEquals(laboratory.getOwner().getName(), "KingBot");
 
@@ -31,7 +31,7 @@ class LaboratoryTest {
         Player king = new KingBot("KingBot", List.of(DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[40]), game);
         game.getPile().initializePile();
         king.setCharacter(new KingCard());
-        laboratory.build(king);
+        laboratory.setOwner(king);
         king.getCity().add(laboratory);
         laboratory.useEffect();
         assertEquals(laboratory.getOwner(), king);

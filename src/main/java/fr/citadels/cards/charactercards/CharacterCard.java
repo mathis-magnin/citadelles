@@ -36,6 +36,7 @@ public abstract class CharacterCard extends Card implements Comparable<Character
     public boolean isDead() {
         return this.dead;
     }
+
     public void setDead(boolean dead) {
         this.dead = dead;
     }
@@ -43,6 +44,7 @@ public abstract class CharacterCard extends Card implements Comparable<Character
     public Player getPlayer() {
         return this.player;
     }
+
     public void setPlayer(Player player) {
         this.player = player;
     }
@@ -53,6 +55,7 @@ public abstract class CharacterCard extends Card implements Comparable<Character
     public boolean isRobbed() {
         return this.robbed;
     }
+
     public void setRobbed(boolean robbed) {
         this.robbed = robbed;
     }

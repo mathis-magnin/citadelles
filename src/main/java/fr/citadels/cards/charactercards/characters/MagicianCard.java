@@ -70,6 +70,7 @@ public class MagicianCard extends CharacterCard {
                     break;
                 }
         }
+        this.getPlayer().getInformation().getDisplay().addBlankLine();
     }
 
 }

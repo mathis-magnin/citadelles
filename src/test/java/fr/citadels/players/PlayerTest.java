@@ -75,6 +75,9 @@ class PlayerTest {
             public boolean activateLaboratoryEffect() {
                 return false;
             }
+
+            @Override
+            public boolean activateGraveyardEffect(DistrictCard removedDistrict) {return false;}
         };
     }
 
@@ -193,6 +196,9 @@ class PlayerTest {
             public boolean activateLaboratoryEffect() {
                 return false;
             }
+
+            @Override
+            public boolean activateGraveyardEffect(DistrictCard removedDistrict) {return false;}
         };
         player.playResourcesPhase();
         player.playBuildingPhase();
@@ -259,6 +265,9 @@ class PlayerTest {
             public boolean activateLaboratoryEffect() {
                 return false;
             }
+
+            @Override
+            public boolean activateGraveyardEffect(DistrictCard removedDistrict) {return false;}
         };
         player.playResourcesPhase();
         player.playBuildingPhase();
@@ -320,6 +329,9 @@ class PlayerTest {
             public boolean activateLaboratoryEffect() {
                 return false;
             }
+
+            @Override
+            public boolean activateGraveyardEffect(DistrictCard removedDistrict) {return false;}
         };
 
 

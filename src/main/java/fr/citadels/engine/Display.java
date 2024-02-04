@@ -25,13 +25,6 @@ public class Display {
     }
 
 
-    /* Getter */
-
-    public String getEvents() {
-        return this.toString();
-    }
-
-
     /* Methods */
 
     public void reset() {
@@ -317,11 +310,47 @@ public class Display {
     public void addWarlordPower(Player player, CharacterCard target, DistrictCard districtToDestroy) {
         this.events.append("Le joueur utilise son pouvoir pour détruire le quartier ").append(districtToDestroy).append(" dans la cité de ").append(target.getPlayer().getName()).append(".\n");
         this.events.append("\tLa fortune de ").append(player.getName()).append(" s'élève donc à ").append(player.getGold()).append(" pièces d'or.\n");
-        this.events.append("\tLa cité de ").append(target.getPlayer().getName()).append((" comporte donc : ")).append((target.getPlayer().getCity().toString())).append(".\n");
+        this.events.append("\tLa cité de ").append(target.getPlayer().getName()).append((" comporte donc : ")).append((target.getPlayer().getCity().toString())).append("\n");
     }
 
+
     public void addNoWarlordPower() {
-        this.events.append("Le joueur n'utilise pas son pouvoir permettant de détruire un quartier d'un autre joueur.\n");
+        this.events.append("Le joueur n'utilise pas son pouvoir permettant de détruire le quartier d'un autre joueur.\n");
+    }
+
+
+    public void addGraveyardEffect(Player player) {
+        this.events.append(player.getName()).append(" utilise l'effet de la carte Cimetière pour prendre en main le quartier détruit en payant 1 pièce d'or.\n");
+        this.events.append("\tLa fortune de ").append(player.getName()).append(" s'élève donc à ").append(player.getGold()).append(" pièces d'or.\n");
+        this.events.append("\tLa main de ").append(player.getName()).append((" comporte donc : ")).append((player.getHand().toString())).append(".\n");
+    }
+
+
+    public void addNoGraveyardEffect(Player player) {
+        this.events.append(player.getName()).append(" n'utilise pas l'effet de la carte Cimetière.\n");
+    }
+
+
+    public void addDistrictPlacedBelow() {
+        this.events.append("Le quartier détruit est donc placé sous la pile.\n");
+    }
+
+
+    public void addFactoryEffectActivated() {
+        this.events.append("Le joueur utilise l'effet de la carte Manufacture.\n");
+    }
+
+
+    public void addLibraryEffectActivated() {
+        this.events.append("Le joueur utilise l'effet de la carte Bibliothèque pour prendre en main toutes les cartes piochées.\n");
+    }
+
+
+    public void addLaboratoryEffectActivated(DistrictCard card, Player player) {
+        this.events.append("Le joueur utilise le pouvoir du Laboratoire pour défausser \n");
+        this.events.append(card).append(" et gagner une pièce d'or.\n");
+        this.addGoldUpdate(player.getGold());
+        this.addHandUpdate(player.getHand());
     }
 
 
@@ -338,20 +367,4 @@ public class Display {
     public void addWinner(Player player) {
         this.events.append("Le gagnant est : ").append(player.getName()).append(" !\n");
     }
-
-    public void addFactoryEffectActivated() {
-        this.events.append("Le joueur utilise le pouvoir de la Manufacture\n");
-    }
-
-    public void addLaboratoryEffectActivated(DistrictCard card, Player player) {
-        this.events.append("Le joueur utilise le pouvoir du Laboratoire pour défausser \n");
-        this.events.append(card).append(" et gagner une pièce d'or.\n");
-        this.addGoldUpdate(player.getGold());
-        this.addHandUpdate(player.getHand());
-    }
-
-    public void addLibraryEffectActivated() {
-        this.events.append("Le joueur utilise le pouvoir de la Bibliothèque et récupère toutes les cartes piochées\n");
-    }
-
 }

@@ -2,7 +2,6 @@ package fr.citadels.players.bots;
 
 
 import fr.citadels.cards.districtcards.DistrictCardsPile;
-import fr.citadels.cards.districtcards.unique.Unique;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.CharacterCard;
 import fr.citadels.cards.charactercards.CharacterCardsList;
@@ -184,9 +183,22 @@ public class RandomBot extends Player {
             DistrictCardsPile.allDistrictCards[61].useEffect();
     }
 
+
     @Override
     public boolean activateFactoryEffect() {
         return RAND.nextBoolean() && getGold() >= 3;
+    }
+
+
+    /**
+     * This bot can randomly activate the graveyard's effect if he can afford it
+     *
+     * @param removedDistrict the district removed by the Warlord
+     * @return a boolean value
+     */
+    @Override
+    public boolean activateGraveyardEffect(DistrictCard removedDistrict) {
+        return RAND.nextBoolean() && (1 <= this.getGold()) && !this.hasCardInCity(removedDistrict);
     }
 
     @Override

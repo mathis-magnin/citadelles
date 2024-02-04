@@ -1,6 +1,7 @@
-package fr.citadels.cards.districtcards.unique;
+package fr.citadels.cards.districtcards.uniques;
 
 import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.uniques.Unique;
 
 public class Laboratory extends Unique {
     public Laboratory() {
@@ -11,7 +12,6 @@ public class Laboratory extends Unique {
     @Override
     public void useEffect() {
         if (isBuilt() && getOwner().activateLaboratoryEffect()) {
-            System.out.println(getOwner().getName() + " A LE LABORATOIRE !!!! \n---------------------------------------------------------\n\n\n\n\n\n\n\n");
             getOwner().getActions().addGold(1);
             DistrictCard card = getOwner().getHand().remove(getOwner().getHand().size() - 1);
             getOwner().getInformation().getPile().placeBelowPile(card);

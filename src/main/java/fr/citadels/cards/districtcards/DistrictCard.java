@@ -10,6 +10,7 @@ public class DistrictCard extends Card {
 
     private final int goldCost;
 
+
     /* Constructor */
 
     public DistrictCard(String cardName, CardFamily cardFamily, int goldCost) {
@@ -17,20 +18,23 @@ public class DistrictCard extends Card {
         this.goldCost = goldCost;
     }
 
+
     /* Methods */
 
+    public int getGoldCost() {
+        return this.goldCost;
+    }
+
+
     /**
-     * Get the owner of the district card
+     * Get the owner of the district card if the card is unique
      *
-     * @return the owner of the district card
+     * @return null
      */
     public Player getOwner() {
         return null;
     }
 
-    public int getGoldCost() {
-        return this.goldCost;
-    }
 
     /***
      * @return a string representation of a district card
@@ -42,13 +46,14 @@ public class DistrictCard extends Card {
 
 
     /**
-     * Set the isBuilt attribute of the district card
+     * Set the owner attribute of the unique district card
      *
      * @param owner the player who built the district card
      */
-    public void build(Player owner) {
+    public void setOwner(Player owner) {
         // will be implemented in the subclasses
     }
+
 
     /**
      * return true if the district card is built, false otherwise (default value is false)
@@ -58,6 +63,7 @@ public class DistrictCard extends Card {
     public boolean isBuilt() {
         return false;
     }
+
 
     /**
      * Use the ability of the district card

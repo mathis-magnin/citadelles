@@ -64,7 +64,7 @@ class WarlordCardTest {
     @Test
     void usePower() {
         player1.setCity(new City(new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[0]))));
-        DistrictCardsPile.allDistrictCards[0].build(player1);
+        DistrictCardsPile.allDistrictCards[0].setOwner(player1);
         player2.getActions().addGold(2);
         player2.getInformation().setTarget(CharacterCardsList.allCharacterCards[0]);
         player2.getInformation().setDistrictToDestroy(DistrictCardsPile.allDistrictCards[0]);

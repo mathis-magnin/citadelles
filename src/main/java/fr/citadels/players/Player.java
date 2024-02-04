@@ -309,6 +309,7 @@ public abstract class Player implements Comparable<Player>, PlayerChoices {
             getCharacter().usePower();
         } else {
             getInformation().getDisplay().addNoWarlordPower();
+            this.getInformation().getDisplay().addBlankLine();
         }
     }
 

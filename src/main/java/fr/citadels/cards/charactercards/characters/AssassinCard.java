@@ -10,8 +10,8 @@ public class AssassinCard extends CharacterCard {
 
     public static CharacterCardsList getPossibleTargets() {
         CharacterCardsList targets = new CharacterCardsList();
-        for(CharacterCard characterCard : CharacterCardsList.allCharacterCards) {
-            if(!characterCard.equals(new AssassinCard())) {
+        for (CharacterCard characterCard : CharacterCardsList.allCharacterCards) {
+            if (!characterCard.equals(new AssassinCard())) {
                 targets.add(characterCard);
             }
         }
@@ -34,6 +34,7 @@ public class AssassinCard extends CharacterCard {
     public void usePower() {
         getPlayer().getInformation().getTarget().setDead(true);
         getPlayer().getInformation().getDisplay().addAssassinPower(getPlayer().getInformation().getTarget());
+        getPlayer().getInformation().getDisplay().addBlankLine();
     }
 
 }

@@ -18,7 +18,7 @@ public class BishopCard extends CharacterCard {
         this.getPlayer().playAsBishop();
     }
 
-    public void usePower(){
+    public void usePower() {
         return;
     }
 

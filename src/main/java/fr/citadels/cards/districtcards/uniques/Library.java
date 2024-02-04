@@ -1,5 +1,6 @@
-package fr.citadels.cards.districtcards.unique;
+package fr.citadels.cards.districtcards.uniques;
 
+import fr.citadels.cards.districtcards.uniques.Unique;
 
 public class Library extends Unique {
 
