@@ -9,6 +9,7 @@ import fr.citadels.cards.districtcards.DistrictCardsPile;
 public class PlayerInformation {
 
     /* Attributes */
+
     private final DistrictCardsPile pile;
     private final Display display;
 
@@ -17,7 +18,9 @@ public class PlayerInformation {
     private CharacterCard target;
     private int cardsToDiscard;
     private DistrictCard districtToDestroy;
-    private boolean recoverDistrictDecision;
+
+
+    /* Constructor */
 
     public PlayerInformation(Game game) {
         this.pile = game.getPile();
@@ -27,7 +30,6 @@ public class PlayerInformation {
         this.target = null;
         this.cardsToDiscard = 0;
         this.districtToDestroy = null;
-        this.recoverDistrictDecision = false;
     }
 
 
@@ -86,21 +88,19 @@ public class PlayerInformation {
     }
 
 
-    public boolean getRecoverDistrictDecision() {
-        return this.recoverDistrictDecision;
-    }
-
-
     /* Setters */
 
     /**
-     * @param district the district the player want to build.
+     * @param district the district the player want to build
      */
     public void setDistrictToBuild(DistrictCard district) {
         this.districtToBuild = district;
     }
 
 
+    /**
+     * @param number the number of the power the player wants to use
+     */
     public void setPowerToUse(int number) {
         this.powerToUse = number;
     }
@@ -121,16 +121,12 @@ public class PlayerInformation {
         this.cardsToDiscard = number;
     }
 
+
     /**
      * @param districtToDestroy the district card to destroy when the warlord's power is used
      */
     public void setDistrictToDestroy(DistrictCard districtToDestroy) {
         this.districtToDestroy = districtToDestroy;
-    }
-
-
-    public void setRecoverDistrictDecision(boolean b) {
-        this.recoverDistrictDecision = b;
     }
 
 }

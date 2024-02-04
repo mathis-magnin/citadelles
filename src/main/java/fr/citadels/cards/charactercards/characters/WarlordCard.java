@@ -52,9 +52,7 @@ public class WarlordCard extends CharacterCard {
     public void usePower() {
         DistrictCard districtToDestroy = this.getPlayer().getInformation().getDistrictToDestroy();
 
-        districtToDestroy.build(null);
-        getPlayer().getInformation().getTarget().getPlayer().getCity().remove(districtToDestroy);
-
+        getPlayer().getInformation().getTarget().getPlayer().getActions().removeCardFromCity(districtToDestroy);
         getPlayer().getActions().removeGold(districtToDestroy.getGoldCost() - 1);
         getPlayer().getInformation().getDisplay().addWarlordPower(this.getPlayer(), this.getPlayer().getInformation().getTarget(), districtToDestroy);
 
@@ -62,6 +60,7 @@ public class WarlordCard extends CharacterCard {
             getPlayer().getInformation().getPile().placeBelowPile(districtToDestroy);
             getPlayer().getInformation().getDisplay().addDistrictPlacedBelow();
         }
+        getPlayer().getInformation().getDisplay().addBlankLine();
     }
 
 }

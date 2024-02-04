@@ -154,7 +154,6 @@ public class PlayerActions {
      */
     public void build() {
         if (this.information.getDistrictToBuild() != null) {
-            this.information.getDistrictToBuild().build(player);
             addCardToCity(this.information.getDistrictToBuild());
             removeGold(this.information.getDistrictToBuild().getGoldCost());
             player.getInformation().getDisplay().addDistrictBuilt(player, this.information.getDistrictToBuild());
@@ -192,6 +191,17 @@ public class PlayerActions {
      */
     public void addCardToCity(DistrictCard card) {
         player.getCity().add(card);
+        card.setOwner(this.player);
+    }
+
+
+    /**
+     * Remove a card from player's city
+     * @param card the card to remove
+     */
+    public void removeCardFromCity(DistrictCard card) {
+        this.player.getCity().remove(card);
+        card.setOwner(null);
     }
 
 
@@ -199,7 +209,9 @@ public class PlayerActions {
      * Add cards to the player's city
      */
     public void addCardsToCity(List<DistrictCard> cards) {
-        player.getCity().addAll(cards);
+        for (DistrictCard card : cards) {
+            this.addCardToCity(card);
+        }
     }
 
 

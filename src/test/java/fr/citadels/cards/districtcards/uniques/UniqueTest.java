@@ -17,7 +17,7 @@ class UniqueTest {
         KingBot kingBot = new KingBot("KingBot", new ArrayList<>(), new Game());
         Unique unique = new Library();
         assertFalse(unique.isBuilt());
-        unique.build(kingBot);
+        unique.setOwner(kingBot);
         assertTrue(unique.isBuilt());
         assertEquals(unique.getOwner(), kingBot);
     }

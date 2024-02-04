@@ -1,10 +1,7 @@
 package fr.citadels.cards.districtcards.uniques;
 
-import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.charactercards.characters.WarlordCard;
 import fr.citadels.cards.districtcards.DistrictCard;
-import fr.citadels.players.Player;
-import fr.citadels.cards.districtcards.uniques.Unique;
 
 public class Graveyard extends Unique {
 
@@ -17,14 +14,19 @@ public class Graveyard extends Unique {
 
     /* Method */
 
-    public boolean useEffect(DistrictCard cardRemoved) {
-        if (this.getOwner() != null) {
-            this.getOwner().chooseToRecoverDistrict();
-            if (!this.getOwner().getCharacter().equals(new WarlordCard()) && this.getOwner().getInformation().getRecoverDistrictDecision()) {
+    /**
+     * When the Warlord destroys a district, the player who built the Graveyard can pay a gold coin to take it back into his hand.
+     * The player can't use the effect if he is the Warlord.
+     *
+     * @param removedDistrict the district removed by the Warlord.
+     * @return true if the card was added into the player's hand.
+     */
+    public boolean useEffect(DistrictCard removedDistrict) {
+        if (this.isBuilt() && !this.getOwner().getCharacter().equals(new WarlordCard())) {
+            if (this.getOwner().activateGraveyardEffect(removedDistrict)) {
                 this.getOwner().getActions().removeGold(1);
-                this.getOwner().getHand().add(cardRemoved);
+                this.getOwner().getHand().add(removedDistrict);
                 this.getOwner().getInformation().getDisplay().addGraveyardEffect(this.getOwner());
-                this.getOwner().getInformation().setRecoverDistrictDecision(false);
                 return true;
             }
             this.getOwner().getInformation().getDisplay().addNoGraveyardEffect(this.getOwner());

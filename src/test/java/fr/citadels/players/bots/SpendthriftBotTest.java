@@ -288,6 +288,23 @@ class SpendthriftBotTest {
     }
 
 
+    @Test
+    void activateGraveyardEffect() {
+        player.setGold(1);
+        player.setCity(new City(List.of(DistrictCardsPile.allDistrictCards[18]))); // cost 3 and 4
+        assertFalse(player.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[18]));
+
+        player.setHand(new Hand(new ArrayList<>()));
+        assertTrue(player.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[25]));
+
+        player.setHand(new Hand(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[5]))); // cost 3 and 4
+
+        assertTrue(player.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[12])); // cost 1 + 1
+        assertTrue(player.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[30])); // cost 2 + 1
+        assertFalse(player.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[10])); // cost 5 + 1
+    }
+
+
     @AfterEach
     void resetCharacterCards() {
         CharacterCardsList.allCharacterCards[0] = new AssassinCard();

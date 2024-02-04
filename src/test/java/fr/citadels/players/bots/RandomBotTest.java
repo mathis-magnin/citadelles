@@ -393,6 +393,16 @@ class RandomBotTest {
         assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
     }
 
+    @Test
+    void activateGraveyardEffect() {
+        player.setGold(1);
+        player.setCity(new City(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[5])));
+        when(random.nextBoolean()).thenReturn(true, true);
+
+        assertTrue(player.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[10]));
+        assertFalse(player.activateGraveyardEffect(DistrictCardsPile.allDistrictCards[5]));
+    }
+
     @AfterEach
     void resetCharacterCards() {
         CharacterCardsList.allCharacterCards[0] = new AssassinCard();

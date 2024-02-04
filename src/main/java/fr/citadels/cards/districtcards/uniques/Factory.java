@@ -1,7 +1,5 @@
 package fr.citadels.cards.districtcards.uniques;
 
-import fr.citadels.cards.districtcards.uniques.Unique;
-
 public class Factory extends Unique {
     public Factory() {
         super("Manufacture", 5);

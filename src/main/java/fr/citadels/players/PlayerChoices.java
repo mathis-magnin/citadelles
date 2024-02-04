@@ -58,9 +58,6 @@ public interface PlayerChoices {
     void chooseTargetToDestroy();
 
 
-    void chooseToRecoverDistrict();
-
-
     /**
      * play the phase when the player takes resources for his turn
      */
@@ -72,11 +69,21 @@ public interface PlayerChoices {
      */
     void playBuildingPhase();
 
+
     /**
      * activate the effect of the factory if the player can
      *
      * @return a boolean true if we want to activate the effect, else otherwise
      */
     boolean activateFactoryEffect(Player player);
+
+
+    /**
+     * Choose if the player wants to use graveyard's effect
+     *
+     * @param removedDistrict the district removed by the Warlord
+     * @return a boolean value
+     */
+    boolean activateGraveyardEffect(DistrictCard removedDistrict);
 
 }
