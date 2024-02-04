@@ -154,7 +154,9 @@ public class RandomBot extends Player {
         boolean draw;
         draw = !RAND.nextBoolean();
         getActions().takeCardsOrGold(draw);
-        DistrictCardsPile.allDistrictCards[60].useEffect();
+
+        if (this.equals(DistrictCardsPile.allDistrictCards[60].getOwner())) // Utilise le pouvoir du laboratoire
+            DistrictCardsPile.allDistrictCards[60].useEffect();
     }
 
 
@@ -178,17 +180,17 @@ public class RandomBot extends Player {
         getInformation().getDisplay().addBlankLine();
         if (!takeGoldFromFamily)
             getActions().takeGoldFromCity();
-        DistrictCardsPile.allDistrictCards[61].useEffect();
+        if (this.equals(DistrictCardsPile.allDistrictCards[61].getOwner())) // Utilise le pouvoir de la manufacture
+            DistrictCardsPile.allDistrictCards[61].useEffect();
     }
 
     @Override
-    public boolean activateFactoryEffect(Player player) {
-        return RAND.nextBoolean() && getGold() >= 3 && this.equals(player);
+    public boolean activateFactoryEffect() {
+        return RAND.nextBoolean() && getGold() >= 3;
     }
 
     @Override
-    public boolean activateLaboratoryEffect(Player player) {
-        return false;
+    public boolean activateLaboratoryEffect() {
+        return RAND.nextBoolean() && !this.getHand().isEmpty();
     }
-
 }

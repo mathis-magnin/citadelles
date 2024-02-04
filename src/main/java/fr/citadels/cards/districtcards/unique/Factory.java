@@ -9,7 +9,7 @@ public class Factory extends Unique {
 
     @Override
     public void useEffect() {
-        if (isBuilt() && getOwner().activateFactoryEffect(this.getOwner())) {
+        if (isBuilt() && getOwner().activateFactoryEffect()) {
             getOwner().getInformation().getDisplay().addFactoryEffectActivated();
             getOwner().getActions().draw(3);
             getOwner().getActions().removeGold(3);

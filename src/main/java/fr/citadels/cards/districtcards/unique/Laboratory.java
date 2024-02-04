@@ -10,7 +10,7 @@ public class Laboratory extends Unique {
 
     @Override
     public void useEffect() {
-        if (isBuilt() && getOwner().activateLaboratoryEffect(this.getOwner())) {
+        if (isBuilt() && getOwner().activateLaboratoryEffect()) {
             getOwner().getActions().addGold(3);
             DistrictCard card = getOwner().getHand().remove(getOwner().getHand().size() - 1);
             getOwner().getInformation().getPile().placeBelowPile(card);

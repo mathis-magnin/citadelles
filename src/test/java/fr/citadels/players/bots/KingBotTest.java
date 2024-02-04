@@ -278,13 +278,10 @@ class KingBotTest {
         player1.getInformation().setDistrictToBuild(DistrictCardsPile.allDistrictCards[61]);
         player1.getActions().addGold(6);
         player1.getActions().build();
-        assertFalse(player1.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
-        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertFalse(player1.activateFactoryEffect());
 
         player1.getActions().addGold(3);
-        assertTrue(player1.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
-        player2.getActions().addGold(3);
-        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertTrue(player1.activateFactoryEffect());
     }
 
     @AfterEach

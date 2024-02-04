@@ -216,13 +216,13 @@ public class ThriftyBot extends Player {
     }
 
     @Override
-    public boolean activateFactoryEffect(Player player) {
-        return getGold() >= 6 && this.equals(player);
+    public boolean activateFactoryEffect() {
+        return getGold() >= 6;
     }
 
     @Override
-    public boolean activateLaboratoryEffect(Player player) {
-        return false;
+    public boolean activateLaboratoryEffect() {
+        return getActions().putRedundantCardsAtTheEnd() > 0 || getHand().size() > 4 || (getGold() < 5 && getHand().size() > 2);
     }
 
 }

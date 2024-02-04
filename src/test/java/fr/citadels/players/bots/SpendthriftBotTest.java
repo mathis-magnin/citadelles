@@ -278,13 +278,10 @@ class SpendthriftBotTest {
         player.getInformation().setDistrictToBuild(DistrictCardsPile.allDistrictCards[61]);
         player.getActions().addGold(6);
         player.getActions().build();
-        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
-        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertFalse(player.activateFactoryEffect());
 
         player.getActions().addGold(3);
-        assertTrue(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
-        player2.getActions().addGold(3);
-        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertTrue(player.activateFactoryEffect());
     }
 
 

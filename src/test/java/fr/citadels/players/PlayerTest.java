@@ -67,12 +67,12 @@ class PlayerTest {
             }
 
             @Override
-            public boolean activateFactoryEffect(Player player) {
+            public boolean activateFactoryEffect() {
                 return false;
             }
 
             @Override
-            public boolean activateLaboratoryEffect(Player player) {
+            public boolean activateLaboratoryEffect() {
                 return false;
             }
         };
@@ -185,12 +185,12 @@ class PlayerTest {
             }
 
             @Override
-            public boolean activateFactoryEffect(Player player) {
+            public boolean activateFactoryEffect() {
                 return false;
             }
 
             @Override
-            public boolean activateLaboratoryEffect(Player player) {
+            public boolean activateLaboratoryEffect() {
                 return false;
             }
         };
@@ -251,12 +251,12 @@ class PlayerTest {
             }
 
             @Override
-            public boolean activateFactoryEffect(Player player) {
+            public boolean activateFactoryEffect() {
                 return false;
             }
 
             @Override
-            public boolean activateLaboratoryEffect(Player player) {
+            public boolean activateLaboratoryEffect() {
                 return false;
             }
         };
@@ -312,12 +312,12 @@ class PlayerTest {
             }
 
             @Override
-            public boolean activateFactoryEffect(Player player) {
+            public boolean activateFactoryEffect() {
                 return false;
             }
 
             @Override
-            public boolean activateLaboratoryEffect(Player player) {
+            public boolean activateLaboratoryEffect() {
                 return false;
             }
         };

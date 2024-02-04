@@ -377,20 +377,16 @@ class RandomBotTest {
         player.getActions().build();
 
         when(random.nextBoolean()).thenReturn(true, true);
-        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
-        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertFalse(player.activateFactoryEffect());
+        assertFalse(player.activateFactoryEffect());
 
         when(random.nextBoolean()).thenReturn(true, true);
         player.setGold(3);
-        player2.setGold(3);
-        assertTrue(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
-        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertTrue(player.activateFactoryEffect());
 
         when(random.nextBoolean()).thenReturn(false, false);
         player.setGold(3);
-        player2.setGold(3);
-        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
-        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertFalse(player.activateFactoryEffect());
     }
 
     @AfterEach

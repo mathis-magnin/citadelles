@@ -215,12 +215,12 @@ public class SpendthriftBot extends Player {
     }
 
     @Override
-    public boolean activateFactoryEffect(Player player) {
-        return getGold() >= 3 && this.equals(player);
+    public boolean activateFactoryEffect() {
+        return getGold() >= 3;
     }
 
     @Override
-    public boolean activateLaboratoryEffect(Player player) {
-        return false;
+    public boolean activateLaboratoryEffect() {
+        return this.getActions().putRedundantCardsAtTheEnd() > 0 || (getGold() < 2 && getHand().size() > 2) || getHand().size() > 4;
     }
 }
