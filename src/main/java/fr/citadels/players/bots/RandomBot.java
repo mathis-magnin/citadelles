@@ -2,6 +2,7 @@ package fr.citadels.players.bots;
 
 
 import fr.citadels.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.districtcards.unique.Unique;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.CharacterCard;
 import fr.citadels.cards.charactercards.CharacterCardsList;
@@ -179,8 +180,9 @@ public class RandomBot extends Player {
         DistrictCardsPile.allDistrictCards[61].useEffect();
     }
 
-    public boolean activateFactoryEffect() {
-        return RAND.nextBoolean() && getGold() >= 3;
+    public boolean activateFactoryEffect(Player player) {
+        return RAND.nextBoolean() && getGold() >= 3 && this.equals(player);
+
     }
 
 }

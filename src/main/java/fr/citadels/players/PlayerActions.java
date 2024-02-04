@@ -149,7 +149,7 @@ public class PlayerActions {
      */
     public void build() {
         if (this.information.getDistrictToBuild() != null) {
-            this.information.getDistrictToBuild().build(true, player);
+            this.information.getDistrictToBuild().build(player);
             addCardToCity(this.information.getDistrictToBuild());
             removeGold(this.information.getDistrictToBuild().getGoldCost());
             player.getInformation().getDisplay().addDistrictBuilt(player, this.information.getDistrictToBuild());

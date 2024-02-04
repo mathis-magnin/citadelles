@@ -43,7 +43,7 @@ public class WarlordCard extends CharacterCard {
 
     @Override
     public void usePower() {
-        getPlayer().getInformation().getDistrictToDestroy().build(false, getPlayer());
+        getPlayer().getInformation().getDistrictToDestroy().build(null);
         getPlayer().getInformation().getTarget().getPlayer().getCity().remove(getPlayer().getInformation().getDistrictToDestroy());
         getPlayer().getInformation().getPile().placeBelowPile(getPlayer().getInformation().getDistrictToDestroy());
         getPlayer().getActions().removeGold(getPlayer().getInformation().getDistrictToDestroy().getGoldCost() - 1);

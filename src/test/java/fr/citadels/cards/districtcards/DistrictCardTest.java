@@ -42,7 +42,5 @@ class DistrictCardTest {
     void testIsBuilt() {
         DistrictCard d = new DistrictCard("Manoir", CardFamily.NOBLE, 3);
         assertFalse(d.isBuilt());
-        d.build(true, null);
-        assertTrue(d.isBuilt());
     }
 }

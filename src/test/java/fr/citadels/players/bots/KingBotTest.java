@@ -1,6 +1,7 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.cards.charactercards.characters.*;
+import fr.citadels.cards.districtcards.unique.Unique;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.CharacterCardsList;
 import fr.citadels.cards.districtcards.City;
@@ -273,10 +274,17 @@ class KingBotTest {
 
     @Test
     void activateFactoryEffect() {
-        player1.setGold(3);
-        assertFalse(player1.activateFactoryEffect());
-        player2.setGold(3);
-        assertTrue(player2.activateFactoryEffect());
+        player1.setHand(new Hand(List.of(DistrictCardsPile.allDistrictCards[61])));
+        player1.getInformation().setDistrictToBuild(DistrictCardsPile.allDistrictCards[61]);
+        player1.getActions().addGold(6);
+        player1.getActions().build();
+        assertFalse(player1.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+
+        player1.getActions().addGold(3);
+        assertTrue(player1.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        player2.getActions().addGold(3);
+        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
     }
 
     @AfterEach

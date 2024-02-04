@@ -67,7 +67,7 @@ class PlayerTest {
             }
 
             @Override
-            public boolean activateFactoryEffect() {
+            public boolean activateFactoryEffect(Player player) {
                 return false;
             }
         };
@@ -180,7 +180,7 @@ class PlayerTest {
             }
 
             @Override
-            public boolean activateFactoryEffect() {
+            public boolean activateFactoryEffect(Player player) {
                 return false;
             }
         };
@@ -241,7 +241,7 @@ class PlayerTest {
             }
 
             @Override
-            public boolean activateFactoryEffect() {
+            public boolean activateFactoryEffect(Player player) {
                 return false;
             }
 
@@ -298,7 +298,7 @@ class PlayerTest {
             }
 
             @Override
-            public boolean activateFactoryEffect() {
+            public boolean activateFactoryEffect(Player player) {
                 return false;
             }
 
