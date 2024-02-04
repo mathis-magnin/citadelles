@@ -23,6 +23,7 @@ public class Unique extends DistrictCard {
     /**
      * @return the owner of the unique district card
      */
+    @Override
     public Player getOwner() {
         return owner;
     }

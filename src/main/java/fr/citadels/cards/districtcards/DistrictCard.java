@@ -19,6 +19,15 @@ public class DistrictCard extends Card {
 
     /* Methods */
 
+    /**
+     * Get the owner of the district card
+     *
+     * @return the owner of the district card
+     */
+    public Player getOwner() {
+        return null;
+    }
+
     public int getGoldCost() {
         return this.goldCost;
     }

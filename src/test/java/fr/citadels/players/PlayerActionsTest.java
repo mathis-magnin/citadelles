@@ -86,6 +86,18 @@ class PlayerActionsTest {
         assertEquals(8, player.getHand().size());
         assertEquals(2, player.getGold());
 
+        player.getHand().add(DistrictCardsPile.allDistrictCards[64]);
+        player.getActions().addGold(6);
+        player.getInformation().setDistrictToBuild(DistrictCardsPile.allDistrictCards[64]);
+        player.getHand().remove(DistrictCardsPile.allDistrictCards[64]);
+        player.getActions().build();
+        actions.takeCardsOrGold(true);
+        assertEquals(10, player.getHand().size());
+
+        actions.takeCardsOrGold(false);
+        assertEquals(10, player.getHand().size());
+        assertEquals(4, player.getGold());
+
     }
 
     @Test

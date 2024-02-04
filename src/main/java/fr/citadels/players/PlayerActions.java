@@ -3,6 +3,7 @@ package fr.citadels.players;
 import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.charactercards.CharacterCardsList;
 import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.DistrictCardsPile;
 import fr.citadels.cards.districtcards.Hand;
 
 import java.util.List;
@@ -103,13 +104,16 @@ public class PlayerActions {
             DistrictCard[] drawnCards = player.getInformation().getPile().draw(2);
             player.getInformation().getDisplay().addDistrictDrawn(drawnCards);
             if (drawnCards.length != 0) { // if there is at least 1 card
-                DistrictCard cardToPlay = player.chooseCardAmongDrawn(drawnCards);
-
                 Hand hand = player.getHand();
-                hand.add(cardToPlay);
-                player.setHand(hand);
+                if (!player.equals(DistrictCardsPile.allDistrictCards[64].getOwner())) {
+                    DistrictCard cardToPlay = player.chooseCardAmongDrawn(drawnCards);
+                    hand.add(cardToPlay);
+                    player.getInformation().getDisplay().addDistrictChosen(player, cardToPlay);
+                } else {
+                    DistrictCardsPile.allDistrictCards[64].useEffect();
+                    hand.addAll(List.of(drawnCards));
+                }
 
-                player.getInformation().getDisplay().addDistrictChosen(player, cardToPlay);
                 player.getInformation().getDisplay().addBlankLine();
             } else {
                 draw = false;
