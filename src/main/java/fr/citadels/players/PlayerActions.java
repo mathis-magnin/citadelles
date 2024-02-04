@@ -112,8 +112,7 @@ public class PlayerActions {
 
                 player.getInformation().getDisplay().addDistrictChosen(player, cardToPlay);
                 player.getInformation().getDisplay().addBlankLine();
-            }
-            else {
+            } else {
                 draw = false;
             }
         }
@@ -151,10 +150,8 @@ public class PlayerActions {
      */
     public void build() {
         if (this.information.getDistrictToBuild() != null) {
+            this.information.getDistrictToBuild().build(true, player);
             addCardToCity(this.information.getDistrictToBuild());
-            if (this.information.getDistrictToBuild().equals(new Graveyard(this.player))) { // Temporary
-                ((Graveyard)(this.information.getDistrictToBuild())).setPlayer(this.player);
-            }
             removeGold(this.information.getDistrictToBuild().getGoldCost());
             player.getInformation().getDisplay().addDistrictBuilt(player, this.information.getDistrictToBuild());
         } else {

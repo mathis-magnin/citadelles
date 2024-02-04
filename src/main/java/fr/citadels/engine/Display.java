@@ -322,19 +322,18 @@ public class Display {
 
 
     public void addNoWarlordPower() {
-        this.events.append("Le joueur n'utilise pas son pouvoir permettant de détruire un quartier d'un autre joueur.\n");
+        this.events.append("Le joueur n'utilise pas son pouvoir permettant de détruire le quartier d'un autre joueur.\n");
     }
 
 
-    public void addGraveyardPower(Player player) {
+    public void addGraveyardEffect(Player player) {
         this.events.append(player.getName()).append(" utilise le pouvoir de la carte Cimetière pour prendre en main le quartier détruit en payant 1 pièces d'or.\n");
         this.events.append("\tLa fortune de ").append(player.getName()).append(" s'élève donc à ").append(player.getGold()).append(" pièces d'or.\n");
         this.events.append("\tLa main de ").append(player.getName()).append((" comporte donc : ")).append((player.getHand().toString())).append(".\n");
     }
 
 
-
-    public void addNoGraveyardPower(Player player) {
+    public void addNoGraveyardEffect(Player player) {
         this.events.append(player.getName()).append(" n'utilise pas le pouvoir de la carte quartier Cimetière.\n");
     }
 
@@ -356,6 +355,10 @@ public class Display {
 
     public void addWinner(Player player) {
         this.events.append("Le gagnant est : ").append(player.getName()).append(" !\n");
+    }
+
+    public void addFactoryEffectActivated(Hand hand) {
+        this.events.append("Le joueur utilise le pouvoir de la Manufacture\n");
     }
 
 }

@@ -72,4 +72,9 @@ public interface PlayerChoices {
      */
     void playBuildingPhase();
 
+    /**
+     * @return a boolean true if we want to activate the effect, else otherwise
+     */
+    boolean activateFactoryEffect();
+
 }

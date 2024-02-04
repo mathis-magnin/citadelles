@@ -8,6 +8,8 @@ import fr.citadels.cards.districtcards.Hand;
 
 import java.util.List;
 
+import static fr.citadels.cards.districtcards.DistrictCardsPile.allDistrictCards;
+
 public abstract class Player implements Comparable<Player>, PlayerChoices {
 
     /* Attributes */
@@ -57,7 +59,6 @@ public abstract class Player implements Comparable<Player>, PlayerChoices {
 
 
     /**
-     *
      * @return the player's actions
      */
     public PlayerActions getActions() {
@@ -138,6 +139,7 @@ public abstract class Player implements Comparable<Player>, PlayerChoices {
 
     /**
      * Set the player's gold
+     *
      * @param gold the amount of gold coins that the player should have
      */
     public void setGold(int gold) {
@@ -305,15 +307,15 @@ public abstract class Player implements Comparable<Player>, PlayerChoices {
         chooseTargetToDestroy();
         if ((getInformation().getTarget() != null) && (getInformation().getDistrictToDestroy() != null)) {
             getCharacter().usePower();
-        }
-        else {
+        } else {
             getInformation().getDisplay().addNoWarlordPower();
+            this.getInformation().getDisplay().addBlankLine();
         }
     }
 
 
     public void chooseToRecoverDistrict() {
-        if (this.gold >= 1) {
+        if (1 <= this.gold) {
             this.getInformation().setRecoverDistrictDecision(true); // Temporary
         }
         this.getInformation().setRecoverDistrictDecision(false);

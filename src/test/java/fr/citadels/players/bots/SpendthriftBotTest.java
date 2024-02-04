@@ -270,6 +270,14 @@ class SpendthriftBotTest {
         assertEquals(new City(), player2.getCity());
     }
 
+    @Test
+    void activateFactoryEffect() {
+        player.setGold(3);
+        assertTrue(player.activateFactoryEffect());
+        player2.setGold(2);
+        assertFalse(player2.activateFactoryEffect());
+    }
+
     @AfterEach
     void resetCharacterCards() {
         CharacterCardsList.allCharacterCards[0] = new AssassinCard();

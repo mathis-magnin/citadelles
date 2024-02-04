@@ -1,5 +1,6 @@
 package fr.citadels.players.bots;
 
+import fr.citadels.cards.districtcards.DistrictCardsPile;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.charactercards.CharacterCard;
@@ -184,6 +185,12 @@ public class KingBot extends Player {
         }
         getInformation().getDisplay().addBlankLine();
         getActions().takeGoldFromCity();
+        DistrictCardsPile.allDistrictCards[61].useEffect();
+    }
+
+    @Override
+    public boolean activateFactoryEffect() {
+        return getHand().size() < 2 && getGold() >= 3;
     }
 
 }

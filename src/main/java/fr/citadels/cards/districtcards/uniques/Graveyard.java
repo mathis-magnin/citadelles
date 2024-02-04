@@ -9,37 +9,39 @@ public class Graveyard extends DistrictCard {
 
     /* Attribute */
 
-    private Player player;
+    private Player owner;
 
 
     /* Constructor */
 
-    public Graveyard(Player player) {
+    public Graveyard() {
         super("Cimetière", CardFamily.UNIQUE, 5);
-        this.player = player;
+        this.owner = null;
     }
 
 
     /* Basic method */
 
-    public void setPlayer(Player player) {
-        this.player = player;
+    @Override
+    public void build(boolean build, Player owner) {
+        super.build(build, owner);
+        this.owner = owner;
     }
 
 
     /* Method */
 
-    public boolean usePower(DistrictCard cardRemoved) {
-        if (this.player != null) {
-            this.player.chooseToRecoverDistrict();
-            if (!this.player.getCharacter().equals(new WarlordCard()) && this.player.getInformation().getRecoverDistrictDecision()) {
-                this.player.getActions().removeGold(1);
-                this.player.getHand().add(cardRemoved);
-                this.player.getInformation().getDisplay().addGraveyardPower(this.player);
-                this.player.getInformation().setRecoverDistrictDecision(false);
+    public boolean useEffect(DistrictCard cardRemoved) {
+        if (this.owner != null) {
+            this.owner.chooseToRecoverDistrict();
+            if (!this.owner.getCharacter().equals(new WarlordCard()) && this.owner.getInformation().getRecoverDistrictDecision()) {
+                this.owner.getActions().removeGold(1);
+                this.owner.getHand().add(cardRemoved);
+                this.owner.getInformation().getDisplay().addGraveyardEffect(this.owner);
+                this.owner.getInformation().setRecoverDistrictDecision(false);
                 return true;
             }
-            this.player.getInformation().getDisplay().addNoGraveyardPower(this.player);
+            this.owner.getInformation().getDisplay().addNoGraveyardEffect(this.owner);
         }
         return false;
     }

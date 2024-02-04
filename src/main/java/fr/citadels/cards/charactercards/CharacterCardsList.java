@@ -12,14 +12,14 @@ public class CharacterCardsList extends ArrayList<CharacterCard> {
     /* Static Content */
 
     public static final CharacterCard[] allCharacterCards = new CharacterCard[]{
-            new AssassinCard(),
+            new AssassinCard(), // 0
             new ThiefCard(),
             new MagicianCard(),
             new KingCard(),
             new BishopCard(),
-            new MerchantCard(),
+            new MerchantCard(), // 5
             new ArchitectCard(),
-            new WarlordCard((Graveyard) (DistrictCardsPile.allDistrictCards[62]))
+            new WarlordCard()
     };
 
     /**

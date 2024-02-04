@@ -66,6 +66,10 @@ class PlayerTest {
                 getActions().removeCardFromHand(0);
             }
 
+            @Override
+            public boolean activateFactoryEffect() {
+                return false;
+            }
         };
     }
 
@@ -175,6 +179,10 @@ class PlayerTest {
                 getActions().removeCardFromHand(0);
             }
 
+            @Override
+            public boolean activateFactoryEffect() {
+                return false;
+            }
         };
         player.playResourcesPhase();
         player.playBuildingPhase();
@@ -232,6 +240,11 @@ class PlayerTest {
                 getActions().removeCardFromHand(0);
             }
 
+            @Override
+            public boolean activateFactoryEffect() {
+                return false;
+            }
+
         };
         player.playResourcesPhase();
         player.playBuildingPhase();
@@ -282,6 +295,11 @@ class PlayerTest {
             public void playBuildingPhase() {
                 getActions().addCardToCity(getHand().get(0));
                 getActions().removeCardFromHand(0);
+            }
+
+            @Override
+            public boolean activateFactoryEffect() {
+                return false;
             }
 
         };
