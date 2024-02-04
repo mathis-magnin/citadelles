@@ -284,6 +284,24 @@ class SpendthriftBotTest {
         assertTrue(player.activateFactoryEffect());
     }
 
+    @Test
+    void activateLaboratoryEffect() {
+        player.setHand(new Hand(List.of(DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[2], DistrictCardsPile.allDistrictCards[3])));
+        assertTrue(player.activateLaboratoryEffect());
+
+        player.getActions().addGold(2);
+        assertFalse(player.activateLaboratoryEffect());
+
+        player.getHand().addAll(List.of(DistrictCardsPile.allDistrictCards[4], DistrictCardsPile.allDistrictCards[5]));
+        assertTrue(player.activateLaboratoryEffect());
+
+        player.setHand(new Hand(List.of(DistrictCardsPile.allDistrictCards[1])));
+        player.setGold(0);
+        assertFalse(player.activateLaboratoryEffect());
+        player.getCity().add(DistrictCardsPile.allDistrictCards[0]);
+        assertTrue(player.activateLaboratoryEffect());
+    }
+
 
     @AfterEach
     void resetCharacterCards() {

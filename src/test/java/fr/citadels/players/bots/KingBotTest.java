@@ -284,6 +284,24 @@ class KingBotTest {
         assertTrue(player1.activateFactoryEffect());
     }
 
+    @Test
+    void activateLaboratoryEffect() {
+        player1.setHand(new Hand(List.of(DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[2], DistrictCardsPile.allDistrictCards[3])));
+        assertTrue(player1.activateLaboratoryEffect());
+
+        player1.getActions().addGold(2);
+        assertFalse(player1.activateLaboratoryEffect());
+
+        player1.getHand().addAll(List.of(DistrictCardsPile.allDistrictCards[4], DistrictCardsPile.allDistrictCards[5]));
+        assertTrue(player1.activateLaboratoryEffect());
+
+        player1.setHand(new Hand(List.of(DistrictCardsPile.allDistrictCards[1])));
+        player1.setGold(0);
+        assertFalse(player1.activateLaboratoryEffect());
+        player1.getCity().add(DistrictCardsPile.allDistrictCards[0]);
+        assertTrue(player1.activateLaboratoryEffect());
+    }
+
     @AfterEach
     void resetCharacterCards() {
         CharacterCardsList.allCharacterCards[0] = new AssassinCard();

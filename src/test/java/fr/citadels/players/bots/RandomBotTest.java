@@ -389,6 +389,22 @@ class RandomBotTest {
         assertFalse(player.activateFactoryEffect());
     }
 
+    @Test
+    void activateLaboratoryEffect() {
+        when(random.nextBoolean()).thenReturn(false);
+        assertFalse(player.activateLaboratoryEffect());
+
+        when(random.nextBoolean()).thenReturn(true);
+        assertTrue(player.activateLaboratoryEffect());
+
+        player.setHand(new Hand(new ArrayList<>()));
+        when(random.nextBoolean()).thenReturn(false);
+        assertFalse(player.activateLaboratoryEffect());
+
+        when(random.nextBoolean()).thenReturn(true);
+        assertFalse(player.activateLaboratoryEffect());
+    }
+
     @AfterEach
     void resetCharacterCards() {
         CharacterCardsList.allCharacterCards[0] = new AssassinCard();

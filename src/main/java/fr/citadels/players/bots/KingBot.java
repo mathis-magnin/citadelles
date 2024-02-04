@@ -172,7 +172,6 @@ public class KingBot extends Player {
         if (draw) {
             getActions().sortHand(CardFamily.NOBLE);
         }
-        DistrictCardsPile.allDistrictCards[60].useEffect();
 
         if (this.equals(DistrictCardsPile.allDistrictCards[60].getOwner())) // Utilise le pouvoir du laboratoire
             DistrictCardsPile.allDistrictCards[60].useEffect();

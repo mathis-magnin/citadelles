@@ -11,7 +11,8 @@ public class Laboratory extends Unique {
     @Override
     public void useEffect() {
         if (isBuilt() && getOwner().activateLaboratoryEffect()) {
-            getOwner().getActions().addGold(3);
+            System.out.println(getOwner().getName() + " A LE LABORATOIRE !!!! \n---------------------------------------------------------\n\n\n\n\n\n\n\n");
+            getOwner().getActions().addGold(1);
             DistrictCard card = getOwner().getHand().remove(getOwner().getHand().size() - 1);
             getOwner().getInformation().getPile().placeBelowPile(card);
             getOwner().getInformation().getDisplay().addLaboratoryEffectActivated(card, getOwner());
