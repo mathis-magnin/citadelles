@@ -1,6 +1,7 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.cards.charactercards.characters.*;
+import fr.citadels.cards.districtcards.uniques.Unique;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.CharacterCardsList;
 import fr.citadels.cards.districtcards.City;
@@ -273,13 +274,27 @@ class ThriftyBotTest {
         assertEquals(new City(), player2.getCity());
     }
 
+
     @Test
     void activateFactoryEffect() {
-        player.setGold(6);
-        assertTrue(player.activateFactoryEffect());
-        player2.setGold(5);
-        assertFalse(player2.activateFactoryEffect());
+        player.setHand(new Hand(List.of(DistrictCardsPile.allDistrictCards[61])));
+        player.getInformation().setDistrictToBuild(DistrictCardsPile.allDistrictCards[61]);
+        player.getActions().addGold(6);
+        player.getActions().build();
+        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+
+        player.getActions().addGold(3);
+        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        player2.getActions().addGold(3);
+        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+
+        player.getActions().addGold(6);
+        assertTrue(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        player2.getActions().addGold(6);
+        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
     }
+
 
     @AfterEach
     void resetCharacterCards() {

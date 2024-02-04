@@ -15,14 +15,6 @@ class FactoryTest {
     Factory factory = new Factory();
 
     @Test
-    void build() {
-        factory.build(true, new KingBot("KingBot", List.of(factory), new Game()));
-        assertTrue(factory.isBuilt());
-        assertEquals(factory.getOwner().getName(), "KingBot");
-
-    }
-
-    @Test
     void useEffect() {
         Game game = new Game();
         Player king = new KingBot("KingBot", List.of(factory), game);

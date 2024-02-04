@@ -1,6 +1,7 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.districtcards.uniques.Unique;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.charactercards.CharacterCard;
@@ -213,8 +214,8 @@ public class ThriftyBot extends Player {
         DistrictCardsPile.allDistrictCards[61].useEffect();
     }
 
-    public boolean activateFactoryEffect() {
-        return getGold() >= 6;
+    public boolean activateFactoryEffect(Player player) {
+        return getGold() >= 6 && this.equals(player);
     }
 
 }

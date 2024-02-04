@@ -189,8 +189,8 @@ public class KingBot extends Player {
     }
 
     @Override
-    public boolean activateFactoryEffect() {
-        return getHand().size() < 2 && getGold() >= 3;
+    public boolean activateFactoryEffect(Player player) {
+        return getHand().size() < 2 && getGold() >= 3 && player.equals(this);
     }
 
 }

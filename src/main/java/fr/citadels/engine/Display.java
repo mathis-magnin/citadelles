@@ -327,7 +327,7 @@ public class Display {
 
 
     public void addGraveyardEffect(Player player) {
-        this.events.append(player.getName()).append(" utilise le pouvoir de la carte Cimetière pour prendre en main le quartier détruit en payant 1 pièces d'or.\n");
+        this.events.append(player.getName()).append(" utilise le pouvoir de la carte Cimetière pour prendre en main le quartier détruit en payant 1 pièce d'or.\n");
         this.events.append("\tLa fortune de ").append(player.getName()).append(" s'élève donc à ").append(player.getGold()).append(" pièces d'or.\n");
         this.events.append("\tLa main de ").append(player.getName()).append((" comporte donc : ")).append((player.getHand().toString())).append(".\n");
     }
@@ -357,8 +357,12 @@ public class Display {
         this.events.append("Le gagnant est : ").append(player.getName()).append(" !\n");
     }
 
-    public void addFactoryEffectActivated(Hand hand) {
+    public void addFactoryEffectActivated() {
         this.events.append("Le joueur utilise le pouvoir de la Manufacture\n");
+    }
+
+    public void addLibraryEffectActivated() {
+        this.events.append("Le joueur utilise le pouvoir de la Bibliothèque et récupère toutes les cartes piochées\n");
     }
 
 }

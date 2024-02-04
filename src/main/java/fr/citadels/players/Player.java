@@ -317,6 +317,7 @@ public abstract class Player implements Comparable<Player>, PlayerChoices {
     public void chooseToRecoverDistrict() {
         if (1 <= this.gold) {
             this.getInformation().setRecoverDistrictDecision(true); // Temporary
+            return;
         }
         this.getInformation().setRecoverDistrictDecision(false);
     }
