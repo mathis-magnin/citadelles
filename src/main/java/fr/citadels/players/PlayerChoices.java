@@ -76,4 +76,11 @@ public interface PlayerChoices {
      */
     boolean activateFactoryEffect(Player player);
 
+    /**
+     * activate the effect of the laboratory if the player can
+     *
+     * @return a boolean true if we want to activate the effect, else otherwise
+     */
+    boolean activateLaboratoryEffect(Player player);
+
 }

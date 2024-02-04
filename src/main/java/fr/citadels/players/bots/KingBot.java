@@ -172,6 +172,7 @@ public class KingBot extends Player {
         if (draw) {
             getActions().sortHand(CardFamily.NOBLE);
         }
+        DistrictCardsPile.allDistrictCards[60].useEffect();
     }
 
 
@@ -191,6 +192,11 @@ public class KingBot extends Player {
     @Override
     public boolean activateFactoryEffect(Player player) {
         return getHand().size() < 2 && getGold() >= 3 && player.equals(this);
+    }
+
+    @Override
+    public boolean activateLaboratoryEffect(Player player) {
+        return false;
     }
 
 }

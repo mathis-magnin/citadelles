@@ -13,7 +13,9 @@ public class Factory extends Unique {
             getOwner().getInformation().getDisplay().addFactoryEffectActivated();
             getOwner().getActions().draw(3);
             getOwner().getActions().removeGold(3);
-            getOwner().getHand().sortCards(getOwner().getCharacter().getCardFamily());
+            if (getOwner().getCharacter() != null) {
+                getOwner().getHand().sortCards(getOwner().getCharacter().getCardFamily());
+            }
         }
     }
 }

@@ -196,6 +196,7 @@ public class SpendthriftBot extends Player {
         // Else pick 2 golds
         boolean draw = ((getGold() > 5) || this.getHand().isEmpty() || (getCheapestCardInHand()[1] > 3));
         getActions().takeCardsOrGold(draw);
+        DistrictCardsPile.allDistrictCards[60].useEffect();
     }
 
 
@@ -213,8 +214,13 @@ public class SpendthriftBot extends Player {
         DistrictCardsPile.allDistrictCards[61].useEffect();
     }
 
+    @Override
     public boolean activateFactoryEffect(Player player) {
         return getGold() >= 3 && this.equals(player);
     }
 
+    @Override
+    public boolean activateLaboratoryEffect(Player player) {
+        return false;
+    }
 }

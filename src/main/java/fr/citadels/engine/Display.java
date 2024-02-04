@@ -343,6 +343,13 @@ public class Display {
         this.events.append("Le joueur utilise le pouvoir de la Manufacture\n");
     }
 
+    public void addLaboratoryEffectActivated(DistrictCard card, Player player) {
+        this.events.append("Le joueur utilise le pouvoir du Laboratoire pour défausser \n");
+        this.events.append(card).append(" et gagner une pièce d'or.\n");
+        this.addGoldUpdate(player.getGold());
+        this.addHandUpdate(player.getHand());
+    }
+
     public void addLibraryEffectActivated() {
         this.events.append("Le joueur utilise le pouvoir de la Bibliothèque et récupère toutes les cartes piochées\n");
     }

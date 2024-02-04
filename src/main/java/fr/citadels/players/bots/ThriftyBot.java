@@ -198,6 +198,7 @@ public class ThriftyBot extends Player {
         boolean draw = ((getGold() > 6) || (getHand().isEmpty()) || ((getGold() > 5) && (getMostExpensiveCardInHand()[1] < 4)));
         getActions().takeGoldFromCity();
         getActions().takeCardsOrGold(draw);
+        DistrictCardsPile.allDistrictCards[60].useEffect();
     }
 
 
@@ -214,8 +215,14 @@ public class ThriftyBot extends Player {
         DistrictCardsPile.allDistrictCards[61].useEffect();
     }
 
+    @Override
     public boolean activateFactoryEffect(Player player) {
         return getGold() >= 6 && this.equals(player);
+    }
+
+    @Override
+    public boolean activateLaboratoryEffect(Player player) {
+        return false;
     }
 
 }

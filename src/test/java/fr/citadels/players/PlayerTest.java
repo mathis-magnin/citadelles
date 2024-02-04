@@ -70,6 +70,11 @@ class PlayerTest {
             public boolean activateFactoryEffect(Player player) {
                 return false;
             }
+
+            @Override
+            public boolean activateLaboratoryEffect(Player player) {
+                return false;
+            }
         };
     }
 
@@ -183,6 +188,11 @@ class PlayerTest {
             public boolean activateFactoryEffect(Player player) {
                 return false;
             }
+
+            @Override
+            public boolean activateLaboratoryEffect(Player player) {
+                return false;
+            }
         };
         player.playResourcesPhase();
         player.playBuildingPhase();
@@ -245,6 +255,10 @@ class PlayerTest {
                 return false;
             }
 
+            @Override
+            public boolean activateLaboratoryEffect(Player player) {
+                return false;
+            }
         };
         player.playResourcesPhase();
         player.playBuildingPhase();
@@ -302,6 +316,10 @@ class PlayerTest {
                 return false;
             }
 
+            @Override
+            public boolean activateLaboratoryEffect(Player player) {
+                return false;
+            }
         };
 
 

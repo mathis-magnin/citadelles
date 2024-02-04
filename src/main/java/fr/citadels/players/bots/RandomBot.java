@@ -154,6 +154,7 @@ public class RandomBot extends Player {
         boolean draw;
         draw = !RAND.nextBoolean();
         getActions().takeCardsOrGold(draw);
+        DistrictCardsPile.allDistrictCards[60].useEffect();
     }
 
 
@@ -180,9 +181,14 @@ public class RandomBot extends Player {
         DistrictCardsPile.allDistrictCards[61].useEffect();
     }
 
+    @Override
     public boolean activateFactoryEffect(Player player) {
         return RAND.nextBoolean() && getGold() >= 3 && this.equals(player);
+    }
 
+    @Override
+    public boolean activateLaboratoryEffect(Player player) {
+        return false;
     }
 
 }
