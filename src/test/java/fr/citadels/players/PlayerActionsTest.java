@@ -13,12 +13,12 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class PlayerActionsTest {
     Player player;
@@ -81,24 +81,39 @@ class PlayerActionsTest {
         actions.takeCardsOrGold(false);
         assertEquals(7, player.getHand().size());
         assertEquals(2, player.getGold());
-
         actions.takeCardsOrGold(true);
         assertEquals(8, player.getHand().size());
         assertEquals(2, player.getGold());
 
+
+    }
+
+    @Test
+    void takeCardOrGoldEffect() {
         player.getHand().add(DistrictCardsPile.allDistrictCards[64]);
         player.getActions().addGold(6);
         player.getInformation().setDistrictToBuild(DistrictCardsPile.allDistrictCards[64]);
         player.getHand().remove(DistrictCardsPile.allDistrictCards[64]);
         player.getActions().build();
         actions.takeCardsOrGold(true);
-        assertEquals(10, player.getHand().size());
+        assertEquals(9, player.getHand().size());
 
         actions.takeCardsOrGold(false);
-        assertEquals(10, player.getHand().size());
-        assertEquals(4, player.getGold());
+        assertEquals(9, player.getHand().size());
+        assertEquals(2, player.getGold());
 
+        player.getHand().add(DistrictCardsPile.allDistrictCards[59]);
+        player.getActions().addGold(5);
+        player.getInformation().setDistrictToBuild(DistrictCardsPile.allDistrictCards[59]);
+        player.getHand().remove(DistrictCardsPile.allDistrictCards[59]);
+        player.getActions().build();
+
+        actions.takeCardsOrGold(true);
+        assertEquals(12, player.getHand().size());
+        DistrictCardsPile.allDistrictCards[64].setOwner(null);
+        DistrictCardsPile.allDistrictCards[59].setOwner(null);
     }
+
 
     @Test
     void takeGoldFromCity() {
