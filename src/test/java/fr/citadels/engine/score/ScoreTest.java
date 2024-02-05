@@ -55,8 +55,8 @@ class ScoreTest {
             DistrictCardsPile.allDistrictCards[62], //cost 5
             DistrictCardsPile.allDistrictCards[63], //cost 6
             DistrictCardsPile.allDistrictCards[64], //cost 6
-            DistrictCardsPile.allDistrictCards[65], //cost 6
-            DistrictCardsPile.allDistrictCards[66]); //cost 6
+            DistrictCardsPile.allDistrictCards[65], //cost 6, bring 8 points
+            DistrictCardsPile.allDistrictCards[66]); //cost 6, bring 8 points
 
 
     /* Initialize players */
@@ -156,7 +156,7 @@ class ScoreTest {
         score1.determinePoints(); // 24 + 4 = 28
         score2.determinePoints(); // 18
         score3.determinePoints(); // 18
-        score4.determinePoints(); // 39 + 2 = 41
+        score4.determinePoints(); // 27 + 2 + 16 = 45
 
         assertTrue(score1.compareTo(score2) > 0);
         assertTrue(score2.compareTo(score1) < 0);
@@ -176,12 +176,12 @@ class ScoreTest {
         score1.determinePoints(); // 24 + 2 = 26
         score2.determinePoints(); // 18
         score3.determinePoints(); // 18
-        score4.determinePoints(); // 39 + 4 = 43
+        score4.determinePoints(); // 27 + 4 + 16 = 47
 
         assertEquals(26, score1.getPoints());
         assertEquals(18, score2.getPoints());
         assertEquals(18, score3.getPoints());
-        assertEquals(43, score4.getPoints());
+        assertEquals(47, score4.getPoints());
     }
 
     @AfterEach

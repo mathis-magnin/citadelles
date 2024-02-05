@@ -84,7 +84,7 @@ public class SpendthriftBot extends Player {
     @Override
     public void chooseDistrictToBuild() {
         int minIndex = getCheapestCardInHand()[0];
-        if ((minIndex < 0) && (getHand().get(minIndex).getGoldCost() <= getGold()))
+        if ((minIndex >= 0) && (getHand().get(minIndex).getGoldCost() <= getGold()))
             this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(minIndex));
         else
             this.getInformation().setDistrictToBuild(null);

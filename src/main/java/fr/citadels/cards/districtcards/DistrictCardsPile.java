@@ -96,8 +96,8 @@ public class DistrictCardsPile extends LinkedList<DistrictCard> {
             new Graveyard(),
             new SchoolOfMagic(),
             new Library(),
-            new DistrictCard("Université", CardFamily.UNIQUE, 6), //65
-            new DistrictCard("Dracoport", CardFamily.UNIQUE, 6)
+            new University(), //65
+            new DragonGate()
     };
 
     /* Methods */
