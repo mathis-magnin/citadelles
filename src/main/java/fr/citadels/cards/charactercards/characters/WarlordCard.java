@@ -53,7 +53,7 @@ public class WarlordCard extends CharacterCard {
             getPlayer().getInformation().getDisplay().addBishopPower();
         }
         if (DistrictCardsPile.allDistrictCards[58].isBuilt() && !DistrictCardsPile.allDistrictCards[58].getOwner().equals(CharacterCardsList.allCharacterCards[4].getPlayer())) {
-            this.getPlayer().getInformation().getDisplay().addDonjonEffect();
+            this.getPlayer().getInformation().getDisplay().addKeepEffect();
         }
 
         DistrictCard districtToDestroy = this.getPlayer().getInformation().getDistrictToDestroy();

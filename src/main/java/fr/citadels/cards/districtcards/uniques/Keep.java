@@ -3,9 +3,9 @@ package fr.citadels.cards.districtcards.uniques;
 import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.districtcards.DistrictCard;
 
-public class Donjon extends DistrictCard {
+public class Keep extends DistrictCard {
 
-    public Donjon() {
+    public Keep() {
         super("Donjon", CardFamily.UNIQUE, 3);
     }
 

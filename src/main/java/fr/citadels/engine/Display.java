@@ -360,7 +360,7 @@ public class Display {
         this.addHandUpdate(player.getHand());
     }
 
-    public void addDonjonEffect() {
+    public void addKeepEffect() {
         this.events.append("Grâce à son effet, le Donjon de ").append(DistrictCardsPile.allDistrictCards[58].getOwner().getName()).append(" ne peut pas être détruit par le condottière.\n");
     }
 
