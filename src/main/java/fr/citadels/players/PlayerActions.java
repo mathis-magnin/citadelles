@@ -103,7 +103,13 @@ public class PlayerActions {
      */
     public void takeCardsOrGold(boolean draw) {
         if (draw) {
-            DistrictCard[] drawnCards = player.getInformation().getPile().draw(2);
+            int nbToDraw = 2;
+            if (player.equals(DistrictCardsPile.allDistrictCards[59].getOwner())) {
+                DistrictCardsPile.allDistrictCards[59].useEffect();
+                nbToDraw++;
+            }
+            DistrictCard[] drawnCards = player.getInformation().getPile().draw(nbToDraw);
+
             player.getInformation().getDisplay().addDistrictDrawn(drawnCards);
             if (drawnCards.length != 0) { // if there is at least 1 card
                 Hand hand = player.getHand();
