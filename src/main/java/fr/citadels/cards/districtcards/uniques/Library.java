@@ -1,12 +1,12 @@
 package fr.citadels.cards.districtcards.uniques;
 
-import fr.citadels.cards.CardFamily;
-import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.Family;
+import fr.citadels.cards.districtcards.District;
 
-public class Library extends DistrictCard {
+public class Library extends District {
 
     public Library() {
-        super("Bibliothèque", CardFamily.UNIQUE, 6);
+        super("Bibliothèque", Family.UNIQUE, 6);
     }
 
     @Override

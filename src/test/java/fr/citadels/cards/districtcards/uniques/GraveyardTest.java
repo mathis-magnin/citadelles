@@ -1,12 +1,14 @@
 package fr.citadels.cards.districtcards.uniques;
 
-import fr.citadels.cards.charactercards.CharacterCardsList;
+import fr.citadels.cards.charactercards.CharactersList;
+import fr.citadels.cards.charactercards.characters.*;
 import fr.citadels.cards.districtcards.City;
-import fr.citadels.cards.districtcards.DistrictCard;
-import fr.citadels.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.districtcards.District;
+import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
-import fr.citadels.players.bots.KingBot;
+import fr.citadels.players.bots.Monarchist;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,28 +30,40 @@ class GraveyardTest {
         game = new Game();
         game.getPile().initializePile();
 
-        graveyard = (Graveyard) (DistrictCardsPile.allDistrictCards[62]);
+        graveyard = (Graveyard) (DistrictsPile.allDistrictCards[62]);
 
-        warlordPlayer = new KingBot("WARLORD", new ArrayList<>(), game);
-        warlordPlayer.setCharacter(CharacterCardsList.allCharacterCards[7]); // Warlord
-        warlordPlayer.getInformation().setTarget(CharacterCardsList.allCharacterCards[2]); // Magician
+        warlordPlayer = new Monarchist("WARLORD", new ArrayList<>(), game);
+        warlordPlayer.setCharacter(CharactersList.allCharacterCards[7]); // Warlord
+        warlordPlayer.getInformation().setTarget(CharactersList.allCharacterCards[2]); // Magician
         warlordPlayer.getActions().addGold(2); // 3 - 1 (cost of the district to destroy - 1)
-        warlordPlayer.getInformation().setDistrictToDestroy(DistrictCardsPile.allDistrictCards[0]);
+        warlordPlayer.getInformation().setDistrictToDestroy(DistrictsPile.allDistrictCards[0]);
 
-        targetedPlayer = new KingBot("TARGET", new ArrayList<>(), game);
-        targetedPlayer.setCharacter(CharacterCardsList.allCharacterCards[2]); // Magician
-        targetedPlayer.setCity(new City(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[15])));
+        targetedPlayer = new Monarchist("TARGET", new ArrayList<>(), game);
+        targetedPlayer.setCharacter(CharactersList.allCharacterCards[2]); // Magician
+        targetedPlayer.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15])));
 
-        graveyardPlayer = new KingBot("GRAVEYARD", new ArrayList<>(), game) {
+        graveyardPlayer = new Monarchist("GRAVEYARD", new ArrayList<>(), game) {
             @Override
-            public boolean activateGraveyardEffect(DistrictCard districtRemoved) {
+            public boolean activateGraveyardEffect(District districtRemoved) {
                 return true;
             }
         };
-        graveyardPlayer.setCharacter(CharacterCardsList.allCharacterCards[5]); // Merchant
+        graveyardPlayer.setCharacter(CharactersList.allCharacterCards[5]); // Merchant
         graveyardPlayer.getActions().addGold(1); // 1 to use the effect of the graveyard
         graveyardPlayer.setCity(new City(List.of(graveyard)));
         graveyard.setOwner(graveyardPlayer);
+    }
+
+    @AfterEach
+    void resetCharacterCards() {
+        CharactersList.allCharacterCards[0] = new Assassin();
+        CharactersList.allCharacterCards[1] = new Thief();
+        CharactersList.allCharacterCards[2] = new Magician();
+        CharactersList.allCharacterCards[3] = new King();
+        CharactersList.allCharacterCards[4] = new Bishop();
+        CharactersList.allCharacterCards[5] = new Merchant();
+        CharactersList.allCharacterCards[6] = new Architect();
+        CharactersList.allCharacterCards[7] = new Warlord();
     }
 
 
@@ -59,25 +73,25 @@ class GraveyardTest {
         warlordPlayer.getCharacter().usePower();
         assertEquals(0, warlordPlayer.getGold());
 
-        assertFalse(targetedPlayer.getCity().contains(DistrictCardsPile.allDistrictCards[0]));
+        assertFalse(targetedPlayer.getCity().contains(DistrictsPile.allDistrictCards[0]));
 
         assertEquals(0, graveyardPlayer.getGold());
-        assertTrue(graveyardPlayer.getHand().contains(DistrictCardsPile.allDistrictCards[0]));
+        assertTrue(graveyardPlayer.getHand().contains(DistrictsPile.allDistrictCards[0]));
         assertNotEquals(graveyard, game.getPile().getLast());
 
 
         /* TARGET and GRAVEYARD are the same player and the district destroyed is graveyard */
 
         setUp();
-        Player targetedGraveyardPlayer = new KingBot("TARGETED_GRAVEYARD", new ArrayList<>(), game) {
+        Player targetedGraveyardPlayer = new Monarchist("TARGETED_GRAVEYARD", new ArrayList<>(), game) {
             @Override
-            public boolean activateGraveyardEffect(DistrictCard removedDistrict) {
+            public boolean activateGraveyardEffect(District removedDistrict) {
                 return true;
             }
         };
-        targetedGraveyardPlayer.setCharacter(CharacterCardsList.allCharacterCards[2]); // Magician
+        targetedGraveyardPlayer.setCharacter(CharactersList.allCharacterCards[2]); // Magician
         targetedGraveyardPlayer.getActions().addGold(1); // 1 to use the effect of the graveyard
-        targetedGraveyardPlayer.setCity(new City(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[15], graveyard)));
+        targetedGraveyardPlayer.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], graveyard)));
         graveyard.setOwner(targetedGraveyardPlayer);
 
         warlordPlayer.getInformation().setDistrictToDestroy(graveyard);
@@ -95,24 +109,24 @@ class GraveyardTest {
         /* WARLORD, TARGET and GRAVEYARD are the same player */
 
         setUp();
-        Player warlordTargetedGraveyardPlayer = new KingBot("WARLORD_TARGETED_GRAVEYARD", new ArrayList<>(), game) {
+        Player warlordTargetedGraveyardPlayer = new Monarchist("WARLORD_TARGETED_GRAVEYARD", new ArrayList<>(), game) {
             @Override
-            public boolean activateGraveyardEffect(DistrictCard removedDistrict) {
+            public boolean activateGraveyardEffect(District removedDistrict) {
                 return true;
             }
         };
-        warlordTargetedGraveyardPlayer.setCharacter(CharacterCardsList.allCharacterCards[7]); // Warlord
-        warlordTargetedGraveyardPlayer.getInformation().setTarget(CharacterCardsList.allCharacterCards[7]); // Warlord
+        warlordTargetedGraveyardPlayer.setCharacter(CharactersList.allCharacterCards[7]); // Warlord
+        warlordTargetedGraveyardPlayer.getInformation().setTarget(CharactersList.allCharacterCards[7]); // Warlord
         warlordTargetedGraveyardPlayer.getActions().addGold(3); // 3 - 1 + 1 : (cost of the district to destroy - 1) + (cost the effect)
-        warlordTargetedGraveyardPlayer.getInformation().setDistrictToDestroy(DistrictCardsPile.allDistrictCards[0]);
-        warlordTargetedGraveyardPlayer.setCity(new City(List.of(DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[15], graveyard)));
+        warlordTargetedGraveyardPlayer.getInformation().setDistrictToDestroy(DistrictsPile.allDistrictCards[0]);
+        warlordTargetedGraveyardPlayer.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], graveyard)));
         graveyard.setOwner(warlordTargetedGraveyardPlayer);
 
         warlordTargetedGraveyardPlayer.getCharacter().usePower();
 
-        assertFalse(warlordTargetedGraveyardPlayer.getCity().contains(DistrictCardsPile.allDistrictCards[0]));
+        assertFalse(warlordTargetedGraveyardPlayer.getCity().contains(DistrictsPile.allDistrictCards[0]));
         assertEquals(1, graveyardPlayer.getGold());
-        assertFalse(graveyardPlayer.getHand().contains(DistrictCardsPile.allDistrictCards[0]));
+        assertFalse(graveyardPlayer.getHand().contains(DistrictsPile.allDistrictCards[0]));
         assertNotEquals(graveyard, game.getPile().getLast());
     }
 }

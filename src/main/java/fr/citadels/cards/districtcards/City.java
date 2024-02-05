@@ -1,13 +1,14 @@
 package fr.citadels.cards.districtcards;
 
 import fr.citadels.cards.districtcards.uniques.Keep;
+import fr.citadels.cards.districtcards.uniques.MiracleCourtyard;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class City extends ArrayList<DistrictCard> {
+public class City extends ArrayList<District> {
 
-    public static final int SIZE_TO_WIN = 7;
+    public static final int NUMBER_DISTRICTS_TO_WIN = 7;
 
     /* Constructors */
 
@@ -16,7 +17,7 @@ public class City extends ArrayList<DistrictCard> {
     }
 
 
-    public City(List<DistrictCard> cards) {
+    public City(List<District> cards) {
         this.addAll(cards);
 
     }
@@ -28,7 +29,7 @@ public class City extends ArrayList<DistrictCard> {
     public String toString() {
         StringBuilder str = new StringBuilder();
         if (!this.isEmpty()) {
-            for (DistrictCard districtCard : this) {
+            for (District districtCard : this) {
                 str.append(districtCard.toString()).append(", ");
             }
             str.delete(str.length() - 2, str.length());
@@ -45,45 +46,51 @@ public class City extends ArrayList<DistrictCard> {
      * @return A boolean value.
      */
     public boolean isComplete() {
-        return this.size() >= SIZE_TO_WIN;
+        return this.size() >= NUMBER_DISTRICTS_TO_WIN;
     }
 
 
     /**
      * Check if the player has one district of each family in his city.
+     * The MiracleCourtyard district count as the missing family.
      *
      * @return A boolean value.
      */
     public boolean hasOneDistrictOfEachFamily() {
-        boolean hasNoble = false;
-        boolean hasReligious = false;
-        boolean hasTrade = false;
-        boolean hasMilitary = false;
-        boolean hasSpecial = false;
+        int hasNoble = 0;
+        int hasReligious = 0;
+        int hasTrade = 0;
+        int hasMilitary = 0;
+        int hasSpecial = 0;
+        int activateMiracleCourtyardEffect = 0;
 
-        for (DistrictCard card : this) {
-            switch (card.getCardFamily()) {
+        for (District card : this) {
+            switch (card.getFamily()) {
                 case NOBLE:
-                    hasNoble = true;
+                    hasNoble = 1;
                     break;
                 case RELIGIOUS:
-                    hasReligious = true;
+                    hasReligious = 1;
                     break;
                 case TRADE:
-                    hasTrade = true;
+                    hasTrade = 1;
                     break;
                 case MILITARY:
-                    hasMilitary = true;
+                    hasMilitary = 1;
                     break;
                 case UNIQUE:
-                    hasSpecial = true;
+                    if (card.equals(new MiracleCourtyard())) {
+                        activateMiracleCourtyardEffect = 1;
+                    } else {
+                        hasSpecial = 1;
+                    }
                     break;
                 case NEUTRAL:
                     break;
             }
-        }
 
-        return hasNoble && hasReligious && hasTrade && hasMilitary && hasSpecial;
+        }
+        return (5 <= hasNoble + hasReligious + hasTrade + hasMilitary + hasSpecial + activateMiracleCourtyardEffect);
     }
 
 
@@ -93,7 +100,7 @@ public class City extends ArrayList<DistrictCard> {
      * @param hand the cards to check
      * @return the index of the first card in the hand that is not already in the city
      */
-    public int getFirstNotDuplicateIndex(List<DistrictCard> hand) {
+    public int getFirstNotDuplicateIndex(List<District> hand) {
         for (int i = 0; i < hand.size(); i++) {
             if (!this.contains(hand.get(i))) {
                 return i;
@@ -102,9 +109,9 @@ public class City extends ArrayList<DistrictCard> {
         return -1;
     }
 
-    public DistrictCard getCheapestDistrictToDestroy() {
-        DistrictCard districtToDestroy = null;
-        for (DistrictCard districtCard : this) {
+    public District getCheapestDistrictToDestroy() {
+        District districtToDestroy = null;
+        for (District districtCard : this) {
             if (!districtCard.equals(new Keep()) && ((districtToDestroy == null) || (districtCard.getGoldCost() < districtToDestroy.getGoldCost()))) {
                 districtToDestroy = districtCard;
             }

@@ -1,6 +1,6 @@
 package fr.citadels.engine;
 
-import fr.citadels.cards.charactercards.CharacterCardsList;
+import fr.citadels.cards.charactercards.CharactersList;
 import fr.citadels.cards.charactercards.characters.*;
 import fr.citadels.players.Player;
 import org.junit.jupiter.api.AfterEach;
@@ -23,7 +23,7 @@ class GameTest {
     @Test
     void initializeGameTest() {
         assertEquals(51, game.getPile().size());
-        for (Player player : game.getPlayerList()) {
+        for (Player player : game.getPlayersTab()) {
             assertEquals(4, player.getHand().size());
             assertEquals(2, player.getGold());
         }
@@ -32,7 +32,7 @@ class GameTest {
     @Test
     void playSelectionPhaseTest() {
         game.playSelectionPhase();
-        for (Player player : game.getPlayerList()) {
+        for (Player player : game.getPlayersTab()) {
             assertNotNull(player.getCharacter());
         }
     }
@@ -40,14 +40,14 @@ class GameTest {
 
     @AfterEach
     void resetCharacterCards() {
-        CharacterCardsList.allCharacterCards[0] = new AssassinCard();
-        CharacterCardsList.allCharacterCards[1] = new ThiefCard();
-        CharacterCardsList.allCharacterCards[2] = new MagicianCard();
-        CharacterCardsList.allCharacterCards[3] = new KingCard();
-        CharacterCardsList.allCharacterCards[4] = new BishopCard();
-        CharacterCardsList.allCharacterCards[5] = new MerchantCard();
-        CharacterCardsList.allCharacterCards[6] = new ArchitectCard();
-        CharacterCardsList.allCharacterCards[7] = new WarlordCard();
+        CharactersList.allCharacterCards[0] = new Assassin();
+        CharactersList.allCharacterCards[1] = new Thief();
+        CharactersList.allCharacterCards[2] = new Magician();
+        CharactersList.allCharacterCards[3] = new King();
+        CharactersList.allCharacterCards[4] = new Bishop();
+        CharactersList.allCharacterCards[5] = new Merchant();
+        CharactersList.allCharacterCards[6] = new Architect();
+        CharactersList.allCharacterCards[7] = new Warlord();
     }
 
 }

@@ -1,14 +1,14 @@
 package fr.citadels.engine;
 
-import fr.citadels.cards.charactercards.CharacterCardsList;
-import fr.citadels.cards.districtcards.DistrictCardsPile;
-import fr.citadels.engine.score.Scoreboard;
 import fr.citadels.cards.Card;
-import fr.citadels.cards.charactercards.CharacterCard;
-import fr.citadels.cards.charactercards.characters.MerchantCard;
+import fr.citadels.cards.charactercards.Character;
+import fr.citadels.cards.charactercards.CharactersList;
+import fr.citadels.cards.charactercards.characters.Merchant;
 import fr.citadels.cards.districtcards.City;
-import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.District;
+import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.engine.score.Scoreboard;
 import fr.citadels.players.Player;
 
 import java.util.List;
@@ -104,7 +104,7 @@ public class Display {
 
     public void addFirstDistrictsDrawn(Player player) {
         this.events.append(player.getName()).append(" pioche : ");
-        for (DistrictCard districtCard : player.getHand()) {
+        for (District districtCard : player.getHand()) {
             this.events.append(districtCard.toString()).append(", ");
         }
         this.removeLastComma();
@@ -117,7 +117,7 @@ public class Display {
     }
 
 
-    public void addRemovedCharacter(CharacterCard[] cardsUp, CharacterCard[] cardsDown) {
+    public void addRemovedCharacter(Character[] cardsUp, Character[] cardsDown) {
         /* Cards up */
         if (cardsUp.length >= 2) {
             this.events.append("Les personnages retirés face visible sont : ");
@@ -126,8 +126,8 @@ public class Display {
         } else {
             this.events.append("Aucun personnage n'est retiré face visible.");
         }
-        for (CharacterCard card : cardsUp) {
-            this.events.append(card.getCardName()).append(", ");
+        for (Character card : cardsUp) {
+            this.events.append(card.getName()).append(", ");
         }
         this.removeLastComma();
         this.addBlankLine();
@@ -140,8 +140,8 @@ public class Display {
         } else {
             this.events.append("Aucun personnage n'est retiré face cachée.");
         }
-        for (CharacterCard card : cardsDown) {
-            this.events.append(card.getCardName()).append(", ");
+        for (Character card : cardsDown) {
+            this.events.append(card.getName()).append(", ");
         }
         this.removeLastComma();
         this.addBlankLine();
@@ -153,23 +153,23 @@ public class Display {
     }
 
 
-    public void addCharacterChosen(Player player, CharacterCard card) {
-        this.events.append(player.getName()).append(" choisit : ").append(card.getCardName()).append("\n");
+    public void addCharacterChosen(Player player, Character card) {
+        this.events.append(player.getName()).append(" choisit : ").append(card.getName()).append("\n");
     }
 
 
-    public void addCharacterNotChosen(CharacterCard character) {
-        this.events.append("Le personnage non choisis est : ").append(character.getCardName());
+    public void addCharacterNotChosen(Character character) {
+        this.events.append("Le personnage non choisis est : ").append(character.getName());
     }
 
 
-    public void addNoPlayerTurn(Player crowned, CharacterCard character) {
-        this.events.append("■ ").append(crowned.getName()).append(" appelle : ").append(character.getCardName()).append("\nAucun joueur ne se manifeste.\n");
+    public void addNoPlayerTurn(Player crowned, Character character) {
+        this.events.append("■ ").append(crowned.getName()).append(" appelle : ").append(character.getName()).append("\nAucun joueur ne se manifeste.\n");
     }
 
 
     public void addPlayerTurn(Player crowned, Player player) {
-        this.events.append("■ ").append(crowned.getName()).append(" appelle : ").append(player.getCharacter().getCardName()).append("\n").append(player.getName()).append(" dévoile son rôle.\n");
+        this.events.append("■ ").append(crowned.getName()).append(" appelle : ").append(player.getCharacter().getName()).append("\n").append(player.getName()).append(" dévoile son rôle.\n");
     }
 
 
@@ -178,8 +178,12 @@ public class Display {
     }
 
 
-    public void addGoldTakenFromCity(Player player, int gold) {
-        this.events.append("Le joueur utilise son pouvoir pour prendre ").append(gold).append(" pièces d'or grâce à ses quartiers : ").append(player.getCharacter().getCardFamily()).append("\n");
+    public void addGoldTakenFromCity(Player player, int gold, boolean activateSchoolOfMagicEffect) {
+        this.events.append("Le joueur utilise son pouvoir pour prendre ").append(gold).append(" pièces d'or grâce à ses quartiers ").append(player.getCharacter().getFamily());
+        if (activateSchoolOfMagicEffect) {
+            this.events.append(" et à l'effet de l'École de magie");
+        }
+        this.events.append(".\n");
         this.addGoldUpdate(player.getGold());
     }
 
@@ -195,7 +199,7 @@ public class Display {
     }
 
 
-    public void addDistrictDrawn(DistrictCard[] districtCards) {
+    public void addDistrictDrawn(District[] districtCards) {
         this.events.append("Le joueur pioche : ");
         for (Card card : districtCards) {
             this.events.append(card.toString()).append(", ");
@@ -205,8 +209,8 @@ public class Display {
     }
 
 
-    public void addDistrictChosen(Player player, DistrictCard districtCard) {
-        this.events.append("Le joueur choisit : ").append(districtCard.getCardName()).append("\n");
+    public void addDistrictChosen(Player player, District districtCard) {
+        this.events.append("Le joueur choisit : ").append(districtCard.getName()).append("\n");
         this.addHandUpdate(player.getHand());
     }
 
@@ -221,7 +225,7 @@ public class Display {
     }
 
 
-    public void addDistrictBuilt(Player player, DistrictCard districtCard) {
+    public void addDistrictBuilt(Player player, District districtCard) {
         this.events.append("Le joueur construit : ").append(districtCard.toString()).append("\n");
         this.addGoldUpdate(player.getGold());
         this.addHandUpdate(player.getHand());
@@ -234,18 +238,18 @@ public class Display {
     }
 
 
-    public void addAssassinPower(CharacterCard target) {
-        this.events.append("Le joueur utilise son pouvoir pour tuer : ").append(target.getCardName()).append(".\n");
+    public void addAssassinPower(Character target) {
+        this.events.append("Le joueur utilise son pouvoir pour tuer : ").append(target.getName()).append(".\n");
     }
 
 
-    public void addWasKilled(CharacterCard character) {
-        this.events.append(character.getPlayer().getName()).append(" était ").append(character.getCardName()).append(" et avait été tué par l'Assassin.\n");
+    public void addWasKilled(Character character) {
+        this.events.append(character.getPlayer().getName()).append(" était ").append(character.getName()).append(" et avait été tué par l'Assassin.\n");
     }
 
 
-    public void addThiefPower(CharacterCard target) {
-        this.events.append("Le joueur utilise son pouvoir pour voler : ").append(target.getCardName()).append(".\n");
+    public void addThiefPower(Character target) {
+        this.events.append("Le joueur utilise son pouvoir pour voler : ").append(target.getName()).append(".\n");
         this.addBlankLine();
     }
 
@@ -264,10 +268,10 @@ public class Display {
     }
 
 
-    public void addMagicianDiscard(Player player, List<DistrictCard> discarded) {
+    public void addMagicianDiscard(Player player, List<District> discarded) {
         this.events.append("Le joueur utilise son pouvoir pour défausser de sa main ");
-        for (DistrictCard districtCard : discarded) {
-            this.events.append(districtCard.getCardName()).append(", ");
+        for (District districtCard : discarded) {
+            this.events.append(districtCard.getName()).append(", ");
         }
         this.removeLastComma();
         this.events.append(" et piocher autant de nouvelles cartes.\n");
@@ -287,11 +291,11 @@ public class Display {
 
 
     public void addBishopPower() {
-        this.events.append(CharacterCardsList.allCharacterCards[4].getPlayer().getName()).append(" utilise son pouvoir pour ne pas être attaqué par le condottière.\n");
+        this.events.append(CharactersList.allCharacterCards[4].getPlayer().getName()).append(" utilise son pouvoir pour ne pas être attaqué par le condottière.\n");
     }
 
 
-    public void addMerchantPower(MerchantCard merchantCard) {
+    public void addMerchantPower(Merchant merchantCard) {
         this.events.append("Le joueur utilise son pouvoir pour gagner une pièce d'or.\n");
         this.addGoldUpdate(merchantCard.getPlayer().getGold());
     }
@@ -314,7 +318,7 @@ public class Display {
     }
 
 
-    public void addWarlordPower(Player player, CharacterCard target, DistrictCard districtToDestroy) {
+    public void addWarlordPower(Player player, Character target, District districtToDestroy) {
         this.events.append("Le joueur utilise son pouvoir pour détruire le quartier ").append(districtToDestroy).append(" dans la cité de ").append(target.getPlayer().getName()).append(".\n");
         this.events.append("\tLa fortune de ").append(player.getName()).append(" s'élève donc à ").append(player.getGold()).append(" pièces d'or.\n");
         this.events.append("\tLa cité de ").append(target.getPlayer().getName()).append((" comporte donc : ")).append((target.getPlayer().getCity().toString())).append("\n");
@@ -327,14 +331,14 @@ public class Display {
 
 
     public void addGraveyardEffect(Player player) {
-        this.events.append(player.getName()).append(" utilise l'effet de la carte Cimetière pour prendre en main le quartier détruit en payant 1 pièce d'or.\n");
+        this.events.append(player.getName()).append(" utilise l'effet du Cimetière pour prendre en main le quartier détruit en payant 1 pièce d'or.\n");
         this.events.append("\tLa fortune de ").append(player.getName()).append(" s'élève donc à ").append(player.getGold()).append(" pièces d'or.\n");
-        this.events.append("\tLa main de ").append(player.getName()).append((" comporte donc : ")).append((player.getHand().toString())).append(".\n");
+        this.events.append("\tLa main de ").append(player.getName()).append((" comporte donc : ")).append((player.getHand().toString())).append("\n");
     }
 
 
     public void addNoGraveyardEffect(Player player) {
-        this.events.append(player.getName()).append(" n'utilise pas l'effet de la carte Cimetière.\n");
+        this.events.append(player.getName()).append(" n'utilise pas l'effet du Cimetière.\n");
     }
 
 
@@ -344,29 +348,41 @@ public class Display {
 
 
     public void addFactoryEffect() {
-        this.events.append("Le joueur utilise l'effet de la carte Manufacture.\n");
+        this.events.append("Le joueur utilise l'effet de la Manufacture pour piocher 3 cartes en payant 3 pièces d'or.\n");
     }
 
 
     public void addLibraryEffect() {
-        this.events.append("Le joueur utilise l'effet de la carte Bibliothèque pour prendre en main toutes les cartes piochées.\n");
+        this.events.append("Le joueur utilise l'effet de la Bibliothèque pour prendre en main toutes les cartes piochées.\n");
     }
 
 
-    public void addLaboratoryEffect(DistrictCard card, Player player) {
-        this.events.append("Le joueur utilise le pouvoir du Laboratoire pour défausser \n");
-        this.events.append(card).append(" et gagner une pièce d'or.\n");
+    public void addObservatoryEffect() {
+        this.events.append("Le joueur utilise l'effet de l'Observatoire pour piocher 3 cartes.\n");
+    }
+
+
+    public void addLaboratoryEffect(District card, Player player) {
+        this.events.append("Le joueur utilise l'effet du Laboratoire pour défausser ").append(card).append(" et gagner une pièce d'or.\n");
         this.addGoldUpdate(player.getGold());
         this.addHandUpdate(player.getHand());
     }
 
     public void addKeepEffect() {
-        this.events.append("Grâce à son effet, le Donjon de ").append(DistrictCardsPile.allDistrictCards[58].getOwner().getName()).append(" ne peut pas être détruit par le condottière.\n");
+        this.events.append("Grâce à son effet, le Donjon de ").append(DistrictsPile.allDistrictCards[58].getOwner().getName()).append(" ne peut pas être détruit par le condottière.\n");
     }
 
 
     public void addGameFinished(Player player) {
         this.events.append(player.getName()).append(" est le premier joueur à posséder une cité complète.\nLa partie se terminera donc à la fin de ce tour.\n");
+    }
+
+
+    public void addPlayersCity(Player[] players) {
+        for (Player player : players) {
+            this.events.append("La cité de ").append(player.getName()).append((" comporte : ")).append((player.getCity().toString())).append("\n");
+        }
+        this.addBlankLine();
     }
 
 

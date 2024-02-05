@@ -6,25 +6,25 @@ public abstract class Card {
 
     /* Attribute */
 
-    private final String cardName;
+    private final String name;
 
-    private final CardFamily cardFamily;
+    private final Family family;
 
     /* Constructor */
 
-    protected Card(String cardName, CardFamily cardFamily) {
-        this.cardName = cardName;
-        this.cardFamily = cardFamily;
+    protected Card(String name, Family family) {
+        this.name = name;
+        this.family = family;
     }
 
     /* Methods */
 
-    public String getCardName() {
-        return this.cardName;
+    public String getName() {
+        return this.name;
     }
 
-    public CardFamily getCardFamily() {
-        return this.cardFamily;
+    public Family getFamily() {
+        return this.family;
     }
 
     /**
@@ -41,7 +41,7 @@ public abstract class Card {
             return false;
         }
         Card card = (Card) o;
-        return this.getCardName().equals(card.getCardName());
+        return this.getName().equals(card.getName());
     }
 
     /**
@@ -51,6 +51,6 @@ public abstract class Card {
      */
     @Override
     public int hashCode() {
-        return Objects.hash(this.cardName);
+        return Objects.hash(this.name);
     }
 }

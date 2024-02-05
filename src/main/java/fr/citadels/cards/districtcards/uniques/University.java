@@ -3,12 +3,12 @@ package fr.citadels.cards.districtcards.uniques;
 import fr.citadels.cards.Family;
 import fr.citadels.cards.districtcards.District;
 
-public class Keep extends District {
+public class University extends District {
 
     /* Constructor */
 
-    public Keep() {
-        super("Donjon", Family.UNIQUE, 3);
+    public University() {
+        super("Université", Family.UNIQUE, 6);
     }
 
 }

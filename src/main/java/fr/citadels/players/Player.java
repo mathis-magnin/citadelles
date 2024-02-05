@@ -1,16 +1,14 @@
 package fr.citadels.players;
 
 import fr.citadels.engine.Game;
-import fr.citadels.cards.charactercards.CharacterCard;
+import fr.citadels.cards.charactercards.Character;
 import fr.citadels.cards.districtcards.City;
-import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.District;
 import fr.citadels.cards.districtcards.Hand;
 
 import java.util.List;
 
-import static fr.citadels.cards.districtcards.DistrictCardsPile.allDistrictCards;
-
-public abstract class Player implements Comparable<Player>, PlayerChoices {
+public abstract class Player implements Comparable<Player>, Choices {
 
     /* Attributes */
 
@@ -18,21 +16,21 @@ public abstract class Player implements Comparable<Player>, PlayerChoices {
     private Hand hand;
     private City city;
     private int gold;
-    private CharacterCard character;
-    protected final PlayerInformation information;
-    protected final PlayerActions actions;
+    private Character character;
+    protected final Memory information;
+    protected final Actions actions;
 
 
     /* Constructor */
 
-    protected Player(String name, List<DistrictCard> cards, Game game) {
+    protected Player(String name, List<District> cards, Game game) {
         this.name = name;
         this.hand = new Hand(cards);
         this.city = new City();
         this.character = null;
 
-        this.information = new PlayerInformation(game);
-        actions = new PlayerActions(this, information);
+        this.information = new Memory(game);
+        actions = new Actions(this, information);
     }
 
 
@@ -61,7 +59,7 @@ public abstract class Player implements Comparable<Player>, PlayerChoices {
     /**
      * @return the player's actions
      */
-    public PlayerActions getActions() {
+    public Actions getActions() {
         return actions;
     }
 
@@ -91,7 +89,7 @@ public abstract class Player implements Comparable<Player>, PlayerChoices {
      *
      * @return the character
      */
-    public CharacterCard getCharacter() {
+    public Character getCharacter() {
         return this.character;
     }
 
@@ -101,7 +99,7 @@ public abstract class Player implements Comparable<Player>, PlayerChoices {
      *
      * @return information
      */
-    public PlayerInformation getInformation() {
+    public Memory getInformation() {
         return information;
     }
 
@@ -131,7 +129,7 @@ public abstract class Player implements Comparable<Player>, PlayerChoices {
      *
      * @param character the character to set
      */
-    public void setCharacter(CharacterCard character) {
+    public void setCharacter(Character character) {
         this.character = character;
         character.setPlayer(this);
     }
@@ -201,7 +199,7 @@ public abstract class Player implements Comparable<Player>, PlayerChoices {
      * @param card the card to check
      * @return true if the player has the card in his city
      */
-    public boolean hasCardInCity(DistrictCard card) {
+    public boolean hasCardInCity(District card) {
         return city.contains(card);
     }
 
