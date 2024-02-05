@@ -1,6 +1,7 @@
 package fr.citadels.engine.score;
 
 import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.DistrictCardsPile;
 import fr.citadels.players.Player;
 
 public class Score implements Comparable<Score> {
@@ -26,6 +27,7 @@ public class Score implements Comparable<Score> {
     private int districtsPoints;
     private int allFamilyPoints;
     private int completeCityPoints;
+    private int pointsFromUniqueDistricts;
 
 
     /* Constructor */
@@ -35,6 +37,7 @@ public class Score implements Comparable<Score> {
         this.districtsPoints = 0;
         this.allFamilyPoints = 0;
         this.completeCityPoints = 0;
+        this.pointsFromUniqueDistricts = 0;
     }
 
 
@@ -44,7 +47,7 @@ public class Score implements Comparable<Score> {
      * @return the total amount of points.
      */
     public int getPoints() {
-        return this.districtsPoints + this.allFamilyPoints + this.completeCityPoints;
+        return this.districtsPoints + this.allFamilyPoints + this.completeCityPoints + this.pointsFromUniqueDistricts;
     }
 
 
@@ -59,6 +62,9 @@ public class Score implements Comparable<Score> {
         str.append(this.player.getName()).append("\n");
         str.append("\tScore total : ").append(this.getPoints()).append(" points\n");
         str.append("\tQuartiers construits : ").append(this.districtsPoints).append(" points\n");
+        if (this.pointsFromUniqueDistricts != 0) {
+            str.append("\tEffets des quartiers merveilles : ").append(this.pointsFromUniqueDistricts).append(" points\n");
+        }
         if (this.completeCityPoints != 0) {
             str.append((this.player == Score.firstPlayerWithCompleteCity) ? "\tPremière cité " : "\tCité ").append("complète : ").append(this.completeCityPoints).append(" points\n");
         }
@@ -101,7 +107,11 @@ public class Score implements Comparable<Score> {
      */
     public void determinePoints() {
         for (DistrictCard district : this.player.getCity()) {
-            this.districtsPoints += district.getGoldCost();   // 1
+            if (district.equals(DistrictCardsPile.allDistrictCards[65]) || district.equals(DistrictCardsPile.allDistrictCards[66])) {
+                this.pointsFromUniqueDistricts += 8;
+            } else {
+                this.districtsPoints += district.getGoldCost();   // 1
+            }
         }
 
         if (this.player.getCity().hasOneDistrictOfEachFamily()) {
