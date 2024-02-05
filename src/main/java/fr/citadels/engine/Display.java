@@ -350,6 +350,9 @@ public class Display {
         this.events.append("Le joueur utilise l'effet de la Bibliothèque pour prendre en main toutes les cartes piochées.\n");
     }
 
+    public void addObservatoryEffectActivated() {
+        this.events.append("Le joueur utilise l'effet de l'Observatoire pour piocher 3 cartes.\n");
+    }
 
     public void addLaboratoryEffectActivated(DistrictCard card, Player player) {
         this.events.append("Le joueur utilise l'effet du Laboratoire pour défausser ").append(card).append(" et gagner une pièce d'or.\n");
