@@ -31,7 +31,8 @@ class ScoreTest {
             DistrictCardsPile.allDistrictCards[15], //cost 2
             DistrictCardsPile.allDistrictCards[18], //cost 3
             DistrictCardsPile.allDistrictCards[22], //cost 5
-            DistrictCardsPile.allDistrictCards[24]); //cost 1
+            DistrictCardsPile.allDistrictCards[24]  //cost 1
+    );
 
     List<DistrictCard> cardsPlayer2 = Arrays.asList(
             DistrictCardsPile.allDistrictCards[29], //cost 2
@@ -40,14 +41,16 @@ class ScoreTest {
             DistrictCardsPile.allDistrictCards[40], //cost 4
             DistrictCardsPile.allDistrictCards[43], //cost 5
             // DistrictCardsPile.allDistrictCards[45], //cost 1
-            DistrictCardsPile.allDistrictCards[48]); //cost 2
+            DistrictCardsPile.allDistrictCards[48]  //cost 2
+    );
 
     List<DistrictCard> cardsPlayer3 = Arrays.asList(
             DistrictCardsPile.allDistrictCards[51], //cost 3
             DistrictCardsPile.allDistrictCards[54], //cost 5
             DistrictCardsPile.allDistrictCards[57], //cost 2
             DistrictCardsPile.allDistrictCards[58], //cost 3
-            DistrictCardsPile.allDistrictCards[59]); //cost 5
+            DistrictCardsPile.allDistrictCards[59]  //cost 5
+    );
 
     List<DistrictCard> cardsPlayer4 = Arrays.asList(
             DistrictCardsPile.allDistrictCards[60], //cost 5
@@ -56,10 +59,16 @@ class ScoreTest {
             DistrictCardsPile.allDistrictCards[63], //cost 6
             DistrictCardsPile.allDistrictCards[64], //cost 6
             DistrictCardsPile.allDistrictCards[65], //cost 6, bring 8 points
-            DistrictCardsPile.allDistrictCards[66]); //cost 6, bring 8 points
+            DistrictCardsPile.allDistrictCards[66] //cost 6, bring 8 points
+    ); //cost 6, bring 8 points
 
-
-    /* Initialize players */
+    List<DistrictCard> cardsPlayer5 = Arrays.asList(
+            DistrictCardsPile.allDistrictCards[57], //cost 2 MiracleCourtyard
+            DistrictCardsPile.allDistrictCards[0],  //cost 3 Noble
+            DistrictCardsPile.allDistrictCards[15], //cost 2 Religious
+            DistrictCardsPile.allDistrictCards[25], //cost 1 Trade
+            DistrictCardsPile.allDistrictCards[58]  //cost 3 Unique
+    );
 
     Game game = new Game();
 
@@ -89,8 +98,6 @@ class ScoreTest {
     };
     Score score2 = new Score(player2);
 
-
-    /* Simulate an entire game (Only for this test class, the method play has been changed) */
     Player player3 = new KingBot("Noa", cardsPlayer3, game) {
         @Override
         public void playResourcesPhase() {
@@ -102,10 +109,10 @@ class ScoreTest {
         }
 
     };
+    Score score3 = new Score(player3);
 
 
     /* Create the score */
-    Score score3 = new Score(player3);
     Player player4 = new KingBot("Luk", cardsPlayer4, game) {
         @Override
         public void playResourcesPhase() {
@@ -119,6 +126,19 @@ class ScoreTest {
     };
     Score score4 = new Score(player4);
 
+    Player player5 = new KingBot("Dan", cardsPlayer5, game) {
+        @Override
+        public void playResourcesPhase() {
+        }
+
+        @Override
+        public void playBuildingPhase() {
+            this.getActions().addCardsToCity(this.getHand());
+        }
+
+    };
+    Score score5 = new Score(player5);
+
     @BeforeEach
     void setUp() {
         player1.playBuildingPhase();
@@ -129,6 +149,8 @@ class ScoreTest {
         player3.chooseCharacter(characters);
         player4.playBuildingPhase();
         player4.chooseCharacter(characters);
+        player5.playBuildingPhase();
+        player5.chooseCharacter(characters);
     }
 
     @Test
@@ -137,6 +159,7 @@ class ScoreTest {
         assertEquals(0, score2.getPoints());
         assertEquals(0, score3.getPoints());
         assertEquals(0, score4.getPoints());
+        assertEquals(0, score5.getPoints());
     }
 
 
@@ -146,6 +169,7 @@ class ScoreTest {
         assertEquals(player2, score2.getPlayer());
         assertEquals(player3, score3.getPlayer());
         assertEquals(player4, score4.getPlayer());
+        assertEquals(player5, score5.getPlayer());
     }
 
 
@@ -157,6 +181,8 @@ class ScoreTest {
         score2.determinePoints(); // 18
         score3.determinePoints(); // 18
         score4.determinePoints(); // 27 + 2 + 16 = 45
+        score5.determinePoints(); // 11 + 3 = 14
+
 
         assertTrue(score1.compareTo(score2) > 0);
         assertTrue(score2.compareTo(score1) < 0);
@@ -177,11 +203,13 @@ class ScoreTest {
         score2.determinePoints(); // 18
         score3.determinePoints(); // 18
         score4.determinePoints(); // 27 + 4 + 16 = 47
+        score5.determinePoints(); // 11 + 3 = 14
 
         assertEquals(26, score1.getPoints());
         assertEquals(18, score2.getPoints());
         assertEquals(18, score3.getPoints());
         assertEquals(47, score4.getPoints());
+        assertEquals(14, score5.getPoints());
     }
 
     @AfterEach
@@ -194,6 +222,7 @@ class ScoreTest {
         CharacterCardsList.allCharacterCards[5] = new MerchantCard();
         CharacterCardsList.allCharacterCards[6] = new ArchitectCard();
         CharacterCardsList.allCharacterCards[7] = new WarlordCard();
+        Score.setFirstPlayerWithCompleteCity(null);
     }
 
 }

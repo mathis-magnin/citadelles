@@ -180,7 +180,7 @@ public class Display {
     public void addGoldTakenFromCity(Player player, int gold, boolean activateSchoolOfMagicEffect) {
         this.events.append("Le joueur utilise son pouvoir pour prendre ").append(gold).append(" pièces d'or grâce à ses quartiers ").append(player.getCharacter().getCardFamily());
         if (activateSchoolOfMagicEffect) {
-            this.events.append(" et à l'effet de l'École de Magie");
+            this.events.append(" et à l'effet de l'École de magie");
         }
         this.events.append(".\n");
         this.addGoldUpdate(player.getGold());
@@ -355,8 +355,7 @@ public class Display {
     }
 
     public void addLaboratoryEffectActivated(DistrictCard card, Player player) {
-        this.events.append("Le joueur utilise l'effet du Laboratoire pour défausser \n");
-        this.events.append(card).append(" et gagner une pièce d'or.\n");
+        this.events.append("Le joueur utilise l'effet du Laboratoire pour défausser ").append(card).append(" et gagner une pièce d'or.\n");
         this.addGoldUpdate(player.getGold());
         this.addHandUpdate(player.getHand());
     }
@@ -364,6 +363,14 @@ public class Display {
 
     public void addGameFinished(Player player) {
         this.events.append(player.getName()).append(" est le premier joueur à posséder une cité complète.\nLa partie se terminera donc à la fin de ce tour.\n");
+    }
+
+
+    public void addPlayersCity(Player[] players) {
+        for (Player player : players) {
+            this.events.append("La cité de ").append(player.getName()).append((" comporte : ")).append((player.getCity().toString())).append("\n");
+        }
+        this.addBlankLine();
     }
 
 

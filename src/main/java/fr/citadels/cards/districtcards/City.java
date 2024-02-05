@@ -1,5 +1,7 @@
 package fr.citadels.cards.districtcards;
 
+import fr.citadels.cards.districtcards.uniques.MiracleCourtyard;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,39 +51,46 @@ public class City extends ArrayList<DistrictCard> {
 
     /**
      * Check if the player has one district of each family in his city.
+     * The MiracleCourtyard district count as the missing family.
      *
      * @return A boolean value.
      */
     public boolean hasOneDistrictOfEachFamily() {
-        boolean hasNoble = false;
-        boolean hasReligious = false;
-        boolean hasTrade = false;
-        boolean hasMilitary = false;
-        boolean hasSpecial = false;
+        int hasNoble = 0;
+        int hasReligious = 0;
+        int hasTrade = 0;
+        int hasMilitary = 0;
+        int hasSpecial = 0;
+        int activateMiracleCourtyardEffect = 0;
 
         for (DistrictCard card : this) {
             switch (card.getCardFamily()) {
                 case NOBLE:
-                    hasNoble = true;
+                    hasNoble = 1;
                     break;
                 case RELIGIOUS:
-                    hasReligious = true;
+                    hasReligious = 1;
                     break;
                 case TRADE:
-                    hasTrade = true;
+                    hasTrade = 1;
                     break;
                 case MILITARY:
-                    hasMilitary = true;
+                    hasMilitary = 1;
                     break;
                 case UNIQUE:
-                    hasSpecial = true;
+                    if (card.equals(new MiracleCourtyard())) {
+                        activateMiracleCourtyardEffect = 1;
+                    }
+                    else {
+                        hasSpecial = 1;
+                    }
                     break;
                 case NEUTRAL:
                     break;
             }
-        }
 
-        return hasNoble && hasReligious && hasTrade && hasMilitary && hasSpecial;
+        }
+        return (5 <= hasNoble + hasReligious + hasTrade + hasMilitary + hasSpecial + activateMiracleCourtyardEffect);
     }
 
 

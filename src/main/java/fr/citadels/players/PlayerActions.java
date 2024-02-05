@@ -137,7 +137,8 @@ public class PlayerActions {
 
 
     /**
-     * Take gold from the city if the family of the card is the same as the family of the character
+     * Take gold from the city if the family of the card is the same as the family of the character.
+     * The SchoolOfMagic district count as the same family of the character.
      */
     public void takeGoldFromCity() {
         if (player.getCharacter() != null) {
