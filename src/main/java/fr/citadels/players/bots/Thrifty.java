@@ -84,12 +84,8 @@ public class Thrifty extends Player {
      */
     @Override
     public void chooseDistrictToBuild() {
-        int maxIndex = 0;
-        for (int i = 1; i < getHand().size(); i++) {
-            if ((getHand().get(i).getGoldCost() > getHand().get(maxIndex).getGoldCost()) && (!hasCardInCity(getHand().get(maxIndex))) && (getHand().get(i).getGoldCost() <= getGold()))
-                maxIndex = i;
-        }
-        if ((getHand().get(maxIndex).getGoldCost() < getGold()) && (getHand().get(maxIndex).getGoldCost() > 1))
+        int maxIndex = getMostExpensiveCardInHand()[0];
+        if ((maxIndex >= 0) && (getHand().get(maxIndex).getGoldCost() <= getGold()))
             this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(maxIndex));
         else
             this.getInformation().setDistrictToBuild(null);
