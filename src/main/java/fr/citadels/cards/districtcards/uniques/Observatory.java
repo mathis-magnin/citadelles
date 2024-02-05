@@ -7,7 +7,8 @@ public class Observatory extends Unique {
     }
 
     @Override
-    public void useEffect() {
+    public boolean useEffect() {
         getOwner().getInformation().getDisplay().addObservatoryEffectActivated();
+        return true;
     }
 }
