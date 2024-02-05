@@ -197,6 +197,9 @@ public class ThriftyBot extends Player {
         boolean draw = ((getGold() > 6) || (getHand().isEmpty()) || ((getGold() > 5) && (getMostExpensiveCardInHand()[1] < 4)));
         getActions().takeGoldFromCity();
         getActions().takeCardsOrGold(draw);
+
+        if (this.equals(DistrictCardsPile.allDistrictCards[60].getOwner())) // Utilise le pouvoir du laboratoire
+            DistrictCardsPile.allDistrictCards[60].useEffect();
     }
 
 
@@ -210,12 +213,18 @@ public class ThriftyBot extends Player {
             getInformation().getDisplay().addNoDistrictBuilt();
         }
         getInformation().getDisplay().addBlankLine();
-        DistrictCardsPile.allDistrictCards[61].useEffect();
+        if (this.equals(DistrictCardsPile.allDistrictCards[61].getOwner())) // Utilise le pouvoir de la manufacture
+            DistrictCardsPile.allDistrictCards[61].useEffect();
     }
 
     @Override
-    public boolean activateFactoryEffect(Player player) {
-        return (getGold() >= 6) && this.equals(player);
+    public boolean activateFactoryEffect() {
+        return getGold() >= 6;
+    }
+
+    @Override
+    public boolean activateLaboratoryEffect() {
+        return getActions().putRedundantCardsAtTheEnd() > 0 || getHand().size() > 4 || (getGold() < 5 && getHand().size() > 2);
     }
 
 

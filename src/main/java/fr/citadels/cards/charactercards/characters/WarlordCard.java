@@ -56,7 +56,7 @@ public class WarlordCard extends CharacterCard {
         getPlayer().getActions().removeGold(districtToDestroy.getGoldCost() - 1);
         getPlayer().getInformation().getDisplay().addWarlordPower(this.getPlayer(), this.getPlayer().getInformation().getTarget(), districtToDestroy);
 
-        if (!((Graveyard)(DistrictCardsPile.allDistrictCards[62])).useEffect(districtToDestroy)) { // Graveyard power
+        if (!((Graveyard) (DistrictCardsPile.allDistrictCards[62])).useEffect(districtToDestroy)) { // Graveyard power
             getPlayer().getInformation().getPile().placeBelowPile(districtToDestroy);
             getPlayer().getInformation().getDisplay().addDistrictPlacedBelow();
         }

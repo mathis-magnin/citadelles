@@ -36,7 +36,8 @@ public class CharacterCardsList extends ArrayList<CharacterCard> {
 
     /* Constructors */
 
-    public CharacterCardsList() { }
+    public CharacterCardsList() {
+    }
 
     public CharacterCardsList(CharacterCard[] characterCards) {
         this.addAll(List.of(characterCards));

@@ -377,20 +377,32 @@ class RandomBotTest {
         player.getActions().build();
 
         when(random.nextBoolean()).thenReturn(true, true);
-        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
-        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertFalse(player.activateFactoryEffect());
+        assertFalse(player.activateFactoryEffect());
 
         when(random.nextBoolean()).thenReturn(true, true);
         player.setGold(3);
-        player2.setGold(3);
-        assertTrue(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
-        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertTrue(player.activateFactoryEffect());
 
         when(random.nextBoolean()).thenReturn(false, false);
         player.setGold(3);
-        player2.setGold(3);
-        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
-        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertFalse(player.activateFactoryEffect());
+    }
+
+    @Test
+    void activateLaboratoryEffect() {
+        when(random.nextBoolean()).thenReturn(false);
+        assertFalse(player.activateLaboratoryEffect());
+
+        when(random.nextBoolean()).thenReturn(true);
+        assertTrue(player.activateLaboratoryEffect());
+
+        player.setHand(new Hand(new ArrayList<>()));
+        when(random.nextBoolean()).thenReturn(false);
+        assertFalse(player.activateLaboratoryEffect());
+
+        when(random.nextBoolean()).thenReturn(true);
+        assertFalse(player.activateLaboratoryEffect());
     }
 
     @Test

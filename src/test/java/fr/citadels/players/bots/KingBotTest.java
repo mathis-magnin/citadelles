@@ -279,13 +279,28 @@ class KingBotTest {
         player1.getInformation().setDistrictToBuild(DistrictCardsPile.allDistrictCards[61]);
         player1.getActions().addGold(6);
         player1.getActions().build();
-        assertFalse(player1.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
-        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertFalse(player1.activateFactoryEffect());
 
         player1.getActions().addGold(3);
-        assertTrue(player1.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
-        player2.getActions().addGold(3);
-        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertTrue(player1.activateFactoryEffect());
+    }
+
+    @Test
+    void activateLaboratoryEffect() {
+        player1.setHand(new Hand(List.of(DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[2], DistrictCardsPile.allDistrictCards[3])));
+        assertTrue(player1.activateLaboratoryEffect());
+
+        player1.getActions().addGold(2);
+        assertFalse(player1.activateLaboratoryEffect());
+
+        player1.getHand().addAll(List.of(DistrictCardsPile.allDistrictCards[4], DistrictCardsPile.allDistrictCards[5]));
+        assertTrue(player1.activateLaboratoryEffect());
+
+        player1.setHand(new Hand(List.of(DistrictCardsPile.allDistrictCards[1])));
+        player1.setGold(0);
+        assertFalse(player1.activateLaboratoryEffect());
+        player1.getCity().add(DistrictCardsPile.allDistrictCards[0]);
+        assertTrue(player1.activateLaboratoryEffect());
     }
 
     @Test

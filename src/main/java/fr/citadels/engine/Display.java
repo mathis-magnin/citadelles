@@ -346,6 +346,14 @@ public class Display {
     }
 
 
+    public void addLaboratoryEffectActivated(DistrictCard card, Player player) {
+        this.events.append("Le joueur utilise le pouvoir du Laboratoire pour défausser \n");
+        this.events.append(card).append(" et gagner une pièce d'or.\n");
+        this.addGoldUpdate(player.getGold());
+        this.addHandUpdate(player.getHand());
+    }
+
+
     public void addGameFinished(Player player) {
         this.events.append(player.getName()).append(" est le premier joueur à posséder une cité complète.\nLa partie se terminera donc à la fin de ce tour.\n");
     }
@@ -359,5 +367,4 @@ public class Display {
     public void addWinner(Player player) {
         this.events.append("Le gagnant est : ").append(player.getName()).append(" !\n");
     }
-
 }

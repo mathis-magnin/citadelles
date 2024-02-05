@@ -281,20 +281,32 @@ class ThriftyBotTest {
         player.getInformation().setDistrictToBuild(DistrictCardsPile.allDistrictCards[61]);
         player.getActions().addGold(6);
         player.getActions().build();
-        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
-        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertFalse(player.activateFactoryEffect());
 
         player.getActions().addGold(3);
-        assertFalse(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
-        player2.getActions().addGold(3);
-        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertFalse(player.activateFactoryEffect());
 
         player.getActions().addGold(6);
-        assertTrue(player.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
-        player2.getActions().addGold(6);
-        assertFalse(player2.activateFactoryEffect(((Unique) DistrictCardsPile.allDistrictCards[61]).getOwner()));
+        assertTrue(player.activateFactoryEffect());
     }
 
+    @Test
+    void activateLaboratoryEffect() {
+        player.setHand(new Hand(List.of(DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[2], DistrictCardsPile.allDistrictCards[3])));
+        assertTrue(player.activateLaboratoryEffect());
+
+        player.getActions().addGold(5);
+        assertFalse(player.activateLaboratoryEffect());
+
+        player.getHand().addAll(List.of(DistrictCardsPile.allDistrictCards[4], DistrictCardsPile.allDistrictCards[5]));
+        assertTrue(player.activateLaboratoryEffect());
+
+        player.setHand(new Hand(List.of(DistrictCardsPile.allDistrictCards[1])));
+        player.setGold(0);
+        assertFalse(player.activateLaboratoryEffect());
+        player.getCity().add(DistrictCardsPile.allDistrictCards[0]);
+        assertTrue(player.activateLaboratoryEffect());
+    }
 
     @Test
     void activateGraveyardEffect() {

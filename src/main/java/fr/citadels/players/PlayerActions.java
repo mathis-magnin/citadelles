@@ -197,6 +197,7 @@ public class PlayerActions {
 
     /**
      * Remove a card from player's city
+     *
      * @param card the card to remove
      */
     public void removeCardFromCity(DistrictCard card) {

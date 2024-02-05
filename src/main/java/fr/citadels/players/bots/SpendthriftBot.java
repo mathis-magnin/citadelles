@@ -195,6 +195,9 @@ public class SpendthriftBot extends Player {
         // Else pick 2 golds
         boolean draw = ((getGold() > 5) || this.getHand().isEmpty() || (getCheapestCardInHand()[1] > 3));
         getActions().takeCardsOrGold(draw);
+
+        if (this.equals(DistrictCardsPile.allDistrictCards[60].getOwner())) // Utilise le pouvoir du laboratoire
+            DistrictCardsPile.allDistrictCards[60].useEffect();
     }
 
 
@@ -209,13 +212,19 @@ public class SpendthriftBot extends Player {
         }
         getInformation().getDisplay().addBlankLine();
         getActions().takeGoldFromCity();
-        DistrictCardsPile.allDistrictCards[61].useEffect();
+        if (this.equals(DistrictCardsPile.allDistrictCards[61].getOwner())) // Utilise le pouvoir de la manufacture
+            DistrictCardsPile.allDistrictCards[61].useEffect();
     }
 
 
     @Override
-    public boolean activateFactoryEffect(Player player) {
-        return getGold() >= 3 && this.equals(player);
+    public boolean activateFactoryEffect() {
+        return getGold() >= 3;
+    }
+
+    @Override
+    public boolean activateLaboratoryEffect() {
+        return this.getActions().putRedundantCardsAtTheEnd() > 0 || (getGold() < 2 && getHand().size() > 2) || getHand().size() > 4;
     }
 
 
@@ -230,5 +239,4 @@ public class SpendthriftBot extends Player {
         return (1 <= this.getGold()) && !this.hasCardInCity(removedDistrict) &&
                 (this.getHand().isEmpty() || (!this.getHand().isEmpty() && (removedDistrict.getGoldCost() + 1 <= this.getCheapestCardInHand()[1]))); // + 1 is to take into account the effect's cost.
     }
-
 }

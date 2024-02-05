@@ -10,8 +10,8 @@ public class AssassinCard extends CharacterCard {
 
     public static CharacterCardsList getPossibleTargets() {
         CharacterCardsList targets = new CharacterCardsList();
-        for(CharacterCard characterCard : CharacterCardsList.allCharacterCards) {
-            if(!characterCard.equals(new AssassinCard())) {
+        for (CharacterCard characterCard : CharacterCardsList.allCharacterCards) {
+            if (!characterCard.equals(new AssassinCard())) {
                 targets.add(characterCard);
             }
         }

@@ -18,7 +18,7 @@ public class KingCard extends CharacterCard {
         this.getPlayer().playAsKing();
     }
 
-    public void usePower(){
+    public void usePower() {
         return;
     }
 

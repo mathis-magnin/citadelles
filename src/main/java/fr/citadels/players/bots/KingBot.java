@@ -172,6 +172,9 @@ public class KingBot extends Player {
         if (draw) {
             getActions().sortHand(CardFamily.NOBLE);
         }
+
+        if (this.equals(DistrictCardsPile.allDistrictCards[60].getOwner())) // Utilise le pouvoir du laboratoire
+            DistrictCardsPile.allDistrictCards[60].useEffect();
     }
 
 
@@ -185,13 +188,19 @@ public class KingBot extends Player {
         }
         getInformation().getDisplay().addBlankLine();
         getActions().takeGoldFromCity();
-        DistrictCardsPile.allDistrictCards[61].useEffect();
+        if (this.equals(DistrictCardsPile.allDistrictCards[61].getOwner())) // Utilise le pouvoir de la manufacture
+            DistrictCardsPile.allDistrictCards[61].useEffect();
     }
 
 
     @Override
-    public boolean activateFactoryEffect(Player player) {
-        return getHand().size() < 2 && getGold() >= 3 && player.equals(this);
+    public boolean activateFactoryEffect() {
+        return getHand().size() < 2 && getGold() >= 3;
+    }
+
+    @Override
+    public boolean activateLaboratoryEffect() {
+        return this.getActions().putRedundantCardsAtTheEnd() > 0 || getHand().size() > 4 || (getHand().size() > 2 && getGold() < 2);
     }
 
 
