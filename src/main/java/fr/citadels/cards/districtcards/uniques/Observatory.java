@@ -1,14 +1,14 @@
 package fr.citadels.cards.districtcards.uniques;
 
-public class Observatory extends Unique {
+import fr.citadels.cards.Family;
+import fr.citadels.cards.districtcards.District;
+
+public class Observatory extends District {
+
+    /* Constructor */
 
     public Observatory() {
-        super("Observatoire", 5);
+        super("Observatoire", Family.UNIQUE, 5);
     }
 
-    @Override
-    public boolean useEffect() {
-        getOwner().getInformation().getDisplay().addObservatoryEffectActivated();
-        return true;
-    }
 }

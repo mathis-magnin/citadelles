@@ -1,15 +1,16 @@
 package fr.citadels.cards.districtcards.uniques;
 
-import fr.citadels.cards.charactercards.CharacterCardsList;
-import fr.citadels.cards.charactercards.characters.WarlordCard;
-import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.Family;
+import fr.citadels.cards.charactercards.CharactersList;
+import fr.citadels.cards.charactercards.characters.Warlord;
+import fr.citadels.cards.districtcards.District;
 
-public class Graveyard extends Unique {
+public class Graveyard extends District {
 
     /* Constructor */
 
     public Graveyard() {
-        super("Cimetière", 5);
+        super("Cimetière", Family.UNIQUE, 5);
     }
 
 
@@ -23,8 +24,8 @@ public class Graveyard extends Unique {
      */
     @Override
     public boolean useEffect() {
-        DistrictCard removedDistrict = CharacterCardsList.allCharacterCards[7].getPlayer().getInformation().getDistrictToDestroy();
-        if (this.isBuilt() && !this.getOwner().getCharacter().equals(new WarlordCard())) {
+        District removedDistrict = CharactersList.allCharacterCards[7].getPlayer().getInformation().getDistrictToDestroy();
+        if (this.isBuilt() && !this.getOwner().getCharacter().equals(new Warlord())) {
             if (this.getOwner().activateGraveyardEffect(removedDistrict)) {
                 this.getOwner().getActions().removeGold(1);
                 this.getOwner().getHand().add(removedDistrict);

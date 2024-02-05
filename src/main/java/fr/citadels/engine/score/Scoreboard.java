@@ -23,7 +23,6 @@ public class Scoreboard {
         this.scores = new Score[players.length];
         for (int i = 0; i < players.length; i++) {
             scores[i] = new Score(players[i]);
-
         }
     }
 

@@ -1,7 +1,14 @@
 package fr.citadels.cards.districtcards.uniques;
 
-public class University extends Unique {
+import fr.citadels.cards.Family;
+import fr.citadels.cards.districtcards.District;
+
+public class University extends District {
+
+    /* Constructor */
+
     public University() {
-        super("Université", 6);
+        super("Université", Family.UNIQUE, 6);
     }
+
 }

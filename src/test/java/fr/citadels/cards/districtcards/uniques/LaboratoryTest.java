@@ -1,12 +1,10 @@
 package fr.citadels.cards.districtcards.uniques;
 
-import fr.citadels.cards.charactercards.CharacterCard;
-import fr.citadels.cards.charactercards.characters.KingCard;
-import fr.citadels.cards.charactercards.characters.ThiefCard;
-import fr.citadels.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.charactercards.characters.King;
+import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
-import fr.citadels.players.bots.KingBot;
+import fr.citadels.players.bots.Monarchist;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -19,7 +17,7 @@ class LaboratoryTest {
 
     @Test
     void build() {
-        laboratory.setOwner(new KingBot("KingBot", List.of(laboratory), new Game()));
+        laboratory.setOwner(new Monarchist("KingBot", List.of(laboratory), new Game()));
         assertTrue(laboratory.isBuilt());
         assertEquals(laboratory.getOwner().getName(), "KingBot");
 
@@ -28,9 +26,9 @@ class LaboratoryTest {
     @Test
     void useEffect() {
         Game game = new Game();
-        Player king = new KingBot("KingBot", List.of(DistrictCardsPile.allDistrictCards[1], DistrictCardsPile.allDistrictCards[40]), game);
+        Player king = new Monarchist("KingBot", List.of(DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[40]), game);
         game.getPile().initializePile();
-        king.setCharacter(new KingCard());
+        king.setCharacter(new King());
         laboratory.setOwner(king);
         king.getCity().add(laboratory);
         laboratory.useEffect();
@@ -38,7 +36,7 @@ class LaboratoryTest {
         assertEquals(2, king.getHand().size());
         assertEquals(0, king.getGold());
 
-        king.getCity().add(DistrictCardsPile.allDistrictCards[0]);
+        king.getCity().add(DistrictsPile.allDistrictCards[0]);
         laboratory.useEffect();
         assertEquals(laboratory.getOwner(), king);
         assertEquals(1, king.getHand().size());

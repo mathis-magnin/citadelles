@@ -1,9 +1,9 @@
 package fr.citadels.cards.districtcards.uniques;
 
-import fr.citadels.cards.charactercards.characters.KingCard;
+import fr.citadels.cards.charactercards.characters.King;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
-import fr.citadels.players.bots.KingBot;
+import fr.citadels.players.bots.Monarchist;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -17,9 +17,9 @@ class FactoryTest {
     @Test
     void useEffect() {
         Game game = new Game();
-        Player king = new KingBot("KingBot", List.of(factory), game);
+        Player king = new Monarchist("KingBot", List.of(factory), game);
         game.getPile().initializePile();
-        king.setCharacter(new KingCard());
+        king.setCharacter(new King());
         factory.useEffect();
         assertEquals(1, king.getHand().size());
 
