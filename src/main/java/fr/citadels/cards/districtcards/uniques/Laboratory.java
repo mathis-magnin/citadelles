@@ -1,11 +1,11 @@
 package fr.citadels.cards.districtcards.uniques;
 
+import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.districtcards.DistrictCard;
-import fr.citadels.cards.districtcards.uniques.Unique;
 
-public class Laboratory extends Unique {
+public class Laboratory extends DistrictCard {
     public Laboratory() {
-        super("Laboratoire", 5);
+        super("Laboratoire", CardFamily.UNIQUE, 5);
     }
 
 
@@ -15,7 +15,7 @@ public class Laboratory extends Unique {
             getOwner().getActions().addGold(1);
             DistrictCard card = getOwner().getHand().remove(getOwner().getHand().size() - 1);
             getOwner().getInformation().getPile().placeBelowPile(card);
-            getOwner().getInformation().getDisplay().addLaboratoryEffectActivated(card, getOwner());
+            getOwner().getInformation().getDisplay().addLaboratoryEffect(card, getOwner());
             return true;
         }
         return false;

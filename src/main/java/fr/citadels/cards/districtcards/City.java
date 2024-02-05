@@ -1,5 +1,7 @@
 package fr.citadels.cards.districtcards;
 
+import fr.citadels.cards.districtcards.uniques.Donjon;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,4 +101,15 @@ public class City extends ArrayList<DistrictCard> {
         }
         return -1;
     }
+
+    public DistrictCard getCheapestDistrictToDestroy() {
+        DistrictCard districtToDestroy = null;
+        for (DistrictCard districtCard : this) {
+            if (!districtCard.equals(new Donjon()) && ((districtToDestroy == null) || (districtCard.getGoldCost() < districtToDestroy.getGoldCost()))) {
+                districtToDestroy = districtCard;
+            }
+        }
+        return districtToDestroy;
+    }
+
 }

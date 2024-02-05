@@ -1,6 +1,7 @@
 package fr.citadels.cards.districtcards;
 
 import fr.citadels.cards.CardFamily;
+import fr.citadels.cards.districtcards.uniques.Library;
 import fr.citadels.engine.Game;
 import fr.citadels.players.bots.KingBot;
 import org.junit.jupiter.api.Assertions;
@@ -43,4 +44,15 @@ class DistrictCardTest {
         DistrictCard d = new DistrictCard("Manoir", CardFamily.NOBLE, 3);
         assertFalse(d.isBuilt());
     }
+
+    @Test
+    void isBuilt() {
+        KingBot kingBot = new KingBot("KingBot", new ArrayList<>(), new Game());
+        DistrictCard unique = new Library();
+        assertFalse(unique.isBuilt());
+        unique.setOwner(kingBot);
+        assertTrue(unique.isBuilt());
+        assertEquals(unique.getOwner(), kingBot);
+    }
+
 }

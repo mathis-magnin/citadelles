@@ -1,15 +1,18 @@
 package fr.citadels.cards.districtcards.uniques;
 
-public class Factory extends Unique {
+import fr.citadels.cards.CardFamily;
+import fr.citadels.cards.districtcards.DistrictCard;
+
+public class Factory extends DistrictCard {
     public Factory() {
-        super("Manufacture", 5);
+        super("Manufacture", CardFamily.UNIQUE, 5);
     }
 
 
     @Override
     public boolean useEffect() {
         if (isBuilt() && getOwner().activateFactoryEffect()) {
-            getOwner().getInformation().getDisplay().addFactoryEffectActivated();
+            getOwner().getInformation().getDisplay().addFactoryEffect();
             getOwner().getActions().draw(3);
             getOwner().getActions().removeGold(3);
             if (getOwner().getCharacter() != null) {

@@ -1,7 +1,6 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.cards.charactercards.characters.*;
-import fr.citadels.cards.districtcards.uniques.Unique;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.CharacterCardsList;
 import fr.citadels.cards.districtcards.City;

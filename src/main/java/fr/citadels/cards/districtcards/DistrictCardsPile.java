@@ -89,7 +89,7 @@ public class DistrictCardsPile extends LinkedList<DistrictCard> {
             new DistrictCard(FORTERESSE, CardFamily.MILITARY, 5),
 
             new DistrictCard("Cour des miracles", CardFamily.UNIQUE, 2),
-            new DistrictCard("Donjon", CardFamily.UNIQUE, 3),
+            new Donjon(),
             new DistrictCard("Observatoire", CardFamily.UNIQUE, 5),
             new Laboratory(), //60
             new Factory(),

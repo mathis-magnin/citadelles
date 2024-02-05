@@ -1,15 +1,16 @@
 package fr.citadels.cards.districtcards.uniques;
 
+import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.charactercards.CharacterCardsList;
 import fr.citadels.cards.charactercards.characters.WarlordCard;
 import fr.citadels.cards.districtcards.DistrictCard;
 
-public class Graveyard extends Unique {
+public class Graveyard extends DistrictCard {
 
     /* Constructor */
 
     public Graveyard() {
-        super("Cimetière", 5);
+        super("Cimetière", CardFamily.UNIQUE, 5);
     }
 
 

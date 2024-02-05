@@ -1,7 +1,5 @@
 package fr.citadels.players.bots;
 
-import fr.citadels.cards.districtcards.DistrictCardsPile;
-import fr.citadels.engine.Game;
 import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.charactercards.CharacterCard;
 import fr.citadels.cards.charactercards.CharacterCardsList;
@@ -10,6 +8,8 @@ import fr.citadels.cards.charactercards.characters.MagicianCard;
 import fr.citadels.cards.charactercards.characters.ThiefCard;
 import fr.citadels.cards.charactercards.characters.WarlordCard;
 import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.DistrictCardsPile;
+import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
 
 import java.util.List;
@@ -149,11 +149,7 @@ public class KingBot extends Player {
         getInformation().setTarget(target);
         DistrictCard districtToDestroy = null;
         if (target != null) {
-            for (DistrictCard districtCard : target.getPlayer().getCity()) {
-                if ((districtToDestroy == null) || (districtCard.getGoldCost() < districtToDestroy.getGoldCost())) {
-                    districtToDestroy = districtCard;
-                }
-            }
+            districtToDestroy = target.getPlayer().getCity().getCheapestDistrictToDestroy();
             if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
                 districtToDestroy = null;
             }

@@ -1,6 +1,7 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.districtcards.uniques.Donjon;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.CardFamily;
 import fr.citadels.cards.charactercards.CharacterCard;
@@ -175,11 +176,7 @@ public class SpendthriftBot extends Player {
         getInformation().setTarget(target);
         DistrictCard districtToDestroy = null;
         if (target != null) {
-            for (DistrictCard districtCard : target.getPlayer().getCity()) {
-                if ((districtToDestroy == null) || (districtCard.getGoldCost() < districtToDestroy.getGoldCost())) {
-                    districtToDestroy = districtCard;
-                }
-            }
+            districtToDestroy = target.getPlayer().getCity().getCheapestDistrictToDestroy();
             if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
                 districtToDestroy = null;
             }

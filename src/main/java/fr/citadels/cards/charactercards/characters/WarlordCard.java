@@ -5,7 +5,6 @@ import fr.citadels.cards.charactercards.CharacterCard;
 import fr.citadels.cards.charactercards.CharacterCardsList;
 import fr.citadels.cards.districtcards.DistrictCard;
 import fr.citadels.cards.districtcards.DistrictCardsPile;
-import fr.citadels.cards.districtcards.uniques.Graveyard;
 
 public class WarlordCard extends CharacterCard {
 
@@ -14,7 +13,7 @@ public class WarlordCard extends CharacterCard {
     public static CharacterCardsList getPossibleTargets() {
         CharacterCardsList targets = new CharacterCardsList();
         for (CharacterCard characterCard : CharacterCardsList.allCharacterCards) {
-            if (!characterCard.equals(new BishopCard()) && characterCard.isPlayed() && !characterCard.getPlayer().hasCompleteCity()) {
+            if (!(characterCard.equals(new BishopCard()) && !characterCard.isDead()) && characterCard.isPlayed() && !characterCard.getPlayer().hasCompleteCity()) {
                 targets.add(characterCard);
             }
         }
@@ -50,6 +49,13 @@ public class WarlordCard extends CharacterCard {
 
     @Override
     public void usePower() {
+        if (CharacterCardsList.allCharacterCards[4].isPlayed() && !CharacterCardsList.allCharacterCards[4].isDead()) {
+            getPlayer().getInformation().getDisplay().addBishopPower();
+        }
+        if (DistrictCardsPile.allDistrictCards[58].isBuilt() && !DistrictCardsPile.allDistrictCards[58].getOwner().equals(CharacterCardsList.allCharacterCards[4].getPlayer())) {
+            this.getPlayer().getInformation().getDisplay().addDonjonEffect();
+        }
+
         DistrictCard districtToDestroy = this.getPlayer().getInformation().getDistrictToDestroy();
 
         getPlayer().getInformation().getTarget().getPlayer().getActions().removeCardFromCity(districtToDestroy);

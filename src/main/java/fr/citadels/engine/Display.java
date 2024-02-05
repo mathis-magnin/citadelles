@@ -1,5 +1,7 @@
 package fr.citadels.engine;
 
+import fr.citadels.cards.charactercards.CharacterCardsList;
+import fr.citadels.cards.districtcards.DistrictCardsPile;
 import fr.citadels.engine.score.Scoreboard;
 import fr.citadels.cards.Card;
 import fr.citadels.cards.charactercards.CharacterCard;
@@ -238,7 +240,7 @@ public class Display {
 
 
     public void addWasKilled(CharacterCard character) {
-        this.events.append(character.getPlayer().getName()).append(" était ").append(character.getCardName()).append(" et a été tué par l'Assassin.\n");
+        this.events.append(character.getPlayer().getName()).append(" était ").append(character.getCardName()).append(" et avait été tué par l'Assassin.\n");
     }
 
 
@@ -281,6 +283,11 @@ public class Display {
 
     public void addKingHeir() {
         this.events.append("Le joueur prend la couronne en tant qu'héritier du roi.\n");
+    }
+
+
+    public void addBishopPower() {
+        this.events.append(CharacterCardsList.allCharacterCards[4].getPlayer().getName()).append(" utilise son pouvoir pour ne pas être attaqué par le condottière.\n");
     }
 
 
@@ -336,21 +343,25 @@ public class Display {
     }
 
 
-    public void addFactoryEffectActivated() {
+    public void addFactoryEffect() {
         this.events.append("Le joueur utilise l'effet de la carte Manufacture.\n");
     }
 
 
-    public void addLibraryEffectActivated() {
+    public void addLibraryEffect() {
         this.events.append("Le joueur utilise l'effet de la carte Bibliothèque pour prendre en main toutes les cartes piochées.\n");
     }
 
 
-    public void addLaboratoryEffectActivated(DistrictCard card, Player player) {
+    public void addLaboratoryEffect(DistrictCard card, Player player) {
         this.events.append("Le joueur utilise le pouvoir du Laboratoire pour défausser \n");
         this.events.append(card).append(" et gagner une pièce d'or.\n");
         this.addGoldUpdate(player.getGold());
         this.addHandUpdate(player.getHand());
+    }
+
+    public void addDonjonEffect() {
+        this.events.append("Grâce à son effet, le Donjon de ").append(DistrictCardsPile.allDistrictCards[58].getOwner().getName()).append(" ne peut pas être détruit par le condottière.\n");
     }
 
 

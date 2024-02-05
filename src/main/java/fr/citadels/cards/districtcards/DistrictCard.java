@@ -10,6 +10,8 @@ public class DistrictCard extends Card {
 
     private final int goldCost;
 
+    private Player owner;
+
 
     /* Constructor */
 
@@ -32,7 +34,7 @@ public class DistrictCard extends Card {
      * @return null
      */
     public Player getOwner() {
-        return null;
+        return owner;
     }
 
 
@@ -51,7 +53,7 @@ public class DistrictCard extends Card {
      * @param owner the player who built the district card
      */
     public void setOwner(Player owner) {
-        // will be implemented in the subclasses
+        this.owner = owner;
     }
 
 
@@ -61,7 +63,7 @@ public class DistrictCard extends Card {
      * @return the isBuilt attribute
      */
     public boolean isBuilt() {
-        return false;
+        return owner != null;
     }
 
 
