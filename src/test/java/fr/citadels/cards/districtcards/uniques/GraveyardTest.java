@@ -1,9 +1,6 @@
 package fr.citadels.cards.districtcards.uniques;
 
 import fr.citadels.cards.charactercards.CharacterCardsList;
-import fr.citadels.cards.charactercards.characters.ArchitectCard;
-import fr.citadels.cards.charactercards.characters.MerchantCard;
-import fr.citadels.cards.charactercards.characters.WarlordCard;
 import fr.citadels.cards.districtcards.City;
 import fr.citadels.cards.districtcards.DistrictCard;
 import fr.citadels.cards.districtcards.DistrictCardsPile;
