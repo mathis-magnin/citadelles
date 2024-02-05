@@ -212,7 +212,7 @@ public class Game {
     /**
      * Play the game until a player has a complete city and determine the ranking
      */
-    public void playGame() {
+    public void play() {
         this.initializeGame();
         int round = 1;
 
