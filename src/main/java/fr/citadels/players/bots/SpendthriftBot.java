@@ -38,12 +38,19 @@ public class SpendthriftBot extends Player {
      * @precondition cardsInHand must contain at least 1 card
      */
     public int[] getCheapestCardInHand() {
+        int[] result = new int[2];
+
+        if (getHand().isEmpty()) {
+            result[0] = -1;
+            result[1] = -1;
+            return result;
+        }
+
         int minIndex = 0;
         for (int i = 1; i < getHand().size(); i++) {
             if ((getHand().get(i).getGoldCost() < getHand().get(minIndex).getGoldCost()) && (!hasCardInCity(getHand().get(minIndex))))
                 minIndex = i;
         }
-        int[] result = new int[2];
         result[0] = minIndex;
         result[1] = getHand().get(minIndex).getGoldCost();
         return result;
@@ -77,7 +84,7 @@ public class SpendthriftBot extends Player {
     @Override
     public void chooseDistrictToBuild() {
         int minIndex = getCheapestCardInHand()[0];
-        if (getHand().get(minIndex).getGoldCost() <= getGold())
+        if ((minIndex < 0) && (getHand().get(minIndex).getGoldCost() <= getGold()))
             this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(minIndex));
         else
             this.getInformation().setDistrictToBuild(null);
