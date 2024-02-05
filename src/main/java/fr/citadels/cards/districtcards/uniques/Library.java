@@ -9,8 +9,9 @@ public class Library extends Unique {
     }
 
     @Override
-    public void useEffect() {
+    public boolean useEffect() {
         getOwner().getInformation().getDisplay().addLibraryEffectActivated();
+        return true;
     }
 
 }
