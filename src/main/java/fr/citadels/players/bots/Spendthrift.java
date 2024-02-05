@@ -85,9 +85,9 @@ public class Spendthrift extends Player {
     public void chooseDistrictToBuild() {
         int minIndex = getCheapestCardInHand()[0];
         if ((minIndex >= 0) && (getHand().get(minIndex).getGoldCost() <= getGold()))
-            this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(minIndex));
+            this.getMemory().setDistrictToBuild(this.getActions().removeCardFromHand(minIndex));
         else
-            this.getInformation().setDistrictToBuild(null);
+            this.getMemory().setDistrictToBuild(null);
     }
 
 
@@ -105,7 +105,7 @@ public class Spendthrift extends Player {
             randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
+        getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
 
@@ -117,9 +117,9 @@ public class Spendthrift extends Player {
     public void chooseTargetToKill() {
         CharactersList possibleTargets = Assassin.getPossibleTargets();
         if (RAND.nextBoolean()) {
-            getInformation().setTarget(possibleTargets.get(4));
+            getMemory().setTarget(possibleTargets.get(4));
         } else {
-            getInformation().setTarget(possibleTargets.get(5));
+            getMemory().setTarget(possibleTargets.get(5));
         }
     }
 
@@ -133,15 +133,15 @@ public class Spendthrift extends Player {
         List<Character> potentialTargets = Thief.getPossibleTargets();
         if (RAND.nextBoolean()) {
             if (potentialTargets.contains(CharactersList.allCharacterCards[3])) {
-                getInformation().setTarget(CharactersList.allCharacterCards[3]);
+                getMemory().setTarget(CharactersList.allCharacterCards[3]);
             } else {
-                getInformation().setTarget(CharactersList.allCharacterCards[6]);
+                getMemory().setTarget(CharactersList.allCharacterCards[6]);
             }
         } else {
             if (potentialTargets.contains(CharactersList.allCharacterCards[6])) {
-                getInformation().setTarget(CharactersList.allCharacterCards[6]);
+                getMemory().setTarget(CharactersList.allCharacterCards[6]);
             } else {
-                getInformation().setTarget(CharactersList.allCharacterCards[3]);
+                getMemory().setTarget(CharactersList.allCharacterCards[3]);
             }
         }
     }
@@ -158,15 +158,15 @@ public class Spendthrift extends Player {
 
         // The magician will exchange his hand with the player with the most cards if this latter has more cards than the magician
         if ((characterWithMostCards != null) && (characterWithMostCards.getPlayer().getHand().size() > this.getHand().size())) {
-            getInformation().setPowerToUse(1);
-            getInformation().setTarget(characterWithMostCards);
+            getMemory().setPowerToUse(1);
+            getMemory().setTarget(characterWithMostCards);
         } else { // else, the magician will discard cards he already has in his city
-            getInformation().setPowerToUse(2);
+            getMemory().setPowerToUse(2);
             getHand().sortCards(Family.NEUTRAL);
             Collections.reverse(getHand());
 
             int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
-            getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
+            getMemory().setCardsToDiscard(nbCardsToDiscard + 1);
         }
         return 0;
     }
@@ -179,7 +179,7 @@ public class Spendthrift extends Player {
     @Override
     public void chooseTargetToDestroy() {
         Character target = Warlord.getOtherCharacterWithBiggestCity();
-        getInformation().setTarget(target);
+        getMemory().setTarget(target);
         District districtToDestroy = null;
         if (target != null) {
             districtToDestroy = target.getPlayer().getCity().getCheapestDistrictToDestroy();
@@ -187,7 +187,7 @@ public class Spendthrift extends Player {
                 districtToDestroy = null;
             }
         }
-        getInformation().setDistrictToDestroy(districtToDestroy);
+        getMemory().setDistrictToDestroy(districtToDestroy);
     }
 
 
@@ -211,9 +211,9 @@ public class Spendthrift extends Player {
             this.chooseDistrictToBuild();
             this.getActions().build();
         } else {
-            getInformation().getDisplay().addNoDistrictBuilt();
+            getMemory().getDisplay().addNoDistrictBuilt();
         }
-        getInformation().getDisplay().addBlankLine();
+        getMemory().getDisplay().addBlankLine();
         getActions().takeGoldFromCity();
         if (this.equals(DistrictsPile.allDistrictCards[61].getOwner())) // Utilise le pouvoir de la manufacture
             DistrictsPile.allDistrictCards[61].useEffect();

@@ -11,7 +11,7 @@ public class Library extends District {
 
     @Override
     public boolean useEffect() {
-        getOwner().getInformation().getDisplay().addLibraryEffect();
+        getOwner().getMemory().getDisplay().addLibraryEffect();
         return true;
     }
 

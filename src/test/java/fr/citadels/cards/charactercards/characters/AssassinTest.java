@@ -24,7 +24,7 @@ class AssassinTest {
         assassin = new Assassin();
         king = new King();
         assassin.setPlayer(player);
-        player.getInformation().setTarget(king);
+        player.getMemory().setTarget(king);
         assassin.usePower();
         Assertions.assertTrue(king.isDead());
     }

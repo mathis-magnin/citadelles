@@ -24,7 +24,7 @@ class FactoryTest {
         assertEquals(1, king.getHand().size());
 
         king.getActions().addGold(6);
-        king.getInformation().setDistrictToBuild(factory);
+        king.getMemory().setDistrictToBuild(factory);
         king.getActions().build();
         assertEquals(1, king.getCity().size());
 

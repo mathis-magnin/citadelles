@@ -32,7 +32,7 @@ class ThriftyTest {
     void setUp() {
         game = new Game();
         game.getPile().initializePile();
-        List<District> districts = new ArrayList<>(List.of(DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[22]));
+        List<District> districts = new ArrayList<>(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[22]));
         player = new Thrifty("Hello", districts, game, random);
         player2 = new Thrifty("Bob", new ArrayList<>(), game, random);
         player3 = new Thrifty("Bob", new ArrayList<>(), game, random);
@@ -43,8 +43,8 @@ class ThriftyTest {
         assertEquals("Hello", player.getName());
         assertEquals(3, player.getHand().size());
         /*check if the elements are in the list*/
-        assertEquals("Temple", player.getHand().get(0).getName());
-        assertEquals("Manoir", player.getHand().get(1).getName());
+        assertEquals("Manoir", player.getHand().get(0).getName());
+        assertEquals("Temple", player.getHand().get(1).getName());
         assertEquals("Cathédrale", player.getHand().get(2).getName());
         assertEquals(0, player.getCity().size());
     }
@@ -63,12 +63,14 @@ class ThriftyTest {
         player.getActions().addGold(4);
 
         player.chooseDistrictToBuild();
-        assertEquals(2, player.getHand().size());
-        assertEquals("Manoir", player.getInformation().getDistrictToBuild().getName());
+        assertEquals(3, player.getHand().size());
+        assertNull(player.getMemory().getDistrictToBuild());
+
+        player.getActions().addGold(1);
         player.chooseDistrictToBuild();
         assertEquals(2, player.getHand().size());
+        assertEquals("Cathédrale", player.getMemory().getDistrictToBuild().getName());
 
-        assertNull(player.getInformation().getDistrictToBuild());
     }
 
     @Test
@@ -86,42 +88,26 @@ class ThriftyTest {
     @Test
     void playWithNoMoney() {
 
-        player.getInformation().getPile().initializePile();
+        player.getMemory().getPile().initializePile();
+
         player.playResourcesPhase();
         player.playBuildingPhase();
-
-
         assertEquals(0, player.getCity().size());
         assertEquals(3, player.getHand().size());
         assertEquals(2, player.getGold());
-        /*assertEquals("Hello a pris 2 pièces d'or.\n" +
-                "Hello a 2 pièces d'or.\n" +
-                "Hello n'a rien construit.\n" +
-                "Hello a dans sa ville : \n", events.getEvents());*/
-        game.getDisplay().reset();
+
+        player.playResourcesPhase();
+        player.playBuildingPhase();
+        assertEquals(0, player.getCity().size());
+        assertEquals(3, player.getHand().size());
+        assertEquals(4, player.getGold());
 
         player.playResourcesPhase();
         player.playBuildingPhase();
         assertEquals(1, player.getCity().size());
         assertEquals(2, player.getHand().size());
-
         assertEquals(1, player.getGold());
-        /*assertEquals("Hello a pris 2 pièces d'or.\n" +
-                "Hello a 4 pièces d'or.\n" +
-                "Hello a construit dans sa ville : Manoir\n" +
-                "Hello a dans sa ville : Manoir, \n", events.getEvents());*/
-        game.getDisplay().reset();
 
-        player.playResourcesPhase();
-        player.playBuildingPhase();
-        assertEquals(1, player.getCity().size());
-        assertEquals(2, player.getHand().size());
-        assertEquals(3, player.getGold());
-        /*assertEquals("Hello a pris 2 pièces d'or.\n" +
-                "Hello a 3 pièces d'or.\n" +
-                "Hello n'a rien construit.\n" +
-                "Hello a dans sa ville : Manoir, \n", events.getEvents());*/
-        game.getDisplay().reset();
     }
 
     @Test
@@ -156,9 +142,9 @@ class ThriftyTest {
         player.setCharacter(CharactersList.allCharacterCards[0]);
         when(random.nextBoolean()).thenReturn(true, false);
         player.playAsAssassin();
-        assertEquals(player.getInformation().getTarget(), CharactersList.allCharacterCards[5]);
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[5]);
         player.playAsAssassin();
-        assertEquals(player.getInformation().getTarget(), CharactersList.allCharacterCards[6]);
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[6]);
     }
 
     @Test
@@ -166,24 +152,24 @@ class ThriftyTest {
         player.setCharacter(CharactersList.allCharacterCards[1]);
         when(random.nextBoolean()).thenReturn(true, false);
         player.playAsThief();
-        assertEquals(player.getInformation().getTarget(), CharactersList.allCharacterCards[3]);
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[3]);
         assertTrue(CharactersList.allCharacterCards[3].isRobbed());
         player.playAsThief();
-        assertEquals(player.getInformation().getTarget(), CharactersList.allCharacterCards[6]);
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[6]);
         assertTrue(CharactersList.allCharacterCards[3].isRobbed());
 
         CharactersList.allCharacterCards[3].setRobbed(false);
         CharactersList.allCharacterCards[6].setRobbed(false);
         CharactersList.allCharacterCards[3].setDead(true);
         player.playAsThief();
-        assertEquals(player.getInformation().getTarget(), CharactersList.allCharacterCards[6]);
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[6]);
         assertTrue(CharactersList.allCharacterCards[6].isRobbed());
 
         CharactersList.allCharacterCards[6].setRobbed(false);
         CharactersList.allCharacterCards[6].setDead(true);
         CharactersList.allCharacterCards[3].setDead(false);
         player.playAsThief();
-        assertEquals(player.getInformation().getTarget(), CharactersList.allCharacterCards[3]);
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[3]);
         assertTrue(CharactersList.allCharacterCards[3].isRobbed());
     }
 
@@ -204,15 +190,15 @@ class ThriftyTest {
         player3.setHand(hand3);
 
         player.playAsMagician();
-        assertEquals(1, player.getInformation().getPowerToUse());
-        assertEquals(player3.getCharacter(), player.getInformation().getTarget());
+        assertEquals(1, player.getMemory().getPowerToUse());
+        assertEquals(player3.getCharacter(), player.getMemory().getTarget());
         assertEquals(hand1, player3.getHand());
         assertEquals(hand2, player2.getHand());
         assertEquals(hand3, player.getHand());
 
         player.getActions().addGold(3);
         player.playAsMagician();
-        assertEquals(2, player.getInformation().getPowerToUse());
+        assertEquals(2, player.getMemory().getPowerToUse());
         assertEquals(hand1, player3.getHand());
         assertEquals(hand2, player2.getHand());
         assertEquals(4, player.getHand().size());
@@ -222,10 +208,10 @@ class ThriftyTest {
         assertEquals("Manoir", player.getHand().get(3).getName());
         assertEquals(1, player.getCity().size());
         assertEquals("Château", player.getCity().get(0).getName());
-        assertEquals(1, player.getInformation().getCardsToDiscard());
+        assertEquals(1, player.getMemory().getCardsToDiscard());
 
         player.playAsMagician();
-        assertEquals(2, player.getInformation().getPowerToUse());
+        assertEquals(2, player.getMemory().getPowerToUse());
         assertEquals(hand1, player3.getHand());
         assertEquals(hand2, player2.getHand());
         assertEquals(3, player.getHand().size());
@@ -235,7 +221,7 @@ class ThriftyTest {
         assertEquals(2, player.getCity().size());
         assertEquals("Château", player.getCity().get(0).getName());
         assertEquals("Manoir", player.getCity().get(1).getName());
-        assertEquals(2, player.getInformation().getCardsToDiscard());
+        assertEquals(2, player.getMemory().getCardsToDiscard());
     }
 
     @Test
@@ -277,7 +263,7 @@ class ThriftyTest {
     @Test
     void activateFactoryEffect() {
         player.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[61])));
-        player.getInformation().setDistrictToBuild(DistrictsPile.allDistrictCards[61]);
+        player.getMemory().setDistrictToBuild(DistrictsPile.allDistrictCards[61]);
         player.getActions().addGold(6);
         player.getActions().build();
         assertFalse(player.activateFactoryEffect());

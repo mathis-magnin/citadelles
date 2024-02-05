@@ -86,9 +86,9 @@ public class Thrifty extends Player {
     public void chooseDistrictToBuild() {
         int maxIndex = getMostExpensiveCardInHand()[0];
         if ((maxIndex >= 0) && (getHand().get(maxIndex).getGoldCost() <= getGold()))
-            this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(maxIndex));
+            this.getMemory().setDistrictToBuild(this.getActions().removeCardFromHand(maxIndex));
         else
-            this.getInformation().setDistrictToBuild(null);
+            this.getMemory().setDistrictToBuild(null);
     }
 
 
@@ -107,7 +107,7 @@ public class Thrifty extends Player {
         }
         this.setCharacter(characters.remove(randomIndex));
 
-        getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
+        getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
 
@@ -119,9 +119,9 @@ public class Thrifty extends Player {
     public void chooseTargetToKill() {
         CharactersList possibleTargets = Assassin.getPossibleTargets();
         if (RAND.nextBoolean()) {
-            getInformation().setTarget(possibleTargets.get(4));
+            getMemory().setTarget(possibleTargets.get(4));
         } else {
-            getInformation().setTarget(possibleTargets.get(5));
+            getMemory().setTarget(possibleTargets.get(5));
         }
     }
 
@@ -135,15 +135,15 @@ public class Thrifty extends Player {
         List<Character> potentialTargets = Thief.getPossibleTargets();
         if (RAND.nextBoolean()) {
             if (potentialTargets.contains(CharactersList.allCharacterCards[3])) {
-                getInformation().setTarget(CharactersList.allCharacterCards[3]);
+                getMemory().setTarget(CharactersList.allCharacterCards[3]);
             } else {
-                getInformation().setTarget(CharactersList.allCharacterCards[6]);
+                getMemory().setTarget(CharactersList.allCharacterCards[6]);
             }
         } else {
             if (potentialTargets.contains(CharactersList.allCharacterCards[6])) {
-                getInformation().setTarget(CharactersList.allCharacterCards[6]);
+                getMemory().setTarget(CharactersList.allCharacterCards[6]);
             } else {
-                getInformation().setTarget(CharactersList.allCharacterCards[3]);
+                getMemory().setTarget(CharactersList.allCharacterCards[3]);
             }
         }
     }
@@ -159,13 +159,13 @@ public class Thrifty extends Player {
         Character characterWithMostCards = Magician.getCharacterWithMostCards();
 
         if ((characterWithMostCards != null) && (characterWithMostCards.getPlayer().getHand().size() > this.getHand().size())) {
-            getInformation().setPowerToUse(1);
-            getInformation().setTarget(characterWithMostCards);
+            getMemory().setPowerToUse(1);
+            getMemory().setTarget(characterWithMostCards);
         } else {
-            getInformation().setPowerToUse(2);
+            getMemory().setPowerToUse(2);
             getHand().sortCards(Family.NEUTRAL);
             int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
-            getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
+            getMemory().setCardsToDiscard(nbCardsToDiscard + 1);
         }
         return 0;
     }
@@ -178,7 +178,7 @@ public class Thrifty extends Player {
     @Override
     public void chooseTargetToDestroy() {
         Character target = Warlord.getOtherCharacterWithBiggestCity();
-        getInformation().setTarget(target);
+        getMemory().setTarget(target);
         District districtToDestroy = null;
         if (target != null) {
             districtToDestroy = target.getPlayer().getCity().getCheapestDistrictToDestroy();
@@ -186,7 +186,7 @@ public class Thrifty extends Player {
                 districtToDestroy = null;
             }
         }
-        getInformation().setDistrictToDestroy(districtToDestroy);
+        getMemory().setDistrictToDestroy(districtToDestroy);
     }
 
 
@@ -209,9 +209,9 @@ public class Thrifty extends Player {
             this.chooseDistrictToBuild();
             this.getActions().build();
         } else {
-            getInformation().getDisplay().addNoDistrictBuilt();
+            getMemory().getDisplay().addNoDistrictBuilt();
         }
-        getInformation().getDisplay().addBlankLine();
+        getMemory().getDisplay().addBlankLine();
         if (this.equals(DistrictsPile.allDistrictCards[61].getOwner())) // Utilise le pouvoir de la manufacture
             DistrictsPile.allDistrictCards[61].useEffect();
     }

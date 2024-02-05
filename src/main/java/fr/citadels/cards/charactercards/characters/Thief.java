@@ -37,9 +37,9 @@ public class Thief extends Character {
      */
     @Override
     public void usePower() {
-        this.getPlayer().getInformation().getTarget().setRobbed(true);
-        this.getPlayer().getInformation().getDisplay().addThiefPower(this.getPlayer().getInformation().getTarget());
-        this.getPlayer().getInformation().getDisplay().addBlankLine();
+        this.getPlayer().getMemory().getTarget().setRobbed(true);
+        this.getPlayer().getMemory().getDisplay().addThiefPower(this.getPlayer().getMemory().getTarget());
+        this.getPlayer().getMemory().getDisplay().addBlankLine();
     }
 
 }

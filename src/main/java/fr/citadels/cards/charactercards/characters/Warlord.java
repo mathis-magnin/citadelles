@@ -50,23 +50,23 @@ public class Warlord extends Character {
     @Override
     public void usePower() {
         if (CharactersList.allCharacterCards[4].isPlayed() && !CharactersList.allCharacterCards[4].isDead()) {
-            getPlayer().getInformation().getDisplay().addBishopPower();
+            getPlayer().getMemory().getDisplay().addBishopPower();
         }
         if (DistrictsPile.allDistrictCards[58].isBuilt() && !DistrictsPile.allDistrictCards[58].getOwner().equals(CharactersList.allCharacterCards[4].getPlayer())) {
-            this.getPlayer().getInformation().getDisplay().addKeepEffect();
+            this.getPlayer().getMemory().getDisplay().addKeepEffect();
         }
 
-        District districtToDestroy = this.getPlayer().getInformation().getDistrictToDestroy();
+        District districtToDestroy = this.getPlayer().getMemory().getDistrictToDestroy();
 
-        getPlayer().getInformation().getTarget().getPlayer().getActions().removeCardFromCity(districtToDestroy);
+        getPlayer().getMemory().getTarget().getPlayer().getActions().removeCardFromCity(districtToDestroy);
         getPlayer().getActions().removeGold(districtToDestroy.getGoldCost() - 1);
-        getPlayer().getInformation().getDisplay().addWarlordPower(this.getPlayer(), this.getPlayer().getInformation().getTarget(), districtToDestroy);
+        getPlayer().getMemory().getDisplay().addWarlordPower(this.getPlayer(), this.getPlayer().getMemory().getTarget(), districtToDestroy);
 
         if (!DistrictsPile.allDistrictCards[62].useEffect()) { // Graveyard power
-            getPlayer().getInformation().getPile().placeBelowPile(districtToDestroy);
-            getPlayer().getInformation().getDisplay().addDistrictPlacedBelow();
+            getPlayer().getMemory().getPile().placeBelowPile(districtToDestroy);
+            getPlayer().getMemory().getDisplay().addDistrictPlacedBelow();
         }
-        getPlayer().getInformation().getDisplay().addBlankLine();
+        getPlayer().getMemory().getDisplay().addBlankLine();
     }
 
 }

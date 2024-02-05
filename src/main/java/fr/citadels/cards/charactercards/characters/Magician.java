@@ -48,29 +48,29 @@ public class Magician extends Character {
     }
 
     public void usePower() {
-        switch (this.getPlayer().getInformation().getPowerToUse()) {
+        switch (this.getPlayer().getMemory().getPowerToUse()) {
             case 1:
-                Hand hand = this.getPlayer().getInformation().getTarget().getPlayer().getHand();
-                this.getPlayer().getInformation().getTarget().getPlayer().setHand(this.getPlayer().getHand());
+                Hand hand = this.getPlayer().getMemory().getTarget().getPlayer().getHand();
+                this.getPlayer().getMemory().getTarget().getPlayer().setHand(this.getPlayer().getHand());
                 this.getPlayer().setHand(hand);
-                this.getPlayer().getInformation().getDisplay().addMagicianSwap(this.getPlayer(), this.getPlayer().getInformation().getTarget().getPlayer());
+                this.getPlayer().getMemory().getDisplay().addMagicianSwap(this.getPlayer(), this.getPlayer().getMemory().getTarget().getPlayer());
                 break;
             case 2:
-                if (this.getPlayer().getInformation().getCardsToDiscard() != 0) {
+                if (this.getPlayer().getMemory().getCardsToDiscard() != 0) {
                     District card;
                     List<District> discardsCards = new ArrayList<>();
-                    int iterations = Math.min(this.getPlayer().getInformation().getCardsToDiscard(), this.getPlayer().getHand().size());
+                    int iterations = Math.min(this.getPlayer().getMemory().getCardsToDiscard(), this.getPlayer().getHand().size());
                     for (int i = 0; i < iterations; i++) {
                         card = this.getPlayer().getHand().remove(this.getPlayer().getHand().size() - 1);
-                        this.getPlayer().getInformation().getPile().placeBelowPile(card);
+                        this.getPlayer().getMemory().getPile().placeBelowPile(card);
                         discardsCards.add(card);
                     }
-                    this.getPlayer().getInformation().getDisplay().addMagicianDiscard(this.getPlayer(), discardsCards);
+                    this.getPlayer().getMemory().getDisplay().addMagicianDiscard(this.getPlayer(), discardsCards);
                     this.getPlayer().getActions().draw(iterations);
                     break;
                 }
         }
-        this.getPlayer().getInformation().getDisplay().addBlankLine();
+        this.getPlayer().getMemory().getDisplay().addBlankLine();
     }
 
 }

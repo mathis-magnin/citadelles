@@ -70,7 +70,7 @@ class MagicianTest {
 
     @Test
     void usePower() {
-        player1.getInformation().setPowerToUse(1);
+        player1.getMemory().setPowerToUse(1);
         player1.setCharacter(CharactersList.allCharacterCards[2]);
         player2.setCharacter(CharactersList.allCharacterCards[3]);
         Hand hand1 = new Hand(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[2]));
@@ -81,7 +81,7 @@ class MagicianTest {
         Assertions.assertEquals(hand1, player1.getHand());
         Assertions.assertEquals(hand2, player2.getHand());
 
-        player1.getInformation().setTarget(player2.getCharacter());
+        player1.getMemory().setTarget(player2.getCharacter());
         player1.getCharacter().usePower();
 
         Assertions.assertEquals(hand2, player1.getHand());
@@ -90,18 +90,18 @@ class MagicianTest {
 
     @Test
     void usePower2() {
-        player1.getInformation().setPowerToUse(2);
+        player1.getMemory().setPowerToUse(2);
         player1.setCharacter(CharactersList.allCharacterCards[2]);
         Hand hand1 = new Hand(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[20], DistrictsPile.allDistrictCards[30]));
         player1.setHand(hand1);
 
-        player1.getInformation().setCardsToDiscard(0);
+        player1.getMemory().setCardsToDiscard(0);
         Assertions.assertEquals(hand1, player1.getHand());
         player1.getCharacter().usePower();
         Assertions.assertEquals(hand1, player1.getHand());
         Assertions.assertEquals(4, player1.getHand().size());
 
-        player1.getInformation().setCardsToDiscard(2);
+        player1.getMemory().setCardsToDiscard(2);
         player1.getCharacter().usePower();
         Assertions.assertEquals(4, player1.getHand().size());
         Assertions.assertTrue(player1.getHand().contains(DistrictsPile.allDistrictCards[0]));

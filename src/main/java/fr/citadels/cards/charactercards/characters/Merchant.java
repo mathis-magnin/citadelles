@@ -20,8 +20,8 @@ public class Merchant extends Character {
 
     public void usePower() {
         this.getPlayer().getActions().addGold(1);
-        this.getPlayer().getInformation().getDisplay().addMerchantPower(this);
-        this.getPlayer().getInformation().getDisplay().addBlankLine();
+        this.getPlayer().getMemory().getDisplay().addMerchantPower(this);
+        this.getPlayer().getMemory().getDisplay().addBlankLine();
     }
 
 }
