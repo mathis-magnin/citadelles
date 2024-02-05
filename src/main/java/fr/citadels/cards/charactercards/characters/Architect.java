@@ -30,7 +30,7 @@ public class Architect extends Character {
      * and he should not use it more than two times per turn.
      */
     public void usePower() {
-        switch (this.getPlayer().getInformation().getPowerToUse()) {
+        switch (this.getPlayer().getMemory().getPowerToUse()) {
             case 1:
                 this.drawCard();
                 break;
@@ -38,7 +38,7 @@ public class Architect extends Character {
                 this.build();
                 break;
         }
-        this.getPlayer().getInformation().getDisplay().addBlankLine();
+        this.getPlayer().getMemory().getDisplay().addBlankLine();
     }
 
 
@@ -46,7 +46,7 @@ public class Architect extends Character {
      * 1. The player gain two extra cards. He can use this ability regardless of what resource he gathered this turn.
      */
     private void drawCard() {
-        this.getPlayer().getInformation().getDisplay().addArchitectPower(1);
+        this.getPlayer().getMemory().getDisplay().addArchitectPower(1);
         this.getPlayer().getActions().draw(2);
     }
 
@@ -58,7 +58,7 @@ public class Architect extends Character {
      * @precondition The player must have chosen which district he wants to build.
      */
     private void build() {
-        this.getPlayer().getInformation().getDisplay().addArchitectPower(2);
+        this.getPlayer().getMemory().getDisplay().addArchitectPower(2);
         this.getPlayer().getActions().build();
     }
 

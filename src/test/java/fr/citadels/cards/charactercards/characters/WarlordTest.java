@@ -66,8 +66,8 @@ class WarlordTest {
         player1.setCity(new City(new ArrayList<>(List.of(DistrictsPile.allDistrictCards[0]))));
         DistrictsPile.allDistrictCards[0].setOwner(player1);
         player2.getActions().addGold(2);
-        player2.getInformation().setTarget(CharactersList.allCharacterCards[0]);
-        player2.getInformation().setDistrictToDestroy(DistrictsPile.allDistrictCards[0]);
+        player2.getMemory().setTarget(CharactersList.allCharacterCards[0]);
+        player2.getMemory().setDistrictToDestroy(DistrictsPile.allDistrictCards[0]);
         player2.getCharacter().usePower();
         assertFalse(DistrictsPile.allDistrictCards[0].isBuilt());
         assertEquals(0, player2.getGold());

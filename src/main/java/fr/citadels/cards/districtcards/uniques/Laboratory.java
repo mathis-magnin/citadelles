@@ -24,8 +24,8 @@ public class Laboratory extends District {
         if (isBuilt() && getOwner().activateLaboratoryEffect()) {
             getOwner().getActions().addGold(1);
             District card = getOwner().getHand().remove(getOwner().getHand().size() - 1);
-            getOwner().getInformation().getPile().placeBelowPile(card);
-            getOwner().getInformation().getDisplay().addLaboratoryEffect(card, getOwner());
+            getOwner().getMemory().getPile().placeBelowPile(card);
+            getOwner().getMemory().getDisplay().addLaboratoryEffect(card, getOwner());
             return true;
         }
         return false;

@@ -17,7 +17,7 @@ public abstract class Player implements Comparable<Player>, Choices {
     private City city;
     private int gold;
     private Character character;
-    protected final Memory information;
+    protected final Memory memory;
     protected final Actions actions;
 
 
@@ -29,8 +29,8 @@ public abstract class Player implements Comparable<Player>, Choices {
         this.city = new City();
         this.character = null;
 
-        this.information = new Memory(game);
-        actions = new Actions(this, information);
+        this.memory = new Memory(game);
+        actions = new Actions(this, memory);
     }
 
 
@@ -95,12 +95,12 @@ public abstract class Player implements Comparable<Player>, Choices {
 
 
     /**
-     * Get the player's information
+     * Get the player's memory
      *
-     * @return information
+     * @return memory
      */
-    public Memory getInformation() {
-        return information;
+    public Memory getMemory() {
+        return memory;
     }
 
 
@@ -277,20 +277,20 @@ public abstract class Player implements Comparable<Player>, Choices {
      * play a round for the linked player if he embodies the architect
      */
     public void playAsArchitect() {
-        this.getInformation().setPowerToUse(1);  // draw two cards
+        this.getMemory().setPowerToUse(1);  // draw two cards
         this.getCharacter().usePower();
 
         this.playResourcesPhase();
         this.playBuildingPhase();
 
-        this.getInformation().setPowerToUse(2);  // build another district
+        this.getMemory().setPowerToUse(2);  // build another district
         for (int i = 0; i < 2; i++) {
             this.chooseDistrictToBuild();
-            if (this.getInformation().getDistrictToBuild() != null) {
+            if (this.getMemory().getDistrictToBuild() != null) {
                 this.getCharacter().usePower();
             } else {
-                this.getInformation().getDisplay().addNoArchitectPower();
-                this.getInformation().getDisplay().addBlankLine();
+                this.getMemory().getDisplay().addNoArchitectPower();
+                this.getMemory().getDisplay().addBlankLine();
             }
         }
     }
@@ -303,11 +303,11 @@ public abstract class Player implements Comparable<Player>, Choices {
         playResourcesPhase();
         playBuildingPhase();
         chooseTargetToDestroy();
-        if ((getInformation().getTarget() != null) && (getInformation().getDistrictToDestroy() != null)) {
+        if ((getMemory().getTarget() != null) && (getMemory().getDistrictToDestroy() != null)) {
             getCharacter().usePower();
         } else {
-            getInformation().getDisplay().addNoWarlordPower();
-            this.getInformation().getDisplay().addBlankLine();
+            getMemory().getDisplay().addNoWarlordPower();
+            this.getMemory().getDisplay().addBlankLine();
         }
     }
 

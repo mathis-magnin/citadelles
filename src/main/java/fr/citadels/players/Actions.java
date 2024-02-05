@@ -88,7 +88,7 @@ public class Actions {
     public void putBack(District[] drawnCards, int randomIndex) {
         for (int i = 0; i < drawnCards.length; i++) {
             if (i != randomIndex) {
-                player.getInformation().getPile().placeBelowPile(drawnCards[i]);
+                player.getMemory().getPile().placeBelowPile(drawnCards[i]);
                 drawnCards[i] = null;
             }
         }
@@ -104,24 +104,24 @@ public class Actions {
         if (draw) {
             int nbToDraw = 2;
             if (player.equals(DistrictsPile.allDistrictCards[59].getOwner())) {
-                player.getInformation().getDisplay().addObservatoryEffect();
+                player.getMemory().getDisplay().addObservatoryEffect();
                 nbToDraw++;
             }
-            District[] drawnCards = player.getInformation().getPile().draw(nbToDraw);
+            District[] drawnCards = player.getMemory().getPile().draw(nbToDraw);
 
-            player.getInformation().getDisplay().addDistrictDrawn(drawnCards);
+            player.getMemory().getDisplay().addDistrictDrawn(drawnCards);
             if (drawnCards.length != 0) { // if there is at least 1 card
                 Hand hand = player.getHand();
                 if (!player.equals(DistrictsPile.allDistrictCards[64].getOwner())) {
                     District cardToPlay = player.chooseCardAmongDrawn(drawnCards);
                     hand.add(cardToPlay);
-                    player.getInformation().getDisplay().addDistrictChosen(player, cardToPlay);
+                    player.getMemory().getDisplay().addDistrictChosen(player, cardToPlay);
                 } else {
                     DistrictsPile.allDistrictCards[64].useEffect();
                     hand.addAll(List.of(drawnCards));
                 }
 
-                player.getInformation().getDisplay().addBlankLine();
+                player.getMemory().getDisplay().addBlankLine();
             } else {
                 draw = false;
             }
@@ -129,8 +129,8 @@ public class Actions {
         if (!draw) {
             addGold(2);
 
-            player.getInformation().getDisplay().addGoldTaken(player, 2);
-            player.getInformation().getDisplay().addBlankLine();
+            player.getMemory().getDisplay().addGoldTaken(player, 2);
+            player.getMemory().getDisplay().addBlankLine();
         }
     }
 
@@ -153,8 +153,8 @@ public class Actions {
             }
             if (goldToTake > 0) {
                 addGold(goldToTake);
-                player.getInformation().getDisplay().addGoldTakenFromCity(player, goldToTake, activateSchoolOfMagicEffect);
-                player.getInformation().getDisplay().addBlankLine();
+                player.getMemory().getDisplay().addGoldTakenFromCity(player, goldToTake, activateSchoolOfMagicEffect);
+                player.getMemory().getDisplay().addBlankLine();
             }
         }
     }
@@ -167,9 +167,9 @@ public class Actions {
         if (this.memory.getDistrictToBuild() != null) {
             addCardToCity(this.memory.getDistrictToBuild());
             removeGold(this.memory.getDistrictToBuild().getGoldCost());
-            player.getInformation().getDisplay().addDistrictBuilt(player, this.memory.getDistrictToBuild());
+            player.getMemory().getDisplay().addDistrictBuilt(player, this.memory.getDistrictToBuild());
         } else {
-            player.getInformation().getDisplay().addNoDistrictBuilt();
+            player.getMemory().getDisplay().addNoDistrictBuilt();
         }
     }
 
@@ -182,7 +182,7 @@ public class Actions {
         CharactersList.allCharacterCards[1].getPlayer().getActions().addGold(goldToTake);
         this.player.setGold(0);
         this.player.getCharacter().setRobbed(false);
-        this.player.getInformation().getDisplay().addRobbed(CharactersList.allCharacterCards[1].getPlayer(), goldToTake);
+        this.player.getMemory().getDisplay().addRobbed(CharactersList.allCharacterCards[1].getPlayer(), goldToTake);
     }
 
 

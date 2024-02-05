@@ -22,7 +22,7 @@ public class Factory extends District {
     @Override
     public boolean useEffect() {
         if (isBuilt() && getOwner().activateFactoryEffect()) {
-            getOwner().getInformation().getDisplay().addFactoryEffect();
+            getOwner().getMemory().getDisplay().addFactoryEffect();
             getOwner().getActions().draw(3);
             getOwner().getActions().removeGold(3);
             if (getOwner().getCharacter() != null) {

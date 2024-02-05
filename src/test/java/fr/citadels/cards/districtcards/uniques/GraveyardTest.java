@@ -34,9 +34,9 @@ class GraveyardTest {
 
         warlordPlayer = new Monarchist("WARLORD", new ArrayList<>(), game);
         warlordPlayer.setCharacter(CharactersList.allCharacterCards[7]); // Warlord
-        warlordPlayer.getInformation().setTarget(CharactersList.allCharacterCards[2]); // Magician
+        warlordPlayer.getMemory().setTarget(CharactersList.allCharacterCards[2]); // Magician
         warlordPlayer.getActions().addGold(2); // 3 - 1 (cost of the district to destroy - 1)
-        warlordPlayer.getInformation().setDistrictToDestroy(DistrictsPile.allDistrictCards[0]);
+        warlordPlayer.getMemory().setDistrictToDestroy(DistrictsPile.allDistrictCards[0]);
 
         targetedPlayer = new Monarchist("TARGET", new ArrayList<>(), game);
         targetedPlayer.setCharacter(CharactersList.allCharacterCards[2]); // Magician
@@ -94,7 +94,7 @@ class GraveyardTest {
         targetedGraveyardPlayer.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], graveyard)));
         graveyard.setOwner(targetedGraveyardPlayer);
 
-        warlordPlayer.getInformation().setDistrictToDestroy(graveyard);
+        warlordPlayer.getMemory().setDistrictToDestroy(graveyard);
         warlordPlayer.getCharacter().usePower();
 
         assertEquals(0, warlordPlayer.getGold());
@@ -116,9 +116,9 @@ class GraveyardTest {
             }
         };
         warlordTargetedGraveyardPlayer.setCharacter(CharactersList.allCharacterCards[7]); // Warlord
-        warlordTargetedGraveyardPlayer.getInformation().setTarget(CharactersList.allCharacterCards[7]); // Warlord
+        warlordTargetedGraveyardPlayer.getMemory().setTarget(CharactersList.allCharacterCards[7]); // Warlord
         warlordTargetedGraveyardPlayer.getActions().addGold(3); // 3 - 1 + 1 : (cost of the district to destroy - 1) + (cost the effect)
-        warlordTargetedGraveyardPlayer.getInformation().setDistrictToDestroy(DistrictsPile.allDistrictCards[0]);
+        warlordTargetedGraveyardPlayer.getMemory().setDistrictToDestroy(DistrictsPile.allDistrictCards[0]);
         warlordTargetedGraveyardPlayer.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], graveyard)));
         graveyard.setOwner(warlordTargetedGraveyardPlayer);
 

@@ -55,11 +55,11 @@ public class Random extends Player {
     public void chooseDistrictToBuild() {
         for (int i = 0; i < getHand().size(); i++) {
             if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i))) {
-                this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(i));
+                this.getMemory().setDistrictToBuild(this.getActions().removeCardFromHand(i));
                 return;
             }
         }
-        this.getInformation().setDistrictToBuild(null);
+        this.getMemory().setDistrictToBuild(null);
     }
 
 
@@ -77,7 +77,7 @@ public class Random extends Player {
             randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
+        getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
 
@@ -89,7 +89,7 @@ public class Random extends Player {
     public void chooseTargetToKill() {
         CharactersList possibleTargets = Assassin.getPossibleTargets();
         int randIndex = RAND.nextInt(possibleTargets.size());
-        getInformation().setTarget(possibleTargets.get(randIndex));
+        getMemory().setTarget(possibleTargets.get(randIndex));
     }
 
 
@@ -101,7 +101,7 @@ public class Random extends Player {
     public void chooseTargetToRob() {
         List<Character> potentialTargets = Thief.getPossibleTargets();
         int randIndex = RAND.nextInt(potentialTargets.size());
-        getInformation().setTarget(potentialTargets.get(randIndex));
+        getMemory().setTarget(potentialTargets.get(randIndex));
     }
 
 
@@ -115,14 +115,14 @@ public class Random extends Player {
         int randPower = RAND.nextInt(2); // choose which power to use
 
         if (randPower == 0) { // swap hands : choose a target
-            this.getInformation().setPowerToUse(1);
+            this.getMemory().setPowerToUse(1);
             int randTarget = RAND.nextInt(Magician.getPossibleTargets().size());
-            this.getInformation().setTarget(Magician.getPossibleTargets().get(randTarget));
+            this.getMemory().setTarget(Magician.getPossibleTargets().get(randTarget));
         } else { // discard cards : choose how many cards to discard
-            this.getInformation().setPowerToUse(2);
+            this.getMemory().setPowerToUse(2);
             if (!this.getHand().isEmpty())
-                this.getInformation().setCardsToDiscard(RAND.nextInt(this.getHand().size()));
-            else this.getInformation().setCardsToDiscard(0);
+                this.getMemory().setCardsToDiscard(RAND.nextInt(this.getHand().size()));
+            else this.getMemory().setCardsToDiscard(0);
         }
         return RAND.nextInt(3);
     }
@@ -136,7 +136,7 @@ public class Random extends Player {
     public void chooseTargetToDestroy() {
         int randTarget = RAND.nextInt(Warlord.getPossibleTargets().size());
         Character target = Warlord.getPossibleTargets().get(randTarget);
-        this.getInformation().setTarget(target);
+        this.getMemory().setTarget(target);
         District districtToDestroy = null;
         if (!target.getPlayer().getCity().isEmpty()) {
             randTarget = RAND.nextInt(target.getPlayer().getCity().size());
@@ -145,7 +145,7 @@ public class Random extends Player {
                 districtToDestroy = null;
             }
         }
-        this.getInformation().setDistrictToDestroy(districtToDestroy);
+        this.getMemory().setDistrictToDestroy(districtToDestroy);
     }
 
 
@@ -174,10 +174,10 @@ public class Random extends Player {
             this.chooseDistrictToBuild();
             this.getActions().build();
         } else {
-            getInformation().getDisplay().addNoDistrictBuilt();
+            getMemory().getDisplay().addNoDistrictBuilt();
         }
 
-        getInformation().getDisplay().addBlankLine();
+        getMemory().getDisplay().addBlankLine();
         if (!takeGoldFromFamily)
             getActions().takeGoldFromCity();
         if (this.equals(DistrictsPile.allDistrictCards[61].getOwner())) // Utilise le pouvoir de la manufacture

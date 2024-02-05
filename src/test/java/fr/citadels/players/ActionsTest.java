@@ -91,7 +91,7 @@ class ActionsTest {
     void takeCardOrGoldEffect() {
         player.getHand().add(DistrictsPile.allDistrictCards[64]);
         player.getActions().addGold(6);
-        player.getInformation().setDistrictToBuild(DistrictsPile.allDistrictCards[64]);
+        player.getMemory().setDistrictToBuild(DistrictsPile.allDistrictCards[64]);
         player.getHand().remove(DistrictsPile.allDistrictCards[64]);
         player.getActions().build();
         actions.takeCardsOrGold(true);
@@ -103,7 +103,7 @@ class ActionsTest {
 
         player.getHand().add(DistrictsPile.allDistrictCards[59]);
         player.getActions().addGold(5);
-        player.getInformation().setDistrictToBuild(DistrictsPile.allDistrictCards[59]);
+        player.getMemory().setDistrictToBuild(DistrictsPile.allDistrictCards[59]);
         player.getHand().remove(DistrictsPile.allDistrictCards[59]);
         player.getActions().build();
 
@@ -221,7 +221,7 @@ class ActionsTest {
         player2.setCharacter(king);
         player2.setGold(8);
 
-        player.getInformation().setTarget(king);
+        player.getMemory().setTarget(king);
         thief.usePower();
 
         assertEquals(10, player.getGold());

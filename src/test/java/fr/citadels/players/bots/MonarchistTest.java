@@ -81,7 +81,7 @@ class MonarchistTest {
     void chooseCardInHand() {
         //no money
         player1.chooseDistrictToBuild();
-        assertNull(player1.getInformation().getDistrictToBuild());
+        assertNull(player1.getMemory().getDistrictToBuild());
         assertEquals(3, player1.getHand().size());
         assertEquals("Manoir", player1.getHand().get(0).getName());
         assertEquals("Cathédrale", player1.getHand().get(1).getName());
@@ -92,7 +92,7 @@ class MonarchistTest {
         player1.getActions().addGold(3);
 
         player1.chooseDistrictToBuild();
-        assertEquals("Manoir", player1.getInformation().getDistrictToBuild().getName());
+        assertEquals("Manoir", player1.getMemory().getDistrictToBuild().getName());
         assertEquals(2, player1.getHand().size());
         assertEquals("Cathédrale", player1.getHand().get(0).getName());
         assertEquals("Temple", player1.getHand().get(1).getName());
@@ -165,20 +165,20 @@ class MonarchistTest {
     void playAsAssassin() {
         player1.setCharacter(CharactersList.allCharacterCards[0]);
         player1.playAsAssassin();
-        assertEquals(player1.getInformation().getTarget(), CharactersList.allCharacterCards[3]);
+        assertEquals(player1.getMemory().getTarget(), CharactersList.allCharacterCards[3]);
     }
 
     @Test
     void playAsThief() {
         player1.setCharacter(CharactersList.allCharacterCards[1]);
         player1.playAsThief();
-        assertEquals(player1.getInformation().getTarget(), CharactersList.allCharacterCards[3]);
+        assertEquals(player1.getMemory().getTarget(), CharactersList.allCharacterCards[3]);
         assertTrue(CharactersList.allCharacterCards[3].isRobbed());
 
         CharactersList.allCharacterCards[3].setRobbed(false);
         CharactersList.allCharacterCards[3].setDead(true);
         player1.playAsThief();
-        assertEquals(player1.getInformation().getTarget(), CharactersList.allCharacterCards[6]);
+        assertEquals(player1.getMemory().getTarget(), CharactersList.allCharacterCards[6]);
         assertTrue(CharactersList.allCharacterCards[6].isRobbed());
     }
 
@@ -199,15 +199,15 @@ class MonarchistTest {
         player3.setHand(hand3);
 
         player1.playAsMagician();
-        assertEquals(1, player1.getInformation().getPowerToUse());
-        assertEquals(player3.getCharacter(), player1.getInformation().getTarget());
+        assertEquals(1, player1.getMemory().getPowerToUse());
+        assertEquals(player3.getCharacter(), player1.getMemory().getTarget());
         assertEquals(hand1, player3.getHand());
         assertEquals(hand2, player2.getHand());
         assertEquals(hand3, player1.getHand());
 
         player1.getActions().addGold(3);
         player1.playAsMagician();
-        assertEquals(2, player1.getInformation().getPowerToUse());
+        assertEquals(2, player1.getMemory().getPowerToUse());
         assertEquals(hand1, player3.getHand());
         assertEquals(hand2, player2.getHand());
         assertEquals(4, player1.getHand().size());
@@ -218,10 +218,10 @@ class MonarchistTest {
 
         assertEquals(1, player1.getCity().size());
         assertEquals("Manoir", player1.getCity().get(0).getName());
-        assertEquals(1, player1.getInformation().getCardsToDiscard());
+        assertEquals(1, player1.getMemory().getCardsToDiscard());
 
         player1.playAsMagician();
-        assertEquals(2, player1.getInformation().getPowerToUse());
+        assertEquals(2, player1.getMemory().getPowerToUse());
         assertEquals(hand1, player3.getHand());
         assertEquals(hand2, player2.getHand());
         assertEquals(3, player1.getHand().size());
@@ -231,12 +231,12 @@ class MonarchistTest {
         assertEquals(2, player1.getCity().size());
         assertEquals("Manoir", player1.getCity().get(0).getName());
         assertEquals("Château", player1.getCity().get(1).getName());
-        assertEquals(5, player1.getInformation().getCardsToDiscard());
+        assertEquals(5, player1.getMemory().getCardsToDiscard());
     }
 
     @Test
     void playAsMerchant() {
-        player1.getInformation().getPile().initializePile();
+        player1.getMemory().getPile().initializePile();
         player1.setCharacter(CharactersList.allCharacterCards[5]);
 
         // First, the bot takes 2 gold coins because it hasn't money.
@@ -275,7 +275,7 @@ class MonarchistTest {
     @Test
     void activateFactoryEffect() {
         player1.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[61])));
-        player1.getInformation().setDistrictToBuild(DistrictsPile.allDistrictCards[61]);
+        player1.getMemory().setDistrictToBuild(DistrictsPile.allDistrictCards[61]);
         player1.getActions().addGold(6);
         player1.getActions().build();
         assertFalse(player1.activateFactoryEffect());

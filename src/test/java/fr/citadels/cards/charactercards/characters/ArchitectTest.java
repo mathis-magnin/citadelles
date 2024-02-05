@@ -31,14 +31,14 @@ class ArchitectTest {
     @Test
     void usePower() {
         /* Power 1 */
-        player.getInformation().setPowerToUse(1);
+        player.getMemory().setPowerToUse(1);
 
         int handSize = player.getHand().size();
         player.getCharacter().usePower();
         Assertions.assertEquals(handSize + 2, player.getHand().size());
 
         /* Power 2 */
-        player.getInformation().setPowerToUse(2);
+        player.getMemory().setPowerToUse(2);
 
         int citySize = player.getCity().size();
         player.chooseDistrictToBuild();

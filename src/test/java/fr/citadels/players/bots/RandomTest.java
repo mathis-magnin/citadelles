@@ -58,15 +58,15 @@ class RandomTest {
 
         player.chooseDistrictToBuild();
         assertEquals(2, player.getHand().size());
-        assertEquals(DistrictsPile.allDistrictCards[12], player.getInformation().getDistrictToBuild());
+        assertEquals(DistrictsPile.allDistrictCards[12], player.getMemory().getDistrictToBuild());
 
         player.chooseDistrictToBuild();
         assertEquals(1, player.getHand().size());
-        assertEquals(DistrictsPile.allDistrictCards[0], player.getInformation().getDistrictToBuild());
+        assertEquals(DistrictsPile.allDistrictCards[0], player.getMemory().getDistrictToBuild());
 
         player.chooseDistrictToBuild();
         assertEquals(1, player.getHand().size());
-        assertNull(player.getInformation().getDistrictToBuild());
+        assertNull(player.getMemory().getDistrictToBuild());
 
         /*test if the player has the card he wants in his city*/
 
@@ -75,18 +75,18 @@ class RandomTest {
         when(playerSpy.hasCardInCity(any())).thenReturn(true);
         playerSpy.chooseDistrictToBuild();
         assertEquals(1, playerSpy.getHand().size());
-        assertNull(playerSpy.getInformation().getDistrictToBuild());
+        assertNull(playerSpy.getMemory().getDistrictToBuild());
 
         player.chooseDistrictToBuild();
         player.chooseDistrictToBuild();
         assertEquals(0, player.getHand().size());
-        assertNull(playerSpy.getInformation().getDistrictToBuild());
+        assertNull(playerSpy.getMemory().getDistrictToBuild());
 
     }
 
     @Test
     void chooseCardAmongDrawn() {
-        player.getInformation().getPile().initializePile();
+        player.getMemory().getPile().initializePile();
         District[] drawnCards = game.getPile().draw(2);
         District cardToPlay = player.chooseCardAmongDrawn(drawnCards);
         for (Card card : drawnCards)
@@ -174,7 +174,7 @@ class RandomTest {
         assertEquals(1, player.getCity().size());
         assertEquals(1, player.getGold());
 
-        player.getInformation().getDisplay().reset();
+        player.getMemory().getDisplay().reset();
 
         /*case 3 : takes gold and don't place*/
 
@@ -188,7 +188,7 @@ class RandomTest {
         assertEquals(1, player.getCity().size());
         assertEquals(3, player.getGold());
 
-        player.getInformation().getDisplay().reset();
+        player.getMemory().getDisplay().reset();
 
         /*case 4 : takes gold and place*/
         when(random.nextBoolean()).thenReturn(true, true, true);
@@ -203,7 +203,7 @@ class RandomTest {
         assertEquals(2, player.getCity().size());
         assertEquals(2, player.getGold());
 
-        player.getInformation().getDisplay().reset();
+        player.getMemory().getDisplay().reset();
 
 
     }
@@ -213,7 +213,7 @@ class RandomTest {
         List<District> districts = new ArrayList<>(List.of(DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[13]));
         player = new Random("Hello", districts, game, random);
 
-        player.getInformation().getDisplay().reset();
+        player.getMemory().getDisplay().reset();
 
 
         player.getActions().addGold(2);
@@ -224,7 +224,7 @@ class RandomTest {
         assertEquals(1, player.getCity().size());
         assertEquals(3, player.getGold());
 
-        player.getInformation().getDisplay().reset();
+        player.getMemory().getDisplay().reset();
 
 
         player.playResourcesPhase();
@@ -247,7 +247,7 @@ class RandomTest {
         assertEquals("Roi", player.getCharacter().getName());
         assertFalse(characters.contains(new King()));
         // assertEquals("Hello a choisi le personnage : Roi\n", events.getEvents());
-        player.getInformation().getDisplay().reset();
+        player.getMemory().getDisplay().reset();
 
         when(random.nextInt(anyInt())).thenReturn(20, 3);
         player.chooseCharacter(characters);
@@ -261,17 +261,17 @@ class RandomTest {
         player.setCharacter(CharactersList.allCharacterCards[0]);
         when(random.nextInt(anyInt())).thenReturn(3);
         player.playAsAssassin();
-        assertEquals(player.getInformation().getTarget(), CharactersList.allCharacterCards[4]);
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[4]);
 
         player.setCharacter(CharactersList.allCharacterCards[0]);
         when(random.nextInt(anyInt())).thenReturn(6);
         player.playAsAssassin();
-        assertEquals(player.getInformation().getTarget(), CharactersList.allCharacterCards[7]);
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[7]);
 
         player.setCharacter(CharactersList.allCharacterCards[0]);
         when(random.nextInt(anyInt())).thenReturn(0);
         player.playAsAssassin();
-        assertEquals(player.getInformation().getTarget(), CharactersList.allCharacterCards[1]);
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[1]);
     }
 
     @Test
@@ -279,26 +279,26 @@ class RandomTest {
         player.setCharacter(CharactersList.allCharacterCards[1]);
         when(random.nextInt(anyInt())).thenReturn(0);
         player.playAsThief();
-        assertEquals(player.getInformation().getTarget(), CharactersList.allCharacterCards[2]);
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[2]);
         assertTrue(CharactersList.allCharacterCards[2].isRobbed());
         CharactersList.allCharacterCards[2].setRobbed(false);
 
         when(random.nextInt(anyInt())).thenReturn(3);
         player.playAsThief();
-        assertEquals(player.getInformation().getTarget(), CharactersList.allCharacterCards[5]);
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[5]);
         assertTrue(CharactersList.allCharacterCards[5].isRobbed());
         CharactersList.allCharacterCards[5].setRobbed(false);
 
         when(random.nextInt(anyInt())).thenReturn(5);
         player.playAsThief();
-        assertEquals(player.getInformation().getTarget(), CharactersList.allCharacterCards[7]);
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[7]);
         assertTrue(CharactersList.allCharacterCards[7].isRobbed());
         CharactersList.allCharacterCards[7].setRobbed(false);
 
         CharactersList.allCharacterCards[5].setDead(true);
         when(random.nextInt(anyInt())).thenReturn(3);
         player.playAsThief();
-        assertEquals(player.getInformation().getTarget(), CharactersList.allCharacterCards[6]);
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[6]);
         assertTrue(CharactersList.allCharacterCards[6].isRobbed());
         CharactersList.allCharacterCards[6].setRobbed(false);
     }
@@ -314,27 +314,27 @@ class RandomTest {
 
         when(random.nextInt(anyInt())).thenReturn(0, 0, 0);
         player.playAsMagician();
-        assertEquals(1, player.getInformation().getPowerToUse());
-        assertEquals(CharactersList.allCharacterCards[3], player.getInformation().getTarget());
+        assertEquals(1, player.getMemory().getPowerToUse());
+        assertEquals(CharactersList.allCharacterCards[3], player.getMemory().getTarget());
         assertEquals(player.getHand(), hand2);
         assertEquals(player2.getHand(), hand1);
 
         when(random.nextInt(anyInt())).thenReturn(1, 2, 1);
         player.playAsMagician();
-        assertEquals(2, player.getInformation().getPowerToUse());
-        assertEquals(2, player.getInformation().getCardsToDiscard());
+        assertEquals(2, player.getMemory().getPowerToUse());
+        assertEquals(2, player.getMemory().getCardsToDiscard());
         assertEquals(2, player.getHand().size());
 
         when(random.nextInt(anyInt())).thenReturn(1, 10, 2);
         player.playAsMagician();
-        assertEquals(2, player.getInformation().getPowerToUse());
-        assertEquals(10, player.getInformation().getCardsToDiscard());
+        assertEquals(2, player.getMemory().getPowerToUse());
+        assertEquals(10, player.getMemory().getCardsToDiscard());
         assertEquals(2, player.getHand().size());
     }
 
     @Test
     void playAsMerchant() {
-        player.getInformation().getPile().initializePile();
+        player.getMemory().getPile().initializePile();
         player.setCharacter(CharactersList.allCharacterCards[5]);
 
         // Bot takes cards and doesn't build
@@ -371,7 +371,7 @@ class RandomTest {
         player.setGold(6);
         player2.setGold(0);
         player.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[61])));
-        player.getInformation().setDistrictToBuild(DistrictsPile.allDistrictCards[61]);
+        player.getMemory().setDistrictToBuild(DistrictsPile.allDistrictCards[61]);
         player.getActions().build();
 
         when(random.nextBoolean()).thenReturn(true, true);

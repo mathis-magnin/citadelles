@@ -24,15 +24,15 @@ public class Graveyard extends District {
      */
     @Override
     public boolean useEffect() {
-        District removedDistrict = CharactersList.allCharacterCards[7].getPlayer().getInformation().getDistrictToDestroy();
+        District removedDistrict = CharactersList.allCharacterCards[7].getPlayer().getMemory().getDistrictToDestroy();
         if (this.isBuilt() && !this.getOwner().getCharacter().equals(new Warlord())) {
             if (this.getOwner().activateGraveyardEffect(removedDistrict)) {
                 this.getOwner().getActions().removeGold(1);
                 this.getOwner().getHand().add(removedDistrict);
-                this.getOwner().getInformation().getDisplay().addGraveyardEffect(this.getOwner());
+                this.getOwner().getMemory().getDisplay().addGraveyardEffect(this.getOwner());
                 return true;
             }
-            this.getOwner().getInformation().getDisplay().addNoGraveyardEffect(this.getOwner());
+            this.getOwner().getMemory().getDisplay().addNoGraveyardEffect(this.getOwner());
         }
         return false;
     }

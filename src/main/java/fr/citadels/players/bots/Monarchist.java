@@ -61,11 +61,11 @@ public class Monarchist extends Player {
     public void chooseDistrictToBuild() {
         for (int i = 0; i < getHand().size(); i++) {
             if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i))) {
-                this.getInformation().setDistrictToBuild(this.getActions().removeCardFromHand(i));
+                this.getMemory().setDistrictToBuild(this.getActions().removeCardFromHand(i));
                 return;
             }
         }
-        this.getInformation().setDistrictToBuild(null);
+        this.getMemory().setDistrictToBuild(null);
     }
 
 
@@ -79,7 +79,7 @@ public class Monarchist extends Player {
         for (int i = 0; i < characters.size(); i++) {
             if (characters.get(i).getName().equals("Roi")) {
                 this.setCharacter(characters.remove(i));
-                getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
+                getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
                 return;
             }
         }
@@ -88,7 +88,7 @@ public class Monarchist extends Player {
          * Could happen if a player already took it or if it is placed face down
          */
         this.setCharacter(characters.remove(0));
-        getInformation().getDisplay().addCharacterChosen(this, this.getCharacter());
+        getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
 
@@ -99,7 +99,7 @@ public class Monarchist extends Player {
     @Override
     public void chooseTargetToKill() {
         CharactersList possibleTargets = Assassin.getPossibleTargets();
-        getInformation().setTarget(possibleTargets.get(2));
+        getMemory().setTarget(possibleTargets.get(2));
     }
 
 
@@ -111,9 +111,9 @@ public class Monarchist extends Player {
     public void chooseTargetToRob() {
         List<Character> potentialTargets = Thief.getPossibleTargets();
         if (potentialTargets.contains(CharactersList.allCharacterCards[3])) {
-            getInformation().setTarget(CharactersList.allCharacterCards[3]);
+            getMemory().setTarget(CharactersList.allCharacterCards[3]);
         } else {
-            getInformation().setTarget(CharactersList.allCharacterCards[6]);
+            getMemory().setTarget(CharactersList.allCharacterCards[6]);
         }
     }
 
@@ -127,13 +127,13 @@ public class Monarchist extends Player {
         Character characterWithMostCards = Magician.getCharacterWithMostCards();
 
         if ((characterWithMostCards != null) && (characterWithMostCards.getPlayer().getHand().size() > this.getHand().size())) {
-            getInformation().setPowerToUse(1);
-            getInformation().setTarget(characterWithMostCards);
+            getMemory().setPowerToUse(1);
+            getMemory().setTarget(characterWithMostCards);
         } else {
-            getInformation().setPowerToUse(2);
+            getMemory().setPowerToUse(2);
             getHand().sortCards(Family.NOBLE);
             int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
-            getInformation().setCardsToDiscard(nbCardsToDiscard + 1);
+            getMemory().setCardsToDiscard(nbCardsToDiscard + 1);
         }
         return 0;
     }
@@ -146,7 +146,7 @@ public class Monarchist extends Player {
     @Override
     public void chooseTargetToDestroy() {
         Character target = Warlord.getOtherCharacterWithBiggestCity();
-        getInformation().setTarget(target);
+        getMemory().setTarget(target);
         District districtToDestroy = null;
         if (target != null) {
             districtToDestroy = target.getPlayer().getCity().getCheapestDistrictToDestroy();
@@ -154,7 +154,7 @@ public class Monarchist extends Player {
                 districtToDestroy = null;
             }
         }
-        getInformation().setDistrictToDestroy(districtToDestroy);
+        getMemory().setDistrictToDestroy(districtToDestroy);
     }
 
 
@@ -180,9 +180,9 @@ public class Monarchist extends Player {
             this.chooseDistrictToBuild();
             this.getActions().build();
         } else {
-            getInformation().getDisplay().addNoDistrictBuilt();
+            getMemory().getDisplay().addNoDistrictBuilt();
         }
-        getInformation().getDisplay().addBlankLine();
+        getMemory().getDisplay().addBlankLine();
         getActions().takeGoldFromCity();
         if (this.equals(DistrictsPile.allDistrictCards[61].getOwner())) // Utilise le pouvoir de la manufacture
             DistrictsPile.allDistrictCards[61].useEffect();

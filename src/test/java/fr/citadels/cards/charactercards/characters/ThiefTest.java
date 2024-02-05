@@ -39,7 +39,7 @@ class ThiefTest {
         player1.setCharacter(thief);
         player2.setCharacter(king);
 
-        player1.getInformation().setTarget(king);
+        player1.getMemory().setTarget(king);
 
         player1.setGold(10);
         player2.setGold(10);
@@ -52,7 +52,7 @@ class ThiefTest {
         Assertions.assertEquals("Neutre", thief.getFamily().toString());
         assertFalse(thief.isRobbed());
         assertEquals(player1, thief.getPlayer());
-        Assertions.assertEquals(player1.getInformation().getTarget(), king);
+        Assertions.assertEquals(player1.getMemory().getTarget(), king);
     }
 
     @Test

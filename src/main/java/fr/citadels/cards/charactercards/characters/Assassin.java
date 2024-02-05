@@ -32,9 +32,9 @@ public class Assassin extends Character {
     }
 
     public void usePower() {
-        getPlayer().getInformation().getTarget().setDead(true);
-        getPlayer().getInformation().getDisplay().addAssassinPower(getPlayer().getInformation().getTarget());
-        getPlayer().getInformation().getDisplay().addBlankLine();
+        getPlayer().getMemory().getTarget().setDead(true);
+        getPlayer().getMemory().getDisplay().addAssassinPower(getPlayer().getMemory().getTarget());
+        getPlayer().getMemory().getDisplay().addBlankLine();
     }
 
 }
