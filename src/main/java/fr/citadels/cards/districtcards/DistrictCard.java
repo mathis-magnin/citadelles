@@ -68,8 +68,8 @@ public class DistrictCard extends Card {
     /**
      * Use the ability of the district card
      */
-    public void useEffect() {
-        // will be implemented in the subclasses
+    public boolean useEffect() {
+        return false;
     }
 
 }

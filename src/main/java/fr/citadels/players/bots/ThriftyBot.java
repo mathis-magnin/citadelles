@@ -37,12 +37,19 @@ public class ThriftyBot extends Player {
      * Get the index and the cost of the most expensive card in the hand that can be bought
      */
     public int[] getMostExpensiveCardInHand() {
+        int[] result = new int[2];
+
+        if (getHand().isEmpty()) {
+            result[0] = -1;
+            result[1] = -1;
+            return result;
+        }
+
         int maxIndex = 0;
         for (int i = 1; i < getHand().size(); i++) {
             if ((getHand().get(i).getGoldCost() > getHand().get(maxIndex).getGoldCost()) && (!hasCardInCity(getHand().get(maxIndex))))
                 maxIndex = i;
         }
-        int[] result = new int[2];
         result[0] = maxIndex;
         result[1] = getHand().get(maxIndex).getGoldCost();
         return result;

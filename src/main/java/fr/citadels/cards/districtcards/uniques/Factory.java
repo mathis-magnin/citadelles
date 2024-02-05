@@ -7,7 +7,7 @@ public class Factory extends Unique {
 
 
     @Override
-    public void useEffect() {
+    public boolean useEffect() {
         if (isBuilt() && getOwner().activateFactoryEffect()) {
             getOwner().getInformation().getDisplay().addFactoryEffectActivated();
             getOwner().getActions().draw(3);
@@ -15,6 +15,8 @@ public class Factory extends Unique {
             if (getOwner().getCharacter() != null) {
                 getOwner().getHand().sortCards(getOwner().getCharacter().getCardFamily());
             }
+            return true;
         }
+        return false;
     }
 }

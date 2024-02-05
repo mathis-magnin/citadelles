@@ -10,6 +10,7 @@ import fr.citadels.cards.districtcards.Hand;
 import fr.citadels.players.Player;
 
 import java.util.List;
+import java.util.StringJoiner;
 
 public class Display {
 
@@ -176,8 +177,12 @@ public class Display {
     }
 
 
-    public void addGoldTakenFromCity(Player player, int gold) {
-        this.events.append("Le joueur utilise son pouvoir pour prendre ").append(gold).append(" pièces d'or grâce à ses quartiers : ").append(player.getCharacter().getCardFamily()).append("\n");
+    public void addGoldTakenFromCity(Player player, int gold, boolean activateSchoolOfMagicEffect) {
+        this.events.append("Le joueur utilise son pouvoir pour prendre ").append(gold).append(" pièces d'or grâce à ses quartiers ").append(player.getCharacter().getCardFamily());
+        if (activateSchoolOfMagicEffect) {
+            this.events.append(" et à l'effet de l'École de Magie");
+        }
+        this.events.append(".\n");
         this.addGoldUpdate(player.getGold());
     }
 
@@ -320,14 +325,14 @@ public class Display {
 
 
     public void addGraveyardEffect(Player player) {
-        this.events.append(player.getName()).append(" utilise l'effet de la carte Cimetière pour prendre en main le quartier détruit en payant 1 pièce d'or.\n");
+        this.events.append(player.getName()).append(" utilise l'effet du Cimetière pour prendre en main le quartier détruit en payant 1 pièce d'or.\n");
         this.events.append("\tLa fortune de ").append(player.getName()).append(" s'élève donc à ").append(player.getGold()).append(" pièces d'or.\n");
-        this.events.append("\tLa main de ").append(player.getName()).append((" comporte donc : ")).append((player.getHand().toString())).append(".\n");
+        this.events.append("\tLa main de ").append(player.getName()).append((" comporte donc : ")).append((player.getHand().toString())).append("\n");
     }
 
 
     public void addNoGraveyardEffect(Player player) {
-        this.events.append(player.getName()).append(" n'utilise pas l'effet de la carte Cimetière.\n");
+        this.events.append(player.getName()).append(" n'utilise pas l'effet du Cimetière.\n");
     }
 
 
@@ -337,17 +342,17 @@ public class Display {
 
 
     public void addFactoryEffectActivated() {
-        this.events.append("Le joueur utilise l'effet de la carte Manufacture.\n");
+        this.events.append("Le joueur utilise l'effet de la Manufacture.\n");
     }
 
 
     public void addLibraryEffectActivated() {
-        this.events.append("Le joueur utilise l'effet de la carte Bibliothèque pour prendre en main toutes les cartes piochées.\n");
+        this.events.append("Le joueur utilise l'effet de la Bibliothèque pour prendre en main toutes les cartes piochées.\n");
     }
 
 
     public void addLaboratoryEffectActivated(DistrictCard card, Player player) {
-        this.events.append("Le joueur utilise le pouvoir du Laboratoire pour défausser \n");
+        this.events.append("Le joueur utilise l'effet du Laboratoire pour défausser \n");
         this.events.append(card).append(" et gagner une pièce d'or.\n");
         this.addGoldUpdate(player.getGold());
         this.addHandUpdate(player.getHand());
