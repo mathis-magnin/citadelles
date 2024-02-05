@@ -144,6 +144,18 @@ class PlayerActionsTest {
         //+0
         assertEquals(6, playerSpy.getGold());
 
+        // choose NEUTRAL but with School Of Magic district
+        when(playerSpy.getCity()).thenReturn(new City(new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[5], DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[25], DistrictCardsPile.allDistrictCards[30], DistrictCardsPile.allDistrictCards[45], DistrictCardsPile.allDistrictCards[60]))));
+        playerSpy.setCharacter(CharacterCardsList.allCharacterCards[1]);
+        actions.takeGoldFromCity();
+        // +1
+        assertEquals(7, playerSpy.getGold());
+
+        // choose RELIGIOUS but with School of Magic district
+        playerSpy.setCharacter(CharacterCardsList.allCharacterCards[4]);
+        actions.takeGoldFromCity();
+        assertEquals(9, playerSpy.getGold()); // +1 and +1
+
     }
 
 

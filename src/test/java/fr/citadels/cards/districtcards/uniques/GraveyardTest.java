@@ -1,12 +1,14 @@
 package fr.citadels.cards.districtcards.uniques;
 
 import fr.citadels.cards.charactercards.CharacterCardsList;
+import fr.citadels.cards.charactercards.characters.*;
 import fr.citadels.cards.districtcards.City;
 import fr.citadels.cards.districtcards.DistrictCard;
 import fr.citadels.cards.districtcards.DistrictCardsPile;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
 import fr.citadels.players.bots.KingBot;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -50,6 +52,18 @@ class GraveyardTest {
         graveyardPlayer.getActions().addGold(1); // 1 to use the effect of the graveyard
         graveyardPlayer.setCity(new City(List.of(graveyard)));
         graveyard.setOwner(graveyardPlayer);
+    }
+
+    @AfterEach
+    void resetCharacterCards() {
+        CharacterCardsList.allCharacterCards[0] = new AssassinCard();
+        CharacterCardsList.allCharacterCards[1] = new ThiefCard();
+        CharacterCardsList.allCharacterCards[2] = new MagicianCard();
+        CharacterCardsList.allCharacterCards[3] = new KingCard();
+        CharacterCardsList.allCharacterCards[4] = new BishopCard();
+        CharacterCardsList.allCharacterCards[5] = new MerchantCard();
+        CharacterCardsList.allCharacterCards[6] = new ArchitectCard();
+        CharacterCardsList.allCharacterCards[7] = new WarlordCard();
     }
 
 

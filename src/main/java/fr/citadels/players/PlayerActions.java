@@ -6,6 +6,7 @@ import fr.citadels.cards.districtcards.DistrictCard;
 import fr.citadels.cards.districtcards.DistrictCardsPile;
 import fr.citadels.cards.districtcards.Hand;
 import fr.citadels.cards.districtcards.uniques.Graveyard;
+import fr.citadels.cards.districtcards.uniques.SchoolOfMagic;
 
 import java.util.List;
 
@@ -135,14 +136,19 @@ public class PlayerActions {
     public void takeGoldFromCity() {
         if (player.getCharacter() != null) {
             int goldToTake = 0;
+            boolean activateSchoolOfMagicEffect = false;
             for (DistrictCard card : player.getCity()) {
                 if (card.getCardFamily().equals(player.getCharacter().getCardFamily())) {
                     goldToTake++;
                 }
+                else if (card.equals(new SchoolOfMagic())) {
+                    goldToTake++;
+                    activateSchoolOfMagicEffect = true;
+                }
             }
             if (goldToTake > 0) {
                 addGold(goldToTake);
-                player.getInformation().getDisplay().addGoldTakenFromCity(player, goldToTake);
+                player.getInformation().getDisplay().addGoldTakenFromCity(player, goldToTake, activateSchoolOfMagicEffect);
                 player.getInformation().getDisplay().addBlankLine();
             }
         }
