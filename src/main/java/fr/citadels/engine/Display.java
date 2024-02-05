@@ -180,7 +180,7 @@ public class Display {
     public void addGoldTakenFromCity(Player player, int gold, boolean activateSchoolOfMagicEffect) {
         this.events.append("Le joueur utilise son pouvoir pour prendre ").append(gold).append(" pièces d'or grâce à ses quartiers ").append(player.getCharacter().getCardFamily());
         if (activateSchoolOfMagicEffect) {
-            this.events.append(" et à l'effet de l'École de Magie");
+            this.events.append(" et à l'effet de l'École de magie");
         }
         this.events.append(".\n");
         this.addGoldUpdate(player.getGold());

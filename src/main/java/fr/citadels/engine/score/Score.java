@@ -1,6 +1,8 @@
 package fr.citadels.engine.score;
 
 import fr.citadels.cards.districtcards.DistrictCard;
+import fr.citadels.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.districtcards.uniques.MiracleCourtyard;
 import fr.citadels.players.Player;
 
 public class Score implements Comparable<Score> {
@@ -8,6 +10,7 @@ public class Score implements Comparable<Score> {
     /* Static contents */
 
     private static Player firstPlayerWithCompleteCity = null;
+    private boolean activateMiracleCourtyardEffect;
 
 
     /**
@@ -35,6 +38,7 @@ public class Score implements Comparable<Score> {
         this.districtsPoints = 0;
         this.allFamilyPoints = 0;
         this.completeCityPoints = 0;
+        this.activateMiracleCourtyardEffect = false;
     }
 
 
@@ -63,7 +67,7 @@ public class Score implements Comparable<Score> {
             str.append((this.player == Score.firstPlayerWithCompleteCity) ? "\tPremière cité " : "\tCité ").append("complète : ").append(this.completeCityPoints).append(" points\n");
         }
         if (this.allFamilyPoints != 0) {
-            str.append("\tQuartier de chaque famille : ").append(this.allFamilyPoints).append(" points\n");
+            str.append("\tQuartier de chaque famille ").append((this.activateMiracleCourtyardEffect) ? "grâce à l'effet de la Cour des miracles " : "").append(": ").append(this.allFamilyPoints).append(" points\n");
         }
         return str.toString();
     }
@@ -106,6 +110,7 @@ public class Score implements Comparable<Score> {
 
         if (this.player.getCity().hasOneDistrictOfEachFamily()) {
             this.allFamilyPoints += 3;   // 3
+            this.activateMiracleCourtyardEffect = (this.player == DistrictCardsPile.allDistrictCards[57].getOwner());
         }
 
         if (this.player.hasCompleteCity()) {
