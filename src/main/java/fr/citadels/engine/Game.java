@@ -228,6 +228,8 @@ public class Game {
         this.scoreboard.initializeScoreboard(this.playersTab);
         this.scoreboard.determineRanking();
         this.display.addScoreTitle();
+        this.display.addPlayersCity(this.playersTab);
+        this.display.addBlankLine();
         this.display.addScoreboard(this.scoreboard);
         this.display.addBlankLine();
         this.display.addWinner(this.scoreboard.getWinner());
