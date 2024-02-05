@@ -121,7 +121,9 @@ public class RandomBot extends Player {
             this.getInformation().setTarget(MagicianCard.getPossibleTargets().get(randTarget));
         } else { // discard cards : choose how many cards to discard
             this.getInformation().setPowerToUse(2);
-            this.getInformation().setCardsToDiscard(RAND.nextInt(this.getHand().size()));
+            if (!this.getHand().isEmpty())
+                this.getInformation().setCardsToDiscard(RAND.nextInt(this.getHand().size()));
+            else this.getInformation().setCardsToDiscard(0);
         }
         return RAND.nextInt(3);
     }
