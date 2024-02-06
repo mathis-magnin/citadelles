@@ -40,6 +40,11 @@ public class Statisticboard {
     }
 
 
+    public Statistic[] getStatistics() {
+        return this.statistics;
+    }
+
+
     /* Methods */
 
     /**
