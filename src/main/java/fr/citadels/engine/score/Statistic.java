@@ -15,11 +15,15 @@ public class Statistic {
 
     /* Constructor */
 
-    public Statistic(Player player) {
+    public Statistic(Player player, double gameNumber, double winNumber, double totalScore) {
         this.player = player;
-        this.gameNumber = 0.0;
-        this.winNumber = 0.0;
-        this.totalScore = 0.0;
+        this.gameNumber = gameNumber;
+        this.winNumber = winNumber;
+        this.totalScore = totalScore;
+    }
+
+    public Statistic(Player player) {
+        this(player, 0, 0, 0);
     }
 
 
@@ -47,6 +51,16 @@ public class Statistic {
     }
 
 
+    public double getGameNumber() {
+        return this.gameNumber;
+    }
+
+
+    public double getTotalScore() {
+        return this.totalScore;
+    }
+
+
     /* Methods */
 
     public double getWinPercentage() {
@@ -54,8 +68,13 @@ public class Statistic {
     }
 
 
+    public double getDefeatNumber() {
+        return this.gameNumber - this.winNumber;
+    }
+
+
     public double getDefeatPercentage() {
-        return (this.gameNumber == 0) ? 0 : ((this.gameNumber - this.winNumber) / this.gameNumber) * 100.0;
+        return (this.gameNumber == 0) ? 0 : (getDefeatNumber() / this.gameNumber) * 100.0;
     }
 
 

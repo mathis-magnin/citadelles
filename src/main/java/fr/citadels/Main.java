@@ -1,8 +1,22 @@
 package fr.citadels;
 
 import com.beust.jcommander.JCommander;
+import com.opencsv.CSVWriter;
+import com.opencsv.exceptions.CsvValidationException;
+import fr.citadels.cards.charactercards.characters.King;
 import fr.citadels.engine.Game;
 import com.beust.jcommander.Parameter;
+import fr.citadels.engine.score.Statisticboard;
+import fr.citadels.players.Player;
+import fr.citadels.players.bots.Monarchist;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -30,7 +44,11 @@ public class Main {
             main.runTwoThousands();
         }
         if (main.csv) {
-            main.runCsv();
+            try {
+                main.runCsv();
+            } catch (IOException | CsvValidationException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -57,8 +75,30 @@ public class Main {
     /**
      * Run several simulations while reading “stats/gamestats.csv” if it exists and adding new statistics.
      */
-    public void runCsv() {
+    public void runCsv() throws IOException, CsvValidationException {
         System.out.println("csv");
+
+        Path path = Paths.get("stats", "gamestats.csv");
+        File file = new File(path.toString());
+        if (file.exists()) {
+            Statisticboard stats = Statisticboard.readCsv(file);
+            System.out.println(stats);
+        } else if (file.createNewFile()) {
+            System.out.println("File created");
+        }
+
+/*
+        Statisticboard stats = new Statisticboard(4);
+        Game game = new Game();
+        Player[] players = new Player[]{new Monarchist("player1", new ArrayList<>(), game), new Monarchist("player2", new ArrayList<>(), game), new Monarchist("player3", new ArrayList<>(), game), new Monarchist("player4", new ArrayList<>(), game)};
+        stats.initialize(players);
+        stats.writeCsv(file);
+
+ */
+
+        Statisticboard stats = Statisticboard.readCsv(file);
+        System.out.println(stats);
+
     }
 
 }
