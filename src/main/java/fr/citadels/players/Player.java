@@ -1,5 +1,6 @@
 package fr.citadels.players;
 
+import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.Character;
 import fr.citadels.cards.districtcards.City;
@@ -28,6 +29,7 @@ public abstract class Player implements Comparable<Player>, Choices {
         this.hand = new Hand(cards);
         this.city = new City();
         this.character = null;
+        this.gold = 0;
 
         this.memory = new Memory(game);
         actions = new Actions(this, memory);
@@ -205,6 +207,32 @@ public abstract class Player implements Comparable<Player>, Choices {
 
 
     /**
+     * play the phase when the player takes resources for his turn
+     */
+    public void playResourcesPhase() {
+        this.chooseDraw();
+        this.getActions().takeCardsOrGold();
+
+        if (this.equals(DistrictsPile.allDistrictCards[60].getOwner())) { // Laboratory effect
+            DistrictsPile.allDistrictCards[60].useEffect();
+        }
+    }
+
+
+    /**
+     * play the phase when the player builds districts in his city
+     */
+    public void playBuildingPhase() {
+        this.chooseDistrictToBuild();
+        this.getActions().build();
+
+        if (this.equals(DistrictsPile.allDistrictCards[61].getOwner())) { // Factory effect
+            DistrictsPile.allDistrictCards[61].useEffect();
+        }
+    }
+
+
+    /**
      * play a round for the linked player when he embodies the assassin
      */
     public void playAsAssassin() {
@@ -230,16 +258,16 @@ public abstract class Player implements Comparable<Player>, Choices {
      * play a round for the linked player when he embodies the magician
      */
     public void playAsMagician() {
-        int momentToUsePower = chooseMagicianPower();
-        if (momentToUsePower == 0) {
+        this.chooseMagicianPower();
+        if (this.memory.getMomentWhenUse() == 0) {
             this.getCharacter().usePower();
         }
         playResourcesPhase();
-        if (momentToUsePower == 1) {
+        if (this.memory.getMomentWhenUse() == 1) {
             this.getCharacter().usePower();
         }
         playBuildingPhase();
-        if (momentToUsePower == 2) {
+        if (this.memory.getMomentWhenUse() == 2) {
             this.getCharacter().usePower();
         }
     }
@@ -249,8 +277,15 @@ public abstract class Player implements Comparable<Player>, Choices {
      * play a round for the linked player when he embodies the king
      */
     public void playAsKing() {
+        this.chooseMomentToTakeGoldFromCity();
         playResourcesPhase();
+        if (this.memory.getMomentWhenUse() == 1) {
+            this.getActions().takeGoldFromCity();
+        }
         playBuildingPhase();
+        if (this.memory.getMomentWhenUse() == 2) {
+            this.getActions().takeGoldFromCity();
+        }
     }
 
 
@@ -258,8 +293,15 @@ public abstract class Player implements Comparable<Player>, Choices {
      * play a round for the linked player when he embodies the bishop
      */
     public void playAsBishop() {
+        this.chooseMomentToTakeGoldFromCity();
         playResourcesPhase();
+        if (this.memory.getMomentWhenUse() == 1) {
+            this.getActions().takeGoldFromCity();
+        }
         playBuildingPhase();
+        if (this.memory.getMomentWhenUse() == 2) {
+            this.getActions().takeGoldFromCity();
+        }
     }
 
 
@@ -267,9 +309,16 @@ public abstract class Player implements Comparable<Player>, Choices {
      * play a round for the linked player if he embodies the merchant
      */
     public void playAsMerchant() {
+        this.chooseMomentToTakeGoldFromCity();
         getCharacter().usePower();
         playResourcesPhase();
+        if (this.memory.getMomentWhenUse() == 1) {
+            this.getActions().takeGoldFromCity();
+        }
         playBuildingPhase();
+        if (this.memory.getMomentWhenUse() == 2) {
+            this.getActions().takeGoldFromCity();
+        }
     }
 
 
@@ -300,8 +349,17 @@ public abstract class Player implements Comparable<Player>, Choices {
      * play a round for the linked player if he embodies the warlord
      */
     public void playAsWarlord() {
+        this.chooseMomentToTakeGoldFromCity();
         playResourcesPhase();
+
+        if (this.memory.getMomentWhenUse() == 1) {
+            this.getActions().takeGoldFromCity();
+        }
         playBuildingPhase();
+        if (this.memory.getMomentWhenUse() == 2) {
+            this.getActions().takeGoldFromCity();
+        }
+
         chooseTargetToDestroy();
         if ((getMemory().getTarget() != null) && (getMemory().getDistrictToDestroy() != null)) {
             getCharacter().usePower();

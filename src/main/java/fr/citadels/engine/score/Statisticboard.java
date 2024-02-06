@@ -34,7 +34,7 @@ public class Statisticboard {
     public String toString() {
         StringBuilder str = new StringBuilder();
         for (Statistic statistic: this.statistics) {
-            str.append(statistic.toString());
+            str.append(statistic.toString()).append("\n");
         }
         return str.toString();
     }
