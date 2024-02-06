@@ -134,17 +134,18 @@ public class Random extends Player {
      */
     @Override
     public void chooseTargetToDestroy() {
-        int randTarget = RAND.nextInt(Warlord.getPossibleTargets().size());
-        Character target = Warlord.getPossibleTargets().get(randTarget);
-        this.getMemory().setTarget(target);
+        Character target = null;
         District districtToDestroy = null;
-        if (!target.getPlayer().getCity().isEmpty()) {
-            randTarget = RAND.nextInt(target.getPlayer().getCity().size());
-            districtToDestroy = target.getPlayer().getCity().get(randTarget);
-            if (districtToDestroy.getGoldCost() - 1 > this.getGold()) {
-                districtToDestroy = null;
+        if (!Warlord.getPossibleTargets().isEmpty()) {
+            target = Warlord.getPossibleTargets().get(RAND.nextInt(Warlord.getPossibleTargets().size()));
+            if (!target.getPlayer().getCity().isEmpty()) {
+                districtToDestroy = target.getPlayer().getCity().get(RAND.nextInt(target.getPlayer().getCity().size()));
+                if (districtToDestroy.getGoldCost() - 1 > this.getGold()) {
+                    districtToDestroy = null;
+                }
             }
         }
+        this.getMemory().setTarget(target);
         this.getMemory().setDistrictToDestroy(districtToDestroy);
     }
 
