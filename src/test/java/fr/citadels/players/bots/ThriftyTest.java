@@ -7,6 +7,7 @@ import fr.citadels.cards.districtcards.City;
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.players.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,8 @@ class ThriftyTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game();
+        Player[] players = new Player[4];
+        game = new Game(players, random);
         game.getPile().initializePile();
         List<District> districts = new ArrayList<>(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[22]));
         player = new Thrifty("Hello", districts, game, random);

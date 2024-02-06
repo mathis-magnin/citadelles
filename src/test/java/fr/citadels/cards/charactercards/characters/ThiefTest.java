@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,10 +32,13 @@ class ThiefTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game();
-
+        Player[] players = new Player[4];
+        game = new Game(players, new Random());
         player1 = new Monarchist("Tom", hand1, game);
         player2 = new Monarchist("Bob", hand2, game);
+        players[0] = player1;
+        players[1] = player2;
+
 
         player1.setCharacter(thief);
         player2.setCharacter(king);

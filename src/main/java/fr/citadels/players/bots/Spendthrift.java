@@ -30,6 +30,10 @@ public class Spendthrift extends Player {
         this.RAND = random;
     }
 
+    public Spendthrift(String name, Random random) {
+        super(name);
+        this.RAND = random;
+    }
     /* Methods */
 
     /**
@@ -76,8 +80,7 @@ public class Spendthrift extends Player {
         result[0] = minIndex;
         if (minIndex == -1) {
             result[1] = -1;
-        }
-        else {
+        } else {
             result[1] = getHand().get(minIndex).getGoldCost();
         }
         return result;

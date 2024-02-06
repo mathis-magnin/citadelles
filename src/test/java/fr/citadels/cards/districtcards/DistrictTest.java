@@ -3,11 +3,13 @@ package fr.citadels.cards.districtcards;
 import fr.citadels.cards.Family;
 import fr.citadels.cards.districtcards.uniques.Library;
 import fr.citadels.engine.Game;
+import fr.citadels.players.Player;
 import fr.citadels.players.bots.Monarchist;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,7 +49,10 @@ class DistrictTest {
 
     @Test
     void isBuilt() {
-        Monarchist kingBot = new Monarchist("KingBot", new ArrayList<>(), new Game());
+        Player[] players = new Player[4];
+        Game game = new Game(players, new Random());
+        Monarchist kingBot = new Monarchist("KingBot", new ArrayList<>(), game);
+        players[0] = kingBot;
         District unique = new Library();
         assertFalse(unique.isBuilt());
         unique.setOwner(kingBot);

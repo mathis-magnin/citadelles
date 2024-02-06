@@ -27,7 +27,7 @@ class ActionsTest {
 
     @BeforeEach
     void setUp() {
-        Game game = new Game();
+        Game game = new Game(null, null);
         game.getPile().initializePile();
         info = new Memory(game);
         player = new Monarchist("test", List.of(DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[22], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[18], DistrictsPile.allDistrictCards[63], DistrictsPile.allDistrictCards[62]), game);

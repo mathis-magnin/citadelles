@@ -14,21 +14,26 @@ import fr.citadels.cards.districtcards.District;
 import fr.citadels.players.Player;
 
 import java.util.List;
+import java.util.Random;
 
-public class Random extends Player {
+public class Uncertain extends Player {
 
     /* Constant */
 
-    private final java.util.Random RAND;
+    private final Random RAND;
 
 
     /* Constructor */
 
-    public Random(String name, List<District> cards, Game game, java.util.Random random) {
+    public Uncertain(String name, List<District> cards, Game game, Random random) {
         super(name, cards, game);
         RAND = random;
     }
 
+    public Uncertain(String name, Random random) {
+        super(name);
+        RAND = random;
+    }
 
     /* Methods */
 

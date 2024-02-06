@@ -30,6 +30,10 @@ public class Thrifty extends Player {
         this.RAND = random;
     }
 
+    public Thrifty(String name, Random random) {
+        super(name);
+        this.RAND = random;
+    }
 
     /* Methods */
 
@@ -76,8 +80,7 @@ public class Thrifty extends Player {
         result[0] = maxIndex;
         if (maxIndex == -1) {
             result[1] = -1;
-        }
-        else {
+        } else {
             result[1] = getHand().get(maxIndex).getGoldCost();
         }
         return result;

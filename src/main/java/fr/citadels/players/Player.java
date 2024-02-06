@@ -7,6 +7,7 @@ import fr.citadels.cards.districtcards.City;
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.cards.districtcards.Hand;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Player implements Comparable<Player>, Choices {
@@ -18,8 +19,8 @@ public abstract class Player implements Comparable<Player>, Choices {
     private City city;
     private int gold;
     private Character character;
-    protected final Memory memory;
-    protected final Actions actions;
+    protected Memory memory;
+    protected Actions actions;
 
 
     /* Constructor */
@@ -35,8 +36,25 @@ public abstract class Player implements Comparable<Player>, Choices {
         actions = new Actions(this, memory);
     }
 
+    protected Player(String name) {
+        this.name = name;
+        this.hand = null;
+        this.city = null;
+        this.character = null;
+        this.memory = null;
+        actions = null;
+    }
+
 
     /* Basic methods */
+    public void initPlayer(List<District> cards, Game game) {
+        this.hand = new Hand(cards);
+        this.city = new City();
+        this.character = null;
+        this.gold = 0;
+        this.memory = new Memory(game);
+        this.actions = new Actions(this, memory);
+    }
 
     /**
      * Get the name of the player
@@ -368,5 +386,6 @@ public abstract class Player implements Comparable<Player>, Choices {
             this.getMemory().getDisplay().addBlankLine();
         }
     }
+
 
 }
