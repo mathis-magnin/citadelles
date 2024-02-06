@@ -319,7 +319,7 @@ public class Display {
 
 
     public void addWarlordPower(Player player, Character target, District districtToDestroy) {
-        this.events.append("Le joueur utilise son pouvoir pour détruire le quartier ").append(districtToDestroy).append(" dans la cité de ").append(target.getPlayer().getName()).append(".\n");
+        this.events.append("Le joueur utilise son pouvoir pour détruire le ").append(districtToDestroy).append(" dans la cité de ").append(target.getPlayer().getName()).append(".\n");
         this.events.append("\tLa fortune de ").append(player.getName()).append(" s'élève donc à ").append(player.getGold()).append(" pièces d'or.\n");
         this.events.append("\tLa cité de ").append(target.getPlayer().getName()).append((" comporte donc : ")).append((target.getPlayer().getCity().toString())).append("\n");
     }
