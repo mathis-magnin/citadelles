@@ -70,6 +70,7 @@ class GraveyardTest {
     @Test
     void useEffectTest() {
         /* The graveyardPlayer wants to use graveyard's effect */
+        warlordPlayer.getMemory().setPowerToUse(1);
         warlordPlayer.getCharacter().usePower();
         assertEquals(0, warlordPlayer.getGold());
 
@@ -95,6 +96,7 @@ class GraveyardTest {
         graveyard.setOwner(targetedGraveyardPlayer);
 
         warlordPlayer.getMemory().setDistrictToDestroy(graveyard);
+        warlordPlayer.getMemory().setPowerToUse(1);
         warlordPlayer.getCharacter().usePower();
 
         assertEquals(0, warlordPlayer.getGold());
@@ -122,6 +124,7 @@ class GraveyardTest {
         warlordTargetedGraveyardPlayer.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], graveyard)));
         graveyard.setOwner(warlordTargetedGraveyardPlayer);
 
+        warlordTargetedGraveyardPlayer.getMemory().setPowerToUse(1);
         warlordTargetedGraveyardPlayer.getCharacter().usePower();
 
         assertFalse(warlordTargetedGraveyardPlayer.getCity().contains(DistrictsPile.allDistrictCards[0]));

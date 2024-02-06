@@ -40,7 +40,6 @@ public class Merchant extends Character {
             default:
                 break;
         }
-        this.getPlayer().getMemory().getDisplay().addBlankLine();
     }
 
 
@@ -50,6 +49,7 @@ public class Merchant extends Character {
     private void gainOneGold() {
         this.getPlayer().getActions().addGold(1);
         this.getPlayer().getMemory().getDisplay().addMerchantPower(this);
+        this.getPlayer().getMemory().getDisplay().addBlankLine();
     }
 
 
@@ -63,8 +63,11 @@ public class Merchant extends Character {
         boolean activateSchoolOfMagicEffect = (DistrictsPile.allDistrictCards[63].getOwner() == this.getPlayer()); // School of magic effect
         gold = activateSchoolOfMagicEffect ? gold + 1 : gold;
 
-        this.getPlayer().getActions().addGold(gold);
-        this.getPlayer().getMemory().getDisplay().addGoldTakenFromCity(this.getPlayer(), gold, activateSchoolOfMagicEffect);
+        if (0 < gold) {
+            this.getPlayer().getActions().addGold(gold);
+            this.getPlayer().getMemory().getDisplay().addGoldTakenFromCity(this.getPlayer(), gold, activateSchoolOfMagicEffect);
+            this.getPlayer().getMemory().getDisplay().addBlankLine();
+        }
     }
 
 }

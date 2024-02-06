@@ -168,7 +168,7 @@ public class Game {
         Character characterKilled = null;
 
         for (Character character : CharactersList.allCharacterCards) {
-            if (character.getPlayer() != null && !character.isDead()) {
+            if (character.isPlayed() && !character.isDead()) {
                 this.display.addPlayerTurn(this.crownedPlayer, character.getPlayer());
                 this.display.addBlankLine();
                 this.display.addPlayer(character.getPlayer());

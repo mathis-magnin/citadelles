@@ -1,5 +1,6 @@
 package fr.citadels.cards.districtcards;
 
+import fr.citadels.cards.Family;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -39,6 +40,14 @@ class CityTest {
         assertTrue(c3.isComplete());
         assertFalse(c4.isComplete());
         assertFalse(c5.isComplete());
+    }
+
+    @Test
+    void getNumberOfDistrictWithFamily() {
+        assertEquals(1, c2.getNumberOfDistrictWithFamily(Family.NOBLE));
+        assertEquals(2, c2.getNumberOfDistrictWithFamily(Family.RELIGIOUS));
+        assertEquals(2, c2.getNumberOfDistrictWithFamily(Family.TRADE));
+        assertEquals(2, c2.getNumberOfDistrictWithFamily(Family.MILITARY));
     }
 
     @Test

@@ -117,66 +117,6 @@ class ActionsTest {
         DistrictsPile.allDistrictCards[59].setOwner(null);
     }
 
-
-    @Test
-    void takeGoldFromCity() {
-        Player playerSpy = spy(player);
-        actions = new Actions(playerSpy, info);
-        //NOBLE card
-        when(playerSpy.getCity()).thenReturn(new City(new ArrayList<>(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[25], DistrictsPile.allDistrictCards[30], DistrictsPile.allDistrictCards[45], DistrictsPile.allDistrictCards[60]))));
-
-        actions.takeGoldFromCity();
-
-        //no character
-        assertEquals(0, playerSpy.getGold());
-
-        //choose NOBLE
-        playerSpy.setCharacter(CharactersList.allCharacterCards[3]);
-
-        actions.takeGoldFromCity();
-        assertEquals(2, playerSpy.getGold());
-
-
-        //choose RELIGIOUS
-        playerSpy.setCharacter(CharactersList.allCharacterCards[4]);
-        actions.takeGoldFromCity();
-        //+1
-        assertEquals(3, playerSpy.getGold());
-
-
-        //choose TRADE
-        playerSpy.setCharacter(CharactersList.allCharacterCards[5]);
-        actions.takeGoldFromCity();
-        //+2
-        assertEquals(5, playerSpy.getGold());
-
-        //choose MILITARY
-        playerSpy.setCharacter(CharactersList.allCharacterCards[7]);
-        actions.takeGoldFromCity();
-        //+1
-        assertEquals(6, playerSpy.getGold());
-
-        //choose NEUTRAL
-        playerSpy.setCharacter(CharactersList.allCharacterCards[1]);
-        actions.takeGoldFromCity();
-        //+0
-        assertEquals(6, playerSpy.getGold());
-
-        // choose MILITARY but with School Of Magic district
-        when(playerSpy.getCity()).thenReturn(new City(new ArrayList<>(List.of(DistrictsPile.allDistrictCards[63], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[25], DistrictsPile.allDistrictCards[30], DistrictsPile.allDistrictCards[60]))));
-        playerSpy.setCharacter(CharactersList.allCharacterCards[7]);
-        actions.takeGoldFromCity();
-        // +1
-        assertEquals(7, playerSpy.getGold());
-
-        // choose RELIGIOUS but with School of Magic district
-        playerSpy.setCharacter(CharactersList.allCharacterCards[4]);
-        actions.takeGoldFromCity();
-        assertEquals(9, playerSpy.getGold()); // +1 and +1
-
-    }
-
-
     @Test
     void addGold() {
         actions.addGold(5);
