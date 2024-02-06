@@ -23,13 +23,13 @@ public class Main {
     /* Command line parameters */
 
     @Parameter(names = "--demo", description = "Demonstration of a single game")
-    private boolean demo = false;
+    public static boolean demo = false;
 
     @Parameter(names = "--2thousands", description = "Simulation of two thousands games")
-    private boolean twoThousands = false;
+    public static boolean twoThousands = false;
 
     @Parameter(names = "--csv", description = "Run several games and add the statistics to the csv file")
-    private boolean csv = false;
+    public static boolean csv = false;
 
 
     /* Programs */
@@ -68,7 +68,8 @@ public class Main {
      * 2. Simulation of 1000 games of the best bot against itself (or as many clone of itself than players).
      */
     public void runTwoThousands() {
-        System.out.println("2 thousands");
+        Game game = new Game();
+        game.play();
     }
 
 

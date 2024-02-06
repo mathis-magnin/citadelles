@@ -56,6 +56,16 @@
             <artifactId>opencsv</artifactId>
             <version>5.9</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.22.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.22.1</version>
+        </dependency>
     </dependencies>
 
 
@@ -78,11 +88,15 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.11.0</version>
+
             </plugin>
 
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.1</version>
+                <configuration>
+                    <argLine>-Dfile.encoding=UTF-8</argLine>
+                </configuration>
             </plugin>
 
             <plugin>
@@ -98,16 +112,12 @@
                 </executions>
                 <configuration>
                     <mainClass>fr.citadels.Main</mainClass>
-                    <!--          <arguments>
-                                <argument>argument1</argument>
-                              </arguments>
-                              <systemProperties>
-                                <systemProperty>
-                                  <key>myproperty</key>
-                                  <value>myvalue</value>
-                                </systemProperty>
-                              </systemProperties>
-                    -->
+                    <systemProperties>
+                        <systemProperty>
+                            <key>file.encoding</key>
+                            <value>UTF-8</value>
+                        </systemProperty>
+                    </systemProperties>
                 </configuration>
             </plugin>
 

@@ -1,5 +1,6 @@
 package fr.citadels.engine;
 
+import fr.citadels.Main;
 import fr.citadels.cards.Card;
 import fr.citadels.cards.charactercards.Character;
 import fr.citadels.cards.charactercards.CharactersList;
@@ -10,8 +11,12 @@ import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.cards.districtcards.Hand;
 import fr.citadels.engine.score.Scoreboard;
 import fr.citadels.players.Player;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+
 
 public class Display {
 
@@ -35,7 +40,10 @@ public class Display {
 
 
     public void print() {
-        System.out.print(this.events);
+        Logger logger = LogManager.getLogger("Citadels");
+        if (!Main.twoThousands)
+            logger.log(Level.INFO, this.events.toString());
+
     }
 
 
