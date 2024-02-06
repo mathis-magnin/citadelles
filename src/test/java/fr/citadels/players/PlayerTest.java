@@ -30,12 +30,22 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseMomentToTakeGoldFromCity() {
+
+            }
+
+            @Override
             public void chooseDistrictToBuild() {
             }
 
             @Override
             public void chooseCharacter(CharactersList characters) {
                 this.setCharacter(characters.get(1));
+            }
+
+            @Override
+            public void chooseDraw() {
+
             }
 
             @Override
@@ -47,8 +57,7 @@ class PlayerTest {
             }
 
             @Override
-            public int chooseMagicianPower() {
-                return 0;
+            public void chooseMagicianPower() {
             }
 
             @Override
@@ -67,17 +76,17 @@ class PlayerTest {
             }
 
             @Override
-            public boolean activateFactoryEffect() {
+            public boolean chooseFactoryEffect() {
                 return false;
             }
 
             @Override
-            public boolean activateLaboratoryEffect() {
+            public boolean chooseLaboratoryEffect() {
                 return false;
             }
 
             @Override
-            public boolean activateGraveyardEffect(District removedDistrict) {
+            public boolean chooseGraveyardEffect(District removedDistrict) {
                 return false;
             }
         };
@@ -153,12 +162,22 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseMomentToTakeGoldFromCity() {
+
+            }
+
+            @Override
             public void chooseDistrictToBuild() {
             }
 
             @Override
             public void chooseCharacter(CharactersList characters) {
                 this.setCharacter(characters.get(2));
+            }
+
+            @Override
+            public void chooseDraw() {
+
             }
 
             @Override
@@ -170,8 +189,7 @@ class PlayerTest {
             }
 
             @Override
-            public int chooseMagicianPower() {
-                return 0;
+            public void chooseMagicianPower() {
             }
 
             @Override
@@ -190,17 +208,17 @@ class PlayerTest {
             }
 
             @Override
-            public boolean activateFactoryEffect() {
+            public boolean chooseFactoryEffect() {
                 return false;
             }
 
             @Override
-            public boolean activateLaboratoryEffect() {
+            public boolean chooseLaboratoryEffect() {
                 return false;
             }
 
             @Override
-            public boolean activateGraveyardEffect(District removedDistrict) {
+            public boolean chooseGraveyardEffect(District removedDistrict) {
                 return false;
             }
         };
@@ -224,12 +242,22 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseMomentToTakeGoldFromCity() {
+
+            }
+
+            @Override
             public void chooseDistrictToBuild() {
             }
 
             @Override
             public void chooseCharacter(CharactersList characters) {
                 this.setCharacter(characters.get(2));
+            }
+
+            @Override
+            public void chooseDraw() {
+
             }
 
             @Override
@@ -241,8 +269,7 @@ class PlayerTest {
             }
 
             @Override
-            public int chooseMagicianPower() {
-                return 0;
+            public void chooseMagicianPower() {
             }
 
             @Override
@@ -261,17 +288,17 @@ class PlayerTest {
             }
 
             @Override
-            public boolean activateFactoryEffect() {
+            public boolean chooseFactoryEffect() {
                 return false;
             }
 
             @Override
-            public boolean activateLaboratoryEffect() {
+            public boolean chooseLaboratoryEffect() {
                 return false;
             }
 
             @Override
-            public boolean activateGraveyardEffect(District removedDistrict) {
+            public boolean chooseGraveyardEffect(District removedDistrict) {
                 return false;
             }
         };
@@ -290,12 +317,22 @@ class PlayerTest {
             }
 
             @Override
+            public void chooseMomentToTakeGoldFromCity() {
+
+            }
+
+            @Override
             public void chooseDistrictToBuild() {
             }
 
             @Override
             public void chooseCharacter(CharactersList characters) {
                 this.setCharacter(characters.get(2));
+            }
+
+            @Override
+            public void chooseDraw() {
+
             }
 
             @Override
@@ -307,8 +344,7 @@ class PlayerTest {
             }
 
             @Override
-            public int chooseMagicianPower() {
-                return 0;
+            public void chooseMagicianPower() {
             }
 
             @Override
@@ -327,17 +363,17 @@ class PlayerTest {
             }
 
             @Override
-            public boolean activateFactoryEffect() {
+            public boolean chooseFactoryEffect() {
                 return false;
             }
 
             @Override
-            public boolean activateLaboratoryEffect() {
+            public boolean chooseLaboratoryEffect() {
                 return false;
             }
 
             @Override
-            public boolean activateGraveyardEffect(District removedDistrict) {
+            public boolean chooseGraveyardEffect(District removedDistrict) {
                 return false;
             }
         };

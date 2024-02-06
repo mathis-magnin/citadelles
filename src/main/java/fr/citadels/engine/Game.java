@@ -8,6 +8,7 @@ import fr.citadels.cards.charactercards.characters.King;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.players.*;
 
+
 import java.util.List;
 import java.util.Random;
 
@@ -17,7 +18,7 @@ public class Game {
 
     /* Constant values */
 
-    public static final int NB_PLAYERS = 4;
+    public static final int NB_PLAYERS = 5;
 
 
     /* Attributes */

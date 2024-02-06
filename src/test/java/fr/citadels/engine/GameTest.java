@@ -8,10 +8,7 @@ import fr.citadels.cards.districtcards.Hand;
 import fr.citadels.players.Actions;
 import fr.citadels.players.Memory;
 import fr.citadels.players.Player;
-import fr.citadels.players.bots.Monarchist;
-import fr.citadels.players.bots.Spendthrift;
-import fr.citadels.players.bots.Thrifty;
-import fr.citadels.players.bots.Uncertain;
+import fr.citadels.players.bots.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,11 +24,12 @@ class GameTest {
 
     @BeforeEach
     void setUp() {
-        Player[] players = new Player[4];
+        Player[] players = new Player[5];
         players[0] = new Uncertain("HASARDEUX", new Random());
         players[1] = new Spendthrift("DÉPENSIER", new Random());
         players[2] = new Thrifty("ÉCONOME", new Random());
         players[3] = new Monarchist("MONARCHISTE");
+        players[4] = new Richard("RICHARD");
 
         game = new Game(players, new Random());
         game.initializeGame();
@@ -40,7 +38,7 @@ class GameTest {
 
     @Test
     void initializeGameTest() {
-        assertEquals(51, game.getPile().size());
+        assertEquals(47, game.getPile().size()); // 51 for 4 players
         for (Player player : game.getPlayersTab()) {
             assertEquals(4, player.getHand().size());
             assertEquals(2, player.getGold());
@@ -63,7 +61,7 @@ class GameTest {
 
 
         game.initializeGame();
-        
+
         assertNull(game.getPlayersTab()[0].getCharacter());
         assertNotEquals(memory, game.getPlayersTab()[0].getMemory());
         assertNotEquals(actions, game.getPlayersTab()[0].getActions());

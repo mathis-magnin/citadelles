@@ -46,7 +46,7 @@ class GraveyardTest {
 
         graveyardPlayer = new Monarchist("GRAVEYARD", new ArrayList<>(), game) {
             @Override
-            public boolean activateGraveyardEffect(District districtRemoved) {
+            public boolean chooseGraveyardEffect(District districtRemoved) {
                 return true;
             }
         };
@@ -91,7 +91,7 @@ class GraveyardTest {
         setUp();
         Player targetedGraveyardPlayer = new Monarchist("TARGETED_GRAVEYARD", new ArrayList<>(), game) {
             @Override
-            public boolean activateGraveyardEffect(District removedDistrict) {
+            public boolean chooseGraveyardEffect(District removedDistrict) {
                 return true;
             }
         };
@@ -117,7 +117,7 @@ class GraveyardTest {
         setUp();
         Player warlordTargetedGraveyardPlayer = new Monarchist("WARLORD_TARGETED_GRAVEYARD", new ArrayList<>(), game) {
             @Override
-            public boolean activateGraveyardEffect(District removedDistrict) {
+            public boolean chooseGraveyardEffect(District removedDistrict) {
                 return true;
             }
         };

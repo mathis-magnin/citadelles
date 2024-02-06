@@ -96,14 +96,12 @@ public class Actions {
 
 
     /**
-     * takes 2 cards or 2 golds from the bank and add them to the player
-     *
-     * @param draw true if the player has to draw cards
+     * Takes 2 cards or 2 golds from the bank and add them to the player
      */
-    public void takeCardsOrGold(boolean draw) {
-        if (draw) {
+    public void takeCardsOrGold() {
+        if (this.memory.getDraw()) {
             int nbToDraw = 2;
-            if (player.equals(DistrictsPile.allDistrictCards[59].getOwner())) {
+            if (player.equals(DistrictsPile.allDistrictCards[59].getOwner())) { // Observatory effect
                 player.getMemory().getDisplay().addObservatoryEffect();
                 nbToDraw++;
             }
@@ -112,21 +110,21 @@ public class Actions {
             player.getMemory().getDisplay().addDistrictDrawn(drawnCards);
             if (drawnCards.length != 0) { // if there is at least 1 card
                 Hand hand = player.getHand();
-                if (!player.equals(DistrictsPile.allDistrictCards[64].getOwner())) {
+                if (player.equals(DistrictsPile.allDistrictCards[64].getOwner())) { // Library effect
+                    this.player.getMemory().getDisplay().addLibraryEffect();
+                    hand.addAll(List.of(drawnCards));
+                } else {
                     District cardToPlay = player.chooseCardAmongDrawn(drawnCards);
                     hand.add(cardToPlay);
                     player.getMemory().getDisplay().addDistrictChosen(player, cardToPlay);
-                } else {
-                    DistrictsPile.allDistrictCards[64].useEffect();
-                    hand.addAll(List.of(drawnCards));
                 }
 
                 player.getMemory().getDisplay().addBlankLine();
             } else {
-                draw = false;
+                this.memory.setDraw(false);
             }
         }
-        if (!draw) {
+        if (!this.memory.getDraw()) {
             addGold(2);
 
             player.getMemory().getDisplay().addGoldTaken(player, 2);
@@ -146,7 +144,7 @@ public class Actions {
             for (District card : player.getCity()) {
                 if (card.getFamily().equals(player.getCharacter().getFamily())) {
                     goldToTake++;
-                } else if (card.equals(new SchoolOfMagic()) && !player.getCharacter().getFamily().equals(Family.NEUTRAL)) {
+                } else if (card.equals(new SchoolOfMagic())) {
                     goldToTake++;
                     activateSchoolOfMagicEffect = true;
                 }
@@ -165,12 +163,14 @@ public class Actions {
      */
     public void build() {
         if (this.memory.getDistrictToBuild() != null) {
-            addCardToCity(this.memory.getDistrictToBuild());
-            removeGold(this.memory.getDistrictToBuild().getGoldCost());
-            player.getMemory().getDisplay().addDistrictBuilt(player, this.memory.getDistrictToBuild());
+            this.addCardToCity(this.memory.getDistrictToBuild());
+            this.player.getHand().remove(this.memory.getDistrictToBuild());
+            this.removeGold(this.memory.getDistrictToBuild().getGoldCost());
+            this.player.getMemory().getDisplay().addDistrictBuilt(this.player, this.memory.getDistrictToBuild());
         } else {
-            player.getMemory().getDisplay().addNoDistrictBuilt();
+            this.player.getMemory().getDisplay().addNoDistrictBuilt();
         }
+        this.player.getMemory().getDisplay().addBlankLine();
     }
 
 

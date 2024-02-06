@@ -33,7 +33,6 @@ class ActionsTest {
         player = new Monarchist("test", List.of(DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[22], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[18], DistrictsPile.allDistrictCards[63], DistrictsPile.allDistrictCards[62]), game);
         player2 = new Monarchist("bot", new ArrayList<>(), game);
         actions = new Actions(player, info);
-
     }
 
     @Test
@@ -77,13 +76,15 @@ class ActionsTest {
     @Test
     void takeCardsOrGold() {
 
-        actions.takeCardsOrGold(false);
+        player.getMemory().setDraw(false);
+        player.getActions().takeCardsOrGold();
         assertEquals(7, player.getHand().size());
         assertEquals(2, player.getGold());
-        actions.takeCardsOrGold(true);
+
+        player.getMemory().setDraw(true);
+        player.getActions().takeCardsOrGold();
         assertEquals(8, player.getHand().size());
         assertEquals(2, player.getGold());
-
 
     }
 
@@ -92,12 +93,14 @@ class ActionsTest {
         player.getHand().add(DistrictsPile.allDistrictCards[64]);
         player.getActions().addGold(6);
         player.getMemory().setDistrictToBuild(DistrictsPile.allDistrictCards[64]);
-        player.getHand().remove(DistrictsPile.allDistrictCards[64]);
         player.getActions().build();
-        actions.takeCardsOrGold(true);
+        player.getMemory().setDraw(true);
+
+        player.getActions().takeCardsOrGold();
         assertEquals(9, player.getHand().size());
 
-        actions.takeCardsOrGold(false);
+        player.getMemory().setDraw(false);
+        player.getActions().takeCardsOrGold();
         assertEquals(9, player.getHand().size());
         assertEquals(2, player.getGold());
 
@@ -107,7 +110,8 @@ class ActionsTest {
         player.getHand().remove(DistrictsPile.allDistrictCards[59]);
         player.getActions().build();
 
-        actions.takeCardsOrGold(true);
+        player.getMemory().setDraw(true);
+        player.getActions().takeCardsOrGold();
         assertEquals(12, player.getHand().size());
         DistrictsPile.allDistrictCards[64].setOwner(null);
         DistrictsPile.allDistrictCards[59].setOwner(null);

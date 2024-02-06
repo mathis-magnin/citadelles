@@ -1,6 +1,7 @@
 package fr.citadels.cards.charactercards;
 
 import fr.citadels.cards.charactercards.characters.*;
+import fr.citadels.engine.Game;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
@@ -12,7 +13,14 @@ class CharactersListTest {
 
     @Test
     void testRemoveCharactersFaceUp() {
-        assertEquals(2, characterCards.removeCharactersFaceUp().length);
+        if (Game.NB_PLAYERS == 4) {
+            assertEquals(2, characterCards.removeCharactersFaceUp().length);
+        } else if (Game.NB_PLAYERS == 5) {
+            assertEquals(1, characterCards.removeCharactersFaceUp().length);
+        }
+        else {
+            assertEquals(0, characterCards.removeCharactersFaceUp().length);
+        }
     }
 
     @Test

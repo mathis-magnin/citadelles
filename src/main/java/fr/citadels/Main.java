@@ -5,10 +5,7 @@ import fr.citadels.engine.Game;
 import com.beust.jcommander.Parameter;
 import fr.citadels.engine.score.Statisticboard;
 import fr.citadels.players.Player;
-import fr.citadels.players.bots.Monarchist;
-import fr.citadels.players.bots.Uncertain;
-import fr.citadels.players.bots.Spendthrift;
-import fr.citadels.players.bots.Thrifty;
+import fr.citadels.players.bots.*;
 import org.apache.logging.log4j.Logger;
 
 
@@ -54,6 +51,7 @@ public class Main {
         players[1] = new Spendthrift("DÉPENSIER", RAND);
         players[2] = new Thrifty("ÉCONOME", RAND);
         players[3] = new Monarchist("MONARCHISTE");
+        players[4] = new Richard("RICHARD");
 
 
         Game game = new Game(players, RAND);
@@ -76,6 +74,7 @@ public class Main {
         players[1] = new Thrifty("ÉCONOME_2", RAND);
         players[2] = new Thrifty("ÉCONOME_3", RAND);
         players[3] = new Thrifty("ÉCONOME_4", RAND);
+        players[4] = new Thrifty("ÉCONOME_5", RAND);
 
         statisticboard.initialize(players);
 
@@ -94,8 +93,9 @@ public class Main {
 
         players[0] = new Spendthrift("DÉPENSIER_1", RAND);
         players[1] = new Spendthrift("DÉPENSIER_2", RAND);
-        players[2] = new Thrifty("ÉCONOME_1", RAND);
-        players[3] = new Thrifty("ÉCONOME_2", RAND);
+        players[2] = new Spendthrift("DÉPENSIER_3", RAND);
+        players[3] = new Thrifty("ÉCONOME_1", RAND);
+        players[4] = new Thrifty("ÉCONOME_2", RAND);
 
         statisticboard.initialize(players);
 
