@@ -71,6 +71,12 @@ public class Statisticboard {
         }
     }
 
+    /**
+     * Write the statisticboard into a csv file.
+     *
+     * @param file the file to write the statisticboard into
+     * @throws IOException if the file is not found
+     */
     public void writeCsv(File file) throws IOException {
             FileWriter fileWriter = new FileWriter(file);
             CSVWriter writer = new CSVWriter(fileWriter);
@@ -87,6 +93,14 @@ public class Statisticboard {
             writer.close();
     }
 
+    /**
+     * Read a statisticboard in a csv file and return it.
+     *
+     * @param file the file to read
+     * @return a statisticboard
+     * @throws IOException if the file is not found
+     * @throws CsvValidationException if the csv file is not valid
+     */
     public static Statisticboard readCsv(File file) throws IOException, CsvValidationException {
         FileReader fileReader = new FileReader(file);
         CSVReader reader = new CSVReader(fileReader);
