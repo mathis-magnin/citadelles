@@ -47,26 +47,71 @@ public class Warlord extends Character {
     }
 
 
+    /**
+     * Let the player who embodies the character use the power which comes from his role.
+     * The abilities of the Warlord are :
+     * 1. The player can destroy a district of a player's city. The player must not target the Bishop and a player who has a complete city.
+     * 2. The player gain one gold coin per Noble district he has in his city.
+     *
+     * @precondition The player must have chosen which power he wants to use.
+     * @precondition About the first power, the player must have chosen which player and district he wants to target.
+     */
     @Override
     public void usePower() {
-        if (CharactersList.allCharacterCards[4].isPlayed() && !CharactersList.allCharacterCards[4].isDead()) {
-            getPlayer().getMemory().getDisplay().addBishopPower();
+        switch (this.getPlayer().getMemory().getPowerToUse()) {
+            case 1:
+                this.destroyDistrict();
+                break;
+            case 2:
+                this.gainGoldsWithCity();
+                break;
+            default:
+                break;
         }
-        if (DistrictsPile.allDistrictCards[58].isBuilt() && !DistrictsPile.allDistrictCards[58].getOwner().equals(CharactersList.allCharacterCards[4].getPlayer())) {
+        this.getPlayer().getMemory().getDisplay().addBlankLine();
+    }
+
+
+    /**
+     * 1. The player can destroy a district of a player's city.
+     * The player must not target the Bishop and a player who has a complete city.
+     * The Keep and Graveyard effect are applied.
+     *
+     * @precondition The player must have chosen which player and district he wants to target.
+     */
+    private void destroyDistrict() {
+        if (CharactersList.allCharacterCards[4].isPlayed() && !CharactersList.allCharacterCards[4].isDead()) {
+            this.getPlayer().getMemory().getDisplay().addBishopPower();
+        }
+        if (DistrictsPile.allDistrictCards[58].isBuilt() && !DistrictsPile.allDistrictCards[58].getOwner().equals(CharactersList.allCharacterCards[4].getPlayer())) { // Keep effect
             this.getPlayer().getMemory().getDisplay().addKeepEffect();
         }
 
         District districtToDestroy = this.getPlayer().getMemory().getDistrictToDestroy();
 
-        getPlayer().getMemory().getTarget().getPlayer().getActions().removeCardFromCity(districtToDestroy);
-        getPlayer().getActions().removeGold(districtToDestroy.getGoldCost() - 1);
-        getPlayer().getMemory().getDisplay().addWarlordPower(this.getPlayer(), this.getPlayer().getMemory().getTarget(), districtToDestroy);
+        this.getPlayer().getMemory().getTarget().getPlayer().getActions().removeCardFromCity(districtToDestroy);
+        this.getPlayer().getActions().removeGold(districtToDestroy.getGoldCost() - 1);
+        this.getPlayer().getMemory().getDisplay().addWarlordPower(this.getPlayer(), this.getPlayer().getMemory().getTarget(), districtToDestroy);
 
-        if (!DistrictsPile.allDistrictCards[62].useEffect()) { // Graveyard power
-            getPlayer().getMemory().getPile().placeBelowPile(districtToDestroy);
-            getPlayer().getMemory().getDisplay().addDistrictPlacedBelow();
+        if (!DistrictsPile.allDistrictCards[62].useEffect()) { // Graveyard effect
+            this.getPlayer().getMemory().getPile().placeBelowPile(districtToDestroy);
+            this.getPlayer().getMemory().getDisplay().addDistrictPlacedBelow();
         }
-        getPlayer().getMemory().getDisplay().addBlankLine();
+    }
+
+
+    /**
+     * 2. The player gain one gold coin per Noble district he has in his city.
+     * The SchoolOfMagic district act as a Noble district.
+     */
+    private void gainGoldsWithCity() {
+        int gold = this.getPlayer().getCity().getNumberOfDistrictWithFamily(this.getFamily());
+
+        boolean activateSchoolOfMagicEffect = (DistrictsPile.allDistrictCards[63].getOwner() == this.getPlayer()); // School of magic effect
+        gold = activateSchoolOfMagicEffect ? gold + 1 : gold;
+
+        this.getPlayer().getActions().addGold(gold);
+        this.getPlayer().getMemory().getDisplay().addGoldTakenFromCity(this.getPlayer(), gold, activateSchoolOfMagicEffect);
     }
 
 }

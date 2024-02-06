@@ -11,6 +11,7 @@ public class Architect extends Character {
         super("Architecte", Family.NEUTRAL, 7);
     }
 
+
     /* Methods */
 
     @Override
@@ -21,7 +22,7 @@ public class Architect extends Character {
 
     /**
      * Let the player who embodies the character use the power which comes from his role.
-     * The abilities of the architect are :
+     * The abilities of the Architect are :
      * 1. The player gain two extra cards. He can use this ability regardless of what resource he gathered this turn.
      * 2. The player can build up to three districts.
      *
@@ -36,6 +37,8 @@ public class Architect extends Character {
                 break;
             case 2:
                 this.build();
+                break;
+            default:
                 break;
         }
         this.getPlayer().getMemory().getDisplay().addBlankLine();
