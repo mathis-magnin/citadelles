@@ -225,7 +225,7 @@ public class Game {
             this.display.printAndReset();
         }
 
-        this.scoreboard.initializeScoreboard(this.playersTab);
+        this.scoreboard.initialize(this.playersTab);
         this.scoreboard.determineRanking();
         this.display.addScoreTitle();
         this.display.addPlayersCity(this.playersTab);
