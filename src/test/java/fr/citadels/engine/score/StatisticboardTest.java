@@ -23,7 +23,7 @@ class StatisticboardTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game();
+        game = new Game(new Player[3], null);
         game.getPile().initializePile();
 
         bob = new Monarchist("bob", new ArrayList<>(), game);

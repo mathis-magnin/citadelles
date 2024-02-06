@@ -7,6 +7,7 @@ import fr.citadels.cards.districtcards.City;
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.players.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,11 +32,17 @@ class SpendthriftTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game();
+        Player[] players = new Player[4];
+        game = new Game(players, new Random());
         List<District> districts = new ArrayList<>(List.of(DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[22]));
         player = new Spendthrift("Hello", districts, game, random);
         player2 = new Spendthrift("Bob", new ArrayList<>(), game, random);
         player3 = new Spendthrift("Tom", new ArrayList<>(), game, random);
+
+        players[0] = player;
+        players[1] = player2;
+        players[2] = player3;
+
     }
 
     @Test
