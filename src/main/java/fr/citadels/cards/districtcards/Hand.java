@@ -1,17 +1,17 @@
 package fr.citadels.cards.districtcards;
 
-import fr.citadels.cards.CardFamily;
+import fr.citadels.cards.Family;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Hand extends ArrayList<DistrictCard> {
+public class Hand extends ArrayList<District> {
 
     @Override
     public String toString() {
         StringBuilder str = new StringBuilder();
         if (!this.isEmpty()) {
-            for (DistrictCard districtCard : this) {
+            for (District districtCard : this) {
                 str.append(districtCard.toString()).append(", ");
             }
             str.delete(str.length() - 2, str.length());
@@ -21,7 +21,7 @@ public class Hand extends ArrayList<DistrictCard> {
 
     /* Constructor */
 
-    public Hand(List<DistrictCard> cards) {
+    public Hand(List<District> cards) {
         this.addAll(cards);
     }
 
@@ -29,10 +29,11 @@ public class Hand extends ArrayList<DistrictCard> {
 
     /**
      * Remove a card from the hand
+     *
      * @param index the index of the card to remove
      * @return the card removed
      */
-    public DistrictCard removeCard(int index) {
+    public District removeCard(int index) {
         return super.remove(index);
     }
 
@@ -42,11 +43,11 @@ public class Hand extends ArrayList<DistrictCard> {
      *
      * @param preferredFamily the family of cards to put first
      */
-    public void sortCards(CardFamily preferredFamily) {
+    public void sortCards(Family preferredFamily) {
         this.sort((o1, o2) -> {
-            if (o1.getCardFamily().equals(preferredFamily) && !o2.getCardFamily().equals(preferredFamily)) {
+            if (o1.getFamily().equals(preferredFamily) && !o2.getFamily().equals(preferredFamily)) {
                 return -1;
-            } else if (!o1.getCardFamily().equals(preferredFamily) && o2.getCardFamily().equals(preferredFamily)) {
+            } else if (!o1.getFamily().equals(preferredFamily) && o2.getFamily().equals(preferredFamily)) {
                 return 1;
             } else {
                 return Integer.compare(o2.getGoldCost(), o1.getGoldCost());

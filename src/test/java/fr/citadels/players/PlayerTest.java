@@ -2,9 +2,9 @@ package fr.citadels.players;
 
 import fr.citadels.cards.charactercards.characters.*;
 import fr.citadels.engine.Game;
-import fr.citadels.cards.charactercards.CharacterCardsList;
-import fr.citadels.cards.districtcards.DistrictCard;
-import fr.citadels.cards.districtcards.DistrictCardsPile;
+import fr.citadels.cards.charactercards.CharactersList;
+import fr.citadels.cards.districtcards.District;
+import fr.citadels.cards.districtcards.DistrictsPile;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,11 +21,11 @@ class PlayerTest {
 
     @BeforeEach
     void setUp() {
-        List<DistrictCard> districts = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[62]));
+        List<District> districts = new ArrayList<>(List.of(DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[22], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[18], DistrictsPile.allDistrictCards[63], DistrictsPile.allDistrictCards[62]));
         game = new Game();
         player = new Player("Hello", districts, game) {
             @Override
-            public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
+            public District chooseCardAmongDrawn(District[] drawnCards) {
                 return drawnCards[0];
             }
 
@@ -34,7 +34,7 @@ class PlayerTest {
             }
 
             @Override
-            public void chooseCharacter(CharacterCardsList characters) {
+            public void chooseCharacter(CharactersList characters) {
                 this.setCharacter(characters.get(1));
             }
 
@@ -57,7 +57,7 @@ class PlayerTest {
 
             @Override
             public void playResourcesPhase() {
-                this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
+                this.chooseCharacter(new CharactersList(CharactersList.allCharacterCards));
             }
 
             @Override
@@ -66,6 +66,18 @@ class PlayerTest {
                 getActions().removeCardFromHand(0);
             }
 
+            @Override
+            public boolean activateFactoryEffect() {
+                return false;
+            }
+
+            @Override
+            public boolean activateLaboratoryEffect() {
+                return false;
+            }
+
+            @Override
+            public boolean activateGraveyardEffect(District removedDistrict) {return false;}
         };
     }
 
@@ -79,9 +91,9 @@ class PlayerTest {
     void getHand() {
         assertEquals(7, player.getHand().size());
         /*check if the elements are in the list*/
-        assertEquals("Temple", player.getHand().get(0).getCardName());
-        assertEquals("Manoir", player.getHand().get(1).getCardName());
-        assertEquals("Cathédrale", player.getHand().get(2).getCardName());
+        assertEquals("Temple", player.getHand().get(0).getName());
+        assertEquals("Manoir", player.getHand().get(1).getName());
+        assertEquals("Cathédrale", player.getHand().get(2).getName());
     }
 
     @Test
@@ -91,17 +103,17 @@ class PlayerTest {
         player.playResourcesPhase();
         player.playBuildingPhase();
         assertEquals(1, player.getCity().size());
-        assertEquals("Temple", player.getCity().get(0).getCardName());
+        assertEquals("Temple", player.getCity().get(0).getName());
 
         player.playResourcesPhase();
         player.playBuildingPhase();
         assertEquals(2, player.getCity().size());
-        assertEquals("Manoir", player.getCity().get(1).getCardName());
+        assertEquals("Manoir", player.getCity().get(1).getName());
 
         player.playResourcesPhase();
         player.playBuildingPhase();
         assertEquals(3, player.getCity().size());
-        assertEquals("Cathédrale", player.getCity().get(2).getCardName());
+        assertEquals("Cathédrale", player.getCity().get(2).getName());
 
     }
 
@@ -119,8 +131,8 @@ class PlayerTest {
     void hasCardInHand() {
         player.playResourcesPhase();
         player.playBuildingPhase();
-        assertTrue(player.hasCardInCity(DistrictCardsPile.allDistrictCards[12]));
-        assertFalse(player.hasCardInCity(DistrictCardsPile.allDistrictCards[58]));
+        assertTrue(player.hasCardInCity(DistrictsPile.allDistrictCards[12]));
+        assertFalse(player.hasCardInCity(DistrictsPile.allDistrictCards[58]));
     }
 
     @Test
@@ -131,10 +143,10 @@ class PlayerTest {
 
     @Test
     void compareToTest() {
-        List<DistrictCard> districts2 = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[62]));
+        List<District> districts2 = new ArrayList<>(List.of(DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[22], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[18], DistrictsPile.allDistrictCards[63], DistrictsPile.allDistrictCards[62]));
         Player player2 = new Player("Hello", districts2, game) {
             @Override
-            public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
+            public District chooseCardAmongDrawn(District[] drawnCards) {
                 return null;
             }
 
@@ -143,7 +155,7 @@ class PlayerTest {
             }
 
             @Override
-            public void chooseCharacter(CharacterCardsList characters) {
+            public void chooseCharacter(CharactersList characters) {
                 this.setCharacter(characters.get(2));
             }
 
@@ -166,7 +178,7 @@ class PlayerTest {
 
             @Override
             public void playResourcesPhase() {
-                this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
+                this.chooseCharacter(new CharactersList(CharactersList.allCharacterCards));
             }
 
             @Override
@@ -175,6 +187,18 @@ class PlayerTest {
                 getActions().removeCardFromHand(0);
             }
 
+            @Override
+            public boolean activateFactoryEffect() {
+                return false;
+            }
+
+            @Override
+            public boolean activateLaboratoryEffect() {
+                return false;
+            }
+
+            @Override
+            public boolean activateGraveyardEffect(District removedDistrict) {return false;}
         };
         player.playResourcesPhase();
         player.playBuildingPhase();
@@ -188,10 +212,10 @@ class PlayerTest {
 
     @Test
     void equals() {
-        List<DistrictCard> districts2 = new ArrayList<>(List.of(DistrictCardsPile.allDistrictCards[12], DistrictCardsPile.allDistrictCards[0], DistrictCardsPile.allDistrictCards[22], DistrictCardsPile.allDistrictCards[15], DistrictCardsPile.allDistrictCards[18], DistrictCardsPile.allDistrictCards[63], DistrictCardsPile.allDistrictCards[62]));
+        List<District> districts2 = new ArrayList<>(List.of(DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[22], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[18], DistrictsPile.allDistrictCards[63], DistrictsPile.allDistrictCards[62]));
         Player player2 = new Player("Hello", districts2, game) {
             @Override
-            public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
+            public District chooseCardAmongDrawn(District[] drawnCards) {
                 return null;
             }
 
@@ -200,7 +224,7 @@ class PlayerTest {
             }
 
             @Override
-            public void chooseCharacter(CharacterCardsList characters) {
+            public void chooseCharacter(CharactersList characters) {
                 this.setCharacter(characters.get(2));
             }
 
@@ -223,7 +247,7 @@ class PlayerTest {
 
             @Override
             public void playResourcesPhase() {
-                this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
+                this.chooseCharacter(new CharactersList(CharactersList.allCharacterCards));
             }
 
             @Override
@@ -232,6 +256,18 @@ class PlayerTest {
                 getActions().removeCardFromHand(0);
             }
 
+            @Override
+            public boolean activateFactoryEffect() {
+                return false;
+            }
+
+            @Override
+            public boolean activateLaboratoryEffect() {
+                return false;
+            }
+
+            @Override
+            public boolean activateGraveyardEffect(District removedDistrict) {return false;}
         };
         player.playResourcesPhase();
         player.playBuildingPhase();
@@ -243,7 +279,7 @@ class PlayerTest {
         //test with different name
         player2 = new Player("Hello2", districts2, game) {
             @Override
-            public DistrictCard chooseCardAmongDrawn(DistrictCard[] drawnCards) {
+            public District chooseCardAmongDrawn(District[] drawnCards) {
                 return null;
             }
 
@@ -252,7 +288,7 @@ class PlayerTest {
             }
 
             @Override
-            public void chooseCharacter(CharacterCardsList characters) {
+            public void chooseCharacter(CharactersList characters) {
                 this.setCharacter(characters.get(2));
             }
 
@@ -275,7 +311,7 @@ class PlayerTest {
 
             @Override
             public void playResourcesPhase() {
-                this.chooseCharacter(new CharacterCardsList(CharacterCardsList.allCharacterCards));
+                this.chooseCharacter(new CharactersList(CharactersList.allCharacterCards));
             }
 
             @Override
@@ -284,6 +320,18 @@ class PlayerTest {
                 getActions().removeCardFromHand(0);
             }
 
+            @Override
+            public boolean activateFactoryEffect() {
+                return false;
+            }
+
+            @Override
+            public boolean activateLaboratoryEffect() {
+                return false;
+            }
+
+            @Override
+            public boolean activateGraveyardEffect(District removedDistrict) {return false;}
         };
 
 
@@ -294,14 +342,14 @@ class PlayerTest {
 
     @AfterEach
     void resetCharacterCards() {
-        CharacterCardsList.allCharacterCards[0] = new AssassinCard();
-        CharacterCardsList.allCharacterCards[1] = new ThiefCard();
-        CharacterCardsList.allCharacterCards[2] = new MagicianCard();
-        CharacterCardsList.allCharacterCards[3] = new KingCard();
-        CharacterCardsList.allCharacterCards[4] = new BishopCard();
-        CharacterCardsList.allCharacterCards[5] = new MerchantCard();
-        CharacterCardsList.allCharacterCards[6] = new ArchitectCard();
-        CharacterCardsList.allCharacterCards[7] = new WarlordCard();
+        CharactersList.allCharacterCards[0] = new Assassin();
+        CharactersList.allCharacterCards[1] = new Thief();
+        CharactersList.allCharacterCards[2] = new Magician();
+        CharactersList.allCharacterCards[3] = new King();
+        CharactersList.allCharacterCards[4] = new Bishop();
+        CharactersList.allCharacterCards[5] = new Merchant();
+        CharactersList.allCharacterCards[6] = new Architect();
+        CharactersList.allCharacterCards[7] = new Warlord();
     }
 
 }
