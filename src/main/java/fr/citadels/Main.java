@@ -8,22 +8,22 @@ public class Main {
 
     /* Command line parameters */
 
-    @Parameter(names = "--demo", description = "Demonstration of one game")
+    @Parameter(names = "--demo", description = "Demonstration of a single game")
     private boolean demo = false;
 
     @Parameter(names = "--2thousands", description = "Simulation of two thousands games")
     private boolean twoThousands = false;
 
-    @Parameter(names = "--csv", description = "Run one game and add the statistics to the csv file")
+    @Parameter(names = "--csv", description = "Run several games and add the statistics to the csv file")
     private boolean csv = false;
 
 
-    /* programs */
+    /* Programs */
 
     public static void main(String... argv) {
         Main main = new Main();
         JCommander.newBuilder().addObject(main).build().parse(argv);
-        if (main.demo) {
+        if (main.demo || !(main.twoThousands || main.csv)) {
             main.runDemonstration();
         }
         if (main.twoThousands) {
@@ -32,23 +32,31 @@ public class Main {
         if (main.csv) {
             main.runCsv();
         }
-        if (!(main.demo || main.twoThousands || main.csv)) {
-            System.out.println("Veuillez précisez au moins un paramètre parmis :\n\t--demo\n\t--2thousands\n\t--csv");
-        }
     }
 
 
+    /**
+     * Run a single game with a full log printed.
+     */
     public void runDemonstration() {
         Game game = new Game();
         game.play();
     }
 
 
+    /**
+     * This program launch 2000 games as follows :
+     * 1. Simulation of 1000 games of the best bot against the second best (with others bots to complete).
+     * 2. Simulation of 1000 games of the best bot against itself (or as many clone of itself than players).
+     */
     public void runTwoThousands() {
         System.out.println("2 thousands");
     }
 
 
+    /**
+     * Run several simulations while reading “stats/gamestats.csv” if it exists and adding new statistics.
+     */
     public void runCsv() {
         System.out.println("csv");
     }
