@@ -22,7 +22,7 @@ class GameTest {
 
     @Test
     void initializeGameTest() {
-        assertEquals(51, game.getPile().size());
+        assertEquals(47, game.getPile().size()); // 51 for 4 players
         for (Player player : game.getPlayersTab()) {
             assertEquals(4, player.getHand().size());
             assertEquals(2, player.getGold());

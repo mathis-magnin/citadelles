@@ -258,7 +258,6 @@ public class Display {
 
     public void addThiefPower(Character target) {
         this.events.append("Le joueur utilise son pouvoir pour voler : ").append(target.getName()).append(".\n");
-        this.addBlankLine();
     }
 
 
@@ -272,7 +271,6 @@ public class Display {
     public void addMagicianSwap(Player player, Player target) {
         this.events.append("Le joueur utilise son pouvoir pour échanger sa main avec celle de ").append(target.getName()).append(".\n");
         this.addHandUpdate(player.getHand());
-        this.addBlankLine();
     }
 
 
@@ -374,6 +372,7 @@ public class Display {
         this.events.append("Le joueur utilise l'effet du Laboratoire pour défausser ").append(card).append(" et gagner une pièce d'or.\n");
         this.addGoldUpdate(player.getGold());
         this.addHandUpdate(player.getHand());
+        this.addBlankLine();
     }
 
     public void addKeepEffect() {
@@ -402,4 +401,5 @@ public class Display {
     public void addWinner(Player player) {
         this.events.append("Le gagnant est : ").append(player.getName()).append(" !\n");
     }
+
 }

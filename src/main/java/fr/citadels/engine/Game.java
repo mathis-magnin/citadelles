@@ -7,18 +7,17 @@ import fr.citadels.cards.charactercards.CharactersList;
 import fr.citadels.cards.charactercards.characters.King;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.players.*;
-import fr.citadels.players.bots.Monarchist;
+import fr.citadels.players.bots.*;
 import fr.citadels.players.bots.Random;
-import fr.citadels.players.bots.Spendthrift;
-import fr.citadels.players.bots.Thrifty;
 
 import java.util.*;
+
 
 public class Game {
 
     /* Constant values */
 
-    public static final int NB_PLAYERS = 4;
+    public static final int NB_PLAYERS = 5;
 
 
     /* Static attributes */
@@ -81,6 +80,7 @@ public class Game {
         this.playersTab[1] = new Spendthrift("DÉPENSIER", Arrays.asList(this.pile.draw(4)), this, RAND);
         this.playersTab[2] = new Thrifty("ÉCONOME", Arrays.asList(this.pile.draw(4)), this, RAND);
         this.playersTab[3] = new Monarchist("MONARCHISTE", Arrays.asList(this.pile.draw(4)), this);
+        this.playersTab[4] = new Richard("RICHARD", Arrays.asList(this.pile.draw(4)), this);
         this.display.addPlayers(this.playersTab);
         this.display.addBlankLine();
 
