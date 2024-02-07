@@ -81,6 +81,7 @@ public class Game {
      * Initialize the game
      */
     void initializeGame() {
+        this.pile.reset();
         this.pile.initializePile();
         this.pile.shufflePile();
 
@@ -133,15 +134,10 @@ public class Game {
      */
     public void playSelectionPhase() {
         /* Reset character's attributes */
-        for (Character character : CharactersList.allCharacterCards) {
-            character.setPlayer(null);
-            character.setDead(false);
-            character.setRobbed(false);
-        }
 
         this.display.addSelectionPhaseTitle();
-
         CharactersList characters = new CharactersList(CharactersList.allCharacterCards);
+        characters.reset();
         Character[] removedCharactersFaceUp = characters.removeCharactersFaceUp();
         Character[] removedCharactersFaceDown = characters.removeCharactersFaceDown();
 

@@ -102,6 +102,15 @@ public class DistrictsPile extends LinkedList<District> {
 
     /* Methods */
 
+    /**
+     * reset the pile
+     */
+    public void reset() {
+        for (District district : allDistrictCards) {
+            district.setOwner(null);
+        }
+    }
+
     /***
      * initialize the pile of district cards with
      * those that will be used during the game
