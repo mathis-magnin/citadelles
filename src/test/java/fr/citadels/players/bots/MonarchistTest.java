@@ -164,7 +164,7 @@ class MonarchistTest {
 
         player1.chooseCharacter(characters);
         assertEquals("Assassin", player1.getCharacter().getName());
-        assertEquals(characters, player1.getMemory().getRemainingCharacters());
+        assertEquals(characters, player1.getMemory().getPossibleCharacters());
         assertEquals(6, characters.size());
     }
 

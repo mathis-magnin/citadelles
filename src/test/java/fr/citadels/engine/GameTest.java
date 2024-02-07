@@ -39,7 +39,7 @@ class GameTest {
     @Test
     void initializeGameTest() {
         assertEquals(47, game.getPile().size()); // 51 for 4 players
-        for (Player player : game.getPlayersTab()) {
+        for (Player player : game.getPlayers()) {
             assertEquals(4, player.getHand().size());
             assertEquals(2, player.getGold());
         }
@@ -48,26 +48,26 @@ class GameTest {
     @Test
     void playSelectionPhaseTest() {
         game.playSelectionPhase();
-        for (Player player : game.getPlayersTab()) {
+        for (Player player : game.getPlayers()) {
             assertNotNull(player.getCharacter());
         }
 
-        game.getPlayersTab()[0].setCharacter(new King());
-        Memory memory = game.getPlayersTab()[0].getMemory();
-        Actions actions = game.getPlayersTab()[0].getActions();
-        game.getPlayersTab()[1].setGold(7);
-        game.getPlayersTab()[2].setCity(new City(List.of(DistrictsPile.allDistrictCards[0])));
-        game.getPlayersTab()[3].setHand(new Hand(List.of(DistrictsPile.allDistrictCards[5])));
+        game.getPlayers()[0].setCharacter(new King());
+        Memory memory = game.getPlayers()[0].getMemory();
+        Actions actions = game.getPlayers()[0].getActions();
+        game.getPlayers()[1].setGold(7);
+        game.getPlayers()[2].setCity(new City(List.of(DistrictsPile.allDistrictCards[0])));
+        game.getPlayers()[3].setHand(new Hand(List.of(DistrictsPile.allDistrictCards[5])));
 
 
         game.initializeGame();
 
-        assertNull(game.getPlayersTab()[0].getCharacter());
-        assertNotEquals(memory, game.getPlayersTab()[0].getMemory());
-        assertNotEquals(actions, game.getPlayersTab()[0].getActions());
-        assertEquals(2, game.getPlayersTab()[1].getGold());
-        assertEquals(0, game.getPlayersTab()[2].getCity().size());
-        assertEquals(4, game.getPlayersTab()[3].getHand().size());
+        assertNull(game.getPlayers()[0].getCharacter());
+        assertNotEquals(memory, game.getPlayers()[0].getMemory());
+        assertNotEquals(actions, game.getPlayers()[0].getActions());
+        assertEquals(2, game.getPlayers()[1].getGold());
+        assertEquals(0, game.getPlayers()[2].getCity().size());
+        assertEquals(4, game.getPlayers()[3].getHand().size());
 
 
     }
@@ -75,7 +75,7 @@ class GameTest {
     @Test
     void initializePlayersTest() {
         game.initializePlayers();
-        for (Player player : game.getPlayersTab()) {
+        for (Player player : game.getPlayers()) {
             assertEquals(0, player.getGold());
             assertEquals(4, player.getHand().size());
             assertEquals(0, player.getCity().size());

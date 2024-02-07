@@ -1,7 +1,6 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.cards.charactercards.Power;
-import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.Family;
 import fr.citadels.cards.charactercards.Character;
@@ -51,7 +50,7 @@ public class Spendthrift extends Player {
             randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        this.getMemory().setRemainingCharacters(characters);
+        this.getMemory().setPossibleCharacters(characters);
         getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
@@ -212,7 +211,7 @@ public class Spendthrift extends Player {
         getMemory().setTarget(target);
         District districtToDestroy = null;
         if (target != null) {
-            districtToDestroy = target.getPlayer().getCity().getCheapestDistrictToDestroy();
+            districtToDestroy = target.getPlayer().getCity().getCheapestDistrict();
             if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
                 districtToDestroy = null;
             }
