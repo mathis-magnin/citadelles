@@ -134,31 +134,6 @@ public class Actions {
 
 
     /**
-     * Take gold from the city if the family of the card is the same as the family of the character.
-     * The SchoolOfMagic district count as the same family of the character.
-     */
-    public void takeGoldFromCity() {
-        if (player.getCharacter() != null) {
-            int goldToTake = 0;
-            boolean activateSchoolOfMagicEffect = false;
-            for (District card : player.getCity()) {
-                if (card.getFamily().equals(player.getCharacter().getFamily())) {
-                    goldToTake++;
-                } else if (card.equals(new SchoolOfMagic())) {
-                    goldToTake++;
-                    activateSchoolOfMagicEffect = true;
-                }
-            }
-            if (goldToTake > 0) {
-                addGold(goldToTake);
-                player.getMemory().getDisplay().addGoldTakenFromCity(player, goldToTake, activateSchoolOfMagicEffect);
-                player.getMemory().getDisplay().addBlankLine();
-            }
-        }
-    }
-
-
-    /**
      * Build the district present in the attribute PlayerInformation's attribute districtToBuild.
      */
     public void build() {

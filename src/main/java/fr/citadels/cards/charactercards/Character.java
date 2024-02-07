@@ -6,12 +6,11 @@ import fr.citadels.players.Player;
 
 public abstract class Character extends Card implements Comparable<Character> {
 
-    /* Attribute */
+    /* Attributes */
 
     private final int rank;
     private Player player;
     private boolean dead;
-
     private boolean robbed;
 
     /* Constructor */
@@ -24,59 +23,8 @@ public abstract class Character extends Card implements Comparable<Character> {
         this.dead = false;
     }
 
-    /* Methods */
 
-    public int getRank() {
-        return this.rank;
-    }
-
-    /**
-     * @return true if the character is dead, false otherwise
-     */
-    public boolean isDead() {
-        return this.dead;
-    }
-
-    public void setDead(boolean dead) {
-        this.dead = dead;
-    }
-
-    public Player getPlayer() {
-        return this.player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    /**
-     * @return true if the character is robbed, false otherwise
-     */
-    public boolean isRobbed() {
-        return this.robbed;
-    }
-
-    public void setRobbed(boolean robbed) {
-        this.robbed = robbed;
-    }
-
-    /**
-     * @return true if the character is embodied by a player, false otherwise
-     */
-    public boolean isPlayed() {
-        return this.getPlayer() != null;
-    }
-
-    /**
-     * Let the player who embodies the character play his turn
-     */
-    public abstract void bringIntoPlay();
-
-    /**
-     * Let the player who embodies the character use the power which comes from his role
-     */
-    public abstract void usePower();
-
+    /* Basic methods */
 
     /**
      * @return a string representation of a district card
@@ -100,5 +48,62 @@ public abstract class Character extends Card implements Comparable<Character> {
     public int compareTo(Character other) {
         return this.getRank() - other.getRank();
     }
+
+
+    public int getRank() {
+        return this.rank;
+    }
+
+
+    public Player getPlayer() {
+        return this.player;
+    }
+
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+
+    public boolean isDead() {
+        return this.dead;
+    }
+
+
+    public void setDead(boolean dead) {
+        this.dead = dead;
+    }
+
+
+    public boolean isRobbed() {
+        return this.robbed;
+    }
+
+
+    public void setRobbed(boolean robbed) {
+        this.robbed = robbed;
+    }
+
+
+    /* Methods */
+
+    /**
+     * @return true if the character is embodied by a player, false otherwise.
+     */
+    public boolean isPlayed() {
+        return (this.getPlayer() != null);
+    }
+
+
+    /**
+     * Let the player who embodies the character play his turn.
+     */
+    public abstract void bringIntoPlay();
+
+
+    /**
+     * Let the player who embodies the character use the power which comes from his role.
+     */
+    public abstract void usePower();
 
 }

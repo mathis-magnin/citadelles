@@ -8,6 +8,11 @@ public class Thief extends Character {
 
     /* Static content */
 
+    /**
+     * The Thief must not target himself nor the assassin nor dead.
+     *
+     * @return The list of characters the Thief can target.
+     */
     public static CharactersList getPossibleTargets() {
         CharactersList targets = new CharactersList();
         for (Character characterCard : CharactersList.allCharacterCards) {
@@ -18,11 +23,13 @@ public class Thief extends Character {
         return targets;
     }
 
+
     /* Constructor */
 
     public Thief() {
         super("Voleur", Family.NEUTRAL, 2);
     }
+
 
     /* Methods */
 
@@ -31,9 +38,12 @@ public class Thief extends Character {
         this.getPlayer().playAsThief();
     }
 
+
     /**
-     * The thief steals all the gold of the character he chooses (the target).
-     * The target can be neither the thief nor the assassin nor dead.
+     * Let the player who embodies the character use the power which comes from his role.
+     * ROB : The thief robs all the gold of the character he wants to.
+     *
+     * @precondition The player must have chosen which character he wants to target.
      */
     @Override
     public void usePower() {

@@ -1,5 +1,6 @@
 package fr.citadels.cards.districtcards;
 
+import fr.citadels.cards.Family;
 import fr.citadels.cards.districtcards.uniques.Keep;
 import fr.citadels.cards.districtcards.uniques.MiracleCourtyard;
 
@@ -8,7 +9,10 @@ import java.util.List;
 
 public class City extends ArrayList<District> {
 
+    /* Static content */
+
     public static final int NUMBER_DISTRICTS_TO_WIN = 7;
+
 
     /* Constructors */
 
@@ -46,7 +50,22 @@ public class City extends ArrayList<District> {
      * @return A boolean value.
      */
     public boolean isComplete() {
-        return this.size() >= NUMBER_DISTRICTS_TO_WIN;
+        return (City.NUMBER_DISTRICTS_TO_WIN <= this.size());
+    }
+
+
+    /**
+     * Calcul the number of district with the same family as that given in parameter.
+     *
+     * @param family the family to compare to.
+     * @return the number of district with the same family to that given in parameter.
+     */
+    public int getNumberOfDistrictWithFamily(Family family) {
+        int number = 0;
+        for (District district : this) {
+            number = (district.getFamily().equals(family)) ? number + 1 : number;
+        }
+        return number;
     }
 
 
@@ -64,8 +83,8 @@ public class City extends ArrayList<District> {
         int hasSpecial = 0;
         int activateMiracleCourtyardEffect = 0;
 
-        for (District card : this) {
-            switch (card.getFamily()) {
+        for (District district : this) {
+            switch (district.getFamily()) {
                 case NOBLE:
                     hasNoble = 1;
                     break;
@@ -79,7 +98,7 @@ public class City extends ArrayList<District> {
                     hasMilitary = 1;
                     break;
                 case UNIQUE:
-                    if (card.equals(new MiracleCourtyard())) {
+                    if (district.equals(new MiracleCourtyard())) {
                         activateMiracleCourtyardEffect = 1;
                     } else {
                         hasSpecial = 1;
@@ -95,10 +114,10 @@ public class City extends ArrayList<District> {
 
 
     /**
-     * this method gives the first card in the hand that is not already in the city
+     * this method gives the first card in the hand that is not already in the city.
      *
-     * @param hand the cards to check
-     * @return the index of the first card in the hand that is not already in the city
+     * @param hand the cards to check.
+     * @return the index of the first card in the hand that is not already in the city.
      */
     public int getFirstNotDuplicateIndex(List<District> hand) {
         for (int i = 0; i < hand.size(); i++) {
@@ -109,11 +128,17 @@ public class City extends ArrayList<District> {
         return -1;
     }
 
+
+    /**
+     * Find the cheapest district of the city.
+     *
+     * @return The cheapest district of the city.
+     */
     public District getCheapestDistrictToDestroy() {
         District districtToDestroy = null;
-        for (District districtCard : this) {
-            if (!districtCard.equals(new Keep()) && ((districtToDestroy == null) || (districtCard.getGoldCost() < districtToDestroy.getGoldCost()))) {
-                districtToDestroy = districtCard;
+        for (District district : this) {
+            if (!district.equals(new Keep()) && ((districtToDestroy == null) || (district.getGoldCost() < districtToDestroy.getGoldCost()))) {
+                districtToDestroy = district;
             }
         }
         return districtToDestroy;
