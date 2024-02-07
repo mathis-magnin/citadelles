@@ -1,6 +1,7 @@
 package fr.citadels.engine.score;
 
 import com.opencsv.exceptions.CsvValidationException;
+import fr.citadels.Main;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
 import fr.citadels.players.bots.Monarchist;
@@ -190,6 +191,51 @@ class StatisticboardTest {
         assertTrue(Math.abs(((100.0 / 3.0) * 2.0) - louStatistic.getDefeatPercentage()) <= tau);
         assertTrue(Math.abs(((30.0 + 20.0 + 10.0) / 3.0) - louStatistic.getAverageScore()) <= tau);
 
+    }
+
+    @Test
+    void readOrCreateStatisticboard() {
+        Path pathTestRead = Paths.get("src/test/resources/testRead.csv");
+        File fileTestRead = new File(pathTestRead.toString());
+        Main.csv = true;
+
+        Random rand = new Random();
+        Player[] players1 = new Player[]{new Thrifty("player1", rand), new Thrifty("player2", rand), new Thrifty("player3", rand), new Thrifty("player4", rand), new Thrifty("player5", rand)};
+        Statisticboard stats;
+        try {
+            stats = Statisticboard.readOrCreateStatisticboard(fileTestRead, players1, false);
+        } catch (CsvValidationException | IOException e) {
+            stats = new Statisticboard(Game.NB_PLAYERS);
+        }
+        assertEquals(5, stats.getStatistics().length);
+
+        assertEquals("player1", stats.getStatistics()[0].getPlayer().getName());
+        assertEquals(10, stats.getStatistics()[0].getGameNumber());
+        assertEquals(5, stats.getStatistics()[0].getWinNumber());
+        assertEquals(200, stats.getStatistics()[0].getTotalScore());
+
+        assertEquals("player5", stats.getStatistics()[4].getPlayer().getName());
+        assertEquals(10, stats.getStatistics()[4].getGameNumber());
+        assertEquals(0, stats.getStatistics()[4].getWinNumber());
+        assertEquals(120, stats.getStatistics()[4].getTotalScore());
+        Main.csv = false;
+
+        try {
+            stats = Statisticboard.readOrCreateStatisticboard(fileTestRead, players1, false);
+        } catch (CsvValidationException | IOException e) {
+            stats = new Statisticboard(Game.NB_PLAYERS);
+        }
+        assertEquals(5, stats.getStatistics().length);
+
+        assertEquals("player1", stats.getStatistics()[0].getPlayer().getName());
+        assertEquals(0, stats.getStatistics()[0].getGameNumber());
+        assertEquals(0, stats.getStatistics()[0].getWinNumber());
+        assertEquals(0, stats.getStatistics()[0].getTotalScore());
+
+        assertEquals("player5", stats.getStatistics()[4].getPlayer().getName());
+        assertEquals(0, stats.getStatistics()[4].getGameNumber());
+        assertEquals(0, stats.getStatistics()[4].getWinNumber());
+        assertEquals(0, stats.getStatistics()[4].getTotalScore());
     }
 
     @Test

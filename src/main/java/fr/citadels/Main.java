@@ -192,7 +192,7 @@ public class Main {
 
         Statisticboard statisticboard;
         try {
-            statisticboard = readOrCreateStatisticboard(file, players, true);
+            statisticboard = readOrCreateStatisticboard(file, players, false);
         } catch (IOException | CsvValidationException e) {
             logger.info("Erreur lors de la lecture du fichier\n\n");
             statisticboard = new Statisticboard(Game.NB_PLAYERS);

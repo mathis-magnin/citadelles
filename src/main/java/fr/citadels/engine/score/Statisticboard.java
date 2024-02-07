@@ -7,6 +7,7 @@ import fr.citadels.Main;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
 import fr.citadels.players.bots.Monarchist;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -89,6 +90,7 @@ public class Statisticboard {
      */
     public static Statisticboard readOrCreateStatisticboard(File file, Player[] players, boolean inSecondIteration) throws CsvValidationException, IOException {
         Statisticboard statisticboard;
+        Logger logger = org.apache.logging.log4j.LogManager.getLogger(Main.class);
 
         if (Main.csv) {
             if (file.exists()) {
@@ -96,12 +98,11 @@ public class Statisticboard {
             } else {
                 statisticboard = new Statisticboard(Game.NB_PLAYERS);
                 statisticboard.initialize(players);
-                System.out.println("Fichier non trouvé");
+                logger.info("Fichier csv non trouvé, création d'un nouveau fichier\n");
             }
         } else {
             statisticboard = new Statisticboard(Game.NB_PLAYERS);
             statisticboard.initialize(players);
-            System.out.println("Csv non demandé");
         }
         return statisticboard;
     }
@@ -160,6 +161,8 @@ public class Statisticboard {
     public static Statisticboard readCsv(File file, Player[] players, boolean inSecondIteration ) throws CsvValidationException, IOException {
         FileReader fileReader = new FileReader(file);
         CSVReader reader = new CSVReader(fileReader);
+        Logger logger = org.apache.logging.log4j.LogManager.getLogger(Main.class);
+
 
         if (inSecondIteration) {
             for (int i = 0; i < players.length + 4; i++)
@@ -171,6 +174,7 @@ public class Statisticboard {
         if (nextLine == null || nextLine.length < 2) {
             Statisticboard statisticboard = new Statisticboard(Game.NB_PLAYERS);
             statisticboard.initialize(players);
+            logger.info("Fichier csv non valide, création d'un nouveau fichier.\n");
             return statisticboard;
         }
 
@@ -184,6 +188,7 @@ public class Statisticboard {
             if ((nbPlayer >= Game.NB_PLAYERS) || (!nextLine[0].equals(players[nbPlayer].getName()))) {
                 Statisticboard statisticboard = new Statisticboard(Game.NB_PLAYERS);
                 statisticboard.initialize(players);
+                logger.info("Fichier csv non valide (trop de joueurs ou noms de joueurs différents), création d'un nouveau fichier.\n");
                 return statisticboard;
             }
             Player player = new Monarchist(nextLine[0]);
@@ -196,6 +201,7 @@ public class Statisticboard {
             file.createNewFile();
             Statisticboard statisticboard = new Statisticboard(Game.NB_PLAYERS);
             statisticboard.initialize(players);
+            logger.info("Fichier non valide (pas assez de joueurs), création d'un nouveau fichier.\n");
             return statisticboard;
         }
 
