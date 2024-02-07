@@ -12,6 +12,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Random;
+
 import fr.citadels.players.bots.*;
 import org.apache.logging.log4j.Logger;
 
@@ -44,8 +46,8 @@ public class Main {
         if (twoThousands) {
             main.runTwoThousands();
         } else
-        if (csv) {
-            // main.runCsv();
+        {
+            main.runCsv();
         }
     }
 
@@ -54,6 +56,10 @@ public class Main {
      * Run a single game with a full log printed.
      */
     public void runDemonstration() {
+        Logger logger = org.apache.logging.log4j.LogManager.getLogger(Main.class);
+        Path path = Paths.get("stats", "gamestats.csv");
+        File file = new File(path.toString());
+
         Player[] players = new Player[Game.NB_PLAYERS];
         players[0] = new Uncertain("HASARDEUX", RAND);
         players[1] = new Spendthrift("DÉPENSIER", RAND);
@@ -61,9 +67,26 @@ public class Main {
         players[3] = new Monarchist("MONARCHISTE");
         players[4] = new Richard("RICHARD");
 
+        Statisticboard statisticboard;
+        try {
+            statisticboard = readOrCreateStatisticboard(file, players, false);
+        } catch (IOException | CsvValidationException e) {
+            logger.info("Erreur lors de la lecture du fichier\n\n");
+            statisticboard = new Statisticboard(Game.NB_PLAYERS);
+            statisticboard.initialize(players);
+        }
 
         Game game = new Game(players, RAND);
         game.play();
+        statisticboard.update(game.getScoreboard());
+
+        if (csv) {
+            try {
+                statisticboard.writeCsv(file, false);
+            } catch (IOException e) {
+                logger.info("Erreur lors de l'écriture du fichier\n\n");
+            }
+        }
     }
 
 
@@ -74,7 +97,6 @@ public class Main {
      */
     public void runTwoThousands() {
         Logger logger = org.apache.logging.log4j.LogManager.getLogger(Main.class);
-
         Path path = Paths.get("stats", "gamestats.csv");
         File file = new File(path.toString());
 
@@ -87,18 +109,32 @@ public class Main {
         players1[3] = new Thrifty("ÉCONOME_4", RAND);
         players1[4] = new Thrifty("ÉCONOME_5", RAND);
 
-        Statisticboard statisticboard1 = readOrCreateStatisticboard(file, players1, false);
+        Statisticboard statisticboard1;
+        try {
+            statisticboard1 = readOrCreateStatisticboard(file, players1, false);
+        } catch (IOException | CsvValidationException e) {
+            logger.info("Erreur lors de la lecture du fichier\n\n");
+            statisticboard1 = new Statisticboard(Game.NB_PLAYERS);
+            statisticboard1.initialize(players1);
+        }
 
         // Initialize the second series of thousand games
 
         Player[] players2 = new Player[Game.NB_PLAYERS];
-        players2[0] = new Spendthrift("DÉPENSIER_1", RAND);
-        players2[1] = new Spendthrift("DÉPENSIER_2", RAND);
-        players2[2] = new Spendthrift("DÉPENSIER_3", RAND);
-        players2[3] = new Thrifty("ÉCONOME_1", RAND);
-        players2[4] = new Thrifty("ÉCONOME_2", RAND);
+        players2[0] = new Spendthrift("DÉPENSIER", RAND);
+        players2[1] = new Monarchist("MONARCHISTE");
+        players2[2] = new Uncertain("HASARDEUX", RAND);
+        players2[3] = new Thrifty("ÉCONOME", RAND);
+        players2[4] = new Richard("RICHARD");
 
-        Statisticboard statisticboard2 = readOrCreateStatisticboard(file, players2, true);
+        Statisticboard statisticboard2;
+        try {
+            statisticboard2 = readOrCreateStatisticboard(file, players2, true);
+        } catch (IOException | CsvValidationException e) {
+            logger.info("Erreur lors de la lecture du fichier\n\n");
+            statisticboard2 = new Statisticboard(Game.NB_PLAYERS);
+            statisticboard2.initialize(players2);
+        }
 
         // Play the first series of thousand games
         logger.info("\n- Partie avec plusieurs fois le meilleur bot\n\n");
@@ -114,7 +150,7 @@ public class Main {
             try {
                 statisticboard1.writeCsv(file, false);
             } catch (IOException e) {
-                System.out.println("Erreur lors de l'écriture du fichier");
+                logger.info("Erreur lors de l'écriture du fichier\n\n");
             }
         }
 
@@ -132,7 +168,7 @@ public class Main {
             try {
                 statisticboard2.writeCsv(file, true);
             } catch (IOException e) {
-                System.out.println("Erreur lors de l'écriture du fichier");
+                logger.info("Erreur lors de l'écriture du fichier\n\n");
             }
         }
     }
@@ -141,29 +177,42 @@ public class Main {
     /**
      * Run several simulations while reading “stats/gamestats.csv” if it exists and adding new statistics.
      */
-    public void runCsv() throws IOException, CsvValidationException {
-        System.out.println("csv");
-
+    public void runCsv() {
+        Logger logger = org.apache.logging.log4j.LogManager.getLogger(Main.class);
         Path path = Paths.get("stats", "gamestats.csv");
         File file = new File(path.toString());
-        if (file.exists()) {
-            //Statisticboard stats = Statisticboard.readCsv(file, players);
-            //System.out.println(stats);
-        } else if (file.createNewFile()) {
-            System.out.println("File created");
+
+        // Initialize the hundred thousand games
+        Player[] players = new Player[Game.NB_PLAYERS];
+        players[0] = new Spendthrift("DÉPENSIER", RAND);
+        players[1] = new Monarchist("MONARCHISTE");
+        players[2] = new Uncertain("HASARDEUX", RAND);
+        players[3] = new Thrifty("ÉCONOME", RAND);
+        players[4] = new Richard("RICHARD");
+
+        Statisticboard statisticboard;
+        try {
+            statisticboard = readOrCreateStatisticboard(file, players, true);
+        } catch (IOException | CsvValidationException e) {
+            logger.info("Erreur lors de la lecture du fichier\n\n");
+            statisticboard = new Statisticboard(Game.NB_PLAYERS);
+            statisticboard.initialize(players);
         }
 
-/*
-        Statisticboard stats = new Statisticboard(4);
-        Game game = new Game();
-        Player[] players = new Player[]{new Monarchist("player1", new ArrayList<>(), game), new Monarchist("player2", new ArrayList<>(), game), new Monarchist("player3", new ArrayList<>(), game), new Monarchist("player4", new ArrayList<>(), game)};
-        stats.initialize(players);
-        stats.writeCsv(file);
+        // Play the hundred thousand games
+        logger.info("\nStatistiques sur 100 000 parties\n\n");
 
- */
+        for (int i = 0; i < 100000; i++) {
+            Game game = new Game(players, RAND);
+            game.play();
+            statisticboard.update(game.getScoreboard());
+        }
+        logger.info(statisticboard);
 
-        //Statisticboard stats = Statisticboard.readCsv(file);
-        //System.out.println(stats);
-
+        try {
+            statisticboard.writeCsv(file, false);
+        } catch (IOException e) {
+            logger.info("Erreur lors de l'écriture du fichier\n\n");
+        }
     }
 }

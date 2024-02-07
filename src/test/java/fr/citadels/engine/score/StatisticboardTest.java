@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -197,10 +198,12 @@ class StatisticboardTest {
         File fileTestWrite = new File(pathTestWrite.toString());
 
         Path pathTestRead = Paths.get("src/test/resources/testRead.csv");
+        Random rand = new Random();
         File fileTestRead = new File(pathTestRead.toString());
-        Statisticboard stats = Statisticboard.readCsv(fileTestRead, players, false);
+        Player[] players1 = new Player[]{new Thrifty("player1", rand), new Thrifty("player2", rand), new Thrifty("player3", rand), new Thrifty("player4", rand), new Thrifty("player5", rand)};
+        Statisticboard stats = Statisticboard.readCsv(fileTestRead, players1, false);
 
-        stats.writeCsv(fileTestRead, false);
+        stats.writeCsv(fileTestWrite, false);
 
         // GAME 1
         Score bobScore1 = mock(Score.class);
@@ -266,7 +269,9 @@ class StatisticboardTest {
         Path pathTestRead = Paths.get("src/test/resources/testRead.csv");
         File fileTestRead = new File(pathTestRead.toString());
 
-        Statisticboard stats = Statisticboard.readCsv(fileTestRead, players, false);
+        Random rand = new Random();
+        Player[] players1 = new Player[]{new Thrifty("player1", rand), new Thrifty("player2", rand), new Thrifty("player3", rand), new Thrifty("player4", rand), new Thrifty("player5", rand)};
+        Statisticboard stats = Statisticboard.readCsv(fileTestRead, players1, false);
         assertEquals(5, stats.getStatistics().length);
 
         assertEquals("player1", stats.getStatistics()[0].getPlayer().getName());

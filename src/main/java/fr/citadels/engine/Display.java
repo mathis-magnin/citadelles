@@ -41,7 +41,7 @@ public class Display {
 
     public void print() {
         Logger logger = LogManager.getLogger("Citadels");
-        if (!Main.twoThousands)
+        if (!Main.twoThousands && !Main.csv)
             logger.log(Level.INFO, this.events.toString());
 
     }

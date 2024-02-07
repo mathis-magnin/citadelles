@@ -87,19 +87,12 @@ public class Statisticboard {
      * @param inSecondIteration a boolean to know if we are in the second iteration of the thousand games
      * @return a statisticboard
      */
-    public static Statisticboard readOrCreateStatisticboard(File file, Player[] players, boolean inSecondIteration) {
+    public static Statisticboard readOrCreateStatisticboard(File file, Player[] players, boolean inSecondIteration) throws CsvValidationException, IOException {
         Statisticboard statisticboard;
 
         if (Main.csv) {
             if (file.exists()) {
-                try {
-                    statisticboard = Statisticboard.readCsv(file, players, inSecondIteration);
-                    System.out.println("Csv lu avec succès");
-                } catch (IOException | CsvValidationException e) {
-                    System.out.println("Erreur lors de la lecture du fichier");
-                    statisticboard = new Statisticboard(Game.NB_PLAYERS);
-                    statisticboard.initialize(players);
-                }
+                statisticboard = Statisticboard.readCsv(file, players, inSecondIteration);
             } else {
                 statisticboard = new Statisticboard(Game.NB_PLAYERS);
                 statisticboard.initialize(players);
@@ -155,6 +148,7 @@ public class Statisticboard {
 
     /**
      * Read a statisticboard in a csv file and return it.
+     * If it's not a valid file or if the number of players or the players' name are not the same as the current game, create a new statisticboard.
      *
      * @param file the file to read
      * @param players an array of players
@@ -187,6 +181,11 @@ public class Statisticboard {
 
         List<Statistic> statistics = new ArrayList<>();
         while (((nextLine = reader.readNext()) != null) && (nextLine.length == 7)){
+            if ((nbPlayer >= Game.NB_PLAYERS) || (!nextLine[0].equals(players[nbPlayer].getName()))) {
+                Statisticboard statisticboard = new Statisticboard(Game.NB_PLAYERS);
+                statisticboard.initialize(players);
+                return statisticboard;
+            }
             Player player = new Monarchist(nextLine[0]);
             Statistic statistic = new Statistic(player, nbGame, Double.parseDouble(nextLine[1]), Double.parseDouble(nextLine[5]));
             statistics.add(statistic);
