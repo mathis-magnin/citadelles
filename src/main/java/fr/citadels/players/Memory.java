@@ -1,5 +1,6 @@
 package fr.citadels.players;
 
+import fr.citadels.cards.charactercards.CharactersList;
 import fr.citadels.cards.charactercards.Power;
 import fr.citadels.engine.Display;
 import fr.citadels.engine.Game;
@@ -21,6 +22,7 @@ public class Memory {
     private Character target;
     private int cardsToDiscard;
     private District districtToDestroy;
+    private CharactersList remainingCharacters;
 
 
     /* Constructor */
@@ -35,6 +37,7 @@ public class Memory {
         this.target = null;
         this.cardsToDiscard = 0;
         this.districtToDestroy = null;
+        this.remainingCharacters = null;
     }
 
 
@@ -103,6 +106,11 @@ public class Memory {
     }
 
 
+    public CharactersList getRemainingCharacters() {
+        return this.remainingCharacters;
+    }
+
+
     /* Setters */
 
     public void setDraw(boolean draw) {
@@ -152,6 +160,11 @@ public class Memory {
      */
     public void setDistrictToDestroy(District districtToDestroy) {
         this.districtToDestroy = districtToDestroy;
+    }
+
+
+    public void setRemainingCharacters(CharactersList characters) {
+        this.remainingCharacters = characters;
     }
 
 }

@@ -43,12 +43,14 @@ public class Monarchist extends Player {
         for (int i = 0; i < characters.size(); i++) {
             if (characters.get(i).getName().equals("Roi")) {
                 this.setCharacter(characters.remove(i));
+                this.getMemory().setRemainingCharacters(characters);
                 getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
                 return;
             }
         }
         // Cannot find the king character, it could happen if a player already took it or if it is placed face down
         this.setCharacter(characters.remove(0));
+        this.getMemory().setRemainingCharacters(characters);
         getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 

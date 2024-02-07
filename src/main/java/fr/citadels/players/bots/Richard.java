@@ -32,6 +32,7 @@ public class Richard extends Player {
     @Override
     public void chooseCharacter(CharactersList characters) {
         this.setCharacter(characters.remove(0));
+        this.getMemory().setRemainingCharacters(characters);
     }
 
 

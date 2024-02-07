@@ -52,6 +52,7 @@ public class Uncertain extends Player {
             randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
+        this.getMemory().setRemainingCharacters(characters);
         getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
