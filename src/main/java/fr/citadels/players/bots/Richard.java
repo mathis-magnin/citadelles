@@ -22,6 +22,10 @@ public class Richard extends Player {
         super(name, cards, game);
     }
 
+    public Richard(String name) {
+        super(name);
+    }
+
 
     /* Methods */
 
@@ -91,10 +95,10 @@ public class Richard extends Player {
     @Override
     public void chooseTargetToDestroy() {
         if (!Warlord.getPossibleTargets().isEmpty()) {
-           this.memory.setTarget(Warlord.getPossibleTargets().get(0));
-           if (!this.memory.getTarget().getPlayer().getCity().isEmpty() && (this.memory.getTarget().getPlayer().getCity().get(0).getGoldCost() - 1 <= this.getGold())) {
-               this.memory.setDistrictToDestroy(this.memory.getTarget().getPlayer().getCity().get(0));
-           }
+            this.memory.setTarget(Warlord.getPossibleTargets().get(0));
+            if (!this.memory.getTarget().getPlayer().getCity().isEmpty() && (this.memory.getTarget().getPlayer().getCity().get(0).getGoldCost() - 1 <= this.getGold())) {
+                this.memory.setDistrictToDestroy(this.memory.getTarget().getPlayer().getCity().get(0));
+            }
         }
     }
 

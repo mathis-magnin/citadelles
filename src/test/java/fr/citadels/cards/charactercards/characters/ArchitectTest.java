@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -21,9 +22,11 @@ class ArchitectTest {
 
     @BeforeEach
     void init() {
-        game = new Game();
-        game.getPile().initializePile();
+        Player[] players = new Player[4];
+        game = new Game(players, new Random());
         player = new Monarchist("Gustave Eiffel", Arrays.asList(DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[10]), game);
+        players[0] = player;
+        game.getPile().initializePile();
         player.setCharacter(new Architect());
         player.getActions().addGold(10);
     }

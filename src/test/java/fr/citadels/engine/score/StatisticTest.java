@@ -19,7 +19,7 @@ class StatisticTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game();
+        game = new Game(new Player[4], null);
         game.getPile().initializePile();
         player = new Monarchist("Bob", new ArrayList<>(), game);
         statistic = new Statistic(player);

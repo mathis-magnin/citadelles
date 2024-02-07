@@ -17,26 +17,32 @@ import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class RandomTest {
+class UncertainTest {
 
     @Mock
     java.util.Random random = mock(java.util.Random.class);
-    Random player;
-    Random player2;
-    Random player3;
+    Uncertain player;
+    Uncertain player2;
+    Uncertain player3;
     Game game;
 
     @BeforeEach
     void setUp() {
-        game = new Game();
+        Player[] players = new Player[4];
+        game = new Game(players, random);
         List<District> districts = new ArrayList<>(List.of(DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[22]));
-        player = new Random("Hello", districts, game, random);
-        player2 = new Random("Bob", new ArrayList<>(), game, random);
-        player3 = new Random("Bob", new ArrayList<>(), game, random);
+        player = new Uncertain("Hello", districts, game, random);
+        player2 = new Uncertain("Bob", new ArrayList<>(), game, random);
+        player3 = new Uncertain("Bob", new ArrayList<>(), game, random);
+
+        players[0] = player;
+        players[1] = player2;
+        players[2] = player3;
     }
 
     @Test
@@ -189,7 +195,7 @@ class RandomTest {
     @Test
     void playWith2GoldsCardAlreadyIn() {
         List<District> districts = new ArrayList<>(List.of(DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[13]));
-        player = new Random("Hello", districts, game, random);
+        player = new Uncertain("Hello", districts, game, random);
 
         player.getActions().addGold(2);
         when(random.nextBoolean()).thenReturn(false, false);

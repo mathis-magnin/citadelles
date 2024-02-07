@@ -6,6 +6,7 @@ import fr.citadels.cards.charactercards.Power;
 import fr.citadels.cards.districtcards.City;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.engine.Game;
+import fr.citadels.players.Player;
 import fr.citadels.players.bots.Monarchist;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -14,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,8 +29,10 @@ class WarlordTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game();
 
+        Player[] players = new Player[4];
+
+        game = new Game(players, new Random());
         player1 = new Monarchist("Tom", new ArrayList<>(), game);
         player2 = new Monarchist("Bob", new ArrayList<>(), game);
         player3 = new Monarchist("Sam", new ArrayList<>(), game);

@@ -8,12 +8,14 @@ import fr.citadels.cards.districtcards.City;
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.players.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,11 +29,15 @@ class MonarchistTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game();
+        Player[] players = new Player[4];
+        game = new Game(players, new Random());
         List<District> districts = new ArrayList<>(List.of(DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[22]));
         player1 = new Monarchist("Hello1", districts, game);
         player2 = new Monarchist("Bob", new ArrayList<>(), game);
         player3 = new Monarchist("Tom", new ArrayList<>(), game);
+        players[0] = player1;
+        players[1] = player2;
+        players[2] = player3;
     }
 
     @Test

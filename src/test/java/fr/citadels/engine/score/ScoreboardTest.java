@@ -62,7 +62,7 @@ class ScoreboardTest {
 
     /* Initialize players */
 
-    Game game = new Game();
+    Game game = new Game(new Player[4], null);
 
     Player player1 = new Monarchist("Tom", cardsPlayer1, game) {
         @Override

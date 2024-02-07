@@ -8,6 +8,7 @@ import fr.citadels.players.bots.Monarchist;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +18,10 @@ class LaboratoryTest {
 
     @Test
     void build() {
-        laboratory.setOwner(new Monarchist("KingBot", List.of(laboratory), new Game()));
+        Player[] players = new Player[4];
+        Game game = new Game(players, new Random());
+        laboratory.setOwner(new Monarchist("KingBot", List.of(laboratory), game));
+        players[0] = laboratory.getOwner();
         assertTrue(laboratory.isBuilt());
         assertEquals(laboratory.getOwner().getName(), "KingBot");
 
@@ -25,8 +29,10 @@ class LaboratoryTest {
 
     @Test
     void useEffect() {
-        Game game = new Game();
+        Player[] players = new Player[4];
+        Game game = new Game(players, new Random());
         Player king = new Monarchist("KingBot", List.of(DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[40]), game);
+        players[0] = king;
         game.getPile().initializePile();
         king.setCharacter(new King());
         laboratory.setOwner(king);

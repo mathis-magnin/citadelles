@@ -27,6 +27,9 @@ public class Monarchist extends Player {
         actions.sortHand(Family.NOBLE);
     }
 
+    public Monarchist(String name) {
+        super(name);
+    }
 
     /* Methods */
 
