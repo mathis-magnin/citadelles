@@ -73,6 +73,42 @@ class GameTest {
     }
 
     @Test
+    void checkAndMarkEndOfGame() {
+        game.getPlayersTab()[0].setCharacter(new King());
+        game.getPlayersTab()[1].setCharacter(new Bishop());
+        game.getPlayersTab()[2].setCharacter(new Merchant());
+        game.getPlayersTab()[3].setCharacter(new Architect());
+        game.getPlayersTab()[4].setCharacter(new Warlord());
+
+        assertFalse(game.isFinished());
+        for (int i = 0; i < game.getPlayersTab().length - 1; i++) {
+            game.checkAndMarkEndOfGame(game.getPlayersTab()[i].getCharacter());
+            assertFalse(game.isFinished());
+        }
+        game.getPlayersTab()[3].setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[2], DistrictsPile.allDistrictCards[3], DistrictsPile.allDistrictCards[4], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[6])));
+        game.checkAndMarkEndOfGame(game.getPlayersTab()[3].getCharacter());
+        assertTrue(game.isFinished());
+    }
+
+    @Test
+    void setNextCrownedPlayerIfPossible() {
+        game.getPlayersTab()[0].setCharacter(new Assassin());
+        game.getPlayersTab()[1].setCharacter(new King());
+        game.getPlayersTab()[2].setCharacter(new Merchant());
+        game.getPlayersTab()[3].setCharacter(new Architect());
+        game.getPlayersTab()[4].setCharacter(new Warlord());
+
+        game.setNextCrownedPlayerIfPossible(game.getPlayersTab()[0].getCharacter());
+        game.setNextCrownedPlayerIfPossible(game.getPlayersTab()[1].getCharacter());
+        game.setNextCrownedPlayerIfPossible(game.getPlayersTab()[2].getCharacter());
+        game.setNextCrownedPlayerIfPossible(game.getPlayersTab()[3].getCharacter());
+        game.setNextCrownedPlayerIfPossible(game.getPlayersTab()[4].getCharacter());
+        assertEquals(game.getPlayersTab()[1], game.getCrownedPlayer());
+
+
+    }
+
+    @Test
     void initializePlayersTest() {
         game.initializePlayers();
         for (Player player : game.getPlayersTab()) {

@@ -43,13 +43,11 @@ public class Monarchist extends Player {
         for (int i = 0; i < characters.size(); i++) {
             if (characters.get(i).getName().equals("Roi")) {
                 this.setCharacter(characters.remove(i));
-                getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
                 return;
             }
         }
         // Cannot find the king character, it could happen if a player already took it or if it is placed face down
         this.setCharacter(characters.remove(0));
-        getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
 
@@ -95,8 +93,7 @@ public class Monarchist extends Player {
         this.chooseDistrictToBuild();
         if (this.memory.getDistrictToBuild() != null) {
             this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.AFTER_BUILDING : Moment.BETWEEN_PHASES);
-        }
-        else {
+        } else {
             this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
         }
     }

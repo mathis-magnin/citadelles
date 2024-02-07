@@ -64,7 +64,13 @@ public class Game {
         return this.pile;
     }
 
+    public Player getCrownedPlayer() {
+        return this.crownedPlayer;
+    }
 
+    public boolean isFinished() {
+        return isFinished;
+    }
 
     /* Methods */
 
@@ -128,6 +134,14 @@ public class Game {
         return -1;
     }
 
+    /**
+     * Show the selected characters of the players
+     */
+    void showSelectedCharacters() {
+        for (Player player : this.playersTab) {
+            player.getMemory().getDisplay().addCharacterChosen(player, player.getCharacter());
+        }
+    }
 
     /**
      * Play the selection phase of the turn
@@ -155,13 +169,39 @@ public class Game {
             index = (i + crownedPlayerIndex) % length;
             this.playersTab[index].chooseCharacter(characters);
         }
-
+        showSelectedCharacters();
         this.display.addBlankLine();
         this.display.addCharacterNotChosen(characters.remove(0)); // Only one character is not chosen
 
         this.display.addBlankLine();
     }
 
+    /**
+     * Check if the game is finished and mark it if it is
+     *
+     * @param character the character to check
+     */
+    public void checkAndMarkEndOfGame(Character character) {
+        if (character.getPlayer().hasCompleteCity() && !this.isFinished) {
+            Score.setFirstPlayerWithCompleteCity(character.getPlayer());
+            this.display.addGameFinished(character.getPlayer());
+            this.display.addBlankLine();
+            this.isFinished = true;
+        }
+    }
+
+    /**
+     * Set the crowned player to King
+     *
+     * @param character the potential character to set as the crowned player
+     */
+    public void setNextCrownedPlayerIfPossible(Character character) {
+        if (character.equals(new King())) {
+            this.crownedPlayer = character.getPlayer();
+            this.display.addKingPower();
+            this.display.addBlankLine();
+        }
+    }
 
     /**
      * Play a turn for each player
@@ -180,19 +220,9 @@ public class Game {
                 if (character.isRobbed()) {
                     character.getPlayer().getActions().getRobbed();
                 }
-                if (character.equals(new King())) {
-                    this.crownedPlayer = character.getPlayer();
-                    this.display.addKingPower();
-                    this.display.addBlankLine();
-                }
+                setNextCrownedPlayerIfPossible(character);
                 character.bringIntoPlay();
-
-                if (character.getPlayer().hasCompleteCity() && !this.isFinished) {
-                    Score.setFirstPlayerWithCompleteCity(character.getPlayer());
-                    this.display.addGameFinished(character.getPlayer());
-                    this.display.addBlankLine();
-                    this.isFinished = true;
-                }
+                checkAndMarkEndOfGame(character);
             } else {
                 this.display.addNoPlayerTurn(this.crownedPlayer, character);
                 this.display.addBlankLine();
