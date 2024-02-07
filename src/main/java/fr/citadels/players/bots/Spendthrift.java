@@ -51,7 +51,7 @@ public class Spendthrift extends Player {
         }
         this.setCharacter(characters.remove(randomIndex));
         this.getMemory().setPossibleCharacters(characters);
-        getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
+
     }
 
 
@@ -116,8 +116,7 @@ public class Spendthrift extends Player {
         this.chooseDistrictToBuild();
         if (this.memory.getDistrictToBuild() != null) {
             this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.AFTER_BUILDING : Moment.BETWEEN_PHASES);
-        }
-        else {
+        } else {
             this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
         }
     }

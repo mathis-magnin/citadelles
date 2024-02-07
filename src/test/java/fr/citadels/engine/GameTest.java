@@ -73,6 +73,42 @@ class GameTest {
     }
 
     @Test
+    void checkAndMarkEndOfGame() {
+        game.getPlayers()[0].setCharacter(new King());
+        game.getPlayers()[1].setCharacter(new Bishop());
+        game.getPlayers()[2].setCharacter(new Merchant());
+        game.getPlayers()[3].setCharacter(new Architect());
+        game.getPlayers()[4].setCharacter(new Warlord());
+
+        assertFalse(game.isFinished());
+        for (int i = 0; i < game.getPlayers().length - 1; i++) {
+            game.checkAndMarkEndOfGame(game.getPlayers()[i].getCharacter());
+            assertFalse(game.isFinished());
+        }
+        game.getPlayers()[3].setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[2], DistrictsPile.allDistrictCards[3], DistrictsPile.allDistrictCards[4], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[6])));
+        game.checkAndMarkEndOfGame(game.getPlayers()[3].getCharacter());
+        assertTrue(game.isFinished());
+    }
+
+    @Test
+    void setNextCrownedPlayerIfPossible() {
+        game.getPlayers()[0].setCharacter(new Assassin());
+        game.getPlayers()[1].setCharacter(new King());
+        game.getPlayers()[2].setCharacter(new Merchant());
+        game.getPlayers()[3].setCharacter(new Architect());
+        game.getPlayers()[4].setCharacter(new Warlord());
+
+        game.setNextCrownedPlayerIfPossible(game.getPlayers()[0].getCharacter());
+        game.setNextCrownedPlayerIfPossible(game.getPlayers()[1].getCharacter());
+        game.setNextCrownedPlayerIfPossible(game.getPlayers()[2].getCharacter());
+        game.setNextCrownedPlayerIfPossible(game.getPlayers()[3].getCharacter());
+        game.setNextCrownedPlayerIfPossible(game.getPlayers()[4].getCharacter());
+        assertEquals(game.getPlayers()[1], game.getCrownedPlayer());
+
+
+    }
+
+    @Test
     void initializePlayersTest() {
         game.initializePlayers();
         for (Player player : game.getPlayers()) {
