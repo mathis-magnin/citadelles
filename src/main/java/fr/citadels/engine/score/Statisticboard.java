@@ -92,17 +92,12 @@ public class Statisticboard {
         Statisticboard statisticboard;
         Logger logger = org.apache.logging.log4j.LogManager.getLogger(Main.class);
 
-        if (Main.csv) {
-            if (file.exists()) {
-                statisticboard = Statisticboard.readCsv(file, players, inSecondIteration);
-            } else {
-                statisticboard = new Statisticboard(Game.NB_PLAYERS);
-                statisticboard.initialize(players);
-                logger.info("Fichier csv non trouvé, création d'un nouveau fichier\n");
-            }
+        if (file.exists()) {
+            statisticboard = Statisticboard.readCsv(file, players, inSecondIteration);
         } else {
             statisticboard = new Statisticboard(Game.NB_PLAYERS);
             statisticboard.initialize(players);
+            logger.info("Fichier csv non trouvé, création d'un nouveau fichier\n");
         }
         return statisticboard;
     }

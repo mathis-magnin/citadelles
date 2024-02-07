@@ -109,13 +109,16 @@ public class Main {
         players1[3] = new Thrifty("ÉCONOME_4", RAND);
         players1[4] = new Thrifty("ÉCONOME_5", RAND);
 
-        Statisticboard statisticboard1;
+        Statisticboard statisticboard1 = new Statisticboard(Game.NB_PLAYERS);
+        statisticboard1.initialize(players1);
+
+        Statisticboard statisticboardCSV1;
         try {
-            statisticboard1 = readOrCreateStatisticboard(file, players1, false);
+            statisticboardCSV1 = readOrCreateStatisticboard(file, players1, false);
         } catch (IOException | CsvValidationException e) {
             logger.info("Erreur lors de la lecture du fichier\n\n");
-            statisticboard1 = new Statisticboard(Game.NB_PLAYERS);
-            statisticboard1.initialize(players1);
+            statisticboardCSV1 = new Statisticboard(Game.NB_PLAYERS);
+            statisticboardCSV1.initialize(players1);
         }
 
         // Initialize the second series of thousand games
@@ -127,13 +130,16 @@ public class Main {
         players2[3] = new Thrifty("ÉCONOME", RAND);
         players2[4] = new Richard("RICHARD");
 
-        Statisticboard statisticboard2;
+        Statisticboard statisticboard2 = new Statisticboard(Game.NB_PLAYERS);
+        statisticboard2.initialize(players2);
+
+        Statisticboard statisticboardCSV2;
         try {
-            statisticboard2 = readOrCreateStatisticboard(file, players2, true);
+            statisticboardCSV2 = readOrCreateStatisticboard(file, players2, true);
         } catch (IOException | CsvValidationException e) {
             logger.info("Erreur lors de la lecture du fichier\n\n");
-            statisticboard2 = new Statisticboard(Game.NB_PLAYERS);
-            statisticboard2.initialize(players2);
+            statisticboardCSV2 = new Statisticboard(Game.NB_PLAYERS);
+            statisticboardCSV2.initialize(players2);
         }
 
         // Play the first series of thousand games
@@ -143,12 +149,13 @@ public class Main {
             Game game = new Game(players1, RAND);
             game.play();
             statisticboard1.update(game.getScoreboard());
+            statisticboardCSV1.update(game.getScoreboard());
         }
         logger.info(statisticboard1);
 
         if (csv) {
             try {
-                statisticboard1.writeCsv(file, false);
+                statisticboardCSV1.writeCsv(file, false);
             } catch (IOException e) {
                 logger.info("Erreur lors de l'écriture du fichier\n\n");
             }
@@ -161,12 +168,13 @@ public class Main {
             Game game = new Game(players2, RAND);
             game.play();
             statisticboard2.update(game.getScoreboard());
+            statisticboardCSV2.update(game.getScoreboard());
         }
         logger.info(statisticboard2);
 
         if (csv) {
             try {
-                statisticboard2.writeCsv(file, true);
+                statisticboardCSV2.writeCsv(file, true);
             } catch (IOException e) {
                 logger.info("Erreur lors de l'écriture du fichier\n\n");
             }
