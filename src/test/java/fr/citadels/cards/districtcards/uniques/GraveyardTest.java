@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,7 +28,8 @@ class GraveyardTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game();
+        Player[] players = new Player[4];
+        game = new Game(players, new Random());
         game.getPile().initializePile();
 
         graveyard = (Graveyard) (DistrictsPile.allDistrictCards[62]);
@@ -44,7 +46,7 @@ class GraveyardTest {
 
         graveyardPlayer = new Monarchist("GRAVEYARD", new ArrayList<>(), game) {
             @Override
-            public boolean activateGraveyardEffect(District districtRemoved) {
+            public boolean chooseGraveyardEffect(District districtRemoved) {
                 return true;
             }
         };
@@ -52,6 +54,10 @@ class GraveyardTest {
         graveyardPlayer.getActions().addGold(1); // 1 to use the effect of the graveyard
         graveyardPlayer.setCity(new City(List.of(graveyard)));
         graveyard.setOwner(graveyardPlayer);
+
+        players[0] = warlordPlayer;
+        players[1] = targetedPlayer;
+        players[2] = graveyardPlayer;
     }
 
     @AfterEach
@@ -85,7 +91,7 @@ class GraveyardTest {
         setUp();
         Player targetedGraveyardPlayer = new Monarchist("TARGETED_GRAVEYARD", new ArrayList<>(), game) {
             @Override
-            public boolean activateGraveyardEffect(District removedDistrict) {
+            public boolean chooseGraveyardEffect(District removedDistrict) {
                 return true;
             }
         };
@@ -111,7 +117,7 @@ class GraveyardTest {
         setUp();
         Player warlordTargetedGraveyardPlayer = new Monarchist("WARLORD_TARGETED_GRAVEYARD", new ArrayList<>(), game) {
             @Override
-            public boolean activateGraveyardEffect(District removedDistrict) {
+            public boolean chooseGraveyardEffect(District removedDistrict) {
                 return true;
             }
         };

@@ -25,20 +25,22 @@ class StatisticboardTest {
     Player bob;
     Player jan;
     Player lou;
+    Player[] players;
 
     Statisticboard statisticboard;
 
     @BeforeEach
     void setUp() {
-        game = new Game();
+        game = new Game(new Player[3], null);
         game.getPile().initializePile();
 
         bob = new Monarchist("bob", new ArrayList<>(), game);
         jan = new Monarchist("jan", new ArrayList<>(), game);
         lou = new Monarchist("lou", new ArrayList<>(), game);
 
+        players = new Player[]{bob, jan, lou};
         statisticboard = new Statisticboard(3);
-        statisticboard.initialize(new Player[]{bob, jan, lou});
+        statisticboard.initialize(players);
     }
 
     @Test
@@ -196,9 +198,9 @@ class StatisticboardTest {
 
         Path pathTestRead = Paths.get("src/test/resources/testRead.csv");
         File fileTestRead = new File(pathTestRead.toString());
-        Statisticboard stats = Statisticboard.readCsv(fileTestRead);
+        Statisticboard stats = Statisticboard.readCsv(fileTestRead, players, false);
 
-        stats.writeCsv(fileTestRead);
+        stats.writeCsv(fileTestRead, false);
 
         // GAME 1
         Score bobScore1 = mock(Score.class);
@@ -237,22 +239,22 @@ class StatisticboardTest {
         when(scoreboard2.getWinner()).thenReturn(bob);
 
         statisticboard.update(scoreboard2);
-        statisticboard.writeCsv(fileTestWrite);
+        statisticboard.writeCsv(fileTestWrite, false);
 
         FileReader fileReader = new FileReader(fileTestWrite);
         BufferedReader bufferedReader = new BufferedReader(fileReader);
         String line = bufferedReader.readLine();
-        assertEquals("\"Nombre de parties jouées : \",\"2.0\"", line);
+        assertEquals("\"Nombre de parties jouées : \",\"2\"", line);
         line = bufferedReader.readLine();
         assertEquals("", line);
         line = bufferedReader.readLine();
         assertEquals("\"Player\",\"Win number\",\"Win percentage\",\"Defeat number\",\"Defeat percentage\",\"Total Score\",\"Average score\"", line);
         line = bufferedReader.readLine();
-        assertEquals("\"bob\",\"1.0\",\"50.0\",\"1.0\",\"50.0\",\"40.0\",\"20.0\"", line);
+        assertEquals("\"bob\",\"1\",\"50\",\"1\",\"50\",\"40\",\"20\"", line);
         line = bufferedReader.readLine();
-        assertEquals("\"jan\",\"0.0\",\"0.0\",\"2.0\",\"100.0\",\"30.0\",\"15.0\"", line);
+        assertEquals("\"jan\",\"0\",\"0\",\"2\",\"100\",\"30\",\"15\"", line);
         line = bufferedReader.readLine();
-        assertEquals("\"lou\",\"1.0\",\"50.0\",\"1.0\",\"50.0\",\"50.0\",\"25.0\"", line);
+        assertEquals("\"lou\",\"1\",\"50\",\"1\",\"50\",\"50\",\"25\"", line);
         line = bufferedReader.readLine();
         assertNull(line);
 
@@ -264,7 +266,7 @@ class StatisticboardTest {
         Path pathTestRead = Paths.get("src/test/resources/testRead.csv");
         File fileTestRead = new File(pathTestRead.toString());
 
-        Statisticboard stats = Statisticboard.readCsv(fileTestRead);
+        Statisticboard stats = Statisticboard.readCsv(fileTestRead, players, false);
         assertEquals(5, stats.getStatistics().length);
 
         assertEquals("player1", stats.getStatistics()[0].getPlayer().getName());

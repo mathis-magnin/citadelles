@@ -26,8 +26,41 @@ public class Monarchist extends Player {
         actions.sortHand(Family.NOBLE);
     }
 
+    public Monarchist(String name) {
+        super(name);
+    }
 
     /* Methods */
+
+    /**
+     * Choose the king characterCard from the list of character.
+     *
+     * @param characters the list of characterCard.
+     */
+    @Override
+    public void chooseCharacter(CharactersList characters) {
+        for (int i = 0; i < characters.size(); i++) {
+            if (characters.get(i).getName().equals("Roi")) {
+                this.setCharacter(characters.remove(i));
+                getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
+                return;
+            }
+        }
+        // Cannot find the king character, it could happen if a player already took it or if it is placed face down
+        this.setCharacter(characters.remove(0));
+        getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
+    }
+
+
+    /**
+     * Draw if his hand is empty, or if he only has district which are already built in his city, or if he can build the district he wants.
+     */
+    @Override
+    public void chooseDraw() {
+        int firstNotDuplicateIndex = getCity().getFirstNotDuplicateIndex(getHand());
+        this.memory.setDraw(getHand().isEmpty() || firstNotDuplicateIndex == -1 || getHand().get(firstNotDuplicateIndex).getGoldCost() < getGold());
+    }
+
 
     /***
      * choose a NOBLE card if possible or the first card
@@ -53,42 +86,35 @@ public class Monarchist extends Player {
     }
 
 
-    /***
-     * take the most expensive card that he can place (preferred noble)
-     * set its districtToBuild attribute with the card chosen or null if no card can be chosen
+    /**
+     * Choose to take gold from city after he built another district from his family or before otherwise.
      */
     @Override
-    public void chooseDistrictToBuild() {
-        for (int i = 0; i < getHand().size(); i++) {
-            if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i))) {
-                this.getMemory().setDistrictToBuild(this.getActions().removeCardFromHand(i));
-                return;
-            }
+    public void chooseMomentToTakeGoldFromCity() {
+        this.chooseDistrictToBuild();
+        if (this.memory.getDistrictToBuild() != null) {
+            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? 2 : 1);
         }
-        this.getMemory().setDistrictToBuild(null);
+        else {
+            this.memory.setMomentWhenUse(1);
+        }
     }
 
 
     /**
-     * Choose the king characterCard from the list of character.
-     *
-     * @param characters the list of characterCard.
+     * Take the most expensive card that he can place (preferred noble)
+     * set its districtToBuild attribute with the card chosen or null if no card can be chosen
      */
     @Override
-    public void chooseCharacter(CharactersList characters) {
-        for (int i = 0; i < characters.size(); i++) {
-            if (characters.get(i).getName().equals("Roi")) {
-                this.setCharacter(characters.remove(i));
-                getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
+    public void chooseDistrictToBuild() {
+        this.getActions().sortHand(Family.NOBLE);
+        for (int i = 0; i < getHand().size(); i++) {
+            if (this.getHand().get(i).getGoldCost() <= getGold() && !this.hasCardInCity(getHand().get(i))) {
+                this.getMemory().setDistrictToBuild(this.getHand().get(i));
                 return;
             }
         }
-        /*
-         * cannot find the king character
-         * Could happen if a player already took it or if it is placed face down
-         */
-        this.setCharacter(characters.remove(0));
-        getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
+        this.getMemory().setDistrictToBuild(null);
     }
 
 
@@ -117,13 +143,12 @@ public class Monarchist extends Player {
         }
     }
 
+
     /**
-     * Choose the power to use as a magician
-     *
-     * @return an int depending on the moment to use the power
+     * Choose the power to use as a magician.
      */
     @Override
-    public int chooseMagicianPower() {
+    public void chooseMagicianPower() {
         Character characterWithMostCards = Magician.getCharacterWithMostCards();
 
         if ((characterWithMostCards != null) && (characterWithMostCards.getPlayer().getHand().size() > this.getHand().size())) {
@@ -135,7 +160,7 @@ public class Monarchist extends Player {
             int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
             getMemory().setCardsToDiscard(nbCardsToDiscard + 1);
         }
-        return 0;
+        this.memory.setMomentWhenUse(0);
     }
 
 
@@ -159,43 +184,13 @@ public class Monarchist extends Player {
 
 
     @Override
-    public void playResourcesPhase() {
-        int firstNotDuplicateIndex = getCity().getFirstNotDuplicateIndex(getHand());
-        boolean draw = getHand().isEmpty() || firstNotDuplicateIndex == -1 || getHand().get(firstNotDuplicateIndex).getGoldCost() < getGold();
-
-        getActions().takeCardsOrGold(draw);
-
-        if (draw) {
-            getActions().sortHand(Family.NOBLE);
-        }
-
-        if (this.equals(DistrictsPile.allDistrictCards[60].getOwner())) // Utilise le pouvoir du laboratoire
-            DistrictsPile.allDistrictCards[60].useEffect();
-    }
-
-
-    @Override
-    public void playBuildingPhase() {
-        if (!getHand().isEmpty()) {
-            this.chooseDistrictToBuild();
-            this.getActions().build();
-        } else {
-            getMemory().getDisplay().addNoDistrictBuilt();
-        }
-        getMemory().getDisplay().addBlankLine();
-        getActions().takeGoldFromCity();
-        if (this.equals(DistrictsPile.allDistrictCards[61].getOwner())) // Utilise le pouvoir de la manufacture
-            DistrictsPile.allDistrictCards[61].useEffect();
-    }
-
-
-    @Override
-    public boolean activateFactoryEffect() {
+    public boolean chooseFactoryEffect() {
         return getHand().size() < 2 && getGold() >= 3;
     }
 
+
     @Override
-    public boolean activateLaboratoryEffect() {
+    public boolean chooseLaboratoryEffect() {
         return this.getActions().putRedundantCardsAtTheEnd() > 0 || getHand().size() > 4 || (getHand().size() > 2 && getGold() < 2);
     }
 
@@ -207,7 +202,7 @@ public class Monarchist extends Player {
      * @return a boolean value
      */
     @Override
-    public boolean activateGraveyardEffect(District removedDistrict) {
+    public boolean chooseGraveyardEffect(District removedDistrict) {
         return (1 <= this.getGold()) && !this.hasCardInCity(removedDistrict) && removedDistrict.getFamily().equals(Family.NOBLE);
     }
 

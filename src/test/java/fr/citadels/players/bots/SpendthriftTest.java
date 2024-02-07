@@ -7,6 +7,7 @@ import fr.citadels.cards.districtcards.City;
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.players.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,11 +32,18 @@ class SpendthriftTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game();
+        Player[] players = new Player[4];
+        game = new Game(players, new Random());
         List<District> districts = new ArrayList<>(List.of(DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[22]));
         player = new Spendthrift("Hello", districts, game, random);
+        player.setCharacter(new Assassin());
         player2 = new Spendthrift("Bob", new ArrayList<>(), game, random);
+        player2.setCharacter(new Assassin());
         player3 = new Spendthrift("Tom", new ArrayList<>(), game, random);
+        player3.setCharacter(new Assassin());
+        players[0] = player;
+        players[1] = player2;
+        players[2] = player3;
     }
 
     @Test
@@ -58,15 +66,19 @@ class SpendthriftTest {
     }
 
     @Test
-    void chooseCardInHand() {
+    void chooseDistrictToBuild() {
+        player.setCharacter(new Assassin());
 
         player.getActions().addGold(4);
 
 
         player.chooseDistrictToBuild();
+        player.getHand().remove(player.getMemory().getDistrictToBuild());
         assertEquals(2, player.getHand().size());
         assertEquals("Temple", player.getMemory().getDistrictToBuild().getName());
+
         player.chooseDistrictToBuild();
+        player.getHand().remove(player.getMemory().getDistrictToBuild());
         assertEquals(1, player.getHand().size());
         assertEquals("Manoir", player.getMemory().getDistrictToBuild().getName());
 
@@ -94,35 +106,21 @@ class SpendthriftTest {
         player.playResourcesPhase();
         player.playBuildingPhase();
 
-
         assertEquals(1, player.getCity().size());
         assertEquals(2, player.getHand().size());
         assertEquals(1, player.getGold());
-        /*assertEquals("Hello a pris 2 pièces d'or.\n" +
-                "Hello a 2 pièces d'or.\n" +
-                "Hello a construit dans sa ville : Temple\n" +
-                "Hello a dans sa ville : Temple, \n", events.getEvents());*/
-
-        player.getMemory().getDisplay().reset();
 
         player.playResourcesPhase();
         player.playBuildingPhase();
         assertEquals(2, player.getCity().size());
         assertEquals(1, player.getHand().size());
         assertEquals(0, player.getGold());
-        /*assertEquals("Hello a pris 2 pièces d'or.\n" +
-                "Hello a 3 pièces d'or.\n" +
-                "Hello a construit dans sa ville : Manoir\n" +
-                "Hello a dans sa ville : Temple, Manoir, \n", events.getEvents());*/
-        game.getDisplay().reset();
 
         player.playResourcesPhase();
         player.playBuildingPhase();
         assertEquals(2, player.getCity().size());
         assertEquals(2, player.getHand().size());
         assertEquals(0, player.getGold());
-        // assertTrue(events.getEvents().contains("Hello n'a rien construit"));
-        game.getDisplay().reset();
     }
 
     @Test
@@ -276,28 +274,28 @@ class SpendthriftTest {
         player.getMemory().setDistrictToBuild(DistrictsPile.allDistrictCards[61]);
         player.getActions().addGold(6);
         player.getActions().build();
-        assertFalse(player.activateFactoryEffect());
+        assertFalse(player.chooseFactoryEffect());
 
         player.getActions().addGold(3);
-        assertTrue(player.activateFactoryEffect());
+        assertTrue(player.chooseFactoryEffect());
     }
 
     @Test
     void activateLaboratoryEffect() {
         player.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[2], DistrictsPile.allDistrictCards[3])));
-        assertTrue(player.activateLaboratoryEffect());
+        assertTrue(player.chooseLaboratoryEffect());
 
         player.getActions().addGold(2);
-        assertFalse(player.activateLaboratoryEffect());
+        assertFalse(player.chooseLaboratoryEffect());
 
         player.getHand().addAll(List.of(DistrictsPile.allDistrictCards[4], DistrictsPile.allDistrictCards[5]));
-        assertTrue(player.activateLaboratoryEffect());
+        assertTrue(player.chooseLaboratoryEffect());
 
         player.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[1])));
         player.setGold(0);
-        assertFalse(player.activateLaboratoryEffect());
+        assertFalse(player.chooseLaboratoryEffect());
         player.getCity().add(DistrictsPile.allDistrictCards[0]);
-        assertTrue(player.activateLaboratoryEffect());
+        assertTrue(player.chooseLaboratoryEffect());
     }
 
 
@@ -305,16 +303,16 @@ class SpendthriftTest {
     void activateGraveyardEffect() {
         player.setGold(1);
         player.setCity(new City(List.of(DistrictsPile.allDistrictCards[18]))); // cost 3 and 4
-        assertFalse(player.activateGraveyardEffect(DistrictsPile.allDistrictCards[18]));
+        assertFalse(player.chooseGraveyardEffect(DistrictsPile.allDistrictCards[18]));
 
         player.setHand(new Hand(new ArrayList<>()));
-        assertTrue(player.activateGraveyardEffect(DistrictsPile.allDistrictCards[25]));
+        assertTrue(player.chooseGraveyardEffect(DistrictsPile.allDistrictCards[25]));
 
         player.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5]))); // cost 3 and 4
 
-        assertTrue(player.activateGraveyardEffect(DistrictsPile.allDistrictCards[12])); // cost 1 + 1
-        assertTrue(player.activateGraveyardEffect(DistrictsPile.allDistrictCards[30])); // cost 2 + 1
-        assertFalse(player.activateGraveyardEffect(DistrictsPile.allDistrictCards[10])); // cost 5 + 1
+        assertTrue(player.chooseGraveyardEffect(DistrictsPile.allDistrictCards[12])); // cost 1 + 1
+        assertTrue(player.chooseGraveyardEffect(DistrictsPile.allDistrictCards[30])); // cost 2 + 1
+        assertFalse(player.chooseGraveyardEffect(DistrictsPile.allDistrictCards[10])); // cost 5 + 1
     }
 
 

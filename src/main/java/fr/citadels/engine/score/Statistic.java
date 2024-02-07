@@ -2,6 +2,8 @@ package fr.citadels.engine.score;
 
 import fr.citadels.players.Player;
 
+import java.text.DecimalFormat;
+
 public class Statistic {
 
 
@@ -31,12 +33,13 @@ public class Statistic {
 
     @Override
     public String toString() {
+        DecimalFormat df = new DecimalFormat("#.###");
         StringBuilder str = new StringBuilder();
         str.append(this.player.getName()).append("\n");
         str.append("\tNombre de parties gagnées : ").append(this.winNumber).append("\n");
-        str.append("\tPourcentage de parties gagnées : ").append(this.getWinPercentage()).append("\n");
-        str.append("\tPourcentage de parties perdues : ").append(this.getDefeatPercentage()).append("\n");
-        str.append("\tScore moyen : ").append(this.getAverageScore()).append("\n");
+        str.append("\tPourcentage de parties gagnées : ").append(df.format(this.getWinPercentage())).append("\n");
+        str.append("\tPourcentage de parties perdues : ").append(df.format(this.getDefeatPercentage())).append("\n");
+        str.append("\tScore moyen : ").append(df.format(this.getAverageScore())).append("\n");
         return str.toString();
     }
 

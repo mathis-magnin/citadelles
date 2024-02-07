@@ -5,6 +5,7 @@ import fr.citadels.cards.charactercards.CharactersList;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.cards.districtcards.Hand;
 import fr.citadels.engine.Game;
+import fr.citadels.players.Player;
 import fr.citadels.players.bots.Monarchist;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -27,12 +29,16 @@ class MagicianTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game();
-        game.getPile().initializePile();
+        Player[] players = new Player[4];
 
+        players[0] = player1;
+        players[1] = player2;
+        players[2] = player3;
+        game = new Game(players, new Random());
         player1 = new Monarchist("Tom", new ArrayList<>(), game);
         player2 = new Monarchist("Bob", new ArrayList<>(), game);
         player3 = new Monarchist("Mat", new ArrayList<>(), game);
+        game.getPile().initializePile();
 
         for (Character characterCard : CharactersList.allCharacterCards) {
             characterCard.setPlayer(null);

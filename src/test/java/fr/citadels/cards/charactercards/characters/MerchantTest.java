@@ -2,12 +2,14 @@ package fr.citadels.cards.charactercards.characters;
 
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.engine.Game;
+import fr.citadels.players.Player;
 import fr.citadels.players.bots.Monarchist;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -19,10 +21,12 @@ class MerchantTest {
     Monarchist player;
 
     @BeforeEach
-    void setup(){
-        game = new Game();
-        game.getPile().initializePile();
+    void setup() {
+        Player[] players = new Player[4];
+        game = new Game(players, new Random());
         player = new Monarchist("Hello1", cardsPlayer, game);
+        players[0] = player;
+        game.getPile().initializePile();
     }
 
     @Test

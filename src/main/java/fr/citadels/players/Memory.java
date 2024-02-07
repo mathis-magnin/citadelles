@@ -13,7 +13,9 @@ public class Memory {
     private final DistrictsPile pile;
     private final Display display;
 
+    private boolean draw;
     private District districtToBuild;
+    private int momentWhenUse;
     private int powerToUse;
     private Character target;
     private int cardsToDiscard;
@@ -25,7 +27,9 @@ public class Memory {
     public Memory(Game game) {
         this.pile = game.getPile();
         this.display = game.getDisplay();
+        this.draw = false;
         this.districtToBuild = null;
+        this.momentWhenUse = -1;
         this.powerToUse = -1;
         this.target = null;
         this.cardsToDiscard = 0;
@@ -51,11 +55,21 @@ public class Memory {
     }
 
 
+    public boolean getDraw() {
+        return this.draw;
+    }
+
+
     /**
      * @return the district to build
      */
     public District getDistrictToBuild() {
         return this.districtToBuild;
+    }
+
+
+    public int getMomentWhenUse() {
+        return this.momentWhenUse;
     }
 
 
@@ -90,11 +104,21 @@ public class Memory {
 
     /* Setters */
 
+    public void setDraw(boolean draw) {
+        this.draw = draw;
+    }
+
+
     /**
      * @param district the district the player want to build
      */
     public void setDistrictToBuild(District district) {
         this.districtToBuild = district;
+    }
+
+
+    public void setMomentWhenUse(int momentWhenUse) {
+        this.momentWhenUse = momentWhenUse;
     }
 
 

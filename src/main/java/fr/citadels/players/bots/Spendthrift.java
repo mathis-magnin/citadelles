@@ -30,7 +30,38 @@ public class Spendthrift extends Player {
         this.RAND = random;
     }
 
+    public Spendthrift(String name, Random random) {
+        super(name);
+        this.RAND = random;
+    }
     /* Methods */
+
+    /**
+     * Choose randomly a characterCard from the list of character.
+     *
+     * @param characters the list of characterCard.
+     */
+    @Override
+    public void chooseCharacter(CharactersList characters) {
+
+        int randomIndex = -1;
+
+        while (randomIndex >= characters.size() || randomIndex < 0) {
+            randomIndex = RAND.nextInt(characters.size());
+        }
+        this.setCharacter(characters.remove(randomIndex));
+        getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
+    }
+
+
+    /**
+     * Draw if the player has less than 5 golds, if he has no cards in hand or if the cheapest card in hand costs more than 3.
+     */
+    @Override
+    public void chooseDraw() {
+        this.memory.setDraw(((5 < getGold()) || this.getHand().isEmpty() || (3 < getCheapestCardInHand()[1])));
+    }
+
 
     /**
      * Get the index and the cost of the cheapest card in the hand that can be built
@@ -49,12 +80,12 @@ public class Spendthrift extends Player {
         result[0] = minIndex;
         if (minIndex == -1) {
             result[1] = -1;
-        }
-        else {
+        } else {
             result[1] = getHand().get(minIndex).getGoldCost();
         }
         return result;
     }
+
 
     /**
      * Choose the cheapest card among the cards drawn
@@ -75,6 +106,22 @@ public class Spendthrift extends Player {
         return cardToPlay;
     }
 
+
+    /**
+     * Choose to take gold from city after he built another district from his family or before otherwise.
+     */
+    @Override
+    public void chooseMomentToTakeGoldFromCity() {
+        this.chooseDistrictToBuild();
+        if (this.memory.getDistrictToBuild() != null) {
+            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? 2 : 1);
+        }
+        else {
+            this.memory.setMomentWhenUse(1);
+        }
+    }
+
+
     /**
      * Choose the cheapest card in hand that can be bought
      * set its districtToBuild attribute with the card chosen or null if no card can be chosen
@@ -83,29 +130,12 @@ public class Spendthrift extends Player {
      */
     @Override
     public void chooseDistrictToBuild() {
+        this.getActions().sortHand(this.getCharacter().getFamily());
         int minIndex = getCheapestCardInHand()[0];
         if ((minIndex >= 0) && (getHand().get(minIndex).getGoldCost() <= getGold()))
-            this.getMemory().setDistrictToBuild(this.getActions().removeCardFromHand(minIndex));
+            this.getMemory().setDistrictToBuild(this.getHand().get(minIndex));
         else
             this.getMemory().setDistrictToBuild(null);
-    }
-
-
-    /**
-     * Choose randomly a characterCard from the list of character.
-     *
-     * @param characters the list of characterCard.
-     */
-    @Override
-    public void chooseCharacter(CharactersList characters) {
-
-        int randomIndex = -1;
-
-        while (randomIndex >= characters.size() || randomIndex < 0) {
-            randomIndex = RAND.nextInt(characters.size());
-        }
-        this.setCharacter(characters.remove(randomIndex));
-        getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
     }
 
 
@@ -149,11 +179,9 @@ public class Spendthrift extends Player {
 
     /**
      * Choose the power to use as a magician
-     *
-     * @return an int depending on the moment to use the power
      */
     @Override
-    public int chooseMagicianPower() {
+    public void chooseMagicianPower() {
         Character characterWithMostCards = Magician.getCharacterWithMostCards();
 
         // The magician will exchange his hand with the player with the most cards if this latter has more cards than the magician
@@ -168,7 +196,7 @@ public class Spendthrift extends Player {
             int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
             getMemory().setCardsToDiscard(nbCardsToDiscard + 1);
         }
-        return 0;
+        this.memory.setMomentWhenUse(0);
     }
 
 
@@ -192,41 +220,13 @@ public class Spendthrift extends Player {
 
 
     @Override
-    public void playResourcesPhase() {
-        // Draw 2 cards or pick 2 golds
-        // Draw if the player has less than 5 golds, if he has no cards in hand or if the cheapest card in hand costs more than 3
-        // Else pick 2 golds
-        boolean draw = ((getGold() > 5) || this.getHand().isEmpty() || (getCheapestCardInHand()[1] > 3));
-        getActions().takeCardsOrGold(draw);
-
-        if (this.equals(DistrictsPile.allDistrictCards[60].getOwner())) // Utilise le pouvoir du laboratoire
-            DistrictsPile.allDistrictCards[60].useEffect();
-    }
-
-
-    @Override
-    public void playBuildingPhase() {
-        // Buy the cheapest card if possible
-        if (!this.getHand().isEmpty()) {
-            this.chooseDistrictToBuild();
-            this.getActions().build();
-        } else {
-            getMemory().getDisplay().addNoDistrictBuilt();
-        }
-        getMemory().getDisplay().addBlankLine();
-        getActions().takeGoldFromCity();
-        if (this.equals(DistrictsPile.allDistrictCards[61].getOwner())) // Utilise le pouvoir de la manufacture
-            DistrictsPile.allDistrictCards[61].useEffect();
-    }
-
-
-    @Override
-    public boolean activateFactoryEffect() {
+    public boolean chooseFactoryEffect() {
         return getGold() >= 3;
     }
 
+
     @Override
-    public boolean activateLaboratoryEffect() {
+    public boolean chooseLaboratoryEffect() {
         return this.getActions().putRedundantCardsAtTheEnd() > 0 || (getGold() < 2 && getHand().size() > 2) || getHand().size() > 4;
     }
 
@@ -238,8 +238,9 @@ public class Spendthrift extends Player {
      * @return a boolean value
      */
     @Override
-    public boolean activateGraveyardEffect(District removedDistrict) {
+    public boolean chooseGraveyardEffect(District removedDistrict) {
         return (1 <= this.getGold()) && !this.hasCardInCity(removedDistrict) &&
                 (this.getHand().isEmpty() || (!this.getHand().isEmpty() && (removedDistrict.getGoldCost() + 1 <= this.getCheapestCardInHand()[1]))); // + 1 is to take into account the effect's cost.
     }
+
 }
