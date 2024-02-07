@@ -125,6 +125,9 @@ public class Statisticboard {
             statistics.add(statistic);
             nbPlayer++;
         }
+        if (nbPlayer != Game.NB_PLAYERS) {
+            //TODO
+        }
 
         return new Statisticboard(statistics.toArray(new Statistic[nbPlayer]));
 
