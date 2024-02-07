@@ -54,8 +54,7 @@ public class Richard extends Player {
         this.chooseDistrictToBuild();
         if (this.memory.getDistrictToBuild() != null) {
             this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.BETWEEN_PHASES : Moment.AFTER_BUILDING);
-        }
-        else {
+        } else {
             this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
         }
     }
@@ -93,35 +92,30 @@ public class Richard extends Player {
 
     /**
      * When the player embodies the warlord, choose the character and the district in city to destroy from the list of possibles targets.
-     * If Richard, who embodies the warlord, thinks the player who embodies the king has 5 or more districts in his city, he will destroy his cheapest district.
+     * If the player who embodies the king has 5 or more districts in his city, Richard will destroy his cheapest district.
      */
     @Override
     public void chooseTargetToDestroy() {
         CharactersList warlordTargets = Warlord.getPossibleTargets();
         if (!warlordTargets.isEmpty()) {
             // Richard's strategy
-            if (!((this.getMemory().getPossibleCharacters().containsAll(List.of(new Assassin(), new King()))) || (this.getMemory().getFaceUpcharacters().contains(new Assassin())))) {
-                List<Player> richardTargets = getPlayersAboutToWin(this.getMemory().getPlayersWhoChose());
-                for (Character character : warlordTargets) {
-                    if (richardTargets.contains(character.getPlayer())) {
-                        this.getMemory().setTarget(character);
-                        District cheapestDistrict = character.getPlayer().getCity().getCheapestDistrict();
-                        if (cheapestDistrict.getGoldCost() - 1 <= this.getGold()) {
-                            this.getMemory().setDistrictToDestroy(cheapestDistrict);
-                            return;
-                        }
-                    }
+            Character king = CharactersList.allCharacterCards[3];
+            if (warlordTargets.contains(king) && this.getCharactersWhoPlayed().contains(king) && (5 <= king.getPlayer().getCity().size())) {
+                this.getMemory().setTarget(CharactersList.allCharacterCards[3]);
+                District cheapestDistrict = CharactersList.allCharacterCards[3].getPlayer().getCity().getCheapestDistrict();
+                if (cheapestDistrict.getGoldCost() - 1 <= this.getGold()) {
+                    this.getMemory().setDistrictToDestroy(cheapestDistrict);
+                    return;
                 }
             }
 
             // Basic strategy : Choose the first player on which he can destroy a district.
-            for(Character character : warlordTargets) {
-                for (District district : character.getPlayer().getCity()) {
-                    if (district.getGoldCost() - 1 <= this.getGold()) {
-                        this.getMemory().setTarget(character);
-                        this.getMemory().setDistrictToDestroy(district);
-                        return;
-                    }
+            for (Character character : warlordTargets) {
+                District cheapestDistrict = character.getPlayer().getCity().getCheapestDistrict();
+                if (cheapestDistrict.getGoldCost() - 1 <= this.getGold()) {
+                    this.getMemory().setTarget(character);
+                    this.getMemory().setDistrictToDestroy(cheapestDistrict);
+                    return;
                 }
             }
         }
@@ -154,7 +148,7 @@ public class Richard extends Player {
      * @param players the list to check.
      * @return a list of players who are about to win.
      */
-    private List<Player> getPlayersAboutToWin(List<Player> players) {
+    public List<Player> getPlayersAboutToWin(List<Player> players) {
         List<Player> playersAboutToWin = new ArrayList<>();
         for (Player player : players) {
             if (5 <= player.getCity().size()) {
@@ -162,6 +156,22 @@ public class Richard extends Player {
             }
         }
         return playersAboutToWin;
+    }
+
+
+    /**
+     * Get characters who played before Richard.
+     *
+     * @return the list of characters who played before.
+     */
+    public CharactersList getCharactersWhoPlayed() {
+        CharactersList charactersWhoPlayed = new CharactersList();
+        for (int i = 0; i < this.getCharacter().getRank() - 1; i++) {
+            if (CharactersList.allCharacterCards[i].isPlayed()) {
+                charactersWhoPlayed.add(CharactersList.allCharacterCards[i]);
+            }
+        }
+        return charactersWhoPlayed;
     }
 
 }

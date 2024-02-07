@@ -27,7 +27,7 @@ class RichardTest {
     Player bob;
     Player lou;
     Player dan;
-    Player richard;
+    Richard richard;
 
     @BeforeEach
     void setUp() {
@@ -54,15 +54,13 @@ class RichardTest {
 
 
     @Test
-    void chooseTargetToDestroy() {
-        // Bob crowned, Merchant [5] face down, some player with the king has more than 5 district.
+    void chooseTargetToDestroy1() {
+        // Lou played the king
         richard.getMemory().setFaceUpcharacters(new CharactersList(new Character[]{CharactersList.allCharacterCards[2], CharactersList.allCharacterCards[4]}));     // Magician and Bishop
         bob.setCharacter(CharactersList.allCharacterCards[0]);      // Assassin
         lou.setCharacter(CharactersList.allCharacterCards[3]);      // King
         dan.setCharacter(CharactersList.allCharacterCards[6]);      // Architect
-        richard.getMemory().setPlayersWhoChose(List.of(bob, lou, dan));
         richard.setCharacter(CharactersList.allCharacterCards[7]);  // Warlord
-        richard.getMemory().setPossibleCharacters(new CharactersList(new Character[]{CharactersList.allCharacterCards[1], CharactersList.allCharacterCards[7]}));   // Thief and Warlord
 
         bob.setCity(new City());
         lou.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[15])));   // Cheapest district 1 [12]
@@ -72,38 +70,52 @@ class RichardTest {
         assertEquals(CharactersList.allCharacterCards[3], richard.getMemory().getTarget());
         assertEquals(DistrictsPile.allDistrictCards[12], richard.getMemory().getDistrictToDestroy());
 
+    }
 
-        // Same but bob has a complete city instead of dan
+    @Test
+    void chooseTargetToDestroy2() {
+        // Same but no one played the king
         richard.getMemory().setTarget(null);
         richard.getMemory().setDistrictToDestroy(null);
-        bob.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[18], DistrictsPile.allDistrictCards[22])));   // Cheapest district 2 [15]
-        lou.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[15])));   // Cheapest district 1 [12]
-        dan.setCity(new City());
 
-        richard.setGold(1); // 2 - 1
-        richard.chooseTargetToDestroy();
-        assertEquals(CharactersList.allCharacterCards[0], richard.getMemory().getTarget());
-        assertEquals(DistrictsPile.allDistrictCards[15], richard.getMemory().getDistrictToDestroy());
-
-
-        // Basic strategy : richard is the crowned player
         richard.getMemory().setFaceUpcharacters(new CharactersList(new Character[]{CharactersList.allCharacterCards[2], CharactersList.allCharacterCards[4]}));     // Magician and Bishop
-        richard.getMemory().setPlayersWhoChose(new ArrayList<>());
-        richard.getMemory().setPossibleCharacters(new CharactersList(new Character[]{CharactersList.allCharacterCards[0], CharactersList.allCharacterCards[1], CharactersList.allCharacterCards[3], CharactersList.allCharacterCards[6], CharactersList.allCharacterCards[7]}));    // Assassin, Thief, King, Architect, Warlord
+        bob.setCharacter(CharactersList.allCharacterCards[0]);      // Assassin
+        lou.setCharacter(CharactersList.allCharacterCards[1]);      // thief
+        dan.setCharacter(CharactersList.allCharacterCards[6]);      // Architect
+        richard.setCharacter(CharactersList.allCharacterCards[7]);  // Warlord
 
         bob.setCity(new City(List.of(DistrictsPile.allDistrictCards[29], DistrictsPile.allDistrictCards[24]))); // Cheapest [24] 1
         lou.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[15])));   // Cheapest district 1 [12]
         dan.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[18], DistrictsPile.allDistrictCards[22])));   // Cheapest district 2 [15]
 
-        richard.getMemory().setTarget(null);
-        richard.getMemory().setDistrictToDestroy(null);
-        richard.setGold(0);
-        richard.chooseTargetToDestroy();
-
+        richard.setGold(20);
         richard.chooseTargetToDestroy();
         assertEquals(CharactersList.allCharacterCards[0], richard.getMemory().getTarget());
         assertEquals(DistrictsPile.allDistrictCards[24], richard.getMemory().getDistrictToDestroy());
+    }
 
+
+    @Test
+    void getPlayersAboutToWin() {
+        bob.setCity(new City());
+        lou.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[15])));   // Cheapest district 1 [12]
+        dan.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[18], DistrictsPile.allDistrictCards[22])));   // Cheapest district 2 [15]
+
+        assertEquals(2, richard.getPlayersAboutToWin(List.of(bob, lou, dan)).size());
+    }
+
+
+    @Test
+    void getCharactersWhoPlayed() {
+        bob.setCharacter(CharactersList.allCharacterCards[0]);      // Assassin
+        lou.setCharacter(CharactersList.allCharacterCards[3]);      // King
+        dan.setCharacter(CharactersList.allCharacterCards[6]);      // Architect
+
+        richard.setCharacter(CharactersList.allCharacterCards[7]);  // Warlord
+        assertEquals(3, richard.getCharactersWhoPlayed().size());
+
+        richard.setCharacter(CharactersList.allCharacterCards[1]);  // Thief
+        assertEquals(1, richard.getCharactersWhoPlayed().size());
     }
 
 }
