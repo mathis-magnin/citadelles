@@ -9,7 +9,6 @@ import fr.citadels.cards.charactercards.characters.Magician;
 import fr.citadels.cards.charactercards.characters.Thief;
 import fr.citadels.cards.charactercards.characters.Warlord;
 import fr.citadels.cards.districtcards.District;
-import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
 
@@ -31,6 +30,7 @@ public class Monarchist extends Player {
         super(name);
     }
 
+
     /* Methods */
 
     /**
@@ -43,11 +43,14 @@ public class Monarchist extends Player {
         for (int i = 0; i < characters.size(); i++) {
             if (characters.get(i).getName().equals("Roi")) {
                 this.setCharacter(characters.remove(i));
+                this.getMemory().setPossibleCharacters(characters);
                 return;
             }
         }
         // Cannot find the king character, it could happen if a player already took it or if it is placed face down
         this.setCharacter(characters.remove(0));
+        this.getMemory().setPossibleCharacters(characters);
+
     }
 
 
@@ -172,7 +175,7 @@ public class Monarchist extends Player {
         getMemory().setTarget(target);
         District districtToDestroy = null;
         if (target != null) {
-            districtToDestroy = target.getPlayer().getCity().getCheapestDistrictToDestroy();
+            districtToDestroy = target.getPlayer().getCity().getCheapestDistrict();
             if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
                 districtToDestroy = null;
             }

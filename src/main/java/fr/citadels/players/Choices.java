@@ -72,7 +72,7 @@ public interface Choices {
 
     /**
      * When the player embodies the warlord, choose the character and the
-     * district in city to destroy from the list of possibles targets
+     * district in city to destroy from the list of possibles targets.
      */
     void chooseTargetToDestroy();
 

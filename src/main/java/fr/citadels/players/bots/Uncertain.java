@@ -1,9 +1,7 @@
 package fr.citadels.players.bots;
 
 
-import fr.citadels.cards.Family;
 import fr.citadels.cards.charactercards.Power;
-import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.Character;
 import fr.citadels.cards.charactercards.CharactersList;
@@ -52,6 +50,8 @@ public class Uncertain extends Player {
             randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
+        this.getMemory().setPossibleCharacters(characters);
+
     }
 
 

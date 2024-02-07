@@ -9,6 +9,7 @@ import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.players.*;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -22,8 +23,8 @@ public class Game {
 
 
     /* Attributes */
+    private final Player[] players;
     private final Random random;
-    private final Player[] playersTab;
     private final Display display;
     private final DistrictsPile pile;
     private final Scoreboard scoreboard;
@@ -34,7 +35,7 @@ public class Game {
     /* Constructor */
 
     public Game(Player[] players, Random random) {
-        this.playersTab = players;
+        this.players = players;
         this.display = new Display();
         this.pile = new DistrictsPile();
         this.isFinished = false;
@@ -46,8 +47,8 @@ public class Game {
 
     /* Getters */
 
-    public Player[] getPlayersTab() {
-        return this.playersTab;
+    public Player[] getPlayers() {
+        return this.players;
     }
 
     public Scoreboard getScoreboard() {
@@ -78,7 +79,7 @@ public class Game {
      * Initialize players
      */
     public void initializePlayers() {
-        for (Player player : this.playersTab) {
+        for (Player player : this.players) {
             player.initPlayer(List.of(pile.draw(4)), this);
         }
     }
@@ -95,22 +96,22 @@ public class Game {
 
         // Initialize the players
         this.initializePlayers();
-        this.display.addPlayers(this.playersTab);
+        this.display.addPlayers(this.players);
         this.display.addBlankLine();
 
-        for (Player player : this.playersTab) {
+        for (Player player : this.players) {
             this.display.addFirstDistrictsDrawn(player);
         }
         this.display.addBlankLine();
 
         // Give 2 golds to every player
-        for (Player player : this.playersTab) {
+        for (Player player : this.players) {
             player.getActions().addGold(2);
         }
         this.display.addInitialGoldGiven(2);
         this.display.addBlankLine();
 
-        this.crownedPlayer = this.playersTab[random.nextInt(NB_PLAYERS)];
+        this.crownedPlayer = this.players[random.nextInt(NB_PLAYERS)];
         this.display.addFirstCrownedPlayer(this.crownedPlayer);
         this.display.addBlankLine(3);
 
@@ -125,9 +126,9 @@ public class Game {
      * -1 if there is no crowned player (it should not happen !).
      */
     private int getCrownedPlayerIndex() {
-        int length = this.playersTab.length;
+        int length = this.players.length;
         for (int i = 0; i < length; i++) {
-            if (this.playersTab[i] == this.crownedPlayer) {
+            if (this.players[i] == this.crownedPlayer) {
                 return i;
             }
         }
@@ -138,7 +139,7 @@ public class Game {
      * Show the selected characters of the players
      */
     void showSelectedCharacters() {
-        for (Player player : this.playersTab) {
+        for (Player player : this.players) {
             player.getMemory().getDisplay().addCharacterChosen(player, player.getCharacter());
         }
     }
@@ -162,12 +163,16 @@ public class Game {
         this.display.addCrownedPlayer(this.crownedPlayer);
         this.display.addBlankLine();
 
-        int length = this.playersTab.length;
+        int length = this.players.length;
+        List<Player> playersWhoPlayed = new ArrayList<>();
         int index;
 
         for (int i = 0; i < length; i++) {
             index = (i + crownedPlayerIndex) % length;
-            this.playersTab[index].chooseCharacter(characters);
+            this.players[index].getMemory().setFaceUpcharacters(new CharactersList(removedCharactersFaceUp));
+            this.players[index].getMemory().setPlayersWhoChose(playersWhoPlayed);
+            this.players[index].chooseCharacter(characters);
+            playersWhoPlayed.add(this.players[index]);
         }
         showSelectedCharacters();
         this.display.addBlankLine();
@@ -258,10 +263,10 @@ public class Game {
             this.display.printAndReset();
         }
 
-        this.scoreboard.initialize(this.playersTab);
+        this.scoreboard.initialize(this.players);
         this.scoreboard.determineRanking();
         this.display.addScoreTitle();
-        this.display.addPlayersCity(this.playersTab);
+        this.display.addPlayersCity(this.players);
         this.display.addBlankLine();
         this.display.addScoreboard(this.scoreboard);
         this.display.addBlankLine();

@@ -1,5 +1,6 @@
 package fr.citadels.players;
 
+import fr.citadels.cards.charactercards.CharactersList;
 import fr.citadels.cards.charactercards.Power;
 import fr.citadels.engine.Display;
 import fr.citadels.engine.Game;
@@ -7,12 +8,15 @@ import fr.citadels.cards.charactercards.Character;
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.cards.districtcards.DistrictsPile;
 
+import java.util.List;
+
 public class Memory {
 
     /* Attributes */
 
     private final DistrictsPile pile;
     private final Display display;
+    private Player[] players;
 
     private boolean draw;
     private District districtToBuild;
@@ -21,6 +25,9 @@ public class Memory {
     private Character target;
     private int cardsToDiscard;
     private District districtToDestroy;
+    private CharactersList faceUpcharacters;
+    private List<Player> playersWhoChose;
+    private CharactersList possibleCharacters;
 
 
     /* Constructor */
@@ -28,6 +35,7 @@ public class Memory {
     public Memory(Game game) {
         this.pile = game.getPile();
         this.display = game.getDisplay();
+        this.players = game.getPlayers();
         this.draw = false;
         this.districtToBuild = null;
         this.momentWhenUse = Choices.Moment.BEFORE_RESSOURCES;
@@ -35,6 +43,9 @@ public class Memory {
         this.target = null;
         this.cardsToDiscard = 0;
         this.districtToDestroy = null;
+        this.faceUpcharacters = null;
+        this.playersWhoChose = null;
+        this.possibleCharacters = null;
     }
 
 
@@ -58,6 +69,11 @@ public class Memory {
 
     public boolean getDraw() {
         return this.draw;
+    }
+
+
+    public Player[] getPlayers() {
+        return this.players;
     }
 
 
@@ -100,6 +116,21 @@ public class Memory {
      */
     public District getDistrictToDestroy() {
         return this.districtToDestroy;
+    }
+
+
+    public CharactersList getFaceUpcharacters() {
+        return faceUpcharacters;
+    }
+
+
+    public CharactersList getPossibleCharacters() {
+        return this.possibleCharacters;
+    }
+
+
+    public List<Player> getPlayersWhoChose() {
+        return this.playersWhoChose;
     }
 
 
@@ -152,6 +183,21 @@ public class Memory {
      */
     public void setDistrictToDestroy(District districtToDestroy) {
         this.districtToDestroy = districtToDestroy;
+    }
+
+
+    public void setFaceUpcharacters(CharactersList characters) {
+        this.faceUpcharacters = characters;
+    }
+
+
+    public void setPossibleCharacters(CharactersList characters) {
+        this.possibleCharacters = characters;
+    }
+
+
+    public void setPlayersWhoChose(List<Player> playersWhoChose) {
+        this.playersWhoChose = playersWhoChose;
     }
 
 }

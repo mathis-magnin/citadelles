@@ -9,7 +9,6 @@ import fr.citadels.cards.charactercards.characters.Magician;
 import fr.citadels.cards.charactercards.characters.Thief;
 import fr.citadels.cards.charactercards.characters.Warlord;
 import fr.citadels.cards.districtcards.District;
-import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
 
@@ -52,6 +51,7 @@ public class Thrifty extends Player {
             randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
+        this.getMemory().setPossibleCharacters(characters);
     }
 
 
@@ -205,7 +205,7 @@ public class Thrifty extends Player {
         getMemory().setTarget(target);
         District districtToDestroy = null;
         if (target != null) {
-            districtToDestroy = target.getPlayer().getCity().getCheapestDistrictToDestroy();
+            districtToDestroy = target.getPlayer().getCity().getCheapestDistrict();
             if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
                 districtToDestroy = null;
             }
