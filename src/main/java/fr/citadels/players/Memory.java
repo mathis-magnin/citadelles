@@ -1,5 +1,6 @@
 package fr.citadels.players;
 
+import fr.citadels.cards.charactercards.Power;
 import fr.citadels.engine.Display;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.Character;
@@ -15,8 +16,8 @@ public class Memory {
 
     private boolean draw;
     private District districtToBuild;
-    private int momentWhenUse;
-    private int powerToUse;
+    private Choices.Moment momentWhenUse;
+    private Power powerToUse;
     private Character target;
     private int cardsToDiscard;
     private District districtToDestroy;
@@ -29,8 +30,8 @@ public class Memory {
         this.display = game.getDisplay();
         this.draw = false;
         this.districtToBuild = null;
-        this.momentWhenUse = -1;
-        this.powerToUse = -1;
+        this.momentWhenUse = Choices.Moment.BEFORE_RESSOURCES;
+        this.powerToUse = Power.KILL;
         this.target = null;
         this.cardsToDiscard = 0;
         this.districtToDestroy = null;
@@ -68,12 +69,12 @@ public class Memory {
     }
 
 
-    public int getMomentWhenUse() {
+    public Choices.Moment getMomentWhenUse() {
         return this.momentWhenUse;
     }
 
 
-    public int getPowerToUse() {
+    public Power getPowerToUse() {
         return this.powerToUse;
     }
 
@@ -117,16 +118,16 @@ public class Memory {
     }
 
 
-    public void setMomentWhenUse(int momentWhenUse) {
-        this.momentWhenUse = momentWhenUse;
+    public void setMomentWhenUse(Choices.Moment moment) {
+        this.momentWhenUse = moment;
     }
 
 
     /**
-     * @param number the number of the power the player wants to use
+     * @param power The power the player wants to use.
      */
-    public void setPowerToUse(int number) {
-        this.powerToUse = number;
+    public void setPowerToUse(Power power) {
+        this.powerToUse = power;
     }
 
 
