@@ -1,9 +1,7 @@
 package fr.citadels.players.bots;
 
 
-import fr.citadels.cards.Family;
 import fr.citadels.cards.charactercards.Power;
-import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.Character;
 import fr.citadels.cards.charactercards.CharactersList;
@@ -52,7 +50,8 @@ public class Uncertain extends Player {
             randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        getMemory().getDisplay().addCharacterChosen(this, this.getCharacter());
+        this.getMemory().setPossibleCharacters(characters);
+
     }
 
 
@@ -89,8 +88,7 @@ public class Uncertain extends Player {
         this.chooseDistrictToBuild();
         if (this.memory.getDistrictToBuild() != null) {
             this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.AFTER_BUILDING : Moment.BETWEEN_PHASES);
-        }
-        else {
+        } else {
             this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
         }
     }

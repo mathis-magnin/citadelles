@@ -138,6 +138,30 @@ class ScoreboardTest {
         assertEquals(player4, scoreboard.getWinner());
     }
 
+    @Test
+    void initialize() {
+        scoreboard.initialize(new Player[]{player1, player2, player3, player4});
+        assertEquals(player1, scoreboard.getScores()[0].getPlayer());
+        assertEquals(player2, scoreboard.getScores()[1].getPlayer());
+        assertEquals(player3, scoreboard.getScores()[2].getPlayer());
+        assertEquals(player4, scoreboard.getScores()[3].getPlayer());
+    }
+
+    @Test
+    void toStringTest() {
+        Score.setFirstPlayerWithCompleteCity(player2);
+        scoreboard.determineRanking();
+        assertEquals("■ 1e place\n" +
+                        scoreboard.getScores()[0].toString() + "\n" +
+                        "■ 2e place\n" +
+                        scoreboard.getScores()[1].toString() + "\n" +
+                        "■ 3e place\n" +
+                        scoreboard.getScores()[2].toString() + "\n" +
+                        "■ 4e place\n" +
+                        scoreboard.getScores()[3].toString() + "\n"
+                , scoreboard.toString());
+    }
+
     @AfterEach
     void resetCharacterCards() {
         CharactersList.allCharacterCards[0] = new Assassin();

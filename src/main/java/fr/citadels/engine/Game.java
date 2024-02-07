@@ -9,6 +9,7 @@ import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.players.*;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -22,8 +23,8 @@ public class Game {
 
 
     /* Attributes */
+    private final Player[] players;
     private final Random random;
-    private final Player[] playersTab;
     private final Display display;
     private final DistrictsPile pile;
     private final Scoreboard scoreboard;
@@ -34,7 +35,7 @@ public class Game {
     /* Constructor */
 
     public Game(Player[] players, Random random) {
-        this.playersTab = players;
+        this.players = players;
         this.display = new Display();
         this.pile = new DistrictsPile();
         this.isFinished = false;
@@ -46,8 +47,8 @@ public class Game {
 
     /* Getters */
 
-    public Player[] getPlayersTab() {
-        return this.playersTab;
+    public Player[] getPlayers() {
+        return this.players;
     }
 
     public Scoreboard getScoreboard() {
@@ -64,7 +65,13 @@ public class Game {
         return this.pile;
     }
 
+    public Player getCrownedPlayer() {
+        return this.crownedPlayer;
+    }
 
+    public boolean isFinished() {
+        return isFinished;
+    }
 
     /* Methods */
 
@@ -72,7 +79,7 @@ public class Game {
      * Initialize players
      */
     public void initializePlayers() {
-        for (Player player : this.playersTab) {
+        for (Player player : this.players) {
             player.initPlayer(List.of(pile.draw(4)), this);
         }
     }
@@ -80,7 +87,8 @@ public class Game {
     /**
      * Initialize the game
      */
-    void initializeGame() {
+    public void initializeGame() {
+        this.pile.reset();
         this.pile.initializePile();
         this.pile.shufflePile();
 
@@ -88,22 +96,22 @@ public class Game {
 
         // Initialize the players
         this.initializePlayers();
-        this.display.addPlayers(this.playersTab);
+        this.display.addPlayers(this.players);
         this.display.addBlankLine();
 
-        for (Player player : this.playersTab) {
+        for (Player player : this.players) {
             this.display.addFirstDistrictsDrawn(player);
         }
         this.display.addBlankLine();
 
         // Give 2 golds to every player
-        for (Player player : this.playersTab) {
+        for (Player player : this.players) {
             player.getActions().addGold(2);
         }
         this.display.addInitialGoldGiven(2);
         this.display.addBlankLine();
 
-        this.crownedPlayer = this.playersTab[random.nextInt(NB_PLAYERS)];
+        this.crownedPlayer = this.players[random.nextInt(NB_PLAYERS)];
         this.display.addFirstCrownedPlayer(this.crownedPlayer);
         this.display.addBlankLine(3);
 
@@ -118,30 +126,33 @@ public class Game {
      * -1 if there is no crowned player (it should not happen !).
      */
     private int getCrownedPlayerIndex() {
-        int length = this.playersTab.length;
+        int length = this.players.length;
         for (int i = 0; i < length; i++) {
-            if (this.playersTab[i] == this.crownedPlayer) {
+            if (this.players[i] == this.crownedPlayer) {
                 return i;
             }
         }
         return -1;
     }
 
+    /**
+     * Show the selected characters of the players
+     */
+    void showSelectedCharacters() {
+        for (Player player : this.players) {
+            player.getMemory().getDisplay().addCharacterChosen(player, player.getCharacter());
+        }
+    }
 
     /**
      * Play the selection phase of the turn
      */
     public void playSelectionPhase() {
         /* Reset character's attributes */
-        for (Character character : CharactersList.allCharacterCards) {
-            character.setPlayer(null);
-            character.setDead(false);
-            character.setRobbed(false);
-        }
 
         this.display.addSelectionPhaseTitle();
-
         CharactersList characters = new CharactersList(CharactersList.allCharacterCards);
+        characters.reset();
         Character[] removedCharactersFaceUp = characters.removeCharactersFaceUp();
         Character[] removedCharactersFaceDown = characters.removeCharactersFaceDown();
 
@@ -152,20 +163,50 @@ public class Game {
         this.display.addCrownedPlayer(this.crownedPlayer);
         this.display.addBlankLine();
 
-        int length = this.playersTab.length;
+        int length = this.players.length;
+        List<Player> playersWhoPlayed = new ArrayList<>();
         int index;
 
         for (int i = 0; i < length; i++) {
             index = (i + crownedPlayerIndex) % length;
-            this.playersTab[index].chooseCharacter(characters);
+            this.players[index].getMemory().setFaceUpcharacters(new CharactersList(removedCharactersFaceUp));
+            this.players[index].getMemory().setPlayersWhoChose(playersWhoPlayed);
+            this.players[index].chooseCharacter(characters);
+            playersWhoPlayed.add(this.players[index]);
         }
-
+        showSelectedCharacters();
         this.display.addBlankLine();
         this.display.addCharacterNotChosen(characters.remove(0)); // Only one character is not chosen
 
         this.display.addBlankLine();
     }
 
+    /**
+     * Check if the game is finished and mark it if it is
+     *
+     * @param character the character to check
+     */
+    public void checkAndMarkEndOfGame(Character character) {
+        if (character.getPlayer().hasCompleteCity() && !this.isFinished) {
+            Score.setFirstPlayerWithCompleteCity(character.getPlayer());
+            this.display.addGameFinished(character.getPlayer());
+            this.display.addBlankLine();
+            this.isFinished = true;
+        }
+    }
+
+    /**
+     * Set the crowned player to King
+     *
+     * @param character the potential character to set as the crowned player
+     */
+    public void setNextCrownedPlayerIfPossible(Character character) {
+        if (character.equals(new King())) {
+            this.crownedPlayer = character.getPlayer();
+            this.display.addKingPower();
+            this.display.addBlankLine();
+        }
+    }
 
     /**
      * Play a turn for each player
@@ -184,19 +225,9 @@ public class Game {
                 if (character.isRobbed()) {
                     character.getPlayer().getActions().getRobbed();
                 }
-                if (character.equals(new King())) {
-                    this.crownedPlayer = character.getPlayer();
-                    this.display.addKingPower();
-                    this.display.addBlankLine();
-                }
+                setNextCrownedPlayerIfPossible(character);
                 character.bringIntoPlay();
-
-                if (character.getPlayer().hasCompleteCity() && !this.isFinished) {
-                    Score.setFirstPlayerWithCompleteCity(character.getPlayer());
-                    this.display.addGameFinished(character.getPlayer());
-                    this.display.addBlankLine();
-                    this.isFinished = true;
-                }
+                checkAndMarkEndOfGame(character);
             } else {
                 this.display.addNoPlayerTurn(this.crownedPlayer, character);
                 this.display.addBlankLine();
@@ -232,10 +263,10 @@ public class Game {
             this.display.printAndReset();
         }
 
-        this.scoreboard.initialize(this.playersTab);
+        this.scoreboard.initialize(this.players);
         this.scoreboard.determineRanking();
         this.display.addScoreTitle();
-        this.display.addPlayersCity(this.playersTab);
+        this.display.addPlayersCity(this.players);
         this.display.addBlankLine();
         this.display.addScoreboard(this.scoreboard);
         this.display.addBlankLine();
