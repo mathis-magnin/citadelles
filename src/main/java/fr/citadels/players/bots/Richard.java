@@ -103,7 +103,7 @@ public class Richard extends Player {
             if (warlordTargets.contains(king) && this.getCharactersWhoPlayed().contains(king) && (5 <= king.getPlayer().getCity().size())) {
                 this.getMemory().setTarget(CharactersList.allCharacterCards[3]);
                 District cheapestDistrict = CharactersList.allCharacterCards[3].getPlayer().getCity().getCheapestDistrict();
-                if (cheapestDistrict.getGoldCost() - 1 <= this.getGold()) {
+                if ((cheapestDistrict != null) && (cheapestDistrict.getGoldCost() - 1 <= this.getGold())) {
                     this.getMemory().setDistrictToDestroy(cheapestDistrict);
                     return;
                 }
@@ -112,7 +112,7 @@ public class Richard extends Player {
             // Basic strategy : Choose the first player on which he can destroy a district.
             for (Character character : warlordTargets) {
                 District cheapestDistrict = character.getPlayer().getCity().getCheapestDistrict();
-                if (cheapestDistrict.getGoldCost() - 1 <= this.getGold()) {
+                if ((cheapestDistrict != null) && (cheapestDistrict.getGoldCost() - 1 <= this.getGold())) {
                     this.getMemory().setTarget(character);
                     this.getMemory().setDistrictToDestroy(cheapestDistrict);
                     return;
