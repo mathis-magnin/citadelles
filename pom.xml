@@ -89,9 +89,6 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.1</version>
-                <configuration>
-                    <argLine>-Dfile.encoding=UTF-8</argLine>
-                </configuration>
             </plugin>
 
             <plugin>
@@ -107,12 +104,6 @@
                 </executions>
                 <configuration>
                     <mainClass>fr.citadels.Main</mainClass>
-                    <systemProperties>
-                        <systemProperty>
-                            <key>file.encoding</key>
-                            <value>UTF-8</value>
-                        </systemProperty>
-                    </systemProperties>
                 </configuration>
             </plugin>
 
