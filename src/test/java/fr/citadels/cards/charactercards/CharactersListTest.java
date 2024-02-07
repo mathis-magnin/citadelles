@@ -1,11 +1,14 @@
 package fr.citadels.cards.charactercards;
 
 import fr.citadels.cards.charactercards.characters.*;
+import fr.citadels.cards.districtcards.District;
 import fr.citadels.engine.Game;
+import fr.citadels.players.Player;
+import fr.citadels.players.bots.Monarchist;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class CharactersListTest {
 
@@ -17,8 +20,7 @@ class CharactersListTest {
             assertEquals(2, characterCards.removeCharactersFaceUp().length);
         } else if (Game.NB_PLAYERS == 5) {
             assertEquals(1, characterCards.removeCharactersFaceUp().length);
-        }
-        else {
+        } else {
             assertEquals(0, characterCards.removeCharactersFaceUp().length);
         }
     }
@@ -26,6 +28,27 @@ class CharactersListTest {
     @Test
     void testRemoveCharactersFaceDown() {
         assertEquals(1, characterCards.removeCharactersFaceDown().length);
+    }
+
+    @Test
+    void reset() {
+        Player player = new Monarchist("hello");
+        for (Character character : characterCards) {
+            character.setPlayer(player);
+            character.setRobbed(true);
+            character.setDead(true);
+            assertEquals(character.getPlayer(), player);
+            assertTrue(character.isRobbed());
+            assertTrue(character.isDead());
+        }
+        characterCards.reset();
+        for (Character character : characterCards) {
+            assertNull(character.getPlayer());
+            assertFalse(character.isRobbed());
+            assertFalse(character.isDead());
+        }
+
+
     }
 
     @AfterEach

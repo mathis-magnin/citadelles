@@ -1,7 +1,10 @@
 package fr.citadels.cards.districtcards;
 
 import fr.citadels.cards.Family;
+import fr.citadels.players.Player;
+import fr.citadels.players.bots.Monarchist;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,4 +43,21 @@ class DistrictsPileTest {
         districtCardsPile.draw(DistrictsPile.allDistrictCards.length);
         assertEquals(new District("Manoir", Family.NOBLE, 3), districtCardsPile.draw(1)[0]);
     }
+
+    @Test
+    void reset() {
+        Player player = new Monarchist("hello");
+        for (District district : districtCardsPile) {
+            district.setOwner(player);
+            assertEquals(district.getOwner(), player);
+        }
+
+        districtCardsPile.reset();
+        for (District district : districtCardsPile) {
+            assertNull(district.getOwner());
+        }
+
+    }
+
+
 }

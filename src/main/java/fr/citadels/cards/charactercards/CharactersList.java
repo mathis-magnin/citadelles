@@ -33,7 +33,6 @@ public class CharactersList extends ArrayList<Character> {
     );
 
     /* Constructors */
-
     public CharactersList() {
     }
 
@@ -42,6 +41,17 @@ public class CharactersList extends ArrayList<Character> {
     }
 
     /* Methods */
+
+    /**
+     * reset la liste de player
+     */
+    public void reset() {
+        for (Character character : CharactersList.allCharacterCards) {
+            character.setPlayer(null);
+            character.setDead(false);
+            character.setRobbed(false);
+        }
+    }
 
     /**
      * remove face up a certain amount of character cards from the character cards
