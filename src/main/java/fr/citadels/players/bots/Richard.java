@@ -1,16 +1,14 @@
 package fr.citadels.players.bots;
 
-import fr.citadels.cards.Family;
+import fr.citadels.cards.charactercards.Character;
 import fr.citadels.cards.charactercards.CharactersList;
 import fr.citadels.cards.charactercards.Power;
-import fr.citadels.cards.charactercards.characters.Assassin;
-import fr.citadels.cards.charactercards.characters.Magician;
-import fr.citadels.cards.charactercards.characters.Thief;
-import fr.citadels.cards.charactercards.characters.Warlord;
+import fr.citadels.cards.charactercards.characters.*;
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Richard extends Player {
@@ -32,6 +30,7 @@ public class Richard extends Player {
     @Override
     public void chooseCharacter(CharactersList characters) {
         this.setCharacter(characters.remove(0));
+        this.getMemory().setPossibleCharacters(characters);
     }
 
 
@@ -92,14 +91,42 @@ public class Richard extends Player {
     }
 
 
+    /**
+     * When the player embodies the warlord, choose the character and the district in city to destroy from the list of possibles targets.
+     * If Richard, who embodies the warlord, thinks the player who embodies the king has 5 or more districts in his city, he will destroy his cheapest district.
+     */
     @Override
     public void chooseTargetToDestroy() {
-        if (!Warlord.getPossibleTargets().isEmpty()) {
-            this.memory.setTarget(Warlord.getPossibleTargets().get(0));
-            if (!this.memory.getTarget().getPlayer().getCity().isEmpty() && (this.memory.getTarget().getPlayer().getCity().get(0).getGoldCost() - 1 <= this.getGold())) {
-                this.memory.setDistrictToDestroy(this.memory.getTarget().getPlayer().getCity().get(0));
+        CharactersList warlordTargets = Warlord.getPossibleTargets();
+        if (!warlordTargets.isEmpty()) {
+            // Richard's strategy
+            if (!((this.getMemory().getPossibleCharacters().containsAll(List.of(new Assassin(), new King()))) || (this.getMemory().getFaceUpcharacters().contains(new Assassin())))) {
+                List<Player> richardTargets = getPlayersAboutToWin(this.getMemory().getPlayersWhoChose());
+                for (Character character : warlordTargets) {
+                    if (richardTargets.contains(character.getPlayer())) {
+                        this.getMemory().setTarget(character);
+                        District cheapestDistrict = character.getPlayer().getCity().getCheapestDistrict();
+                        if (cheapestDistrict.getGoldCost() - 1 <= this.getGold()) {
+                            this.getMemory().setDistrictToDestroy(cheapestDistrict);
+                            return;
+                        }
+                    }
+                }
+            }
+
+            // Basic strategy : Choose the first player on which he can destroy a district.
+            for(Character character : warlordTargets) {
+                for (District district : character.getPlayer().getCity()) {
+                    if (district.getGoldCost() - 1 <= this.getGold()) {
+                        this.getMemory().setTarget(character);
+                        this.getMemory().setDistrictToDestroy(district);
+                        return;
+                    }
+                }
             }
         }
+        this.getMemory().setTarget(null);
+        this.getMemory().setDistrictToDestroy(null);
     }
 
 
@@ -118,6 +145,23 @@ public class Richard extends Player {
     @Override
     public boolean chooseGraveyardEffect(District removedDistrict) {
         return (1 <= this.getGold()) && (!this.hasCardInCity(removedDistrict));
+    }
+
+
+    /**
+     * Find players who are about to win, that is to say with more than 5 district in theirs city.
+     *
+     * @param players the list to check.
+     * @return a list of players who are about to win.
+     */
+    private List<Player> getPlayersAboutToWin(List<Player> players) {
+        List<Player> playersAboutToWin = new ArrayList<>();
+        for (Player player : players) {
+            if (5 <= player.getCity().size()) {
+                playersAboutToWin.add(player);
+            }
+        }
+        return playersAboutToWin;
     }
 
 }

@@ -134,7 +134,7 @@ public class City extends ArrayList<District> {
      *
      * @return The cheapest district of the city.
      */
-    public District getCheapestDistrictToDestroy() {
+    public District getCheapestDistrict() {
         District districtToDestroy = null;
         for (District district : this) {
             if (!district.equals(new Keep()) && ((districtToDestroy == null) || (district.getGoldCost() < districtToDestroy.getGoldCost()))) {
