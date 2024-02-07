@@ -3,6 +3,7 @@ package fr.citadels.players.bots;
 import fr.citadels.cards.Family;
 import fr.citadels.cards.charactercards.Character;
 import fr.citadels.cards.charactercards.CharactersList;
+import fr.citadels.cards.charactercards.Power;
 import fr.citadels.cards.charactercards.characters.Assassin;
 import fr.citadels.cards.charactercards.characters.Magician;
 import fr.citadels.cards.charactercards.characters.Thief;
@@ -108,13 +109,13 @@ public class Thrifty extends Player {
      * Choose to take gold from city after he built another district from his family or before otherwise.
      */
     @Override
-    public void chooseMomentToTakeGoldFromCity() {
+    public void chooseMomentToTakeIncome() {
         this.chooseDistrictToBuild();
         if (this.memory.getDistrictToBuild() != null) {
-            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? 2 : 1);
+            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.AFTER_BUILDING : Moment.BETWEEN_PHASES);
         }
         else {
-            this.memory.setMomentWhenUse(1);
+            this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
         }
     }
 
@@ -182,15 +183,15 @@ public class Thrifty extends Player {
         Character characterWithMostCards = Magician.getCharacterWithMostCards();
 
         if ((characterWithMostCards != null) && (characterWithMostCards.getPlayer().getHand().size() > this.getHand().size())) {
-            getMemory().setPowerToUse(1);
+            getMemory().setPowerToUse(Power.SWAP);
             getMemory().setTarget(characterWithMostCards);
         } else {
-            getMemory().setPowerToUse(2);
+            getMemory().setPowerToUse(Power.RECYCLE);
             getHand().sortCards(Family.NEUTRAL);
             int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
             getMemory().setCardsToDiscard(nbCardsToDiscard + 1);
         }
-        this.memory.setMomentWhenUse(0);
+        this.memory.setMomentWhenUse(Moment.BEFORE_RESSOURCES);
     }
 
 

@@ -2,6 +2,7 @@ package fr.citadels.players.bots;
 
 import fr.citadels.cards.Family;
 import fr.citadels.cards.charactercards.CharactersList;
+import fr.citadels.cards.charactercards.Power;
 import fr.citadels.cards.charactercards.characters.Assassin;
 import fr.citadels.cards.charactercards.characters.Magician;
 import fr.citadels.cards.charactercards.characters.Thief;
@@ -46,13 +47,13 @@ public class Richard extends Player {
      * Choose to take gold from city after he built another district from his family or before otherwise.
      */
     @Override
-    public void chooseMomentToTakeGoldFromCity() {
+    public void chooseMomentToTakeIncome() {
         this.chooseDistrictToBuild();
         if (this.memory.getDistrictToBuild() != null) {
-            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? 2 : 1);
+            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.BETWEEN_PHASES : Moment.AFTER_BUILDING);
         }
         else {
-            this.memory.setMomentWhenUse(1);
+            this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
         }
     }
 
@@ -81,9 +82,9 @@ public class Richard extends Player {
 
     @Override
     public void chooseMagicianPower() {
-        this.memory.setPowerToUse(0);
+        this.memory.setPowerToUse(Power.SWAP);
         this.memory.setTarget(Magician.getPossibleTargets().get(0));
-        this.memory.setMomentWhenUse(0);
+        this.memory.setMomentWhenUse(Moment.BEFORE_RESSOURCES);
     }
 
 

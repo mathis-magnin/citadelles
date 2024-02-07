@@ -23,7 +23,7 @@ public class King extends Character {
 
     /**
      * Let the player who embodies the character use the power which comes from his role.
-     * The player gain one gold coin per Noble district he has in his city.
+     * INCOME : The player gain one gold coin per Noble district he has in his city.
      * The SchoolOfMagic district act as a Noble district.
      */
     @Override

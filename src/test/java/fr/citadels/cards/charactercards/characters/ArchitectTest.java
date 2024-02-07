@@ -1,5 +1,6 @@
 package fr.citadels.cards.charactercards.characters;
 
+import fr.citadels.cards.charactercards.Power;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
@@ -31,14 +32,14 @@ class ArchitectTest {
     @Test
     void usePower() {
         /* Power 1 */
-        player.getMemory().setPowerToUse(1);
+        player.getMemory().setPowerToUse(Power.DRAW);
 
         int handSize = player.getHand().size();
         player.getCharacter().usePower();
         Assertions.assertEquals(handSize + 2, player.getHand().size());
 
         /* Power 2 */
-        player.getMemory().setPowerToUse(2);
+        player.getMemory().setPowerToUse(Power.BUILD);
 
         int citySize = player.getCity().size();
         player.chooseDistrictToBuild();

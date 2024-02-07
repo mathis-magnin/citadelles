@@ -2,6 +2,7 @@ package fr.citadels.cards.charactercards.characters;
 
 import fr.citadels.cards.charactercards.Character;
 import fr.citadels.cards.charactercards.CharactersList;
+import fr.citadels.cards.charactercards.Power;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.cards.districtcards.Hand;
 import fr.citadels.engine.Game;
@@ -70,7 +71,7 @@ class MagicianTest {
 
     @Test
     void usePower() {
-        player1.getMemory().setPowerToUse(1);
+        player1.getMemory().setPowerToUse(Power.SWAP);
         player1.setCharacter(CharactersList.allCharacterCards[2]);
         player2.setCharacter(CharactersList.allCharacterCards[3]);
         Hand hand1 = new Hand(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[2]));
@@ -90,7 +91,7 @@ class MagicianTest {
 
     @Test
     void usePower2() {
-        player1.getMemory().setPowerToUse(2);
+        player1.getMemory().setPowerToUse(Power.RECYCLE);
         player1.setCharacter(CharactersList.allCharacterCards[2]);
         Hand hand1 = new Hand(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[20], DistrictsPile.allDistrictCards[30]));
         player1.setHand(hand1);

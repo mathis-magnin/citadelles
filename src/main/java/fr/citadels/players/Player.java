@@ -1,5 +1,6 @@
 package fr.citadels.players;
 
+import fr.citadels.cards.charactercards.Power;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.Character;
@@ -237,7 +238,9 @@ public abstract class Player implements Comparable<Player>, Choices {
      */
     public void playAsAssassin() {
         this.playResourcesPhase();
+
         this.playBuildingPhase();
+
         this.chooseTargetToKill();
         this.getCharacter().usePower();
     }
@@ -248,7 +251,9 @@ public abstract class Player implements Comparable<Player>, Choices {
      */
     public void playAsThief() {
         this.playResourcesPhase();
+
         this.playBuildingPhase();
+
         this.chooseTargetToRob();
         this.getCharacter().usePower();
     }
@@ -259,15 +264,20 @@ public abstract class Player implements Comparable<Player>, Choices {
      */
     public void playAsMagician() {
         this.chooseMagicianPower();
-        if (this.memory.getMomentWhenUse() == 0) {
+
+        if (this.memory.getMomentWhenUse().equals(Moment.BEFORE_RESSOURCES)) {
             this.getCharacter().usePower();
         }
+
         this.playResourcesPhase();
-        if (this.memory.getMomentWhenUse() == 1) {
+
+        if (this.memory.getMomentWhenUse().equals(Moment.BETWEEN_PHASES)) {
             this.getCharacter().usePower();
         }
+
         this.playBuildingPhase();
-        if (this.memory.getMomentWhenUse() == 2) {
+
+        if (this.memory.getMomentWhenUse().equals(Moment.AFTER_BUILDING)) {
             this.getCharacter().usePower();
         }
     }
@@ -277,13 +287,16 @@ public abstract class Player implements Comparable<Player>, Choices {
      * Play a round for the linked player when he embodies the king.
      */
     public void playAsKing() {
-        this.chooseMomentToTakeGoldFromCity();
-        playResourcesPhase();
-        if (this.memory.getMomentWhenUse() == 1) {
+        this.playResourcesPhase();
+        this.chooseMomentToTakeIncome();
+
+        if (this.memory.getMomentWhenUse().equals(Moment.BETWEEN_PHASES)) {
             this.getCharacter().usePower();
         }
-        playBuildingPhase();
-        if (this.memory.getMomentWhenUse() == 2) {
+
+        this.playBuildingPhase();
+
+        if (this.memory.getMomentWhenUse().equals(Moment.AFTER_BUILDING)) {
             this.getCharacter().usePower();
         }
     }
@@ -293,13 +306,16 @@ public abstract class Player implements Comparable<Player>, Choices {
      * Play a round for the linked player when he embodies the bishop.
      */
     public void playAsBishop() {
-        this.chooseMomentToTakeGoldFromCity();
         this.playResourcesPhase();
-        if (this.memory.getMomentWhenUse() == 1) {
+        this.chooseMomentToTakeIncome();
+
+        if (this.memory.getMomentWhenUse().equals(Moment.BETWEEN_PHASES)) {
             this.getCharacter().usePower();
         }
+
         this.playBuildingPhase();
-        if (this.memory.getMomentWhenUse() == 2) {
+
+        if (this.memory.getMomentWhenUse().equals(Moment.AFTER_BUILDING)) {
             this.getCharacter().usePower();
         }
     }
@@ -309,18 +325,20 @@ public abstract class Player implements Comparable<Player>, Choices {
      * Play a round for the linked player if he embodies the merchant.
      */
     public void playAsMerchant() {
-        this.chooseMomentToTakeGoldFromCity();
-
-        this.getMemory().setPowerToUse(2); //  Gain one gold
+        this.getMemory().setPowerToUse(Power.GOLD);
         this.getCharacter().usePower();
-        this.getMemory().setPowerToUse(1); // Gain golds with city
 
         this.playResourcesPhase();
-        if (this.memory.getMomentWhenUse() == 1) {
+        this.chooseMomentToTakeIncome();
+        this.getMemory().setPowerToUse(Power.INCOME);
+
+        if (this.memory.getMomentWhenUse().equals(Moment.BETWEEN_PHASES)) {
             this.getCharacter().usePower();
         }
+
         this.playBuildingPhase();
-        if (this.memory.getMomentWhenUse() == 2) {
+
+        if (this.memory.getMomentWhenUse().equals(Moment.AFTER_BUILDING)) {
             this.getCharacter().usePower();
         }
     }
@@ -330,13 +348,13 @@ public abstract class Player implements Comparable<Player>, Choices {
      * Play a round for the linked player if he embodies the architect.
      */
     public void playAsArchitect() {
-        this.getMemory().setPowerToUse(1);  // Draw two cards
+        this.getMemory().setPowerToUse(Power.DRAW);
         this.getCharacter().usePower();
 
         this.playResourcesPhase();
         this.playBuildingPhase();
 
-        this.getMemory().setPowerToUse(2);  // Build another district
+        this.getMemory().setPowerToUse(Power.BUILD);
         for (int i = 0; i < 2; i++) {
             this.chooseDistrictToBuild();
             if (this.getMemory().getDistrictToBuild() != null) {
@@ -353,19 +371,21 @@ public abstract class Player implements Comparable<Player>, Choices {
      * Play a round for the linked player if he embodies the warlord.
      */
     public void playAsWarlord() {
-        this.chooseMomentToTakeGoldFromCity();
         this.playResourcesPhase();
+        this.chooseMomentToTakeIncome();
+        this.getMemory().setPowerToUse(Power.INCOME);
 
-        this.getMemory().setPowerToUse(2); // Gain golds with city
-        if (this.memory.getMomentWhenUse() == 1) {
-            this.getCharacter().usePower();
-        }
-        playBuildingPhase();
-        if (this.memory.getMomentWhenUse() == 2) {
+        if (this.memory.getMomentWhenUse() == Moment.BETWEEN_PHASES) {
             this.getCharacter().usePower();
         }
 
-        this.getMemory().setPowerToUse(1); // Destroy a district
+        this.playBuildingPhase();
+
+        if (this.memory.getMomentWhenUse() == Moment.AFTER_BUILDING) {
+            this.getCharacter().usePower();
+        }
+
+        this.getMemory().setPowerToUse(Power.DESTROY);
         this.chooseTargetToDestroy();
         if ((getMemory().getTarget() != null) && (getMemory().getDistrictToDestroy() != null)) {
             getCharacter().usePower();

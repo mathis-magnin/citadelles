@@ -1,6 +1,7 @@
 package fr.citadels.cards.districtcards.uniques;
 
 import fr.citadels.cards.charactercards.CharactersList;
+import fr.citadels.cards.charactercards.Power;
 import fr.citadels.cards.charactercards.characters.*;
 import fr.citadels.cards.districtcards.City;
 import fr.citadels.cards.districtcards.District;
@@ -70,7 +71,7 @@ class GraveyardTest {
     @Test
     void useEffectTest() {
         /* The graveyardPlayer wants to use graveyard's effect */
-        warlordPlayer.getMemory().setPowerToUse(1);
+        warlordPlayer.getMemory().setPowerToUse(Power.DESTROY);
         warlordPlayer.getCharacter().usePower();
         assertEquals(0, warlordPlayer.getGold());
 
@@ -96,7 +97,7 @@ class GraveyardTest {
         graveyard.setOwner(targetedGraveyardPlayer);
 
         warlordPlayer.getMemory().setDistrictToDestroy(graveyard);
-        warlordPlayer.getMemory().setPowerToUse(1);
+        warlordPlayer.getMemory().setPowerToUse(Power.DESTROY);
         warlordPlayer.getCharacter().usePower();
 
         assertEquals(0, warlordPlayer.getGold());
@@ -124,7 +125,7 @@ class GraveyardTest {
         warlordTargetedGraveyardPlayer.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], graveyard)));
         graveyard.setOwner(warlordTargetedGraveyardPlayer);
 
-        warlordTargetedGraveyardPlayer.getMemory().setPowerToUse(1);
+        warlordTargetedGraveyardPlayer.getMemory().setPowerToUse(Power.DESTROY);
         warlordTargetedGraveyardPlayer.getCharacter().usePower();
 
         assertFalse(warlordTargetedGraveyardPlayer.getCity().contains(DistrictsPile.allDistrictCards[0]));

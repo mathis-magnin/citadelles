@@ -5,6 +5,13 @@ import fr.citadels.cards.districtcards.District;
 
 public interface Choices {
 
+    enum Moment {
+        BEFORE_RESSOURCES,
+        BETWEEN_PHASES,
+        AFTER_BUILDING
+    }
+
+
     /**
      * Choose and take a characterCard from the list of character.
      *
@@ -31,7 +38,7 @@ public interface Choices {
     /**
      * Choose the moment to take gold from the city.
      */
-    void chooseMomentToTakeGoldFromCity();
+    void chooseMomentToTakeIncome();
 
 
     /**

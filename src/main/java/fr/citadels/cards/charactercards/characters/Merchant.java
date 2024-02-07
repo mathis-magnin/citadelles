@@ -24,18 +24,18 @@ public class Merchant extends Character {
     /**
      * Let the player who embodies the character use the power which comes from his role.
      * The abilities of the Merchant are :
-     * 1. The player gain one gold coin.
-     * 2. The player gain one gold coin per Trade district he has in his city.
+     * INCOME : The player gain one gold coin per Trade district he has in his city.
+     * GOLD : The player gain one gold coin.
      *
      * @precondition The player must have chosen which power he wants to use.
      */
     public void usePower() {
         switch (this.getPlayer().getMemory().getPowerToUse()) {
-            case 1:
-                this.gainGoldsWithCity();
+            case INCOME:
+                this.income();
                 break;
-            case 2:
-                this.gainOneGold();
+            case GOLD:
+                this.gold();
                 break;
             default:
                 break;
@@ -44,20 +44,10 @@ public class Merchant extends Character {
 
 
     /**
-     * 1. The player gain one gold coin.
-     */
-    private void gainOneGold() {
-        this.getPlayer().getActions().addGold(1);
-        this.getPlayer().getMemory().getDisplay().addMerchantPower(this);
-        this.getPlayer().getMemory().getDisplay().addBlankLine();
-    }
-
-
-    /**
-     * 2. The player gain one gold coin per Noble district he has in his city.
+     * The player gain one gold coin per Noble district he has in his city.
      * The SchoolOfMagic district act as a Noble district.
      */
-    private void gainGoldsWithCity() {
+    private void income() {
         int gold = this.getPlayer().getCity().getNumberOfDistrictWithFamily(this.getFamily());
 
         boolean activateSchoolOfMagicEffect = (DistrictsPile.allDistrictCards[63].getOwner() == this.getPlayer()); // School of magic effect
@@ -68,6 +58,16 @@ public class Merchant extends Character {
             this.getPlayer().getMemory().getDisplay().addGoldTakenFromCity(this.getPlayer(), gold, activateSchoolOfMagicEffect);
             this.getPlayer().getMemory().getDisplay().addBlankLine();
         }
+    }
+
+
+    /**
+     * The player gain one gold coin.
+     */
+    private void gold() {
+        this.getPlayer().getActions().addGold(1);
+        this.getPlayer().getMemory().getDisplay().addMerchantPower(this);
+        this.getPlayer().getMemory().getDisplay().addBlankLine();
     }
 
 }

@@ -10,6 +10,11 @@ public class Warlord extends Character {
 
     /* Static content */
 
+    /**
+     * The Warlord must not target the alive Bishop or a character's player who has a complete city.
+     *
+     * @return The list of characters the Warlord can target.
+     */
     public static CharactersList getPossibleTargets() {
         CharactersList targets = new CharactersList();
         for (Character characterCard : CharactersList.allCharacterCards) {
@@ -21,6 +26,11 @@ public class Warlord extends Character {
     }
 
 
+    /**
+     * Gives the character who has the biggest city except the Warlord.
+     *
+     * @return the character with the biggest city.
+     */
     public static Character getOtherCharacterWithBiggestCity() {
         Character characterWithBiggestCity = null;
         for (Character character : getPossibleTargets()) {
@@ -50,20 +60,20 @@ public class Warlord extends Character {
     /**
      * Let the player who embodies the character use the power which comes from his role.
      * The abilities of the Warlord are :
-     * 1. The player can destroy a district of a player's city. The player must not target the Bishop and a player who has a complete city.
-     * 2. The player gain one gold coin per Noble district he has in his city.
+     * INCOME : The player gain one gold coin per Noble district he has in his city.
+     * DESTROY : The player can destroy a district of a player's city.
      *
      * @precondition The player must have chosen which power he wants to use.
-     * @precondition About the first power, the player must have chosen which player and district he wants to target.
+     * @precondition About the DESTROY power, the player must have chosen which player and district he wants to target.
      */
     @Override
     public void usePower() {
         switch (this.getPlayer().getMemory().getPowerToUse()) {
-            case 1:
-                this.destroyDistrict();
+            case INCOME:
+                this.income();
                 break;
-            case 2:
-                this.gainGoldsWithCity();
+            case DESTROY:
+                this.destroy();
                 break;
             default:
                 break;
@@ -72,13 +82,31 @@ public class Warlord extends Character {
 
 
     /**
-     * 1. The player can destroy a district of a player's city.
+     * The player gain one gold coin per Noble district he has in his city.
+     * The SchoolOfMagic district act as a Noble district.
+     */
+    private void income() {
+        int gold = this.getPlayer().getCity().getNumberOfDistrictWithFamily(this.getFamily());
+
+        boolean activateSchoolOfMagicEffect = (DistrictsPile.allDistrictCards[63].getOwner() == this.getPlayer()); // School of magic effect
+        gold = activateSchoolOfMagicEffect ? gold + 1 : gold;
+
+        if (0 < gold) {
+            this.getPlayer().getActions().addGold(gold);
+            this.getPlayer().getMemory().getDisplay().addGoldTakenFromCity(this.getPlayer(), gold, activateSchoolOfMagicEffect);
+            this.getPlayer().getMemory().getDisplay().addBlankLine();
+        }
+    }
+
+
+    /**
+     * The player can destroy a district of a player's city.
      * The player must not target the Bishop and a player who has a complete city.
      * The Keep and Graveyard effect are applied.
      *
      * @precondition The player must have chosen which player and district he wants to target.
      */
-    private void destroyDistrict() {
+    private void destroy() {
         if (CharactersList.allCharacterCards[4].isPlayed() && !CharactersList.allCharacterCards[4].isDead()) {
             this.getPlayer().getMemory().getDisplay().addBishopPower();
         }
@@ -97,24 +125,6 @@ public class Warlord extends Character {
             this.getPlayer().getMemory().getDisplay().addDistrictPlacedBelow();
         }
         this.getPlayer().getMemory().getDisplay().addBlankLine();
-    }
-
-
-    /**
-     * 2. The player gain one gold coin per Noble district he has in his city.
-     * The SchoolOfMagic district act as a Noble district.
-     */
-    private void gainGoldsWithCity() {
-        int gold = this.getPlayer().getCity().getNumberOfDistrictWithFamily(this.getFamily());
-
-        boolean activateSchoolOfMagicEffect = (DistrictsPile.allDistrictCards[63].getOwner() == this.getPlayer()); // School of magic effect
-        gold = activateSchoolOfMagicEffect ? gold + 1 : gold;
-
-        if (0 < gold) {
-            this.getPlayer().getActions().addGold(gold);
-            this.getPlayer().getMemory().getDisplay().addGoldTakenFromCity(this.getPlayer(), gold, activateSchoolOfMagicEffect);
-            this.getPlayer().getMemory().getDisplay().addBlankLine();
-        }
     }
 
 }

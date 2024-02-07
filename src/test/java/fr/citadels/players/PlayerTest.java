@@ -30,7 +30,7 @@ class PlayerTest {
             }
 
             @Override
-            public void chooseMomentToTakeGoldFromCity() {
+            public void chooseMomentToTakeIncome() {
 
             }
 
@@ -160,7 +160,7 @@ class PlayerTest {
             }
 
             @Override
-            public void chooseMomentToTakeGoldFromCity() {
+            public void chooseMomentToTakeIncome() {
 
             }
 
@@ -238,7 +238,7 @@ class PlayerTest {
             }
 
             @Override
-            public void chooseMomentToTakeGoldFromCity() {
+            public void chooseMomentToTakeIncome() {
 
             }
 
@@ -311,7 +311,7 @@ class PlayerTest {
             }
 
             @Override
-            public void chooseMomentToTakeGoldFromCity() {
+            public void chooseMomentToTakeIncome() {
 
             }
 

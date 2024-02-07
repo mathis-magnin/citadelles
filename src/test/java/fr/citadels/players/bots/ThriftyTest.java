@@ -1,5 +1,6 @@
 package fr.citadels.players.bots;
 
+import fr.citadels.cards.charactercards.Power;
 import fr.citadels.cards.charactercards.characters.*;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.CharactersList;
@@ -193,7 +194,7 @@ class ThriftyTest {
         player3.setHand(hand3);
 
         player.playAsMagician();
-        assertEquals(1, player.getMemory().getPowerToUse());
+        assertEquals(Power.SWAP, player.getMemory().getPowerToUse());
         assertEquals(player3.getCharacter(), player.getMemory().getTarget());
         assertEquals(hand1, player3.getHand());
         assertEquals(hand2, player2.getHand());
@@ -201,7 +202,7 @@ class ThriftyTest {
 
         player.getActions().addGold(3);
         player.playAsMagician();
-        assertEquals(2, player.getMemory().getPowerToUse());
+        assertEquals(Power.RECYCLE, player.getMemory().getPowerToUse());
         assertEquals(hand1, player3.getHand());
         assertEquals(hand2, player2.getHand());
         assertEquals(4, player.getHand().size());
@@ -214,7 +215,7 @@ class ThriftyTest {
         assertEquals(1, player.getMemory().getCardsToDiscard());
 
         player.playAsMagician();
-        assertEquals(2, player.getMemory().getPowerToUse());
+        assertEquals(Power.RECYCLE, player.getMemory().getPowerToUse());
         assertEquals(hand1, player3.getHand());
         assertEquals(hand2, player2.getHand());
         assertEquals(3, player.getHand().size());

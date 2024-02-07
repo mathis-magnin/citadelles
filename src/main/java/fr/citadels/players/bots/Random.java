@@ -2,6 +2,7 @@ package fr.citadels.players.bots;
 
 
 import fr.citadels.cards.Family;
+import fr.citadels.cards.charactercards.Power;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.Character;
@@ -79,13 +80,13 @@ public class Random extends Player {
      * Choose to take gold from city after he built another district from his family or before otherwise.
      */
     @Override
-    public void chooseMomentToTakeGoldFromCity() {
+    public void chooseMomentToTakeIncome() {
         this.chooseDistrictToBuild();
         if (this.memory.getDistrictToBuild() != null) {
-            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? 2 : 1);
+            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.AFTER_BUILDING : Moment.BETWEEN_PHASES);
         }
         else {
-            this.memory.setMomentWhenUse(1);
+            this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
         }
     }
 
@@ -140,16 +141,16 @@ public class Random extends Player {
         int randPower = RAND.nextInt(2); // choose which power to use
 
         if (randPower == 0) { // swap hands : choose a target
-            this.getMemory().setPowerToUse(1);
+            this.getMemory().setPowerToUse(Power.SWAP);
             int randTarget = RAND.nextInt(Magician.getPossibleTargets().size());
             this.getMemory().setTarget(Magician.getPossibleTargets().get(randTarget));
         } else { // discard cards : choose how many cards to discard
-            this.getMemory().setPowerToUse(2);
+            this.getMemory().setPowerToUse(Power.RECYCLE);
             if (!this.getHand().isEmpty())
                 this.getMemory().setCardsToDiscard(RAND.nextInt(this.getHand().size()));
             else this.getMemory().setCardsToDiscard(0);
         }
-        this.memory.setMomentWhenUse(this.RAND.nextInt(3));
+        this.memory.setMomentWhenUse(Moment.values()[this.RAND.nextInt(3)]);
     }
 
 

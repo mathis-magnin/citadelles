@@ -1,5 +1,6 @@
 package fr.citadels.players.bots;
 
+import fr.citadels.cards.charactercards.Power;
 import fr.citadels.cards.charactercards.characters.*;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.Card;
@@ -283,20 +284,20 @@ class RandomTest {
 
         when(random.nextInt(anyInt())).thenReturn(0, 0, 0);
         player.playAsMagician();
-        assertEquals(1, player.getMemory().getPowerToUse());
+        assertEquals(Power.SWAP, player.getMemory().getPowerToUse());
         assertEquals(CharactersList.allCharacterCards[3], player.getMemory().getTarget());
         assertEquals(player.getHand(), hand2);
         assertEquals(player2.getHand(), hand1);
 
         when(random.nextInt(anyInt())).thenReturn(1, 2, 1);
         player.playAsMagician();
-        assertEquals(2, player.getMemory().getPowerToUse());
+        assertEquals(Power.RECYCLE, player.getMemory().getPowerToUse());
         assertEquals(2, player.getMemory().getCardsToDiscard());
         assertEquals(2, player.getHand().size());
 
         when(random.nextInt(anyInt())).thenReturn(1, 10, 2);
         player.playAsMagician();
-        assertEquals(2, player.getMemory().getPowerToUse());
+        assertEquals(Power.RECYCLE, player.getMemory().getPowerToUse());
         assertEquals(10, player.getMemory().getCardsToDiscard());
         assertEquals(2, player.getHand().size());
     }
@@ -308,7 +309,7 @@ class RandomTest {
 
         // Bot takes cards and doesn't build
         // At the end of its turn, it has 1 gold due to the merchant power
-        when(random.nextBoolean()).thenReturn(false, true, false);
+        when(random.nextBoolean()).thenReturn(true, false, false);
         player.playAsMerchant();
         assertEquals(0, player.getCity().size());
         assertEquals(4, player.getHand().size());
