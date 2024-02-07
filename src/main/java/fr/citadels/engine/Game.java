@@ -87,7 +87,7 @@ public class Game {
     /**
      * Initialize the game
      */
-    void initializeGame() {
+    public void initializeGame() {
         this.pile.reset();
         this.pile.initializePile();
         this.pile.shufflePile();

@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Random;
 
 import fr.citadels.players.bots.*;
 import org.apache.logging.log4j.Logger;
@@ -42,11 +41,9 @@ public class Main {
         JCommander.newBuilder().addObject(main).build().parse(argv);
         if (demo || !(twoThousands || csv)) {
             main.runDemonstration();
-        } else
-        if (twoThousands) {
+        } else if (twoThousands) {
             main.runTwoThousands();
-        } else
-        {
+        } else {
             main.runCsv();
         }
     }

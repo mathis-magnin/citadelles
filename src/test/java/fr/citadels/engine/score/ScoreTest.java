@@ -212,6 +212,42 @@ class ScoreTest {
         assertEquals(14, score5.getPoints());
     }
 
+    @Test
+    void toStringTest() {
+        Score.setFirstPlayerWithCompleteCity(player4);
+
+        score1.determinePoints(); // 24 + 2 = 26
+        score2.determinePoints(); // 18
+        score3.determinePoints(); // 18
+        score4.determinePoints(); // 27 + 4 + 16 = 47
+        score5.determinePoints(); // 11 + 3 = 14
+
+        assertEquals("Tom\n" +
+                        "\tScore total : 26 points\n" +
+                        "\tQuartiers construits : 24 points\n" +
+                        "\tCité complète : 2 points\n"
+                , score1.toString());
+        assertEquals("Bob\n" +
+                        "\tScore total : 18 points\n" +
+                        "\tQuartiers construits : 18 points\n"
+                , score2.toString());
+        assertEquals("Noa\n" +
+                        "\tScore total : 18 points\n" +
+                        "\tQuartiers construits : 18 points\n"
+                , score3.toString());
+        assertEquals("Luk\n" +
+                        "\tScore total : 47 points\n" +
+                        "\tQuartiers construits : 27 points\n" +
+                        "\tEffets des quartiers merveilles : 16 points\n" +
+                        "\tPremière cité complète : 4 points\n"
+                , score4.toString());
+        assertEquals("Dan\n" +
+                        "\tScore total : 14 points\n" +
+                        "\tQuartiers construits : 11 points\n" +
+                        "\tQuartier de chaque famille grâce à l'effet de la Cour des miracles : 3 points\n"
+                , score5.toString());
+    }
+
     @AfterEach
     void resetCharacterCards() {
         CharactersList.allCharacterCards[0] = new Assassin();
