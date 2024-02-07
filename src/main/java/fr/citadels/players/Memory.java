@@ -1,5 +1,6 @@
 package fr.citadels.players;
 
+import fr.citadels.cards.charactercards.Power;
 import fr.citadels.engine.Display;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.Character;
@@ -13,8 +14,10 @@ public class Memory {
     private final DistrictsPile pile;
     private final Display display;
 
+    private boolean draw;
     private District districtToBuild;
-    private int powerToUse;
+    private Choices.Moment momentWhenUse;
+    private Power powerToUse;
     private Character target;
     private int cardsToDiscard;
     private District districtToDestroy;
@@ -25,8 +28,10 @@ public class Memory {
     public Memory(Game game) {
         this.pile = game.getPile();
         this.display = game.getDisplay();
+        this.draw = false;
         this.districtToBuild = null;
-        this.powerToUse = -1;
+        this.momentWhenUse = Choices.Moment.BEFORE_RESSOURCES;
+        this.powerToUse = Power.KILL;
         this.target = null;
         this.cardsToDiscard = 0;
         this.districtToDestroy = null;
@@ -51,6 +56,11 @@ public class Memory {
     }
 
 
+    public boolean getDraw() {
+        return this.draw;
+    }
+
+
     /**
      * @return the district to build
      */
@@ -59,7 +69,12 @@ public class Memory {
     }
 
 
-    public int getPowerToUse() {
+    public Choices.Moment getMomentWhenUse() {
+        return this.momentWhenUse;
+    }
+
+
+    public Power getPowerToUse() {
         return this.powerToUse;
     }
 
@@ -90,6 +105,11 @@ public class Memory {
 
     /* Setters */
 
+    public void setDraw(boolean draw) {
+        this.draw = draw;
+    }
+
+
     /**
      * @param district the district the player want to build
      */
@@ -98,11 +118,16 @@ public class Memory {
     }
 
 
+    public void setMomentWhenUse(Choices.Moment moment) {
+        this.momentWhenUse = moment;
+    }
+
+
     /**
-     * @param number the number of the power the player wants to use
+     * @param power The power the player wants to use.
      */
-    public void setPowerToUse(int number) {
-        this.powerToUse = number;
+    public void setPowerToUse(Power power) {
+        this.powerToUse = power;
     }
 
 

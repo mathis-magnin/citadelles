@@ -5,14 +5,10 @@ import fr.citadels.cards.districtcards.District;
 
 public class Library extends District {
 
+    /* Constructor */
+
     public Library() {
         super("Bibliothèque", Family.UNIQUE, 6);
-    }
-
-    @Override
-    public boolean useEffect() {
-        getOwner().getMemory().getDisplay().addLibraryEffect();
-        return true;
     }
 
 }

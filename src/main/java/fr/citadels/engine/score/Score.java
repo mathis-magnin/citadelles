@@ -78,8 +78,6 @@ public class Score implements Comparable<Score> {
     }
 
 
-    /* Method */
-
     /**
      * Player's score comparison is based on their points (natural ordering of integer).
      * If there is a tie, the comparison would be based on the rank of their last character (natural ordering of integer).
@@ -95,6 +93,8 @@ public class Score implements Comparable<Score> {
         return (this.getPoints() - other.getPoints() != 0) ? this.getPoints() - other.getPoints() : this.player.compareTo(other.getPlayer());
     }
 
+
+    /* Method */
 
     /**
      * Determine the score of a player and update it attributes.

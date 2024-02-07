@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MemoryTest {
-    Game game = new Game();
+    Game game = new Game(null, null);
     Memory info = new Memory(game);
 
     @Test

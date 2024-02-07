@@ -1,5 +1,6 @@
 package fr.citadels.players.bots;
 
+import fr.citadels.cards.charactercards.Power;
 import fr.citadels.cards.charactercards.characters.*;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.CharactersList;
@@ -7,15 +8,16 @@ import fr.citadels.cards.districtcards.City;
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.players.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 class MonarchistTest {
 
@@ -27,11 +29,15 @@ class MonarchistTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game();
+        Player[] players = new Player[4];
+        game = new Game(players, new Random());
         List<District> districts = new ArrayList<>(List.of(DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[22]));
         player1 = new Monarchist("Hello1", districts, game);
         player2 = new Monarchist("Bob", new ArrayList<>(), game);
         player3 = new Monarchist("Tom", new ArrayList<>(), game);
+        players[0] = player1;
+        players[1] = player2;
+        players[2] = player3;
     }
 
     @Test
@@ -93,9 +99,10 @@ class MonarchistTest {
 
         player1.chooseDistrictToBuild();
         assertEquals("Manoir", player1.getMemory().getDistrictToBuild().getName());
-        assertEquals(2, player1.getHand().size());
-        assertEquals("Cathédrale", player1.getHand().get(0).getName());
-        assertEquals("Temple", player1.getHand().get(1).getName());
+        assertEquals(3, player1.getHand().size());
+        assertEquals("Manoir", player1.getHand().get(0).getName());
+        assertEquals("Cathédrale", player1.getHand().get(1).getName());
+        assertEquals("Temple", player1.getHand().get(2).getName());
     }
 
     @Test
@@ -115,7 +122,7 @@ class MonarchistTest {
         //take cards because money
         player1.playResourcesPhase();
         player1.playBuildingPhase();
-        assertEquals(1, player1.getGold()); // 1+2-3+1(gold from family)
+        assertEquals(0, player1.getGold()); // 1+2-3
         assertEquals(1, player1.getHand().size());
         assertEquals("Cathédrale", player1.getHand().get(0).getName());
         assertEquals("Temple", player1.getCity().get(0).getName());
@@ -124,7 +131,7 @@ class MonarchistTest {
         //take money because money needed
         player1.playResourcesPhase();
         player1.playBuildingPhase();
-        assertEquals(4, player1.getGold());
+        assertEquals(2, player1.getGold());
         assertEquals(1, player1.getHand().size());
         assertEquals("Cathédrale", player1.getHand().get(0).getName());
         assertEquals("Temple", player1.getCity().get(0).getName());
@@ -133,17 +140,16 @@ class MonarchistTest {
         //take cards because money needed
         player1.playResourcesPhase();
         player1.playBuildingPhase();
-        assertEquals(2, player1.getGold()); // 4+2-5+1
-        assertEquals(0, player1.getHand().size());
+        assertEquals(4, player1.getGold()); // 2+2
+        assertEquals(1, player1.getHand().size());
         assertEquals("Temple", player1.getCity().get(0).getName());
         assertEquals("Manoir", player1.getCity().get(1).getName());
-        assertEquals("Cathédrale", player1.getCity().get(2).getName());
 
         //take cards because no money
         player1.playResourcesPhase();
         player1.playBuildingPhase();
-        assertEquals(3, player1.getGold());
-        assertEquals(1, player1.getHand().size());
+        assertEquals(1, player1.getGold());
+        assertEquals(0, player1.getHand().size());
         assertEquals("Temple", player1.getCity().get(0).getName());
         assertEquals("Manoir", player1.getCity().get(1).getName());
         assertEquals("Cathédrale", player1.getCity().get(2).getName());
@@ -199,7 +205,7 @@ class MonarchistTest {
         player3.setHand(hand3);
 
         player1.playAsMagician();
-        assertEquals(1, player1.getMemory().getPowerToUse());
+        assertEquals(Power.SWAP, player1.getMemory().getPowerToUse());
         assertEquals(player3.getCharacter(), player1.getMemory().getTarget());
         assertEquals(hand1, player3.getHand());
         assertEquals(hand2, player2.getHand());
@@ -207,7 +213,7 @@ class MonarchistTest {
 
         player1.getActions().addGold(3);
         player1.playAsMagician();
-        assertEquals(2, player1.getMemory().getPowerToUse());
+        assertEquals(Power.RECYCLE, player1.getMemory().getPowerToUse());
         assertEquals(hand1, player3.getHand());
         assertEquals(hand2, player2.getHand());
         assertEquals(4, player1.getHand().size());
@@ -221,13 +227,13 @@ class MonarchistTest {
         assertEquals(1, player1.getMemory().getCardsToDiscard());
 
         player1.playAsMagician();
-        assertEquals(2, player1.getMemory().getPowerToUse());
+        assertEquals(Power.RECYCLE, player1.getMemory().getPowerToUse());
         assertEquals(hand1, player3.getHand());
         assertEquals(hand2, player2.getHand());
         assertEquals(3, player1.getHand().size());
-        assertEquals("Manoir", player1.getHand().get(0).getName());
+        assertEquals("Château", player1.getHand().get(0).getName());
         assertEquals("Manoir", player1.getHand().get(1).getName());
-        assertEquals("Château", player1.getHand().get(2).getName());
+        assertEquals("Manoir", player1.getHand().get(2).getName());
         assertEquals(2, player1.getCity().size());
         assertEquals("Manoir", player1.getCity().get(0).getName());
         assertEquals("Château", player1.getCity().get(1).getName());
@@ -278,28 +284,28 @@ class MonarchistTest {
         player1.getMemory().setDistrictToBuild(DistrictsPile.allDistrictCards[61]);
         player1.getActions().addGold(6);
         player1.getActions().build();
-        assertFalse(player1.activateFactoryEffect());
+        assertFalse(player1.chooseFactoryEffect());
 
         player1.getActions().addGold(3);
-        assertTrue(player1.activateFactoryEffect());
+        assertTrue(player1.chooseFactoryEffect());
     }
 
     @Test
     void activateLaboratoryEffect() {
         player1.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[2], DistrictsPile.allDistrictCards[3])));
-        assertTrue(player1.activateLaboratoryEffect());
+        assertTrue(player1.chooseLaboratoryEffect());
 
         player1.getActions().addGold(2);
-        assertFalse(player1.activateLaboratoryEffect());
+        assertFalse(player1.chooseLaboratoryEffect());
 
         player1.getHand().addAll(List.of(DistrictsPile.allDistrictCards[4], DistrictsPile.allDistrictCards[5]));
-        assertTrue(player1.activateLaboratoryEffect());
+        assertTrue(player1.chooseLaboratoryEffect());
 
         player1.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[1])));
         player1.setGold(0);
-        assertFalse(player1.activateLaboratoryEffect());
+        assertFalse(player1.chooseLaboratoryEffect());
         player1.getCity().add(DistrictsPile.allDistrictCards[0]);
-        assertTrue(player1.activateLaboratoryEffect());
+        assertTrue(player1.chooseLaboratoryEffect());
     }
 
     @Test
@@ -307,9 +313,9 @@ class MonarchistTest {
         player1.setGold(1);
         player1.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5])));
 
-        assertTrue(player1.activateGraveyardEffect(DistrictsPile.allDistrictCards[10]));
-        assertFalse(player1.activateGraveyardEffect(DistrictsPile.allDistrictCards[5]));
-        assertFalse(player1.activateGraveyardEffect(DistrictsPile.allDistrictCards[15]));
+        assertTrue(player1.chooseGraveyardEffect(DistrictsPile.allDistrictCards[10]));
+        assertFalse(player1.chooseGraveyardEffect(DistrictsPile.allDistrictCards[5]));
+        assertFalse(player1.chooseGraveyardEffect(DistrictsPile.allDistrictCards[15]));
     }
 
     @AfterEach

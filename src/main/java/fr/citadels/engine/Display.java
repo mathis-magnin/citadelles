@@ -1,5 +1,6 @@
 package fr.citadels.engine;
 
+import fr.citadels.Main;
 import fr.citadels.cards.Card;
 import fr.citadels.cards.charactercards.Character;
 import fr.citadels.cards.charactercards.CharactersList;
@@ -10,8 +11,12 @@ import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.cards.districtcards.Hand;
 import fr.citadels.engine.score.Scoreboard;
 import fr.citadels.players.Player;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+
 
 public class Display {
 
@@ -35,7 +40,10 @@ public class Display {
 
 
     public void print() {
-        System.out.print(this.events);
+        Logger logger = LogManager.getLogger("Citadels");
+        if (!Main.twoThousands)
+            logger.log(Level.INFO, this.events.toString());
+
     }
 
 
@@ -250,7 +258,6 @@ public class Display {
 
     public void addThiefPower(Character target) {
         this.events.append("Le joueur utilise son pouvoir pour voler : ").append(target.getName()).append(".\n");
-        this.addBlankLine();
     }
 
 
@@ -264,7 +271,6 @@ public class Display {
     public void addMagicianSwap(Player player, Player target) {
         this.events.append("Le joueur utilise son pouvoir pour échanger sa main avec celle de ").append(target.getName()).append(".\n");
         this.addHandUpdate(player.getHand());
-        this.addBlankLine();
     }
 
 
@@ -366,6 +372,7 @@ public class Display {
         this.events.append("Le joueur utilise l'effet du Laboratoire pour défausser ").append(card).append(" et gagner une pièce d'or.\n");
         this.addGoldUpdate(player.getGold());
         this.addHandUpdate(player.getHand());
+        this.addBlankLine();
     }
 
     public void addKeepEffect() {
@@ -394,4 +401,5 @@ public class Display {
     public void addWinner(Player player) {
         this.events.append("Le gagnant est : ").append(player.getName()).append(" !\n");
     }
+
 }

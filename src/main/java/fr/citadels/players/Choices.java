@@ -5,6 +5,27 @@ import fr.citadels.cards.districtcards.District;
 
 public interface Choices {
 
+    enum Moment {
+        BEFORE_RESSOURCES,
+        BETWEEN_PHASES,
+        AFTER_BUILDING
+    }
+
+
+    /**
+     * Choose and take a characterCard from the list of character.
+     *
+     * @param characters the list of characterCard.
+     */
+    void chooseCharacter(CharactersList characters);
+
+
+    /**
+     * Choose to draw cards or to take gold.
+     */
+    void chooseDraw();
+
+
     /**
      * choose a card to take among the cards drawn
      *
@@ -15,18 +36,16 @@ public interface Choices {
 
 
     /**
+     * Choose the moment to take gold from the city.
+     */
+    void chooseMomentToTakeIncome();
+
+
+    /**
      * choose a district in hand to build
      * set the player's districtToBuild attribute with the card chosen or null if no card can be chosen
      */
     void chooseDistrictToBuild();
-
-
-    /**
-     * Choose and take a characterCard from the list of character.
-     *
-     * @param characters the list of characterCard.
-     */
-    void chooseCharacter(CharactersList characters);
 
 
     /**
@@ -48,7 +67,7 @@ public interface Choices {
      * and consequently either the character to exchange his hand with from the list of possibles targets
      * or the cards from his hands he should and replace by cards from the pile
      */
-    int chooseMagicianPower();
+    void chooseMagicianPower();
 
 
     /**
@@ -59,30 +78,18 @@ public interface Choices {
 
 
     /**
-     * play the phase when the player takes resources for his turn
-     */
-    void playResourcesPhase();
-
-
-    /**
-     * play the phase when the player builds districts in his city
-     */
-    void playBuildingPhase();
-
-
-    /**
      * activate the effect of the factory if the player can
      *
      * @return a boolean true if we want to activate the effect, else otherwise
      */
-    boolean activateFactoryEffect();
+    boolean chooseFactoryEffect();
 
     /**
      * activate the effect of the laboratory if the player can
      *
      * @return a boolean true if we want to activate the effect, else otherwise
      */
-    boolean activateLaboratoryEffect();
+    boolean chooseLaboratoryEffect();
 
 
     /**
@@ -91,6 +98,6 @@ public interface Choices {
      * @param removedDistrict the district removed by the Warlord
      * @return a boolean value
      */
-    boolean activateGraveyardEffect(District removedDistrict);
+    boolean chooseGraveyardEffect(District removedDistrict);
 
 }

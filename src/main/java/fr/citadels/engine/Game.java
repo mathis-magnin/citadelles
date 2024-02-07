@@ -7,27 +7,22 @@ import fr.citadels.cards.charactercards.CharactersList;
 import fr.citadels.cards.charactercards.characters.King;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.players.*;
-import fr.citadels.players.bots.Monarchist;
-import fr.citadels.players.bots.Random;
-import fr.citadels.players.bots.Spendthrift;
-import fr.citadels.players.bots.Thrifty;
 
-import java.util.*;
+
+import java.util.List;
+import java.util.Random;
+
 
 public class Game {
 
+
     /* Constant values */
 
-    public static final int NB_PLAYERS = 4;
-
-
-    /* Static attributes */
-
-    private static final java.util.Random RAND = new java.util.Random();
+    public static final int NB_PLAYERS = 5;
 
 
     /* Attributes */
-
+    private final Random random;
     private final Player[] playersTab;
     private final Display display;
     private final DistrictsPile pile;
@@ -38,13 +33,14 @@ public class Game {
 
     /* Constructor */
 
-    public Game() {
-        this.playersTab = new Player[NB_PLAYERS];
+    public Game(Player[] players, Random random) {
+        this.playersTab = players;
         this.display = new Display();
         this.pile = new DistrictsPile();
         this.isFinished = false;
         this.scoreboard = new Scoreboard(NB_PLAYERS);
         this.crownedPlayer = null;
+        this.random = random;
     }
 
 
@@ -52,6 +48,10 @@ public class Game {
 
     public Player[] getPlayersTab() {
         return this.playersTab;
+    }
+
+    public Scoreboard getScoreboard() {
+        return this.scoreboard;
     }
 
 
@@ -65,7 +65,17 @@ public class Game {
     }
 
 
+
     /* Methods */
+
+    /**
+     * Initialize players
+     */
+    public void initializePlayers() {
+        for (Player player : this.playersTab) {
+            player.initPlayer(List.of(pile.draw(4)), this);
+        }
+    }
 
     /**
      * Initialize the game
@@ -77,10 +87,7 @@ public class Game {
         this.display.addGameTitle();
 
         // Initialize the players
-        this.playersTab[0] = new Random("HASARDEUX", Arrays.asList(this.pile.draw(4)), this, RAND);
-        this.playersTab[1] = new Spendthrift("DÉPENSIER", Arrays.asList(this.pile.draw(4)), this, RAND);
-        this.playersTab[2] = new Thrifty("ÉCONOME", Arrays.asList(this.pile.draw(4)), this, RAND);
-        this.playersTab[3] = new Monarchist("MONARCHISTE", Arrays.asList(this.pile.draw(4)), this);
+        this.initializePlayers();
         this.display.addPlayers(this.playersTab);
         this.display.addBlankLine();
 
@@ -96,7 +103,7 @@ public class Game {
         this.display.addInitialGoldGiven(2);
         this.display.addBlankLine();
 
-        this.crownedPlayer = this.playersTab[RAND.nextInt(NB_PLAYERS)];
+        this.crownedPlayer = this.playersTab[random.nextInt(NB_PLAYERS)];
         this.display.addFirstCrownedPlayer(this.crownedPlayer);
         this.display.addBlankLine(3);
 
@@ -168,7 +175,7 @@ public class Game {
         Character characterKilled = null;
 
         for (Character character : CharactersList.allCharacterCards) {
-            if (character.getPlayer() != null && !character.isDead()) {
+            if (character.isPlayed() && !character.isDead()) {
                 this.display.addPlayerTurn(this.crownedPlayer, character.getPlayer());
                 this.display.addBlankLine();
                 this.display.addPlayer(character.getPlayer());
@@ -212,7 +219,7 @@ public class Game {
     /**
      * Play the game until a player has a complete city and determine the ranking
      */
-    public void playGame() {
+    public void play() {
         this.initializeGame();
         int round = 1;
 
@@ -225,7 +232,7 @@ public class Game {
             this.display.printAndReset();
         }
 
-        this.scoreboard.initializeScoreboard(this.playersTab);
+        this.scoreboard.initialize(this.playersTab);
         this.scoreboard.determineRanking();
         this.display.addScoreTitle();
         this.display.addPlayersCity(this.playersTab);
@@ -234,6 +241,8 @@ public class Game {
         this.display.addBlankLine();
         this.display.addWinner(this.scoreboard.getWinner());
         this.display.printAndReset();
+
     }
+
 
 }

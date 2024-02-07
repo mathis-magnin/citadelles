@@ -21,7 +21,7 @@ public class Laboratory extends District {
      */
     @Override
     public boolean useEffect() {
-        if (isBuilt() && getOwner().activateLaboratoryEffect()) {
+        if (isBuilt() && getOwner().chooseLaboratoryEffect()) {
             getOwner().getActions().addGold(1);
             District card = getOwner().getHand().remove(getOwner().getHand().size() - 1);
             getOwner().getMemory().getPile().placeBelowPile(card);

@@ -29,7 +29,12 @@ public class Scoreboard {
 
     /* Basic method */
 
-    public void initializeScoreboard(Player[] players) {
+    /**
+     * Initialize the scoreboard.
+     * @param players an array of player
+     * @precondition players should be the same size as scores.
+     */
+    public void initialize(Player[] players) {
         for (int i = 0; i < players.length; i++) {
             scores[i] = new Score(players[i]);
         }
@@ -47,6 +52,11 @@ public class Scoreboard {
             str.append("\n");
         }
         return str.toString();
+    }
+
+
+    public Score[] getScores() {
+        return this.scores;
     }
 
 

@@ -2,9 +2,11 @@ package fr.citadels.cards.charactercards.characters;
 
 import fr.citadels.cards.charactercards.Character;
 import fr.citadels.cards.charactercards.CharactersList;
+import fr.citadels.cards.charactercards.Power;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.cards.districtcards.Hand;
 import fr.citadels.engine.Game;
+import fr.citadels.players.Player;
 import fr.citadels.players.bots.Monarchist;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -27,12 +30,16 @@ class MagicianTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game();
-        game.getPile().initializePile();
+        Player[] players = new Player[4];
 
+        players[0] = player1;
+        players[1] = player2;
+        players[2] = player3;
+        game = new Game(players, new Random());
         player1 = new Monarchist("Tom", new ArrayList<>(), game);
         player2 = new Monarchist("Bob", new ArrayList<>(), game);
         player3 = new Monarchist("Mat", new ArrayList<>(), game);
+        game.getPile().initializePile();
 
         for (Character characterCard : CharactersList.allCharacterCards) {
             characterCard.setPlayer(null);
@@ -70,7 +77,7 @@ class MagicianTest {
 
     @Test
     void usePower() {
-        player1.getMemory().setPowerToUse(1);
+        player1.getMemory().setPowerToUse(Power.SWAP);
         player1.setCharacter(CharactersList.allCharacterCards[2]);
         player2.setCharacter(CharactersList.allCharacterCards[3]);
         Hand hand1 = new Hand(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[2]));
@@ -90,7 +97,7 @@ class MagicianTest {
 
     @Test
     void usePower2() {
-        player1.getMemory().setPowerToUse(2);
+        player1.getMemory().setPowerToUse(Power.RECYCLE);
         player1.setCharacter(CharactersList.allCharacterCards[2]);
         Hand hand1 = new Hand(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[20], DistrictsPile.allDistrictCards[30]));
         player1.setHand(hand1);

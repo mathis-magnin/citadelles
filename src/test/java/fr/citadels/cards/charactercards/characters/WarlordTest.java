@@ -2,9 +2,11 @@ package fr.citadels.cards.charactercards.characters;
 
 import fr.citadels.cards.charactercards.Character;
 import fr.citadels.cards.charactercards.CharactersList;
+import fr.citadels.cards.charactercards.Power;
 import fr.citadels.cards.districtcards.City;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.engine.Game;
+import fr.citadels.players.Player;
 import fr.citadels.players.bots.Monarchist;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,8 +29,10 @@ class WarlordTest {
 
     @BeforeEach
     void setUp() {
-        game = new Game();
 
+        Player[] players = new Player[4];
+
+        game = new Game(players, new Random());
         player1 = new Monarchist("Tom", new ArrayList<>(), game);
         player2 = new Monarchist("Bob", new ArrayList<>(), game);
         player3 = new Monarchist("Sam", new ArrayList<>(), game);
@@ -63,15 +68,30 @@ class WarlordTest {
 
     @Test
     void usePower() {
+        /* Power 1 : Destroy district */
         player1.setCity(new City(new ArrayList<>(List.of(DistrictsPile.allDistrictCards[0]))));
         DistrictsPile.allDistrictCards[0].setOwner(player1);
         player2.getActions().addGold(2);
         player2.getMemory().setTarget(CharactersList.allCharacterCards[0]);
         player2.getMemory().setDistrictToDestroy(DistrictsPile.allDistrictCards[0]);
+        player2.getMemory().setPowerToUse(Power.DESTROY);
         player2.getCharacter().usePower();
         assertFalse(DistrictsPile.allDistrictCards[0].isBuilt());
         assertEquals(0, player2.getGold());
         Assertions.assertEquals(new City(), player1.getCity());
+
+        /* Power 2 : Gain golds with city */
+        player2.setCity(new City(List.of(DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25], DistrictsPile.allDistrictCards[35], DistrictsPile.allDistrictCards[45], DistrictsPile.allDistrictCards[55], DistrictsPile.allDistrictCards[65])));
+        // Noble, Religious, Trade, Trade, Military, Military, Unique
+        player2.getMemory().setPowerToUse(Power.INCOME);
+        player2.getCharacter().usePower();
+        assertEquals(2, player2.getGold()); // +2
+
+        player2.setCity(new City(List.of(DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25], DistrictsPile.allDistrictCards[35], DistrictsPile.allDistrictCards[45], DistrictsPile.allDistrictCards[55], DistrictsPile.allDistrictCards[63])));
+        // Noble, Religious, Trade, Trade, Military, Military, Unique(SchoolOfMagic)
+        DistrictsPile.allDistrictCards[63].setOwner(player2);
+        player2.getCharacter().usePower();
+        assertEquals(5, player2.getGold()); // +3
     }
 
     @AfterAll
