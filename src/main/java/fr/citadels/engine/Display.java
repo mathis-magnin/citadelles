@@ -4,6 +4,7 @@ import fr.citadels.Main;
 import fr.citadels.cards.Card;
 import fr.citadels.cards.charactercards.Character;
 import fr.citadels.cards.charactercards.CharactersList;
+import fr.citadels.cards.charactercards.Power;
 import fr.citadels.cards.charactercards.characters.Merchant;
 import fr.citadels.cards.districtcards.City;
 import fr.citadels.cards.districtcards.District;
@@ -307,13 +308,13 @@ public class Display {
     }
 
 
-    public void addArchitectPower(int number) {
+    public void addArchitectPower(Power power) {
         this.events.append("Le joueur utilise son pouvoir pour ");
-        switch (number) {
-            case 1:
+        switch (power) {
+            case DRAW:
                 this.events.append("piocher et ajouter deux cartes à sa main.\n");
                 break;
-            case 2:
+            case BUILD:
                 this.events.append("construire un quartier supplémentaire.\n");
         }
     }
