@@ -173,5 +173,5 @@ public class Richard extends Player {
         }
         return charactersWhoPlayed;
     }
-
+//BONJOUR
 }
