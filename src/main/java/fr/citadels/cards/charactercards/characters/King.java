@@ -28,16 +28,7 @@ public class King extends Character {
      */
     @Override
     public void usePower() {
-        int gold = this.getPlayer().getCity().getNumberOfDistrictWithFamily(this.getFamily());
-
-        boolean activateSchoolOfMagicEffect = (DistrictsPile.allDistrictCards[63].getOwner() == this.getPlayer()); // School of magic effect
-        gold = activateSchoolOfMagicEffect ? gold + 1 : gold;
-
-        if (0 < gold) {
-            this.getPlayer().getActions().addGold(gold);
-            this.getPlayer().getMemory().getDisplay().addGoldTakenFromCity(this.getPlayer(), gold, activateSchoolOfMagicEffect);
-            this.getPlayer().getMemory().getDisplay().addBlankLine();
-        }
+        super.income();
     }
 
 }
