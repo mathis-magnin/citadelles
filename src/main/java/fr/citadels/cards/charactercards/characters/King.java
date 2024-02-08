@@ -2,7 +2,6 @@ package fr.citadels.cards.charactercards.characters;
 
 import fr.citadels.cards.Family;
 import fr.citadels.cards.charactercards.Character;
-import fr.citadels.cards.districtcards.DistrictsPile;
 
 public class King extends Character {
 
