@@ -56,7 +56,7 @@ class RichardTest {
     @Test
     void chooseTargetToDestroy1() {
         // Lou played the king
-        richard.getMemory().setFaceUpcharacters(new CharactersList(new Character[]{CharactersList.allCharacterCards[2], CharactersList.allCharacterCards[4]}));     // Magician and Bishop
+        richard.getMemory().setFaceUpCharacters(new CharactersList(new Character[]{CharactersList.allCharacterCards[2], CharactersList.allCharacterCards[4]}));     // Magician and Bishop
         bob.setCharacter(CharactersList.allCharacterCards[0]);      // Assassin
         lou.setCharacter(CharactersList.allCharacterCards[3]);      // King
         dan.setCharacter(CharactersList.allCharacterCards[6]);      // Architect
@@ -78,7 +78,7 @@ class RichardTest {
         richard.getMemory().setTarget(null);
         richard.getMemory().setDistrictToDestroy(null);
 
-        richard.getMemory().setFaceUpcharacters(new CharactersList(new Character[]{CharactersList.allCharacterCards[2], CharactersList.allCharacterCards[4]}));     // Magician and Bishop
+        richard.getMemory().setFaceUpCharacters(new CharactersList(new Character[]{CharactersList.allCharacterCards[2], CharactersList.allCharacterCards[4]}));     // Magician and Bishop
         bob.setCharacter(CharactersList.allCharacterCards[0]);      // Assassin
         lou.setCharacter(CharactersList.allCharacterCards[1]);      // thief
         dan.setCharacter(CharactersList.allCharacterCards[6]);      // Architect

@@ -25,9 +25,11 @@ public class Memory {
     private Character target;
     private int cardsToDiscard;
     private District districtToDestroy;
-    private CharactersList faceUpcharacters;
+
+    private CharactersList faceUpCharacters;
     private List<Player> playersWhoChose;
     private CharactersList possibleCharacters;
+    private Player previousArchitect;
 
 
     /* Constructor */
@@ -43,9 +45,10 @@ public class Memory {
         this.target = null;
         this.cardsToDiscard = 0;
         this.districtToDestroy = null;
-        this.faceUpcharacters = null;
+        this.faceUpCharacters = null;
         this.playersWhoChose = null;
         this.possibleCharacters = null;
+        this.previousArchitect = null;
     }
 
 
@@ -119,8 +122,8 @@ public class Memory {
     }
 
 
-    public CharactersList getFaceUpcharacters() {
-        return faceUpcharacters;
+    public CharactersList getFaceUpCharacters() {
+        return faceUpCharacters;
     }
 
 
@@ -131,6 +134,11 @@ public class Memory {
 
     public List<Player> getPlayersWhoChose() {
         return this.playersWhoChose;
+    }
+
+
+    public Player getPreviousArchitect() {
+        return previousArchitect;
     }
 
 
@@ -186,8 +194,8 @@ public class Memory {
     }
 
 
-    public void setFaceUpcharacters(CharactersList characters) {
-        this.faceUpcharacters = characters;
+    public void setFaceUpCharacters(CharactersList characters) {
+        this.faceUpCharacters = characters;
     }
 
 
@@ -198,6 +206,11 @@ public class Memory {
 
     public void setPlayersWhoChose(List<Player> playersWhoChose) {
         this.playersWhoChose = playersWhoChose;
+    }
+
+
+    public void setPreviousArchitect(Player previousArchitect) {
+        this.previousArchitect = previousArchitect;
     }
 
 }

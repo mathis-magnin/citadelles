@@ -169,7 +169,7 @@ public class Game {
 
         for (int i = 0; i < length; i++) {
             index = (i + crownedPlayerIndex) % length;
-            this.players[index].getMemory().setFaceUpcharacters(new CharactersList(removedCharactersFaceUp));
+            this.players[index].getMemory().setFaceUpCharacters(new CharactersList(removedCharactersFaceUp));
             this.players[index].getMemory().setPlayersWhoChose(playersWhoPlayed);
             this.players[index].chooseCharacter(characters);
             playersWhoPlayed.add(this.players[index]);

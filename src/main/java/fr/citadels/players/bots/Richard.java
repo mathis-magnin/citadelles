@@ -84,6 +84,39 @@ public class Richard extends Player {
 
     @Override
     public void chooseMagicianPower() {
+        this.getMemory().setPowerToUse(Power.SWAP);
+        this.getMemory().setMomentWhenUse(Moment.BEFORE_RESSOURCES);
+        CharactersList magicianTarget = Magician.getPossibleTargets();
+
+        Character assassin = CharactersList.allCharacterCards[0];
+        Character bishop = CharactersList.allCharacterCards[4];
+        Character warlord = CharactersList.allCharacterCards[7];
+
+        /* Richard's strategy */
+        /* Assassin */
+        if (magicianTarget.contains(assassin) && (5 <= assassin.getPlayer().getCity().size()) && (this.getKilledCharacter().equals(warlord))) {
+            this.getMemory().setTarget(assassin);
+            return;
+        }
+        /* Bishop and Warlord */
+        List<Player> possibleBishopPlayers = this.getPossiblePlayersWhoPlay(bishop);
+        List<Player> possibleWarlordPlayers = this.getPossiblePlayersWhoPlay(warlord);
+        for (Character character : magicianTarget) {
+            if (possibleBishopPlayers.contains(character.getPlayer()) && (5 <= character.getPlayer().getCity().size())) {
+                this.getMemory().setTarget(character);
+                return;
+            }
+            if (possibleWarlordPlayers.contains(character.getPlayer()) && (5 <= character.getPlayer().getCity().size())) {
+                this.getMemory().setTarget(character);
+                return;
+            }
+        }
+        /* Player who is about to win */
+
+        /* Previous architect */
+
+
+        /* Basic strategy : */
         this.memory.setPowerToUse(Power.SWAP);
         this.memory.setTarget(Magician.getPossibleTargets().get(0));
         this.memory.setMomentWhenUse(Moment.BEFORE_RESSOURCES);
@@ -100,9 +133,9 @@ public class Richard extends Player {
         if (!warlordTargets.isEmpty()) {
             // Richard's strategy
             Character king = CharactersList.allCharacterCards[3];
-            if (warlordTargets.contains(king) && this.getCharactersWhoPlayed().contains(king) && (5 <= king.getPlayer().getCity().size())) {
-                this.getMemory().setTarget(CharactersList.allCharacterCards[3]);
-                District cheapestDistrict = CharactersList.allCharacterCards[3].getPlayer().getCity().getCheapestDistrict();
+            if (warlordTargets.contains(king) && (5 <= king.getPlayer().getCity().size())) {
+                this.getMemory().setTarget(king);
+                District cheapestDistrict = king.getPlayer().getCity().getCheapestDistrict();
                 if ((cheapestDistrict != null) && (cheapestDistrict.getGoldCost() - 1 <= this.getGold())) {
                     this.getMemory().setDistrictToDestroy(cheapestDistrict);
                     return;
@@ -139,6 +172,34 @@ public class Richard extends Player {
     @Override
     public boolean chooseGraveyardEffect(District removedDistrict) {
         return (1 <= this.getGold()) && (!this.hasCardInCity(removedDistrict));
+    }
+
+
+    public List<Player> getPossiblePlayersWhoPlay(Character character) {
+        if (!this.getMemory().getFaceUpCharacters().contains(character)) { // A player is maybe playing the character
+            if (this.getMemory().getPossibleCharacters().contains(character)) { // A player who chose his character after richard is maybe playing the character
+                return this.getPlayersWhoChose();
+            }
+            else {  // A player who chose his character before richard is maybe playing Warlord
+                return this.getPlayersWhoWillChoose();
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Find the killed player if it exists.
+     *
+     * @return the killed player or null.
+     */
+    public Character getKilledCharacter() {
+        for (Character character : CharactersList.allCharacterCards) {
+            if (character.isDead()) {
+                return character;
+            }
+        }
+        return null;
     }
 
 
