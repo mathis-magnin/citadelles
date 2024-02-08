@@ -390,7 +390,7 @@ class PlayerTest {
         player.initPlayer(new ArrayList<>(List.of(DistrictsPile.allDistrictCards[12])), game);
         assertEquals(0, player.getGold());
         assertEquals(1, player.getHand().size());
-        assertEquals(player.getHand().get(0).getName(), "Temple");
+        assertEquals("Temple", player.getHand().get(0).getName());
         assertEquals(0, player.getCity().size());
         assertNull(player.getCharacter());
         assertNotNull(player.getActions());
