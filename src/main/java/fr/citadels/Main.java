@@ -48,6 +48,7 @@ public class Main {
         players[4] = new Richard("RICHARD");
         return players;
     }
+
     /* Programs */
 
     public static void main(String... argv) {

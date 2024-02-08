@@ -18,7 +18,7 @@ public class Statisticboard {
 
     /* Attribute */
 
-    private Statistic[] statistics;
+    private final Statistic[] statistics;
 
 
     /* Constructor */
@@ -110,36 +110,34 @@ public class Statisticboard {
      * @throws IOException if the file is not found
      */
     public void writeCsv(File file, boolean inSecondIteration) throws IOException {
-        if (!inSecondIteration) {
-            file.delete();
-            file.createNewFile();
-        }
+        Logger logger = org.apache.logging.log4j.LogManager.getLogger(Main.class);
+        if (!inSecondIteration && (file.delete() && file.createNewFile()))
+            logger.info("\n");
 
         FileWriter fileWriter = new FileWriter(file, inSecondIteration);
-        CSVWriter writer = new CSVWriter(fileWriter);
-        DecimalFormat df = new DecimalFormat("#.###");
+        try (CSVWriter writer = new CSVWriter(fileWriter)) {
+            DecimalFormat df = new DecimalFormat("#.###");
 
-        if (inSecondIteration) {
-            writer.writeNext(new String[]{});
+            if (inSecondIteration)
+                writer.writeNext(new String[]{});
+
+            writer.writeNext(new String[]{"Nombre de parties jouées : ", (df.format(this.statistics[0].getGameNumber()))});
+            fileWriter.write("\n");
+
+            List<String[]> data = new ArrayList<>();
+            data.add(new String[]{"Player", "Win number", "Win percentage", "Defeat number", "Defeat percentage", "Total Score", "Average score"});
+            for (Statistic statistic : this.statistics) {
+                data.add(new String[]{
+                        statistic.getPlayer().getName(),
+                        String.valueOf(df.format(statistic.getWinNumber())),
+                        String.valueOf(df.format(statistic.getWinPercentage())),
+                        String.valueOf(df.format(statistic.getDefeatNumber())),
+                        String.valueOf(df.format(statistic.getDefeatPercentage())),
+                        String.valueOf(df.format(statistic.getTotalScore())),
+                        String.valueOf(df.format(statistic.getAverageScore()))});
+            }
+            writer.writeAll(data);
         }
-
-        writer.writeNext(new String[]{"Nombre de parties jouées : ", (df.format(this.statistics[0].getGameNumber()))});
-        fileWriter.write("\n");
-
-        List<String[]> data = new ArrayList<>();
-        data.add(new String[]{"Player", "Win number", "Win percentage", "Defeat number", "Defeat percentage", "Total Score", "Average score"});
-        for (Statistic statistic : this.statistics) {
-            data.add(new String[]{
-                    statistic.getPlayer().getName(),
-                    String.valueOf(df.format(statistic.getWinNumber())),
-                    String.valueOf(df.format(statistic.getWinPercentage())),
-                    String.valueOf(df.format(statistic.getDefeatNumber())),
-                    String.valueOf(df.format(statistic.getDefeatPercentage())),
-                    String.valueOf(df.format(statistic.getTotalScore())),
-                    String.valueOf(df.format(statistic.getAverageScore()))});
-        }
-        writer.writeAll(data);
-        writer.close();
     }
 
     /**
@@ -155,48 +153,55 @@ public class Statisticboard {
      */
     public static Statisticboard readCsv(File file, Player[] players, boolean inSecondIteration ) throws CsvValidationException, IOException {
         FileReader fileReader = new FileReader(file);
-        CSVReader reader = new CSVReader(fileReader);
-        Logger logger = org.apache.logging.log4j.LogManager.getLogger(Main.class);
+        Logger logger;
+        int nbPlayer;
+        List<Statistic> statistics;
+
+        try (CSVReader reader = new CSVReader(fileReader)) {
+            logger = org.apache.logging.log4j.LogManager.getLogger(Main.class);
 
 
-        if (inSecondIteration) {
-            for (int i = 0; i < players.length + 4; i++)
-                reader.readNext();
-        }
+            if (inSecondIteration) {
+                for (int i = 0; i < players.length + 4; i++)
+                    reader.readNext();
+            }
 
-        double nbGame = 0;
-        String[] nextLine = reader.readNext();
-        if (nextLine == null || nextLine.length < 2) {
-            Statisticboard statisticboard = new Statisticboard(Game.NB_PLAYERS);
-            statisticboard.initialize(players);
-            logger.info("Fichier csv non valide, création d'un nouveau fichier.\n");
-            return statisticboard;
-        }
-
-        nbGame = Double.parseDouble(nextLine[1]);
-        reader.readNext();
-        reader.readNext();
-        int nbPlayer = 0;
-
-        List<Statistic> statistics = new ArrayList<>();
-        while (((nextLine = reader.readNext()) != null) && (nextLine.length == 7)){
-            if ((nbPlayer >= Game.NB_PLAYERS) || (!nextLine[0].equals(players[nbPlayer].getName()))) {
+            double nbGame = 0;
+            String[] nextLine = reader.readNext();
+            if (nextLine == null || nextLine.length < 2) {
                 Statisticboard statisticboard = new Statisticboard(Game.NB_PLAYERS);
                 statisticboard.initialize(players);
-                logger.info("Fichier csv non valide (trop de joueurs ou noms de joueurs différents), création d'un nouveau fichier.\n");
+                logger.info("Fichier csv non valide, création d'un nouveau fichier.\n");
                 return statisticboard;
             }
-            Player player = new Monarchist(nextLine[0]);
-            Statistic statistic = new Statistic(player, nbGame, Double.parseDouble(nextLine[1]), Double.parseDouble(nextLine[5]));
-            statistics.add(statistic);
-            nbPlayer++;
+
+            nbGame = Double.parseDouble(nextLine[1]);
+            reader.readNext();
+            reader.readNext();
+            nbPlayer = 0;
+
+            statistics = new ArrayList<>();
+            while (((nextLine = reader.readNext()) != null) && (nextLine.length == 7)) {
+                if ((nbPlayer >= Game.NB_PLAYERS) || (!nextLine[0].equals(players[nbPlayer].getName()))) {
+                    logger.info("Fichier csv non valide (trop de joueurs ou noms de joueurs différents), création d'un nouveau fichier.\n");
+                    Statisticboard statisticboard = new Statisticboard(Game.NB_PLAYERS);
+                    statisticboard.initialize(players);
+                    return statisticboard;
+                }
+                Player player = new Monarchist(nextLine[0]);
+                Statistic statistic = new Statistic(player, nbGame, Double.parseDouble(nextLine[1]), Double.parseDouble(nextLine[5]));
+                statistics.add(statistic);
+                nbPlayer++;
+            }
         }
         if (nbPlayer != Game.NB_PLAYERS) {
-            file.delete();
-            file.createNewFile();
+            logger.info("Fichier non valide (pas assez de joueurs), création d'un nouveau fichier.\n");
+             if (file.delete())
+                 logger.info("Fichier csv supprimé avec succès.\n");
+             if (file.createNewFile())
+                 logger.info("Fichier csv créé avec succès.\n");
             Statisticboard statisticboard = new Statisticboard(Game.NB_PLAYERS);
             statisticboard.initialize(players);
-            logger.info("Fichier non valide (pas assez de joueurs), création d'un nouveau fichier.\n");
             return statisticboard;
         }
 
