@@ -78,7 +78,37 @@ public class Richard extends Player {
 
     @Override
     public void chooseTargetToRob() {
-        this.memory.setTarget(Thief.getPossibleTargets().get(0));
+        List<Player> playersAboutToWin = this.getPlayersWithMoreDistrictsThan(List.of(getMemory().getPlayers()), 5);
+
+        for (Player player : playersAboutToWin) {
+            if (getMemory().getPlayersWhoChose().contains(player)) {
+                if (!getMemory().getPossibleCharacters().contains(CharactersList.allCharacterCards[4]) && !getMemory().getFaceUpcharacters().contains(CharactersList.allCharacterCards[4])) {
+                    this.memory.setTarget(CharactersList.allCharacterCards[4]);
+                    return;
+                } else if (!getMemory().getPossibleCharacters().contains(CharactersList.allCharacterCards[7]) && !getMemory().getFaceUpcharacters().contains(CharactersList.allCharacterCards[7])) {
+                    this.memory.setTarget(CharactersList.allCharacterCards[7]);
+                    return;
+                }
+            } else {
+                if (getMemory().getPossibleCharacters().contains(CharactersList.allCharacterCards[4])) {
+                    this.memory.setTarget(CharactersList.allCharacterCards[4]);
+                    return;
+                } else if (getMemory().getPossibleCharacters().contains(CharactersList.allCharacterCards[7])) {
+                    this.memory.setTarget(CharactersList.allCharacterCards[7]);
+                    return;
+                }
+            }
+        }
+
+        CharactersList targets = Thief.getPossibleTargets();
+        for (int i : List.of(6, 7, 2, 3, 4)) {
+            if (!quiPeutAvoir(CharactersList.allCharacterCards[i]).isEmpty() && targets.contains(CharactersList.allCharacterCards[i])) {
+                this.memory.setTarget(CharactersList.allCharacterCards[i]);
+                return;
+            }
+        }
+
+        this.memory.setTarget(null);
     }
 
 
@@ -143,19 +173,20 @@ public class Richard extends Player {
 
 
     /**
-     * Find players who are about to win, that is to say with more than 5 district in theirs city.
+     * Find players who have a minimum amount of districts in their city.
      *
      * @param players the list to check.
+     * @param minDistricts the minimum amount of districts the player should have
      * @return a list of players who are about to win.
      */
-    public List<Player> getPlayersAboutToWin(List<Player> players) {
-        List<Player> playersAboutToWin = new ArrayList<>();
+    public List<Player> getPlayersWithMoreDistrictsThan(List<Player> players, int minDistricts) {
+        List<Player> playersWithMinDistricts = new ArrayList<>();
         for (Player player : players) {
-            if (5 <= player.getCity().size()) {
-                playersAboutToWin.add(player);
+            if (minDistricts <= player.getCity().size()) {
+                playersWithMinDistricts.add(player);
             }
         }
-        return playersAboutToWin;
+        return playersWithMinDistricts;
     }
 
 
