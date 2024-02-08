@@ -8,7 +8,6 @@ import fr.citadels.cards.districtcards.City;
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.cards.districtcards.Hand;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Player implements Comparable<Player>, Choices {

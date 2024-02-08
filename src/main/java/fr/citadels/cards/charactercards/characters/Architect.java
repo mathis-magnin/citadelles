@@ -2,6 +2,7 @@ package fr.citadels.cards.charactercards.characters;
 
 import fr.citadels.cards.Family;
 import fr.citadels.cards.charactercards.Character;
+import fr.citadels.cards.charactercards.Power;
 
 public class Architect extends Character {
 
@@ -49,7 +50,7 @@ public class Architect extends Character {
      * The player gain two extra cards. He can use this ability regardless of what resource he gathered this turn.
      */
     private void draw() {
-        this.getPlayer().getMemory().getDisplay().addArchitectPower(1);
+        this.getPlayer().getMemory().getDisplay().addArchitectPower(Power.DRAW);
         this.getPlayer().getActions().draw(2);
     }
 
@@ -61,7 +62,7 @@ public class Architect extends Character {
      * @precondition The player must have chosen which district he wants to build.
      */
     private void build() {
-        this.getPlayer().getMemory().getDisplay().addArchitectPower(2);
+        this.getPlayer().getMemory().getDisplay().addArchitectPower(Power.BUILD);
         this.getPlayer().getActions().build();
     }
 
