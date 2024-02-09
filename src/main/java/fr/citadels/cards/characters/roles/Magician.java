@@ -2,7 +2,6 @@ package fr.citadels.cards.characters.roles;
 
 import fr.citadels.cards.Family;
 import fr.citadels.cards.characters.Character;
-import fr.citadels.cards.characters.CharactersList;
 import fr.citadels.cards.districts.District;
 import fr.citadels.cards.districts.Hand;
 
@@ -11,24 +10,6 @@ import java.util.List;
 
 public class Magician extends Character {
 
-    /* Static content */
-
-    /**
-     * The Magician must not target himself or unplayed character.
-     *
-     * @return The list of characters the Magician can target.
-     */
-    public static CharactersList getPossibleTargets() {
-        CharactersList targets = new CharactersList();
-        for (Character characterCard : CharactersList.allCharacterCards) {
-            if (characterCard.isPlayed() && !characterCard.equals(new Magician())) {
-                targets.add(characterCard);
-            }
-        }
-        return targets;
-    }
-
-
     /**
      * Gives the character who has the biggest amount of cards in his hand except the magician or an unplayed character.
      *
@@ -36,7 +17,7 @@ public class Magician extends Character {
      */
     public static Character getCharacterWithMostCards() {
         Character characterWithMostCards = null;
-        for (Character character : getPossibleTargets()) {
+        for (Character character : this.getPossibleTargets()) {
             if ((characterWithMostCards == null) || (character.getPlayer().getHand().size() > characterWithMostCards.getPlayer().getHand().size())) {
                 characterWithMostCards = character;
             }
@@ -101,10 +82,10 @@ public class Magician extends Character {
      * @precondition The player must have chosen which player he wants to target.
      */
     private void recycle() {
-        if (this.getPlayer().getMemory().getCardsToDiscard() != 0) {
+        if (this.getPlayer().getMemory().getNumberCardsToDiscard() != 0) {
             District card;
             List<District> discardsCards = new ArrayList<>();
-            int iterations = Math.min(this.getPlayer().getMemory().getCardsToDiscard(), this.getPlayer().getHand().size());
+            int iterations = Math.min(this.getPlayer().getMemory().getNumberCardsToDiscard(), this.getPlayer().getHand().size());
             for (int i = 0; i < iterations; i++) {
                 card = this.getPlayer().getHand().remove(this.getPlayer().getHand().size() - 1);
                 this.getPlayer().getMemory().getPile().placeBelowPile(card);
@@ -113,6 +94,22 @@ public class Magician extends Character {
             this.getPlayer().getMemory().getDisplay().addMagicianDiscard(this.getPlayer(), discardsCards);
             this.getPlayer().getActions().draw(iterations);
         }
+    }
+
+
+    /**
+     * The Magician must not target himself or unplayed character.
+     *
+     * @return The list of characters the Magician can target.
+     */
+    public List<Character> getPossibleTargets() {
+        List<Character> targets = new ArrayList<>();
+        for (Character characterCard : this.getPlayer().getMemory().getCharactersDeck().get()) {
+            if (characterCard.isPlayed() && !characterCard.equals(new Magician())) {
+                targets.add(characterCard);
+            }
+        }
+        return targets;
     }
 
 }

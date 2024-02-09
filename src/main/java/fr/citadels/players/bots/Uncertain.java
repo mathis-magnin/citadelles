@@ -4,7 +4,6 @@ package fr.citadels.players.bots;
 import fr.citadels.cards.characters.Power;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.characters.Character;
-import fr.citadels.cards.characters.CharactersList;
 import fr.citadels.cards.characters.roles.Assassin;
 import fr.citadels.cards.characters.roles.Magician;
 import fr.citadels.cards.characters.roles.Thief;
@@ -43,15 +42,11 @@ public class Uncertain extends Player {
      */
     @Override
     public void chooseCharacter(CharactersList characters) {
-
         int randomIndex = -1;
-
         while (randomIndex >= characters.size() || randomIndex < 0) {
             randomIndex = rand.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        this.getMemory().setPossibleCharacters(characters);
-
     }
 
 
@@ -149,9 +144,12 @@ public class Uncertain extends Player {
             this.getMemory().setTarget(Magician.getPossibleTargets().get(randTarget));
         } else { // discard cards : choose how many cards to discard
             this.getMemory().setPowerToUse(Power.RECYCLE);
-            if (!this.getHand().isEmpty())
-                this.getMemory().setCardsToDiscard(rand.nextInt(this.getHand().size()));
-            else this.getMemory().setCardsToDiscard(0);
+            if (!this.getHand().isEmpty()) {
+                this.getMemory().setNumberCardsToDiscard(rand.nextInt(this.getHand().size()));
+            }
+            else {
+                this.getMemory().setNumberCardsToDiscard(0);
+            }
         }
         this.memory.setMomentWhenUse(Moment.values()[this.rand.nextInt(3)]);
     }

@@ -1,6 +1,6 @@
 package fr.citadels.players;
 
-import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.characters.CharactersDeck;
 import fr.citadels.cards.characters.Power;
 import fr.citadels.engine.Display;
 import fr.citadels.engine.Game;
@@ -8,6 +8,7 @@ import fr.citadels.cards.characters.Character;
 import fr.citadels.cards.districts.District;
 import fr.citadels.cards.districts.DistrictsPile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Memory {
@@ -15,37 +16,42 @@ public class Memory {
     /* Attributes */
 
     private final DistrictsPile pile;
+    private final CharactersDeck charactersDeck;
     private final Display display;
     private Player[] players;
-
+    private int playerIndex;
     private boolean draw;
     private District districtToBuild;
     private Choices.Moment momentWhenUse;
     private Power powerToUse;
     private Character target;
-    private int cardsToDiscard;
+    private int numberCardsToDiscard;
     private District districtToDestroy;
-    private CharactersList faceUpcharacters;
-    private List<Player> playersWhoChose;
-    private CharactersList possibleCharacters;
+    private Character[] faceUpCharacters;
+    private List<Character> possibleCharacters;
+    private Player previousArchitect;
+    private int turnNumber;
 
 
     /* Constructor */
 
     public Memory(Game game) {
         this.pile = game.getPile();
+        this.charactersDeck = game.getCharactersDeck();
         this.display = game.getDisplay();
         this.players = game.getPlayers();
+        this.playerIndex = 0;
         this.draw = false;
         this.districtToBuild = null;
-        this.momentWhenUse = Choices.Moment.BEFORE_RESSOURCES;
+        this.momentWhenUse = Choices.Moment.BEFORE_RESOURCES;
         this.powerToUse = Power.KILL;
         this.target = null;
-        this.cardsToDiscard = 0;
+        this.numberCardsToDiscard = 0;
         this.districtToDestroy = null;
-        this.faceUpcharacters = null;
-        this.playersWhoChose = null;
+        this.faceUpCharacters = null;
         this.possibleCharacters = null;
+        this.previousArchitect = null;
+        this.turnNumber = game.getTurnNumber();
     }
 
 
@@ -56,6 +62,11 @@ public class Memory {
      */
     public DistrictsPile getPile() {
         return pile;
+    }
+
+
+    public CharactersDeck getCharactersDeck() {
+        return charactersDeck;
     }
 
 
@@ -74,6 +85,11 @@ public class Memory {
 
     public Player[] getPlayers() {
         return this.players;
+    }
+
+
+    public int getPlayerIndex() {
+        return this.playerIndex;
     }
 
 
@@ -106,8 +122,8 @@ public class Memory {
     /**
      * @return the number of cards to discard when the magician's power is used
      */
-    public int getCardsToDiscard() {
-        return this.cardsToDiscard;
+    public int getNumberCardsToDiscard() {
+        return this.numberCardsToDiscard;
     }
 
 
@@ -119,22 +135,35 @@ public class Memory {
     }
 
 
-    public CharactersList getFaceUpcharacters() {
-        return faceUpcharacters;
+    public Character[] getFaceUpCharacters() {
+        return faceUpCharacters;
     }
 
 
-    public CharactersList getPossibleCharacters() {
+    public List<Character> getPossibleCharacters() {
         return this.possibleCharacters;
     }
 
 
-    public List<Player> getPlayersWhoChose() {
-        return this.playersWhoChose;
+    public Player getPreviousArchitect() {
+        return this.previousArchitect;
+    }
+
+    public Integer getTurnNumber() {
+        return this.turnNumber;
+    }
+
+    /* Setters */
+
+    public void setPlayers(Player[] players) {
+        this.players = players;
     }
 
 
-    /* Setters */
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
+    }
+
 
     public void setDraw(boolean draw) {
         this.draw = draw;
@@ -173,8 +202,8 @@ public class Memory {
     /**
      * @param number the number of cards to discard when the magician's power is used
      */
-    public void setCardsToDiscard(int number) {
-        this.cardsToDiscard = number;
+    public void setNumberCardsToDiscard(int number) {
+        this.numberCardsToDiscard = number;
     }
 
 
@@ -186,18 +215,24 @@ public class Memory {
     }
 
 
-    public void setFaceUpcharacters(CharactersList characters) {
-        this.faceUpcharacters = characters;
+    public void setFaceUpCharacters(Character[] characters) {
+        this.faceUpCharacters = characters;
     }
 
 
-    public void setPossibleCharacters(CharactersList characters) {
-        this.possibleCharacters = characters;
+    public void setPreviousArchitect(Player previousArchitect) {
+        this.previousArchitect = previousArchitect;
     }
 
 
-    public void setPlayersWhoChose(List<Player> playersWhoChose) {
-        this.playersWhoChose = playersWhoChose;
+    public void setPossibleCharacters(List<Character> characters) {
+        this.possibleCharacters = new ArrayList<>();
+        this.possibleCharacters.addAll(characters);
+    }
+
+
+    public void setTurnNumber(int turnNumber) {
+        this.turnNumber = turnNumber;
     }
 
 }

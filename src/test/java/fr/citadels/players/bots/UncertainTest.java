@@ -4,7 +4,6 @@ import fr.citadels.cards.characters.Power;
 import fr.citadels.cards.characters.roles.*;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.Card;
-import fr.citadels.cards.characters.CharactersList;
 import fr.citadels.cards.districts.City;
 import fr.citadels.cards.districts.District;
 import fr.citadels.cards.districts.DistrictsPile;
@@ -297,13 +296,13 @@ class UncertainTest {
         when(random.nextInt(anyInt())).thenReturn(1, 2, 1);
         player.playAsMagician();
         assertEquals(Power.RECYCLE, player.getMemory().getPowerToUse());
-        assertEquals(2, player.getMemory().getCardsToDiscard());
+        assertEquals(2, player.getMemory().getNumberCardsToDiscard());
         assertEquals(2, player.getHand().size());
 
         when(random.nextInt(anyInt())).thenReturn(1, 10, 2);
         player.playAsMagician();
         assertEquals(Power.RECYCLE, player.getMemory().getPowerToUse());
-        assertEquals(10, player.getMemory().getCardsToDiscard());
+        assertEquals(10, player.getMemory().getNumberCardsToDiscard());
         assertEquals(2, player.getHand().size());
     }
 

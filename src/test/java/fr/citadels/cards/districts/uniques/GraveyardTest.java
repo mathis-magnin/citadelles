@@ -1,6 +1,5 @@
 package fr.citadels.cards.districts.uniques;
 
-import fr.citadels.cards.characters.CharactersList;
 import fr.citadels.cards.characters.Power;
 import fr.citadels.cards.characters.roles.*;
 import fr.citadels.cards.districts.City;

@@ -2,27 +2,11 @@ package fr.citadels.cards.characters.roles;
 
 import fr.citadels.cards.Family;
 import fr.citadels.cards.characters.Character;
-import fr.citadels.cards.characters.CharactersList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Assassin extends Character {
-
-    /* Static content */
-
-    /**
-     * The Assassin must not target himself.
-     *
-     * @return The list of characters the Assassin can target.
-     */
-    public static CharactersList getPossibleTargets() {
-        CharactersList targets = new CharactersList();
-        for (Character characterCard : CharactersList.allCharacterCards) {
-            if (!characterCard.equals(new Assassin())) {
-                targets.add(characterCard);
-            }
-        }
-        return targets;
-    }
-
 
     /* Constructor */
 
@@ -45,10 +29,28 @@ public class Assassin extends Character {
      *
      * @precondition The player must have chosen which character he wants to target.
      */
+    @Override
     public void usePower() {
         getPlayer().getMemory().getTarget().setDead(true);
         getPlayer().getMemory().getDisplay().addAssassinPower(getPlayer().getMemory().getTarget());
         getPlayer().getMemory().getDisplay().addBlankLine();
+    }
+
+
+    /**
+     * The Assassin must not target himself.
+     *
+     * @return The list of characters the Assassin can target.
+     */
+    @Override
+    public List<Character> getPossibleTargets() {
+        List<Character> targets = new ArrayList<>();
+        for (Character character : this.getPlayer().getMemory().getCharactersDeck().get()) {
+            if (!character.equals(new Assassin())) {
+                targets.add(character);
+            }
+        }
+        return targets;
     }
 
 }

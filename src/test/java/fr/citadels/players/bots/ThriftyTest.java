@@ -3,7 +3,6 @@ package fr.citadels.players.bots;
 import fr.citadels.cards.characters.Power;
 import fr.citadels.cards.characters.roles.*;
 import fr.citadels.engine.Game;
-import fr.citadels.cards.characters.CharactersList;
 import fr.citadels.cards.districts.City;
 import fr.citadels.cards.districts.District;
 import fr.citadels.cards.districts.DistrictsPile;
@@ -214,7 +213,7 @@ class ThriftyTest {
         assertEquals("Manoir", player.getHand().get(3).getName());
         assertEquals(1, player.getCity().size());
         assertEquals("Château", player.getCity().get(0).getName());
-        assertEquals(1, player.getMemory().getCardsToDiscard());
+        assertEquals(1, player.getMemory().getNumberCardsToDiscard());
 
         player.playAsMagician();
         assertEquals(Power.RECYCLE, player.getMemory().getPowerToUse());
@@ -227,7 +226,7 @@ class ThriftyTest {
         assertEquals(2, player.getCity().size());
         assertEquals("Château", player.getCity().get(0).getName());
         assertEquals("Manoir", player.getCity().get(1).getName());
-        assertEquals(2, player.getMemory().getCardsToDiscard());
+        assertEquals(2, player.getMemory().getNumberCardsToDiscard());
     }
 
     @Test

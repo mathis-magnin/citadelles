@@ -1,12 +1,13 @@
 package fr.citadels.players;
 
-import fr.citadels.cards.characters.CharactersList;
 import fr.citadels.cards.districts.District;
+
+import java.util.List;
 
 public interface Choices {
 
     enum Moment {
-        BEFORE_RESSOURCES,
+        BEFORE_RESOURCES,
         BETWEEN_PHASES,
         AFTER_BUILDING
     }
@@ -17,7 +18,7 @@ public interface Choices {
      *
      * @param characters the list of characterCard.
      */
-    void chooseCharacter(CharactersList characters);
+    void chooseCharacter(List<Character> characters);
 
 
     /**
@@ -65,7 +66,7 @@ public interface Choices {
     /**
      * When the player embodies the magician, choose which power he should use, when he should use it,
      * and consequently either the character to exchange his hand with from the list of possibles targets
-     * or the cards from his hands he should and replace by cards from the pile
+     * or the cards from his hands he should discard and replace by cards from the pile
      */
     void chooseMagicianPower();
 

@@ -1,6 +1,7 @@
 package fr.citadels.players;
 
 import fr.citadels.cards.characters.Power;
+import fr.citadels.cards.characters.roles.Warlord;
 import fr.citadels.cards.districts.DistrictsPile;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.characters.Character;
@@ -251,6 +252,41 @@ public abstract class Player implements Comparable<Player>, Choices {
 
 
     /**
+     * Default behaviour (used by several bots) :
+     * Choose to take gold from city after he built another district from his family or before otherwise.
+     */
+    @Override
+    public void chooseMomentToTakeIncome() {
+        this.chooseDistrictToBuild();
+        if (this.memory.getDistrictToBuild() != null) {
+            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.AFTER_BUILDING : Moment.BETWEEN_PHASES);
+        } else {
+            this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
+        }
+    }
+
+
+    /**
+     * Default behaviour (used by several bots) :
+     * When the player embodies the warlord, choose the character and the
+     * district in city to destroy from the list of possibles targets
+     */
+    @Override
+    public void chooseTargetToDestroy() {
+        Character target = Warlord.getOtherCharacterWithBiggestCity();
+        getMemory().setTarget(target);
+        District districtToDestroy = null;
+        if (target != null) {
+            districtToDestroy = target.getPlayer().getCity().getCheapestDistrict();
+            if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
+                districtToDestroy = null;
+            }
+        }
+        getMemory().setDistrictToDestroy(districtToDestroy);
+    }
+
+
+    /**
      * Play a round for the linked player when he embodies the assassin.
      */
     public void playAsAssassin() {
@@ -282,7 +318,7 @@ public abstract class Player implements Comparable<Player>, Choices {
     public void playAsMagician() {
         this.chooseMagicianPower();
 
-        if (this.memory.getMomentWhenUse().equals(Moment.BEFORE_RESSOURCES)) {
+        if (this.memory.getMomentWhenUse().equals(Moment.BEFORE_RESOURCES)) {
             this.getCharacter().usePower();
         }
 

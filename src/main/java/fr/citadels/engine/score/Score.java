@@ -117,9 +117,10 @@ public class Score implements Comparable<Score> {
             }
         }
 
-        if (this.player.getCity().hasOneDistrictOfEachFamily()) {
+        boolean[] districtOfEachFamily = this.player.getCity().hasOneDistrictOfEachFamily();
+        if (districtOfEachFamily[0]) {
             this.allFamiliesPoints += 3;   // 3
-            this.activateMiracleCourtyardEffect = (this.player == DistrictsPile.allDistrictCards[57].getOwner());
+            this.activateMiracleCourtyardEffect = districtOfEachFamily[1];
         }
 
         if (this.player.hasCompleteCity()) {

@@ -3,7 +3,6 @@ package fr.citadels.engine;
 import fr.citadels.Main;
 import fr.citadels.cards.Card;
 import fr.citadels.cards.characters.Character;
-import fr.citadels.cards.characters.CharactersList;
 import fr.citadels.cards.characters.Power;
 import fr.citadels.cards.characters.roles.Merchant;
 import fr.citadels.cards.districts.City;

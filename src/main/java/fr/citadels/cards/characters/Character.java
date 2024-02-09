@@ -5,6 +5,9 @@ import fr.citadels.cards.Family;
 import fr.citadels.cards.districts.DistrictsPile;
 import fr.citadels.players.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Character extends Card implements Comparable<Character> {
 
     /* Attributes */
@@ -106,6 +109,14 @@ public abstract class Character extends Card implements Comparable<Character> {
      * Let the player who embodies the character use the power which comes from his role.
      */
     public abstract void usePower();
+
+
+    /**
+     * @return The list of characters who can be targeted by the character.
+     */
+    public List<Character> getPossibleTargets() {
+        return new ArrayList<>();
+    }
 
 
     /**

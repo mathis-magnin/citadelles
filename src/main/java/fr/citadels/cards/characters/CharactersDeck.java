@@ -58,6 +58,11 @@ public class CharactersDeck {
     }
 
 
+    public Character get(Role role) {
+        return this.characters[role.ordinal()];
+    }
+
+
     public Character[] getFaceUpCharacters() {
         return this.faceUpCharacters;
     }

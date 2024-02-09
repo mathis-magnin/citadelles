@@ -2,29 +2,16 @@ package fr.citadels.cards.characters.roles;
 
 import fr.citadels.cards.Family;
 import fr.citadels.cards.characters.Character;
-import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.characters.Role;
 import fr.citadels.cards.districts.District;
 import fr.citadels.cards.districts.DistrictsPile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Warlord extends Character {
 
     /* Static content */
-
-    /**
-     * The Warlord must not target the alive Bishop or a character's player who has a complete city.
-     *
-     * @return The list of characters the Warlord can target.
-     */
-    public static CharactersList getPossibleTargets() {
-        CharactersList targets = new CharactersList();
-        for (Character characterCard : CharactersList.allCharacterCards) {
-            if (!(characterCard.equals(new Bishop()) && !characterCard.isDead()) && characterCard.isPlayed() && !characterCard.getPlayer().hasCompleteCity()) {
-                targets.add(characterCard);
-            }
-        }
-        return targets;
-    }
-
 
     /**
      * Gives the character who has the biggest city except the Warlord.
@@ -89,10 +76,10 @@ public class Warlord extends Character {
      * @precondition The player must have chosen which player and district he wants to target.
      */
     private void destroy() {
-        if (CharactersList.allCharacterCards[4].isPlayed() && !CharactersList.allCharacterCards[4].isDead()) {
+        if (this.getPlayer().getMemory().getCharactersDeck().get(Role.BISHOP).isPlayed() && !this.getPlayer().getMemory().getCharactersDeck().get(Role.BISHOP).isDead()) {
             this.getPlayer().getMemory().getDisplay().addBishopPower();
         }
-        if (DistrictsPile.allDistrictCards[58].isBuilt() && !DistrictsPile.allDistrictCards[58].getOwner().equals(CharactersList.allCharacterCards[4].getPlayer())) { // Keep effect
+        if (DistrictsPile.allDistrictCards[58].isBuilt() && !DistrictsPile.allDistrictCards[58].getOwner().equals(this.getPlayer().getMemory().getCharactersDeck().get(Role.BISHOP).getPlayer())) { // Keep effect
             this.getPlayer().getMemory().getDisplay().addKeepEffect();
         }
 
@@ -107,6 +94,22 @@ public class Warlord extends Character {
             this.getPlayer().getMemory().getDisplay().addDistrictPlacedBelow();
         }
         this.getPlayer().getMemory().getDisplay().addBlankLine();
+    }
+
+
+    /**
+     * The Warlord must not target the alive Bishop or a character's player who has a complete city.
+     *
+     * @return The list of characters the Warlord can target.
+     */
+    public List<Character> getPossibleTargets() {
+        List<Character> targets = new ArrayList<>();
+        for (Character characterCard : this.getPlayer().getMemory().getCharactersDeck().get()) {
+            if (!(characterCard.equals(new Bishop()) && !characterCard.isDead()) && characterCard.isPlayed() && !characterCard.getPlayer().hasCompleteCity()) {
+                targets.add(characterCard);
+            }
+        }
+        return targets;
     }
 
 }

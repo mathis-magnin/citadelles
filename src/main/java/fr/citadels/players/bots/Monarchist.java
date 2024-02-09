@@ -2,12 +2,12 @@ package fr.citadels.players.bots;
 
 import fr.citadels.cards.Family;
 import fr.citadels.cards.characters.Character;
-import fr.citadels.cards.characters.CharactersList;
 import fr.citadels.cards.characters.Power;
+import fr.citadels.cards.characters.Role;
 import fr.citadels.cards.characters.roles.Assassin;
+import fr.citadels.cards.characters.roles.King;
 import fr.citadels.cards.characters.roles.Magician;
 import fr.citadels.cards.characters.roles.Thief;
-import fr.citadels.cards.characters.roles.Warlord;
 import fr.citadels.cards.districts.District;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
@@ -39,18 +39,15 @@ public class Monarchist extends Player {
      * @param characters the list of characterCard.
      */
     @Override
-    public void chooseCharacter(CharactersList characters) {
+    public void chooseCharacter(List<Character> characters) {
         for (int i = 0; i < characters.size(); i++) {
-            if (characters.get(i).getName().equals("Roi")) {
+            if (characters.get(i).equals(new King())) {
                 this.setCharacter(characters.remove(i));
-                this.getMemory().setPossibleCharacters(characters);
                 return;
             }
         }
         // Cannot find the king character, it could happen if a player already took it or if it is placed face down
         this.setCharacter(characters.remove(0));
-        this.getMemory().setPossibleCharacters(characters);
-
     }
 
 
@@ -89,20 +86,6 @@ public class Monarchist extends Player {
 
 
     /**
-     * Choose to take gold from city after he built another district from his family or before otherwise.
-     */
-    @Override
-    public void chooseMomentToTakeIncome() {
-        this.chooseDistrictToBuild();
-        if (this.memory.getDistrictToBuild() != null) {
-            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.AFTER_BUILDING : Moment.BETWEEN_PHASES);
-        } else {
-            this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
-        }
-    }
-
-
-    /**
      * Take the most expensive card that he can place (preferred noble)
      * set its districtToBuild attribute with the card chosen or null if no card can be chosen
      */
@@ -125,7 +108,7 @@ public class Monarchist extends Player {
      */
     @Override
     public void chooseTargetToKill() {
-        CharactersList possibleTargets = Assassin.getPossibleTargets();
+        List<Character> possibleTargets = Assassin.getPossibleTargets();
         getMemory().setTarget(possibleTargets.get(2));
     }
 
@@ -137,10 +120,10 @@ public class Monarchist extends Player {
     @Override
     public void chooseTargetToRob() {
         List<Character> potentialTargets = Thief.getPossibleTargets();
-        if (potentialTargets.contains(CharactersList.allCharacterCards[3])) {
-            getMemory().setTarget(CharactersList.allCharacterCards[3]);
+        if (potentialTargets.contains(new King())) {
+            getMemory().setTarget(this.getMemory().getCharactersDeck().get(Role.KING));
         } else {
-            getMemory().setTarget(CharactersList.allCharacterCards[6]);
+            getMemory().setTarget(this.getMemory().getCharactersDeck().get(Role.ARCHITECT));
         }
     }
 
@@ -159,28 +142,9 @@ public class Monarchist extends Player {
             getMemory().setPowerToUse(Power.RECYCLE);
             getHand().sortCards(Family.NOBLE);
             int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
-            getMemory().setCardsToDiscard(nbCardsToDiscard + 1);
+            getMemory().setNumberCardsToDiscard(nbCardsToDiscard + 1);
         }
-        this.memory.setMomentWhenUse(Moment.BEFORE_RESSOURCES);
-    }
-
-
-    /**
-     * When the player embodies the warlord, choose the character and the
-     * district in city to destroy from the list of possibles targets
-     */
-    @Override
-    public void chooseTargetToDestroy() {
-        Character target = Warlord.getOtherCharacterWithBiggestCity();
-        getMemory().setTarget(target);
-        District districtToDestroy = null;
-        if (target != null) {
-            districtToDestroy = target.getPlayer().getCity().getCheapestDistrict();
-            if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
-                districtToDestroy = null;
-            }
-        }
-        getMemory().setDistrictToDestroy(districtToDestroy);
+        this.memory.setMomentWhenUse(Moment.BEFORE_RESOURCES);
     }
 
 

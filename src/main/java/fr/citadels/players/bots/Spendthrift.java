@@ -4,11 +4,9 @@ import fr.citadels.cards.characters.Power;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.Family;
 import fr.citadels.cards.characters.Character;
-import fr.citadels.cards.characters.CharactersList;
 import fr.citadels.cards.characters.roles.Assassin;
 import fr.citadels.cards.characters.roles.Magician;
 import fr.citadels.cards.characters.roles.Thief;
-import fr.citadels.cards.characters.roles.Warlord;
 import fr.citadels.cards.districts.District;
 import fr.citadels.players.Player;
 
@@ -43,15 +41,11 @@ public class Spendthrift extends Player {
      */
     @Override
     public void chooseCharacter(CharactersList characters) {
-
         int randomIndex = -1;
-
         while (randomIndex >= characters.size() || randomIndex < 0) {
             randomIndex = rand.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        this.getMemory().setPossibleCharacters(characters);
-
     }
 
 
@@ -105,20 +99,6 @@ public class Spendthrift extends Player {
         District cardToPlay = drawnCards[minIndex];
         getActions().putBack(drawnCards, minIndex);
         return cardToPlay;
-    }
-
-
-    /**
-     * Choose to take gold from city after he built another district from his family or before otherwise.
-     */
-    @Override
-    public void chooseMomentToTakeIncome() {
-        this.chooseDistrictToBuild();
-        if (this.memory.getDistrictToBuild() != null) {
-            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.AFTER_BUILDING : Moment.BETWEEN_PHASES);
-        } else {
-            this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
-        }
     }
 
 
@@ -194,28 +174,9 @@ public class Spendthrift extends Player {
             Collections.reverse(getHand());
 
             int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
-            getMemory().setCardsToDiscard(nbCardsToDiscard + 1);
+            getMemory().setNumberCardsToDiscard(nbCardsToDiscard + 1);
         }
-        this.memory.setMomentWhenUse(Moment.BEFORE_RESSOURCES);
-    }
-
-
-    /**
-     * When the player embodies the warlord, choose the character and the
-     * district in city to destroy from the list of possibles targets
-     */
-    @Override
-    public void chooseTargetToDestroy() {
-        Character target = Warlord.getOtherCharacterWithBiggestCity();
-        getMemory().setTarget(target);
-        District districtToDestroy = null;
-        if (target != null) {
-            districtToDestroy = target.getPlayer().getCity().getCheapestDistrict();
-            if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
-                districtToDestroy = null;
-            }
-        }
-        getMemory().setDistrictToDestroy(districtToDestroy);
+        this.memory.setMomentWhenUse(Moment.BEFORE_RESOURCES);
     }
 
 

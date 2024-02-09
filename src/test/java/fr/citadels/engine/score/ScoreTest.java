@@ -2,7 +2,6 @@ package fr.citadels.engine.score;
 
 import fr.citadels.cards.characters.roles.*;
 import fr.citadels.engine.Game;
-import fr.citadels.cards.characters.CharactersList;
 import fr.citadels.cards.districts.District;
 import fr.citadels.cards.districts.DistrictsPile;
 import fr.citadels.players.Player;

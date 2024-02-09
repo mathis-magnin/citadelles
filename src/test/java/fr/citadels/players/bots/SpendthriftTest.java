@@ -3,7 +3,6 @@ package fr.citadels.players.bots;
 import fr.citadels.cards.characters.Power;
 import fr.citadels.cards.characters.roles.*;
 import fr.citadels.engine.Game;
-import fr.citadels.cards.characters.CharactersList;
 import fr.citadels.cards.districts.City;
 import fr.citadels.cards.districts.District;
 import fr.citadels.cards.districts.DistrictsPile;
@@ -220,7 +219,7 @@ class SpendthriftTest {
         assertEquals("Manoir", player.getHand().get(1).getName());
         assertEquals("Manoir", player.getHand().get(2).getName());
         assertEquals(1, player.getCity().size());
-        assertEquals(1, player.getMemory().getCardsToDiscard());
+        assertEquals(1, player.getMemory().getNumberCardsToDiscard());
 
         player.playAsMagician();
         assertEquals(Power.RECYCLE, player.getMemory().getPowerToUse());
@@ -231,7 +230,50 @@ class SpendthriftTest {
         assertEquals("Manoir", player.getHand().get(1).getName());
         assertEquals(1, player.getCity().size());
         assertEquals("Manoir", player.getCity().get(0).getName());
-        assertEquals(4, player.getMemory().getCardsToDiscard());
+        assertEquals(4, player.getMemory().getNumberCardsToDiscard());
+    }
+
+    @Test
+    void playAsKing() {
+        player.setCharacter(CharactersList.allCharacterCards[3]);
+
+        player.setGold(0);
+        player.setCity(new City(List.of(DistrictsPile.allDistrictCards[5])));
+        player.playAsKing();
+        // The bot take 2 golds, receive 1 gold from the castle.
+        // It builds the temple wich costs 1 gold.
+        assertEquals(2, player.getCity().size());
+        assertEquals(2, player.getHand().size());
+        assertEquals("Château", player.getCity().get(0).getName());
+        assertEquals("Temple", player.getCity().get(1).getName());
+        assertEquals(2, player.getGold());
+    }
+
+    @Test
+    void playAsBishop() {
+        player.setCharacter(CharactersList.allCharacterCards[4]);
+
+        player.setGold(0);
+        player.setCity(new City(List.of(DistrictsPile.allDistrictCards[20])));
+        player.playAsBishop();
+        // The bot take 2 golds, receive 1 gold from the monastery.
+        // It builds the temple wich costs 1 gold.
+        assertEquals(2, player.getCity().size());
+        assertEquals(2, player.getHand().size());
+        assertEquals("Monastère", player.getCity().get(0).getName());
+        assertEquals("Temple", player.getCity().get(1).getName());
+        assertEquals(3, player.getGold());
+
+        player.setGold(0);
+        player.getHand().remove(1);
+        player.setCity(new City(List.of(DistrictsPile.allDistrictCards[20])));
+        player.playAsBishop();
+        // The bot take 2 golds, receive 1 gold from the castle.
+        // It cannot build because it doesn't have enough gold.
+        assertEquals(1, player.getCity().size());
+        assertEquals(1, player.getHand().size());
+        assertEquals("Monastère", player.getCity().get(0).getName());
+        assertEquals(3, player.getGold());
     }
 
     @Test
@@ -242,6 +284,17 @@ class SpendthriftTest {
         // At the end of its turn, as he has taken a gold due to the merchant power, he has 2 gold coins.
         player.playAsMerchant();
         assertEquals(2, player.getGold());
+    }
+
+    @Test
+    void playAsArchitect() {
+        player.setCharacter(CharactersList.allCharacterCards[6]);
+
+        player.getHand().remove(0);
+        player.setGold(20);
+        player.playAsArchitect();
+        // During its turn, the bot builds 2 districts because it has 2 in its hand.
+        assertEquals(2, player.getCity().size());
     }
 
     @Test

@@ -2,27 +2,11 @@ package fr.citadels.cards.characters.roles;
 
 import fr.citadels.cards.Family;
 import fr.citadels.cards.characters.Character;
-import fr.citadels.cards.characters.CharactersList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Thief extends Character {
-
-    /* Static content */
-
-    /**
-     * The Thief must not target himself nor the assassin nor dead.
-     *
-     * @return The list of characters the Thief can target.
-     */
-    public static CharactersList getPossibleTargets() {
-        CharactersList targets = new CharactersList();
-        for (Character characterCard : CharactersList.allCharacterCards) {
-            if (!characterCard.equals(new Assassin()) && !characterCard.equals(new Thief()) && !characterCard.isDead()) {
-                targets.add(characterCard);
-            }
-        }
-        return targets;
-    }
-
 
     /* Constructor */
 
@@ -50,6 +34,22 @@ public class Thief extends Character {
         this.getPlayer().getMemory().getTarget().setRobbed(true);
         this.getPlayer().getMemory().getDisplay().addThiefPower(this.getPlayer().getMemory().getTarget());
         this.getPlayer().getMemory().getDisplay().addBlankLine();
+    }
+
+
+    /**
+     * The Thief must not target himself nor the assassin nor dead.
+     *
+     * @return The list of characters the Thief can target.
+     */
+    public List<Character> getPossibleTargets() {
+        List<Character> targets = new ArrayList<>();
+        for (Character characterCard : this.getPlayer().getMemory().getCharactersDeck().get()) {
+            if (!characterCard.equals(new Assassin()) && !characterCard.equals(new Thief()) && !characterCard.isDead()) {
+                targets.add(characterCard);
+            }
+        }
+        return targets;
     }
 
 }

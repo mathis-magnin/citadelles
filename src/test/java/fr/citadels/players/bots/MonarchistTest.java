@@ -3,7 +3,6 @@ package fr.citadels.players.bots;
 import fr.citadels.cards.characters.Power;
 import fr.citadels.cards.characters.roles.*;
 import fr.citadels.engine.Game;
-import fr.citadels.cards.characters.CharactersList;
 import fr.citadels.cards.districts.City;
 import fr.citadels.cards.districts.District;
 import fr.citadels.cards.districts.DistrictsPile;
@@ -164,7 +163,6 @@ class MonarchistTest {
 
         player1.chooseCharacter(characters);
         assertEquals("Assassin", player1.getCharacter().getName());
-        assertEquals(characters, player1.getMemory().getPossibleCharacters());
         assertEquals(6, characters.size());
     }
 
@@ -225,7 +223,7 @@ class MonarchistTest {
 
         assertEquals(1, player1.getCity().size());
         assertEquals("Manoir", player1.getCity().get(0).getName());
-        assertEquals(1, player1.getMemory().getCardsToDiscard());
+        assertEquals(1, player1.getMemory().getNumberCardsToDiscard());
 
         player1.playAsMagician();
         assertEquals(Power.RECYCLE, player1.getMemory().getPowerToUse());
@@ -238,7 +236,7 @@ class MonarchistTest {
         assertEquals(2, player1.getCity().size());
         assertEquals("Manoir", player1.getCity().get(0).getName());
         assertEquals("Château", player1.getCity().get(1).getName());
-        assertEquals(5, player1.getMemory().getCardsToDiscard());
+        assertEquals(5, player1.getMemory().getNumberCardsToDiscard());
     }
 
     @Test
