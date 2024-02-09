@@ -20,19 +20,19 @@ import java.util.Random;
  */
 public class Thrifty extends Player {
 
-    private final Random RAND;
+    private final Random rand;
 
 
     /* Constructor */
 
     public Thrifty(String name, List<District> cards, Game game, Random random) {
         super(name, cards, game);
-        this.RAND = random;
+        this.rand = random;
     }
 
     public Thrifty(String name, Random random) {
         super(name);
-        this.RAND = random;
+        this.rand = random;
     }
 
     /* Methods */
@@ -46,7 +46,7 @@ public class Thrifty extends Player {
     public void chooseCharacter(CharactersList characters) {
         int randomIndex = -1;
         while (randomIndex >= characters.size() || randomIndex < 0) {
-            randomIndex = RAND.nextInt(characters.size());
+            randomIndex = rand.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
     }
@@ -141,7 +141,7 @@ public class Thrifty extends Player {
     @Override
     public void chooseTargetToKill() {
         CharactersList possibleTargets = Assassin.getPossibleTargets();
-        if (RAND.nextBoolean()) {
+        if (rand.nextBoolean()) {
             getMemory().setTarget(possibleTargets.get(4));
         } else {
             getMemory().setTarget(possibleTargets.get(5));
@@ -156,7 +156,7 @@ public class Thrifty extends Player {
     @Override
     public void chooseTargetToRob() {
         List<Character> potentialTargets = Thief.getPossibleTargets();
-        if (RAND.nextBoolean()) {
+        if (rand.nextBoolean()) {
             if (potentialTargets.contains(CharactersList.allCharacterCards[3])) {
                 getMemory().setTarget(CharactersList.allCharacterCards[3]);
             } else {

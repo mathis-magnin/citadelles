@@ -36,7 +36,7 @@ public class Statistic {
         DecimalFormat df = new DecimalFormat("#.###");
         StringBuilder str = new StringBuilder();
         str.append(this.player.getName()).append("\n");
-        str.append("\tNombre de parties gagnées : ").append(this.winNumber).append("\n");
+        str.append("\tNombre de parties gagnées : ").append(df.format(this.winNumber)).append("\n");
         str.append("\tPourcentage de parties gagnées : ").append(df.format(this.getWinPercentage())).append("\n");
         str.append("\tPourcentage de parties perdues : ").append(df.format(this.getDefeatPercentage())).append("\n");
         str.append("\tScore moyen : ").append(df.format(this.getAverageScore())).append("\n");

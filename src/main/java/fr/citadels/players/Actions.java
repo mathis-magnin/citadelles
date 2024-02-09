@@ -5,7 +5,6 @@ import fr.citadels.cards.charactercards.CharactersList;
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.cards.districtcards.Hand;
-import fr.citadels.cards.districtcards.uniques.SchoolOfMagic;
 
 import java.util.List;
 
