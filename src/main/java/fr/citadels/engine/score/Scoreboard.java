@@ -31,13 +31,19 @@ public class Scoreboard {
 
     /**
      * Initialize the scoreboard.
-     * @param players an array of player
+     *
+     * @param players an array of player.
      * @precondition players should be the same size as scores.
      */
     public void initialize(Player[] players) {
         for (int i = 0; i < players.length; i++) {
             scores[i] = new Score(players[i]);
         }
+    }
+
+
+    public Score[] getScores() {
+        return this.scores;
     }
 
 
@@ -55,12 +61,8 @@ public class Scoreboard {
     }
 
 
-    public Score[] getScores() {
-        return this.scores;
-    }
-
-
     /* Methods */
+
 
     /**
      * Determine the ranking of all the players.

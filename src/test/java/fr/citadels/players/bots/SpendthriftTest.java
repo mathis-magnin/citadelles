@@ -1,13 +1,13 @@
 package fr.citadels.players.bots;
 
-import fr.citadels.cards.charactercards.Power;
-import fr.citadels.cards.charactercards.characters.*;
+import fr.citadels.cards.characters.Power;
+import fr.citadels.cards.characters.roles.*;
 import fr.citadels.engine.Game;
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.districtcards.City;
-import fr.citadels.cards.districtcards.District;
-import fr.citadels.cards.districtcards.DistrictsPile;
-import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.districts.City;
+import fr.citadels.cards.districts.District;
+import fr.citadels.cards.districts.DistrictsPile;
+import fr.citadels.cards.districts.Hand;
 import fr.citadels.players.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -56,6 +57,24 @@ class SpendthriftTest {
         assertEquals("Manoir", player.getHand().get(1).getName());
         assertEquals("Cathédrale", player.getHand().get(2).getName());
         assertEquals(0, player.getCity().size());
+    }
+
+    @Test
+    void chooseCharacter() {
+        CharactersList characters = new CharactersList(CharactersList.allCharacterCards);
+
+        when(random.nextInt(anyInt())).thenReturn(3);
+        player.chooseCharacter(characters);
+        assertEquals("Roi", player.getCharacter().getName());
+
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        player.setCity(new City(List.of(DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[20])));
+        player.chooseCharacter(characters);
+        assertEquals("Évêque", player.getCharacter().getName());
+
+        player.getActions().addGold(5);
+        player.chooseCharacter(characters);
+        assertEquals("Architecte", player.getCharacter().getName());
     }
 
     @Test
@@ -98,6 +117,10 @@ class SpendthriftTest {
         drawnCards = new District[]{DistrictsPile.allDistrictCards[22], DistrictsPile.allDistrictCards[0]};
         cardToPlay = player.chooseCardAmongDrawn(drawnCards);
         assertEquals("Manoir", cardToPlay.getName());
+
+        drawnCards = new District[]{DistrictsPile.allDistrictCards[34], DistrictsPile.allDistrictCards[60]};
+        cardToPlay = player.chooseCardAmongDrawn(drawnCards);
+        assertEquals("Laboratoire", cardToPlay.getName());
     }
 
     @Test
@@ -167,25 +190,25 @@ class SpendthriftTest {
         player.setCharacter(CharactersList.allCharacterCards[1]);
         when(random.nextBoolean()).thenReturn(true, false);
         player.playAsThief();
-        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[3]);
-        assertTrue(CharactersList.allCharacterCards[3].isRobbed());
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[7]);
+        assertTrue(CharactersList.allCharacterCards[7].isRobbed());
         player.playAsThief();
         assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[6]);
-        assertTrue(CharactersList.allCharacterCards[3].isRobbed());
+        assertTrue(CharactersList.allCharacterCards[7].isRobbed());
 
-        CharactersList.allCharacterCards[3].setRobbed(false);
+        CharactersList.allCharacterCards[7].setRobbed(false);
         CharactersList.allCharacterCards[6].setRobbed(false);
-        CharactersList.allCharacterCards[3].setDead(true);
+        CharactersList.allCharacterCards[7].setDead(true);
         player.playAsThief();
         assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[6]);
         assertTrue(CharactersList.allCharacterCards[6].isRobbed());
 
         CharactersList.allCharacterCards[6].setRobbed(false);
         CharactersList.allCharacterCards[6].setDead(true);
-        CharactersList.allCharacterCards[3].setDead(false);
+        CharactersList.allCharacterCards[7].setDead(false);
         player.playAsThief();
-        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[3]);
-        assertTrue(CharactersList.allCharacterCards[3].isRobbed());
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[7]);
+        assertTrue(CharactersList.allCharacterCards[7].isRobbed());
     }
 
     @Test
@@ -220,7 +243,7 @@ class SpendthriftTest {
         assertEquals("Manoir", player.getHand().get(1).getName());
         assertEquals("Manoir", player.getHand().get(2).getName());
         assertEquals(1, player.getCity().size());
-        assertEquals(1, player.getMemory().getCardsToDiscard());
+        assertEquals(1, player.getMemory().getNumberCardsToDiscard());
 
         player.playAsMagician();
         assertEquals(Power.RECYCLE, player.getMemory().getPowerToUse());
@@ -231,7 +254,50 @@ class SpendthriftTest {
         assertEquals("Manoir", player.getHand().get(1).getName());
         assertEquals(1, player.getCity().size());
         assertEquals("Manoir", player.getCity().get(0).getName());
-        assertEquals(4, player.getMemory().getCardsToDiscard());
+        assertEquals(4, player.getMemory().getNumberCardsToDiscard());
+    }
+
+    @Test
+    void playAsKing() {
+        player.setCharacter(CharactersList.allCharacterCards[3]);
+
+        player.setGold(0);
+        player.setCity(new City(List.of(DistrictsPile.allDistrictCards[5])));
+        player.playAsKing();
+        // The bot take 2 golds, receive 1 gold from the castle.
+        // It builds the temple wich costs 1 gold.
+        assertEquals(2, player.getCity().size());
+        assertEquals(2, player.getHand().size());
+        assertEquals("Château", player.getCity().get(0).getName());
+        assertEquals("Temple", player.getCity().get(1).getName());
+        assertEquals(2, player.getGold());
+    }
+
+    @Test
+    void playAsBishop() {
+        player.setCharacter(CharactersList.allCharacterCards[4]);
+
+        player.setGold(0);
+        player.setCity(new City(List.of(DistrictsPile.allDistrictCards[20])));
+        player.playAsBishop();
+        // The bot take 2 golds, receive 1 gold from the monastery.
+        // It builds the temple wich costs 1 gold.
+        assertEquals(2, player.getCity().size());
+        assertEquals(2, player.getHand().size());
+        assertEquals("Monastère", player.getCity().get(0).getName());
+        assertEquals("Temple", player.getCity().get(1).getName());
+        assertEquals(3, player.getGold());
+
+        player.setGold(0);
+        player.getHand().remove(1);
+        player.setCity(new City(List.of(DistrictsPile.allDistrictCards[20])));
+        player.playAsBishop();
+        // The bot take 2 golds, receive 1 gold from the castle.
+        // It cannot build because it doesn't have enough gold.
+        assertEquals(1, player.getCity().size());
+        assertEquals(1, player.getHand().size());
+        assertEquals("Monastère", player.getCity().get(0).getName());
+        assertEquals(3, player.getGold());
     }
 
     @Test
@@ -242,6 +308,17 @@ class SpendthriftTest {
         // At the end of its turn, as he has taken a gold due to the merchant power, he has 2 gold coins.
         player.playAsMerchant();
         assertEquals(2, player.getGold());
+    }
+
+    @Test
+    void playAsArchitect() {
+        player.setCharacter(CharactersList.allCharacterCards[6]);
+
+        player.getHand().remove(0);
+        player.setGold(20);
+        player.playAsArchitect();
+        // During its turn, the bot builds 2 districts because it has 2 in its hand.
+        assertEquals(2, player.getCity().size());
     }
 
     @Test

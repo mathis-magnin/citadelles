@@ -2,8 +2,6 @@ package fr.citadels.cards;
 
 public enum Family {
 
-    /* Values */
-
     NEUTRAL("Neutre"),
     NOBLE("Noble"),
     RELIGIOUS("Religieux"),
@@ -24,10 +22,10 @@ public enum Family {
     }
 
 
-    /* Basic methods */
+    /* Basic method */
 
     /**
-     * @return a string representation of a card family
+     * @return a string representation of a card family.
      */
     @Override
     public String toString() {

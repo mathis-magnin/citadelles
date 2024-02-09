@@ -24,12 +24,33 @@ public class Statistic {
         this.totalScore = totalScore;
     }
 
+
     public Statistic(Player player) {
         this(player, 0, 0, 0);
     }
 
 
     /* Basic methods */
+
+    public Player getPlayer() {
+        return this.player;
+    }
+
+
+    public double getGameNumber() {
+        return this.gameNumber;
+    }
+
+
+    public double getWinNumber() {
+        return this.winNumber;
+    }
+
+
+    public double getTotalScore() {
+        return this.totalScore;
+    }
+
 
     @Override
     public String toString() {
@@ -41,26 +62,6 @@ public class Statistic {
         str.append("\tPourcentage de parties perdues : ").append(df.format(this.getDefeatPercentage())).append("\n");
         str.append("\tScore moyen : ").append(df.format(this.getAverageScore())).append("\n");
         return str.toString();
-    }
-
-
-    public Player getPlayer() {
-        return this.player;
-    }
-
-
-    public double getWinNumber() {
-        return this.winNumber;
-    }
-
-
-    public double getGameNumber() {
-        return this.gameNumber;
-    }
-
-
-    public double getTotalScore() {
-        return this.totalScore;
     }
 
 
@@ -82,14 +83,15 @@ public class Statistic {
 
 
     public double getAverageScore() {
-        return  (this.gameNumber == 0) ? 0 : this.totalScore / this.gameNumber;
+        return (this.gameNumber == 0) ? 0 : this.totalScore / this.gameNumber;
     }
 
 
     /**
      * Update the statistic of the player based on the new score given in parameter.
-     * @param score the new score of the player
-     * @param isWinner a boolean at true if the player is the winner of the game
+     *
+     * @param score    the new score of the player.
+     * @param isWinner a boolean at true if the player is the winner of the game.
      */
     public void update(Score score, boolean isWinner) {
         this.gameNumber++;

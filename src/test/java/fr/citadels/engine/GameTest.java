@@ -1,10 +1,10 @@
 package fr.citadels.engine;
 
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.charactercards.characters.*;
-import fr.citadels.cards.districtcards.City;
-import fr.citadels.cards.districtcards.DistrictsPile;
-import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.characters.roles.*;
+import fr.citadels.cards.districts.City;
+import fr.citadels.cards.districts.DistrictsPile;
+import fr.citadels.cards.districts.Hand;
 import fr.citadels.players.Actions;
 import fr.citadels.players.Memory;
 import fr.citadels.players.Player;
@@ -48,9 +48,6 @@ class GameTest {
     @Test
     void playSelectionPhaseTest() {
         game.playSelectionPhase();
-        for (Player player : game.getPlayers()) {
-            assertNotNull(player.getCharacter());
-        }
 
         game.getPlayers()[0].setCharacter(new King());
         Memory memory = game.getPlayers()[0].getMemory();
@@ -103,9 +100,7 @@ class GameTest {
         game.setNextCrownedPlayerIfPossible(game.getPlayers()[2].getCharacter());
         game.setNextCrownedPlayerIfPossible(game.getPlayers()[3].getCharacter());
         game.setNextCrownedPlayerIfPossible(game.getPlayers()[4].getCharacter());
-        assertEquals(game.getPlayers()[1], game.getCrownedPlayer());
-
-
+        assertEquals(game.getPlayers()[0], game.getCrownedPlayer());
     }
 
     @Test

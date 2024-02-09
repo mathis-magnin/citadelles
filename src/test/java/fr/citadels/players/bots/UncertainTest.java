@@ -1,14 +1,14 @@
 package fr.citadels.players.bots;
 
-import fr.citadels.cards.charactercards.Power;
-import fr.citadels.cards.charactercards.characters.*;
+import fr.citadels.cards.characters.Power;
+import fr.citadels.cards.characters.roles.*;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.Card;
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.districtcards.City;
-import fr.citadels.cards.districtcards.District;
-import fr.citadels.cards.districtcards.DistrictsPile;
-import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.districts.City;
+import fr.citadels.cards.districts.District;
+import fr.citadels.cards.districts.DistrictsPile;
+import fr.citadels.cards.districts.Hand;
 import fr.citadels.players.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +17,6 @@ import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -298,13 +297,13 @@ class UncertainTest {
         when(random.nextInt(anyInt())).thenReturn(1, 2, 1);
         player.playAsMagician();
         assertEquals(Power.RECYCLE, player.getMemory().getPowerToUse());
-        assertEquals(2, player.getMemory().getCardsToDiscard());
+        assertEquals(2, player.getMemory().getNumberCardsToDiscard());
         assertEquals(2, player.getHand().size());
 
         when(random.nextInt(anyInt())).thenReturn(1, 10, 2);
         player.playAsMagician();
         assertEquals(Power.RECYCLE, player.getMemory().getPowerToUse());
-        assertEquals(10, player.getMemory().getCardsToDiscard());
+        assertEquals(10, player.getMemory().getNumberCardsToDiscard());
         assertEquals(2, player.getHand().size());
     }
 
