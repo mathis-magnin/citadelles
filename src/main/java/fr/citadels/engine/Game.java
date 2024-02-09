@@ -1,19 +1,18 @@
 package fr.citadels.engine;
 
+import fr.citadels.cards.characters.Role;
 import fr.citadels.engine.score.Score;
 import fr.citadels.engine.score.Scoreboard;
-import fr.citadels.cards.charactercards.Character;
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.charactercards.characters.King;
-import fr.citadels.cards.districtcards.DistrictsPile;
+import fr.citadels.cards.characters.Character;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.characters.roles.King;
+import fr.citadels.cards.districts.DistrictsPile;
 import fr.citadels.players.*;
-
 
 import java.util.*;
 
 
 public class Game {
-
 
     /* Constant values */
 
@@ -21,43 +20,52 @@ public class Game {
 
 
     /* Attributes */
-    private final Player[] players;
+
     private final Random random;
     private final Display display;
-    private final DistrictsPile pile;
-    private final Scoreboard scoreboard;
-    private boolean isFinished;
-    private Player crownedPlayer;
     private int turnNumber;
+    private boolean isFinished;
+    private final Scoreboard scoreboard;
+
+    private final DistrictsPile pile;
+    private final Player[] players;
+    private Player crownedPlayer;
 
 
     /* Constructor */
 
     public Game(Player[] players, Random random) {
-        this.players = players;
+        this.random = random;
         this.display = new Display();
-        this.pile = new DistrictsPile();
+        this.turnNumber = 1;
         this.isFinished = false;
         this.scoreboard = new Scoreboard(NB_PLAYERS);
+
+        this.pile = new DistrictsPile();
+        this.players = players;
         this.crownedPlayer = null;
-        this.random = random;
-        this.turnNumber = 1;
     }
 
 
     /* Getters */
 
-    public Player[] getPlayers() {
-        return this.players;
+    public Display getDisplay() {
+        return this.display;
     }
+
+
+    public Integer getTurnNumber() {
+        return this.turnNumber;
+    }
+
+
+    public boolean isFinished() {
+        return this.isFinished;
+    }
+
 
     public Scoreboard getScoreboard() {
         return this.scoreboard;
-    }
-
-
-    public Display getDisplay() {
-        return this.display;
     }
 
 
@@ -65,22 +73,21 @@ public class Game {
         return this.pile;
     }
 
+
+    public Player[] getPlayers() {
+        return this.players;
+    }
+
+
     public Player getCrownedPlayer() {
         return this.crownedPlayer;
     }
 
-    public boolean isFinished() {
-        return this.isFinished;
-    }
-
-    public Integer getTurnNumber() {
-        return this.turnNumber;
-    }
 
     /* Methods */
 
     /**
-     * Initialize players
+     * Initialize players.
      */
     public void initializePlayers() {
         for (Player player : this.players) {
@@ -88,8 +95,9 @@ public class Game {
         }
     }
 
+
     /**
-     * Initialize the game
+     * Initialize the game.
      */
     public void initializeGame() {
         this.pile.reset();
@@ -140,8 +148,9 @@ public class Game {
         return -1;
     }
 
+
     /**
-     * Show the selected characters of the players
+     * Show the selected characters of the players.
      */
     public void showSelectedCharacters() {
         for (Player player : this.players) {
@@ -149,14 +158,15 @@ public class Game {
         }
     }
 
+
     /**
-     * Rotate the list in order to place the crownedPlayer at the first position
+     * Rotate the list in order to place the crownedPlayer at the first position.
      */
     public void placeKingAtTheStartOfPlayers() {
         List<Player> playersList = Arrays.asList(this.players);
         Collections.rotate(playersList, (this.players.length - this.getCrownedPlayerIndex()));
         int i = 0;
-        for(Player player : playersList) {
+        for (Player player : playersList) {
             this.players[i] = player;
             i++;
         }
@@ -164,7 +174,7 @@ public class Game {
 
 
     /**
-     * Play the selection phase of the turn
+     * Play the selection phase of the turn.
      */
     public void playSelectionPhase() {
         this.display.addSelectionPhaseTitle();
@@ -193,10 +203,11 @@ public class Game {
         this.display.addBlankLine();
     }
 
+
     /**
-     * Check if the game is finished and mark it if it is
+     * Check if the game is finished and mark it if it is.
      *
-     * @param character the character to check
+     * @param character the character to check.
      */
     public void checkAndMarkEndOfGame(Character character) {
         if (character.getPlayer().hasCompleteCity() && !this.isFinished) {
@@ -207,10 +218,11 @@ public class Game {
         }
     }
 
+
     /**
-     * Set the crowned player to King
+     * Set the crowned player to King.
      *
-     * @param character the potential character to set as the crowned player
+     * @param character the potential character to set as the crowned player.
      */
     public void setNextCrownedPlayerIfPossible(Character character) {
         if (character.equals(new King())) {
@@ -221,8 +233,9 @@ public class Game {
         }
     }
 
+
     /**
-     * Play a turn for each player
+     * Play a turn for each player.
      */
     public void playTurnPhase() {
         this.display.addTurnPhaseTitle();
@@ -242,7 +255,7 @@ public class Game {
                 setNextCrownedPlayerIfPossible(character);
                 character.bringIntoPlay();
                 character.getPlayer().getMemory().setTurnNumber(this.turnNumber);
-                character.getPlayer().getMemory().setPreviousArchitect(CharactersList.allCharacterCards[6].getPlayer());
+                character.getPlayer().getMemory().setPreviousArchitect(CharactersList.allCharacterCards[Role.ARCHITECT.ordinal()].getPlayer());
                 checkAndMarkEndOfGame(character);
             } else {
                 this.display.addNoPlayerTurn(this.crownedPlayer, character);
@@ -265,7 +278,7 @@ public class Game {
 
 
     /**
-     * Play the game until a player has a complete city and determine the ranking
+     * Play the game until a player has a complete city and determine the ranking.
      */
     public void play() {
         this.initializeGame();
@@ -291,6 +304,5 @@ public class Game {
         this.display.printAndReset();
 
     }
-
 
 }

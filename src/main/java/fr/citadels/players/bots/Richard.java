@@ -1,10 +1,11 @@
 package fr.citadels.players.bots;
 
-import fr.citadels.cards.charactercards.Character;
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.charactercards.Power;
-import fr.citadels.cards.charactercards.characters.*;
-import fr.citadels.cards.districtcards.District;
+import fr.citadels.cards.characters.Character;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.characters.Power;
+import fr.citadels.cards.characters.Role;
+import fr.citadels.cards.characters.roles.*;
+import fr.citadels.cards.districts.District;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
 
@@ -34,9 +35,9 @@ public class Richard extends Player {
         /* Richard's strategy */
         boolean characterUpdated = false;
 
-        Character assassin = CharactersList.allCharacterCards[0];
-        Character thief = CharactersList.allCharacterCards[1];
-        Character magician = CharactersList.allCharacterCards[2];
+        Character assassin = CharactersList.allCharacterCards[Role.ASSASSIN.ordinal()];
+        Character thief = CharactersList.allCharacterCards[Role.THIEF.ordinal()];
+        Character magician = CharactersList.allCharacterCards[Role.MAGICIAN.ordinal()];
 
         List<Player> playersWithSixDistricts = getPlayersWithMinCity(Arrays.asList(this.getMemory().getPlayers()), 6);
         List<Player> playersWithFiveDistricts = getPlayersWithMinCity(Arrays.asList(this.getMemory().getPlayers()), 5);
@@ -82,9 +83,9 @@ public class Richard extends Player {
     public boolean richardHasSixDistricts() {
         boolean characterUpdated = false;
 
-        Character assassin = CharactersList.allCharacterCards[0];
-        Character bishop = CharactersList.allCharacterCards[4];
-        Character warlord = CharactersList.allCharacterCards[7];
+        Character assassin = CharactersList.allCharacterCards[Role.ASSASSIN.ordinal()];
+        Character bishop = CharactersList.allCharacterCards[Role.BISHOP.ordinal()];
+        Character warlord = CharactersList.allCharacterCards[Role.WARLORD.ordinal()];
 
         if (this.getPlayersWhoChoseBefore().isEmpty() || (this.getPlayersWhoChoseBefore().size() == 1)) { // Richard is the first or second to choose his character
             characterUpdated = chooseInOrder(assassin, warlord, bishop);
@@ -96,10 +97,10 @@ public class Richard extends Player {
     public boolean anotherPlayerHasSixDistricts(List<Player> playersWithSixDistricts) {
         boolean characherUpdated = false;
 
-        Character assassin = CharactersList.allCharacterCards[0];
-        Character magician = CharactersList.allCharacterCards[2];
-        Character bishop = CharactersList.allCharacterCards[4];
-        Character warlord = CharactersList.allCharacterCards[7];
+        Character assassin = CharactersList.allCharacterCards[Role.ASSASSIN.ordinal()];
+        Character magician = CharactersList.allCharacterCards[Role.MAGICIAN.ordinal()];
+        Character bishop = CharactersList.allCharacterCards[Role.BISHOP.ordinal()];
+        Character warlord = CharactersList.allCharacterCards[Role.WARLORD.ordinal()];
 
         if (this.getPlayersWhoChoseBefore().isEmpty()) { // Richard is the first to choose his character
             if (playersWithSixDistricts.contains(this.getPlayersWhoChoseAfter().get(0))) { // The player who has 6 districts is the second to choose his character
@@ -118,10 +119,10 @@ public class Richard extends Player {
     public boolean anotherPlayerHasFiveDistricts() {
         boolean characterUpdated;
 
-        Character assassin = CharactersList.allCharacterCards[0];
-        Character king = CharactersList.allCharacterCards[3];
-        Character bishop = CharactersList.allCharacterCards[4];
-        Character warlord = CharactersList.allCharacterCards[7];
+        Character assassin = CharactersList.allCharacterCards[Role.ASSASSIN.ordinal()];
+        Character king = CharactersList.allCharacterCards[Role.KING.ordinal()];
+        Character bishop = CharactersList.allCharacterCards[Role.BISHOP.ordinal()];
+        Character warlord = CharactersList.allCharacterCards[Role.WARLORD.ordinal()];
 
         characterUpdated = chooseInOrder(king, assassin, warlord);
         if ((!characterUpdated) && this.getMemory().getPossibleCharacters().contains(bishop)) {
@@ -135,8 +136,8 @@ public class Richard extends Player {
     public boolean aPlayerHasFourGoldsAndOneCardInHand(List<Player> playersWithFourGoldsAndOneHand, List<Player> playersWithFourGoldsOneHandFourDistricts) {
         boolean characterUpdated = false;
 
-        Character assassin = CharactersList.allCharacterCards[0];
-        Character architect = CharactersList.allCharacterCards[6];
+        Character assassin = CharactersList.allCharacterCards[Role.ASSASSIN.ordinal()];
+        Character architect = CharactersList.allCharacterCards[Role.ARCHITECT.ordinal()];
 
         if (playersWithFourGoldsAndOneHand.contains(this)) {
             this.setCharacter(architect);
@@ -186,11 +187,11 @@ public class Richard extends Player {
         List<Player> playersAboutToWin = this.getPlayersWithMoreDistrictsThan(List.of(getMemory().getPlayers()), 5);
 
         for (Player player : playersAboutToWin) {
-            if (getPossiblePlayersWhoPlay(CharactersList.allCharacterCards[4]).contains(player)) {
-                this.memory.setTarget(CharactersList.allCharacterCards[4]);
+            if (getPossiblePlayersWhoPlay(CharactersList.allCharacterCards[Role.BISHOP.ordinal()]).contains(player)) {
+                this.memory.setTarget(CharactersList.allCharacterCards[Role.BISHOP.ordinal()]);
                 return;
-            } else if (getPossiblePlayersWhoPlay(CharactersList.allCharacterCards[7]).contains(player)) {
-                this.memory.setTarget(CharactersList.allCharacterCards[7]);
+            } else if (getPossiblePlayersWhoPlay(CharactersList.allCharacterCards[Role.ARCHITECT.ordinal()]).contains(player)) {
+                this.memory.setTarget(CharactersList.allCharacterCards[Role.ARCHITECT.ordinal()]);
                 return;
             }
         }
@@ -224,10 +225,10 @@ public class Richard extends Player {
         CharactersList warlordTargets = Warlord.getPossibleTargets();
         if (!warlordTargets.isEmpty()) {
             // Richard's strategy
-            Character king = CharactersList.allCharacterCards[3];
+            Character king = CharactersList.allCharacterCards[Role.KING.ordinal()];
             if (warlordTargets.contains(king) && (5 <= king.getPlayer().getCity().size())) {
-                this.getMemory().setTarget(CharactersList.allCharacterCards[3]);
-                District cheapestDistrict = CharactersList.allCharacterCards[3].getPlayer().getCity().getCheapestDistrict();
+                this.getMemory().setTarget(king);
+                District cheapestDistrict = king.getPlayer().getCity().getCheapestDistrict();
                 if ((cheapestDistrict != null) && (cheapestDistrict.getGoldCost() - 1 <= this.getGold())) {
                     this.getMemory().setDistrictToDestroy(cheapestDistrict);
                     return;

@@ -1,10 +1,10 @@
 package fr.citadels.engine.score;
 
-import fr.citadels.cards.charactercards.characters.*;
+import fr.citadels.cards.characters.roles.*;
 import fr.citadels.engine.Game;
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.districtcards.District;
-import fr.citadels.cards.districtcards.DistrictsPile;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.districts.District;
+import fr.citadels.cards.districts.DistrictsPile;
 import fr.citadels.players.Player;
 import fr.citadels.players.bots.Monarchist;
 import org.junit.jupiter.api.AfterEach;

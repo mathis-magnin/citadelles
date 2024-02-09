@@ -1,15 +1,15 @@
 package fr.citadels.players.bots;
 
 
-import fr.citadels.cards.charactercards.Power;
+import fr.citadels.cards.characters.Power;
 import fr.citadels.engine.Game;
-import fr.citadels.cards.charactercards.Character;
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.charactercards.characters.Assassin;
-import fr.citadels.cards.charactercards.characters.Magician;
-import fr.citadels.cards.charactercards.characters.Thief;
-import fr.citadels.cards.charactercards.characters.Warlord;
-import fr.citadels.cards.districtcards.District;
+import fr.citadels.cards.characters.Character;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.characters.roles.Assassin;
+import fr.citadels.cards.characters.roles.Magician;
+import fr.citadels.cards.characters.roles.Thief;
+import fr.citadels.cards.characters.roles.Warlord;
+import fr.citadels.cards.districts.District;
 import fr.citadels.players.Player;
 
 import java.util.List;
@@ -28,6 +28,7 @@ public class Uncertain extends Player {
         super(name, cards, game);
         rand = random;
     }
+
 
     public Uncertain(String name, Random random) {
         super(name);
@@ -61,11 +62,11 @@ public class Uncertain extends Player {
 
 
     /***
-     * choose a card to play among the cards drawn
+     * choose a card to play among the cards drawn.
      *
-     * @precondition drawnCards must contain at least 1 card
-     * @param drawnCards cards drawn
-     * @return the card to play
+     * @precondition drawnCards must contain at least 1 card.
+     * @param drawnCards cards drawn.
+     * @return the card to play.
      */
     @Override
     public District chooseCardAmongDrawn(District[] drawnCards) {
@@ -91,8 +92,8 @@ public class Uncertain extends Player {
 
 
     /***
-     * choose or not a card in hand
-     * set the card chosen or null if no card can be chosen in the districtToBuild attribute
+     * Choose or not a card in hand
+     * set the card chosen or null if no card can be chosen in the districtToBuild attribute.
      */
     @Override
     public void chooseDistrictToBuild() {
@@ -109,8 +110,7 @@ public class Uncertain extends Player {
 
 
     /**
-     * When the player embodies the assassin, choose the
-     * character to kill from the list of possibles targets
+     * When the player embodies the assassin, choose the character to kill from the list of possibles targets.
      */
     @Override
     public void chooseTargetToKill() {
@@ -121,8 +121,7 @@ public class Uncertain extends Player {
 
 
     /**
-     * When the player embodies the thief, choose the
-     * character to rob from the list of possibles targets
+     * When the player embodies the thief, choose the character to rob from the list of possibles targets.
      */
     @Override
     public void chooseTargetToRob() {
@@ -133,7 +132,7 @@ public class Uncertain extends Player {
 
 
     /**
-     * Choose the power to use as a magician
+     * Choose the power to use as a magician.
      */
     @Override
     public void chooseMagicianPower() {
@@ -157,8 +156,7 @@ public class Uncertain extends Player {
 
 
     /**
-     * When the player embodies the warlord, choose the character and the
-     * district in city to destroy from the list of possibles targets
+     * When the player embodies the warlord, choose the character and the district in city to destroy from the list of possibles targets.
      */
     @Override
     public void chooseTargetToDestroy() {
@@ -185,10 +183,10 @@ public class Uncertain extends Player {
 
 
     /**
-     * This bot can randomly activate the graveyard's effect if he can afford it
+     * This bot can randomly activate the graveyard's effect if he can afford it.
      *
-     * @param removedDistrict the district removed by the Warlord
-     * @return a boolean value
+     * @param removedDistrict the district removed by the Warlord.
+     * @return a boolean value.
      */
     @Override
     public boolean chooseGraveyardEffect(District removedDistrict) {
@@ -200,4 +198,5 @@ public class Uncertain extends Player {
     public boolean chooseLaboratoryEffect() {
         return rand.nextBoolean() && !this.getHand().isEmpty();
     }
+
 }

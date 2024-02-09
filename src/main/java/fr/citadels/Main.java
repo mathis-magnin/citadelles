@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 import static fr.citadels.engine.score.Statisticboard.readOrCreateStatisticboard;
 
 public class Main {
+
     private static final java.util.Random RAND = new java.util.Random();
     private static final Logger logger = org.apache.logging.log4j.LogManager.getLogger(Main.class);
 
@@ -34,14 +35,15 @@ public class Main {
     @Parameter(names = "--csv", description = "Run several games and add the statistics to the csv file")
     public static boolean csv = false;
 
-    // optional parameter
+    // Optional parameter
     @Parameter(names = "--length", description = "Number of games to play")
     private int iterationAmount = 100000;
+
 
     /**
      * Initialize the players for the game.
      *
-     * @return the players for the game
+     * @return the players for the game.
      */
     public static Player[] initPlayer() {
         Player[] players = new Player[Game.NB_PLAYERS];
@@ -52,6 +54,7 @@ public class Main {
         players[4] = new Richard("RICHARD");
         return players;
     }
+
 
     /* Programs */
 
@@ -67,12 +70,13 @@ public class Main {
         }
     }
 
+
     /**
      * Write the statistics in the csv file.
      *
-     * @param file              the file to write
-     * @param statisticboardCSV the statisticboard to write
-     * @param iteration         true if the statisticboard is for the second series of thousand games
+     * @param file              the file to write.
+     * @param statisticboardCSV the statisticboard to write.
+     * @param iteration         true if the statisticboard is for the second series of thousand games.
      */
     public static void writeCsv(File file, Statisticboard statisticboardCSV, boolean iteration) {
         if (csv) {
@@ -84,13 +88,14 @@ public class Main {
         }
     }
 
+
     /**
      * Read the statisticboard from the csv file if it exists, otherwise create a new one.
      *
-     * @param file      the file to read
-     * @param players   the players of the game
-     * @param iteration true if the statisticboard is for the second series of thousand games
-     * @return the statisticboard read or created
+     * @param file      the file to read.
+     * @param players   the players of the game.
+     * @param iteration true if the statisticboard is for the second series of thousand games.
+     * @return the statisticboard read or created.
      */
     public static Statisticboard secureReadOrCreateStatisticboard(File file, Player[] players, boolean iteration) {
         try {
@@ -102,6 +107,7 @@ public class Main {
             return statisticboard;
         }
     }
+
 
     /**
      * Run a single game with a full log printed.
@@ -212,4 +218,5 @@ public class Main {
 
         writeCsv(file, statisticboardCSV, false);
     }
+
 }

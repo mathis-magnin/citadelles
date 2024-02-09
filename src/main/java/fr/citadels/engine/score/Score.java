@@ -1,13 +1,14 @@
 package fr.citadels.engine.score;
 
-import fr.citadels.cards.districtcards.District;
-import fr.citadels.cards.districtcards.DistrictsPile;
+import fr.citadels.cards.districts.District;
+import fr.citadels.cards.districts.DistrictsPile;
 
+import fr.citadels.cards.districts.Unique;
 import fr.citadels.players.Player;
 
 public class Score implements Comparable<Score> {
 
-    /* Static contents */
+    /* Static content */
 
     private static Player firstPlayerWithCompleteCity = null;
 
@@ -46,16 +47,16 @@ public class Score implements Comparable<Score> {
 
     /* Basic methods */
 
+    public Player getPlayer() {
+        return this.player;
+    }
+
+
     /**
      * @return the total amount of points.
      */
     public int getPoints() {
         return this.districtsPoints + this.allFamiliesPoints + this.completeCityPoints + this.uniqueDistrictsPoints;
-    }
-
-
-    public Player getPlayer() {
-        return this.player;
     }
 
 
@@ -110,7 +111,7 @@ public class Score implements Comparable<Score> {
      */
     public void determinePoints() {
         for (District district : this.player.getCity()) {
-            if (district.equals(DistrictsPile.allDistrictCards[65]) || district.equals(DistrictsPile.allDistrictCards[66])) {
+            if (district.equals(DistrictsPile.allDistrictCards[Unique.UNIVERSITY.toIndex()]) || district.equals(DistrictsPile.allDistrictCards[Unique.DRAGON_GATE.toIndex()])) {
                 this.uniqueDistrictsPoints += 8;
             } else {
                 this.districtsPoints += district.getGoldCost();   // 1

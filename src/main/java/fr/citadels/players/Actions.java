@@ -1,10 +1,11 @@
 package fr.citadels.players;
 
 import fr.citadels.cards.Family;
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.districtcards.District;
-import fr.citadels.cards.districtcards.DistrictsPile;
-import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.characters.Role;
+import fr.citadels.cards.districts.District;
+import fr.citadels.cards.districts.DistrictsPile;
+import fr.citadels.cards.districts.Hand;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ public class Actions {
 
     private final Player player;
     private final Memory memory;
+
 
     /* Constructor */
 
@@ -26,12 +28,11 @@ public class Actions {
 
     /* Methods */
 
-
     /**
-     * add gold to the player from the bank
+     * Add gold to the player from the bank.
      *
-     * @param amount the amount of gold earned by the player
-     * @precondition amount should be positive
+     * @param amount the amount of gold earned by the player.
+     * @precondition amount should be positive.
      */
     public void addGold(int amount) {
         player.setGold(player.getGold() + amount);
@@ -39,10 +40,10 @@ public class Actions {
 
 
     /**
-     * remove gold from the player to the bank
+     * Remove gold from the player to the bank.
      *
-     * @param amount the amount of gold paid by the player
-     * @precondition amount should be positive
+     * @param amount the amount of gold paid by the player.
+     * @precondition amount should be positive.
      */
     public void removeGold(int amount) {
         if (amount >= player.getGold()) {
@@ -54,9 +55,9 @@ public class Actions {
 
 
     /**
-     * Sort the player's hand
+     * Sort the player's hand.
      *
-     * @param family the family of the cards to put first
+     * @param family the family of the cards to put first.
      */
     public void sortHand(Family family) {
         Hand hand = player.getHand();
@@ -65,6 +66,11 @@ public class Actions {
     }
 
 
+    /**
+     * Put the redundant cards within the hand at the hand. That is to say if a district is both present in hand and city.
+     *
+     * @return the number of redundant card that have been found.
+     */
     public int putRedundantCardsAtTheEnd() {
         int redundantCards = 0;
         Hand hand = player.getHand();
@@ -79,10 +85,10 @@ public class Actions {
 
 
     /**
-     * put back the cards drawn except the one played
+     * Put back the cards drawn except the one played.
      *
-     * @param drawnCards  cards drawn
-     * @param randomIndex index of the card played
+     * @param drawnCards  cards drawn.
+     * @param randomIndex index of the card played.
      */
     public void putBack(District[] drawnCards, int randomIndex) {
         for (int i = 0; i < drawnCards.length; i++) {
@@ -95,7 +101,7 @@ public class Actions {
 
 
     /**
-     * Takes 2 cards or 2 golds from the bank and add them to the player
+     * Takes 2 cards or 2 golds from the bank and add them to the player.
      */
     public void takeCardsOrGold() {
         if (this.memory.getDraw()) {
@@ -149,22 +155,22 @@ public class Actions {
 
 
     /**
-     * Give all the player's gold to the thief
+     * Give all the player's gold to the thief.
      */
     public void getRobbed() {
         int goldToTake = this.player.getGold();
-        CharactersList.allCharacterCards[1].getPlayer().getActions().addGold(goldToTake);
+        CharactersList.allCharacterCards[Role.THIEF.ordinal()].getPlayer().getActions().addGold(goldToTake);
         this.player.setGold(0);
         this.player.getCharacter().setRobbed(false);
-        this.player.getMemory().getDisplay().addRobbed(CharactersList.allCharacterCards[1].getPlayer(), goldToTake);
+        this.player.getMemory().getDisplay().addRobbed(CharactersList.allCharacterCards[Role.THIEF.ordinal()].getPlayer(), goldToTake);
     }
 
 
     /**
-     * Remove a card from the player's hand
+     * Remove a card from the player's hand.
      *
-     * @param index the index of the card to remove
-     * @return the card removed
+     * @param index the index of the card to remove.
+     * @return the card removed.
      */
     public District removeCardFromHand(int index) {
         return player.getHand().removeCard(index);
@@ -172,7 +178,7 @@ public class Actions {
 
 
     /**
-     * Add a card to the player's city
+     * Add a card to the player's city.
      */
     public void addCardToCity(District card) {
         player.getCity().add(card);
@@ -181,9 +187,9 @@ public class Actions {
 
 
     /**
-     * Remove a card from player's city
+     * Remove a card from player's city.
      *
-     * @param card the card to remove
+     * @param card the card to remove.
      */
     public void removeCardFromCity(District card) {
         this.player.getCity().remove(card);
@@ -192,7 +198,7 @@ public class Actions {
 
 
     /**
-     * Add cards to the player's city
+     * Add cards to the player's city.
      */
     public void addCardsToCity(List<District> cards) {
         for (District card : cards) {

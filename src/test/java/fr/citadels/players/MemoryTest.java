@@ -1,7 +1,7 @@
 package fr.citadels.players;
 
 import fr.citadels.engine.Game;
-import fr.citadels.cards.charactercards.characters.King;
+import fr.citadels.cards.characters.roles.King;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

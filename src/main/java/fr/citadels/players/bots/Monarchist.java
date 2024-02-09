@@ -1,13 +1,14 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.cards.Family;
-import fr.citadels.cards.charactercards.Character;
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.charactercards.Power;
-import fr.citadels.cards.charactercards.characters.Assassin;
-import fr.citadels.cards.charactercards.characters.Magician;
-import fr.citadels.cards.charactercards.characters.Thief;
-import fr.citadels.cards.districtcards.District;
+import fr.citadels.cards.characters.Character;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.characters.Power;
+import fr.citadels.cards.characters.Role;
+import fr.citadels.cards.characters.roles.Assassin;
+import fr.citadels.cards.characters.roles.Magician;
+import fr.citadels.cards.characters.roles.Thief;
+import fr.citadels.cards.districts.District;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
 
@@ -24,6 +25,7 @@ public class Monarchist extends Player {
         super(name, cards, game);
         actions.sortHand(Family.NOBLE);
     }
+
 
     public Monarchist(String name) {
         super(name);
@@ -60,12 +62,12 @@ public class Monarchist extends Player {
     }
 
 
-    /***
-     * choose a NOBLE card if possible or the first card
+    /**
+     * Choose a NOBLE card if possible or the first card.
      *
-     * @precondition drawnCards must contain at least 1 card
-     * @param drawnCards cards drawn
-     * @return the card to play
+     * @param drawnCards cards drawn.
+     * @return the card to play.
+     * @precondition drawnCards must contain at least 1 card.
      */
     @Override
     public District chooseCardAmongDrawn(District[] drawnCards) {
@@ -85,8 +87,8 @@ public class Monarchist extends Player {
 
 
     /**
-     * Take the most expensive card that he can place (preferred noble)
-     * set its districtToBuild attribute with the card chosen or null if no card can be chosen
+     * Take the most expensive card that he can place (preferred noble).
+     * Set its districtToBuild attribute with the card chosen or null if no card can be chosen.
      */
     @Override
     public void chooseDistrictToBuild() {
@@ -102,8 +104,7 @@ public class Monarchist extends Player {
 
 
     /**
-     * When the player embodies the assassin, choose the
-     * character to kill from the list of possibles targets
+     * When the player embodies the assassin, choose the character to kill from the list of possibles targets.
      */
     @Override
     public void chooseTargetToKill() {
@@ -113,16 +114,15 @@ public class Monarchist extends Player {
 
 
     /**
-     * When the player embodies the thief, choose the
-     * character to rob from the list of possibles targets
+     * When the player embodies the thief, choose the character to rob from the list of possibles targets.
      */
     @Override
     public void chooseTargetToRob() {
         List<Character> potentialTargets = Thief.getPossibleTargets();
-        if (potentialTargets.contains(CharactersList.allCharacterCards[3])) {
-            getMemory().setTarget(CharactersList.allCharacterCards[3]);
+        if (potentialTargets.contains(CharactersList.allCharacterCards[Role.KING.ordinal()])) {
+            getMemory().setTarget(CharactersList.allCharacterCards[Role.KING.ordinal()]);
         } else {
-            getMemory().setTarget(CharactersList.allCharacterCards[6]);
+            getMemory().setTarget(CharactersList.allCharacterCards[Role.ARCHITECT.ordinal()]);
         }
     }
 
@@ -160,10 +160,10 @@ public class Monarchist extends Player {
 
 
     /**
-     * This bot wants to activate the graveyard's effect if the removed district is NOBLE
+     * This bot wants to activate the graveyard's effect if the removed district is Noble.
      *
-     * @param removedDistrict the district removed by the Warlord
-     * @return a boolean value
+     * @param removedDistrict the district removed by the Warlord.
+     * @return a boolean value.
      */
     @Override
     public boolean chooseGraveyardEffect(District removedDistrict) {

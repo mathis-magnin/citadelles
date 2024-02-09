@@ -4,11 +4,11 @@ import java.util.Objects;
 
 public abstract class Card {
 
-    /* Attribute */
+    /* Attributes */
 
     private final String name;
-
     private final Family family;
+
 
     /* Constructor */
 
@@ -17,20 +17,23 @@ public abstract class Card {
         this.family = family;
     }
 
-    /* Methods */
+
+    /* Basic methods */
 
     public String getName() {
         return this.name;
     }
 
+
     public Family getFamily() {
         return this.family;
     }
 
+
     /**
-     * judge if 2 card objects are equals
+     * Judge if 2 card objects are equals.
      *
-     * @return true if the 2 cards are equals and false otherwise
+     * @return true if the 2 cards are equals and false otherwise.
      */
     @Override
     public boolean equals(Object o) {
@@ -44,13 +47,15 @@ public abstract class Card {
         return this.getName().equals(card.getName());
     }
 
+
     /**
-     * generates a hash code for a district card
+     * Generates a hash code for a district card.
      *
-     * @return a hash value
+     * @return a hash value.
      */
     @Override
     public int hashCode() {
         return Objects.hash(this.name);
     }
+
 }
