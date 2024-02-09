@@ -45,36 +45,30 @@ public class Richard extends Player {
         List<Player> playersWithFourGoldsOneHandFourDistricts = getPlayersWithMinCity(playersWithFourGoldsOneHand, 4);
         List<Player> playersWithFourHand = getPlayersWithMinGoldAndHand(Arrays.asList(this.getMemory().getPlayers()), 0, 4);
 
-        if(!playersWithSixDistricts.isEmpty()) { // There is a player who has 6 districts
-            if(playersWithSixDistricts.contains(this)) { // Richard has 6 districts
+        if (!playersWithSixDistricts.isEmpty()) { // There is a player who has 6 districts
+            if (playersWithSixDistricts.contains(this)) { // Richard has 6 districts
                 characterUpdated = richardHasSixDistricts(characters);
-            }
-            else { // Another player has 6 districts
+            } else { // Another player has 6 districts
                 characterUpdated = anotherPlayerHasSixDistricts(playersWithSixDistricts, characters);
             }
-        }
-        else if (!playersWithFiveDistricts.isEmpty() && !((playersWithFiveDistricts.size() == 1) && playersWithFiveDistricts.contains(this))) { // Another player has 5 or more districts in his city
+        } else if (!playersWithFiveDistricts.isEmpty() && !((playersWithFiveDistricts.size() == 1) && playersWithFiveDistricts.contains(this))) { // Another player has 5 or more districts in his city
             characterUpdated = anotherPlayerHasFiveDistricts(characters);
-        }
-        else if (!playersWithFourGoldsOneHand.isEmpty()) {
+        } else if (!playersWithFourGoldsOneHand.isEmpty()) {
             characterUpdated = aPlayerHasFourGoldsAndOneCardInHand(playersWithFourGoldsOneHand, playersWithFourGoldsOneHandFourDistricts, characters);
-        }
-        else if(((this.getMemory().getPreviousArchitect() != null) && (this.getMemory().getPreviousArchitect().getHand().size() >= 4)) || this.getHand().isEmpty()) {
+        } else if (((this.getMemory().getPreviousArchitect() != null) && (this.getMemory().getPreviousArchitect().getHand().size() >= 4)) || this.getHand().isEmpty()) {
             this.setCharacter(magician);
             characterUpdated = true;
-        }
-        else if((playersWithFourHand.size() == 1) && playersWithFourHand.contains(this)) {
+        } else if ((playersWithFourHand.size() == 1) && playersWithFourHand.contains(this)) {
             this.setCharacter(assassin);
             characterUpdated = true;
-        }
-        else if(this.getMemory().getTurnNumber() < 7) {
+        } else if (this.getMemory().getTurnNumber() < 7) {
             this.setCharacter(thief);
             characterUpdated = true;
         }
 
         /* Basic strategy */
 
-        if(!characterUpdated) {
+        if (!characterUpdated) {
             this.setCharacter(characters.get(0));
             characters.remove(0);
         }
@@ -90,7 +84,7 @@ public class Richard extends Player {
 
         if (this.getPlayersWhoChoseBefore().isEmpty() || (this.getPlayersWhoChoseBefore().size() == 1)) { // Richard is the first or second to choose his character
             characterUpdated = chooseInOrder(assassin, warlord, bishop);
-            if(characterUpdated) {
+            if (characterUpdated) {
                 characters.remove(this.getCharacter());
             }
         }
@@ -116,7 +110,7 @@ public class Richard extends Player {
         } else if ((this.getPlayersWhoChoseBefore().size() == 1) && (!playersWithSixDistricts.contains(this.getPlayersWhoChoseBefore().get(0)))) { // Richard is the second to choose his character and the player who has 6 districts wasn't the first to choose his character
             characterUpdated = triangularCharacterChoice(assassin, bishop, warlord, assassin, bishop, warlord, magician);
         }
-        if(characterUpdated) {
+        if (characterUpdated) {
             characters.remove(this.getCharacter());
         }
         return characterUpdated;
@@ -136,7 +130,7 @@ public class Richard extends Player {
             this.setCharacter(bishop);
             characterUpdated = true;
         }
-        if(characterUpdated) {
+        if (characterUpdated) {
             characters.remove(this.getCharacter());
         }
         return characterUpdated;
@@ -176,17 +170,75 @@ public class Richard extends Player {
 
     @Override
     public void chooseDistrictToBuild() {
-        if (!this.getHand().isEmpty() && (this.getHand().get(0).getGoldCost() <= this.getGold()) && !this.hasCardInCity(this.getHand().get(0))) {
-            this.memory.setDistrictToBuild(this.getHand().get(0));
-        } else {
-            this.memory.setDistrictToBuild(null);
+        this.getActions().sortHand(this.getCharacter().getFamily());
+        for (District district : this.getHand()) {
+            if (district.getGoldCost() <= this.getGold()) {
+                this.getMemory().setDistrictToBuild(district);
+                return;
+            }
         }
+        this.getMemory().setDistrictToBuild(null);
     }
 
 
     @Override
     public void chooseTargetToKill() {
+        List<Player> playersAboutToWin = this.getPlayersWithMinCity(List.of(getMemory().getPlayers()), 6);
+        Character target;
+        if ((target = killAtTheEnd(playersAboutToWin)) != null) {
+            this.memory.setTarget(target);
+            return;
+        }
+
+        List<Player> playersWithMoreThanFiveDistricts = this.getPlayersWithMinCity(List.of(getMemory().getPlayers()), 5);
+        if ((target = killPlayerAboutToWin(playersWithMoreThanFiveDistricts)) != null) {
+            this.memory.setTarget(target);
+            return;
+        }
+
         this.memory.setTarget(Assassin.getPossibleTargets().get(0));
+    }
+
+
+    /**
+     * Choose to kill the Bishop, the Magician or the Warlord if a player about to win can embody them and if it is the last turn.
+     *
+     * @param players
+     * @return a target
+     */
+    public Character killAtTheEnd(List<Player> players) {
+        for (Player player : players) {
+            if (getMemory().getPlayerIndex() == 0) {
+                if (!getMemory().getPossibleCharacters().contains(CharactersList.allCharacterCards[7])) {
+                    if (player.getMemory().getPlayerIndex() == 1) {
+                        return CharactersList.allCharacterCards[4];
+                    } else {
+                        return CharactersList.allCharacterCards[2];
+                    }
+                } else if (!getMemory().getPossibleCharacters().contains(CharactersList.allCharacterCards[4]) && (player.getMemory().getPlayerIndex() == 1)) {
+                    return CharactersList.allCharacterCards[7];
+                }
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Choose to kill a character wich a player about to win can embody.
+     *
+     * @param players
+     * @return
+     */
+    public Character killPlayerAboutToWin(List<Player> players) {
+        for (Player player : players) {
+            for (int i : List.of(3, 4, 1, 7)) { // King, Bishop, Thief, Warlord
+                if (getPossiblePlayersWhoPlay(CharactersList.allCharacterCards[i]).contains(player)) {
+                    return CharactersList.allCharacterCards[i];
+                }
+            }
+        }
+        return null;
     }
 
 
@@ -232,7 +284,7 @@ public class Richard extends Player {
         boolean targetUpdated = targetAssassinOrBishopOrWarlord(magicianTarget);
 
         /* Player who is about to win */
-        if(!targetUpdated) {
+        if (!targetUpdated) {
             targetUpdated = targetPlayerWithSixDistrictsAndBiggestHand(magicianTarget);
         }
 
@@ -244,7 +296,7 @@ public class Richard extends Player {
         }
 
         /* Basic strategy : Discard redundant cards between phases */
-        if(!targetUpdated) {
+        if (!targetUpdated) {
             this.memory.setPowerToUse(Power.RECYCLE);
             this.getMemory().setNumberCardsToDiscard(this.getActions().putRedundantCardsAtTheEnd());
             this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
@@ -278,33 +330,30 @@ public class Richard extends Player {
 
         List<Player> possibleAssassinPlayers = this.getPossiblePlayersWhoPlay(assassin);
         Player assassinPlayer = null;
-        if(possibleAssassinPlayers.size() == 1) {
+        if (possibleAssassinPlayers.size() == 1) {
             assassinPlayer = possibleAssassinPlayers.get(0);
         }
         List<Player> possibleBishopPlayers = this.getPossiblePlayersWhoPlay(bishop);
         Player bishopPlayer = null;
-        if(possibleBishopPlayers.size() == 1) {
+        if (possibleBishopPlayers.size() == 1) {
             bishopPlayer = possibleBishopPlayers.get(0);
         }
         List<Player> possibleWarlordPlayers = this.getPossiblePlayersWhoPlay(warlord);
         Player warlordPlayer = null;
-        if(possibleWarlordPlayers.size() == 1) {
+        if (possibleWarlordPlayers.size() == 1) {
             warlordPlayer = possibleWarlordPlayers.get(0);
         }
 
         if (magicianTarget.contains(assassin) && (assassinPlayer != null) && playersWithFiveDistricts.contains(assassinPlayer) && (this.getKilledCharacter().equals(warlord))) {
             this.getMemory().setTarget(assassin);
             targetUpdated = true;
-        }
-        else if (magicianTarget.contains(bishop) && (bishopPlayer != null) && playersWithFiveDistricts.contains(bishopPlayer)) {
+        } else if (magicianTarget.contains(bishop) && (bishopPlayer != null) && playersWithFiveDistricts.contains(bishopPlayer)) {
             this.getMemory().setTarget(bishop);
             targetUpdated = true;
-        }
-        else if (magicianTarget.contains(warlord) && (warlordPlayer != null) && playersWithFiveDistricts.contains(warlordPlayer)) {
+        } else if (magicianTarget.contains(warlord) && (warlordPlayer != null) && playersWithFiveDistricts.contains(warlordPlayer)) {
             this.getMemory().setTarget(warlord);
             targetUpdated = true;
-        }
-        else {
+        } else {
             targetUpdated = searchBishopOrWarlordInTargets(magicianTarget, playersWithFiveDistricts, possibleBishopPlayers, possibleWarlordPlayers);
         }
         return targetUpdated;
@@ -396,8 +445,7 @@ public class Richard extends Player {
         if (!this.getMemory().getFaceUpCharacters().contains(character)) { // A player is maybe playing the character
             if (!this.getMemory().getPossibleCharacters().contains(character)) { // A player who chose his character before richard is maybe playing the character
                 return this.getPlayersWhoChoseBefore();
-            }
-            else {  // A player who chose his character after richard is maybe playing Warlord
+            } else {  // A player who chose his character after richard is maybe playing Warlord
                 return this.getPlayersWhoChoseAfter();
             }
         }
@@ -424,13 +472,13 @@ public class Richard extends Player {
      * Choose a character according to the following logic :
      * We are searching for 3 characters and choose one if they are all available or only one of them is missing
      *
-     * @param first the first character of the 3 searching for
-     * @param second the second character of the 3 searching for
-     * @param third the third character of the 3 searching for
-     * @param whenAll the character to choose if all the 3 searching for are available
-     * @param whenFirstMissing the character to choose if only the first character of the 3 searching is missing
+     * @param first             the first character of the 3 searching for
+     * @param second            the second character of the 3 searching for
+     * @param third             the third character of the 3 searching for
+     * @param whenAll           the character to choose if all the 3 searching for are available
+     * @param whenFirstMissing  the character to choose if only the first character of the 3 searching is missing
      * @param whenSecondMissing the character to choose if only the second character of the 3 searching is missing
-     * @param whenThirdMissing the character to choose if only the third character of the 3 searching is missing
+     * @param whenThirdMissing  the character to choose if only the third character of the 3 searching is missing
      * @return true if the character was updated
      */
     public boolean triangularCharacterChoice(Character first, Character second, Character third, Character whenAll, Character whenFirstMissing, Character whenSecondMissing, Character whenThirdMissing) {
@@ -457,22 +505,20 @@ public class Richard extends Player {
     /**
      * Choose a character according to the order indicated by the parameters
      *
-     * @param first the character to choose in priority
+     * @param first  the character to choose in priority
      * @param second the character to choose if the first can't be chosen
-     * @param third the character to choose if the first and the second can't be chosen
+     * @param third  the character to choose if the first and the second can't be chosen
      * @return true if the character was updated
      */
     public boolean chooseInOrder(Character first, Character second, Character third) {
         boolean characterUpdated = false;
-        if(this.getMemory().getPossibleCharacters().contains(first)) {
+        if (this.getMemory().getPossibleCharacters().contains(first)) {
             this.setCharacter(first);
             characterUpdated = true;
-        }
-        else if(this.getMemory().getPossibleCharacters().contains(second)) {
+        } else if (this.getMemory().getPossibleCharacters().contains(second)) {
             this.setCharacter(second);
             characterUpdated = true;
-        }
-        else if(this.getMemory().getPossibleCharacters().contains(third)) {
+        } else if (this.getMemory().getPossibleCharacters().contains(third)) {
             this.setCharacter(third);
             characterUpdated = true;
         }
