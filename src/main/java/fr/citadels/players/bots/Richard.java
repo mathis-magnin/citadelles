@@ -168,17 +168,75 @@ public class Richard extends Player {
 
     @Override
     public void chooseDistrictToBuild() {
-        if (!this.getHand().isEmpty() && (this.getHand().get(0).getGoldCost() <= this.getGold()) && !this.hasCardInCity(this.getHand().get(0))) {
-            this.memory.setDistrictToBuild(this.getHand().get(0));
-        } else {
-            this.memory.setDistrictToBuild(null);
+        this.getActions().sortHand(this.getCharacter().getFamily());
+        for (District district : this.getHand()) {
+            if (district.getGoldCost() <= this.getGold()) {
+                this.getMemory().setDistrictToBuild(district);
+                return;
+            }
         }
+        this.getMemory().setDistrictToBuild(null);
     }
 
 
     @Override
     public void chooseTargetToKill() {
+        List<Player> playersAboutToWin = this.getPlayersWithMinCity(List.of(getMemory().getPlayers()), 6);
+        Character target;
+        if ((target = killAtTheEnd(playersAboutToWin)) != null) {
+            this.memory.setTarget(target);
+            return;
+        }
+
+        List<Player> playersWithMoreThanFiveDistricts = this.getPlayersWithMinCity(List.of(getMemory().getPlayers()), 5);
+        if ((target = killPlayerAboutToWin(playersWithMoreThanFiveDistricts)) != null) {
+            this.memory.setTarget(target);
+            return;
+        }
+
         this.memory.setTarget(Assassin.getPossibleTargets().get(0));
+    }
+
+
+    /**
+     * Choose to kill the Bishop, the Magician or the Warlord if a player about to win can embody them and if it is the last turn.
+     *
+     * @param players
+     * @return a target
+     */
+    public Character killAtTheEnd(List<Player> players) {
+        for (Player player : players) {
+            if (getMemory().getPlayerIndex() == 0) {
+                if (!getMemory().getPossibleCharacters().contains(CharactersList.allCharacterCards[7])) {
+                    if (player.getMemory().getPlayerIndex() == 1) {
+                        return CharactersList.allCharacterCards[4];
+                    } else {
+                        return CharactersList.allCharacterCards[2];
+                    }
+                } else if (!getMemory().getPossibleCharacters().contains(CharactersList.allCharacterCards[4]) && (player.getMemory().getPlayerIndex() == 1)) {
+                    return CharactersList.allCharacterCards[7];
+                }
+            }
+        }
+        return null;
+    }
+
+
+    /**
+     * Choose to kill a character wich a player about to win can embody.
+     *
+     * @param players
+     * @return
+     */
+    public Character killPlayerAboutToWin(List<Player> players) {
+        for (Player player : players) {
+            for (int i : List.of(3, 4, 1, 7)) { // King, Bishop, Thief, Warlord
+                if (getPossiblePlayersWhoPlay(CharactersList.allCharacterCards[i]).contains(player)) {
+                    return CharactersList.allCharacterCards[i];
+                }
+            }
+        }
+        return null;
     }
 
 
