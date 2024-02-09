@@ -43,14 +43,11 @@ public class Monarchist extends Player {
         for (int i = 0; i < characters.size(); i++) {
             if (characters.get(i).getName().equals("Roi")) {
                 this.setCharacter(characters.remove(i));
-                this.getMemory().setPossibleCharacters(characters);
                 return;
             }
         }
         // Cannot find the king character, it could happen if a player already took it or if it is placed face down
         this.setCharacter(characters.remove(0));
-        this.getMemory().setPossibleCharacters(characters);
-
     }
 
 
@@ -159,9 +156,9 @@ public class Monarchist extends Player {
             getMemory().setPowerToUse(Power.RECYCLE);
             getHand().sortCards(Family.NOBLE);
             int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
-            getMemory().setCardsToDiscard(nbCardsToDiscard + 1);
+            getMemory().setNumberCardsToDiscard(nbCardsToDiscard + 1);
         }
-        this.memory.setMomentWhenUse(Moment.BEFORE_RESSOURCES);
+        this.memory.setMomentWhenUse(Moment.BEFORE_RESOURCES);
     }
 
 

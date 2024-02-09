@@ -75,7 +75,7 @@ public class City extends ArrayList<District> {
      *
      * @return A boolean value.
      */
-    public boolean hasOneDistrictOfEachFamily() {
+    public boolean[] hasOneDistrictOfEachFamily() {
         int hasNoble = 0;
         int hasReligious = 0;
         int hasTrade = 0;
@@ -109,7 +109,7 @@ public class City extends ArrayList<District> {
             }
 
         }
-        return (5 <= hasNoble + hasReligious + hasTrade + hasMilitary + hasSpecial + activateMiracleCourtyardEffect);
+        return new boolean[]{(5 <= hasNoble + hasReligious + hasTrade + hasMilitary + hasSpecial + activateMiracleCourtyardEffect), (activateMiracleCourtyardEffect == 1)};
     }
 
 

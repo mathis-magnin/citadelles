@@ -9,9 +9,7 @@ import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.players.*;
 
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 
 public class Game {
@@ -30,6 +28,7 @@ public class Game {
     private final Scoreboard scoreboard;
     private boolean isFinished;
     private Player crownedPlayer;
+    private int turnNumber;
 
 
     /* Constructor */
@@ -42,6 +41,7 @@ public class Game {
         this.scoreboard = new Scoreboard(NB_PLAYERS);
         this.crownedPlayer = null;
         this.random = random;
+        this.turnNumber = 1;
     }
 
 
@@ -70,7 +70,11 @@ public class Game {
     }
 
     public boolean isFinished() {
-        return isFinished;
+        return this.isFinished;
+    }
+
+    public Integer getTurnNumber() {
+        return this.turnNumber;
     }
 
     /* Methods */
@@ -112,6 +116,7 @@ public class Game {
         this.display.addBlankLine();
 
         this.crownedPlayer = this.players[random.nextInt(NB_PLAYERS)];
+        this.placeKingAtTheStartOfPlayers();
         this.display.addFirstCrownedPlayer(this.crownedPlayer);
         this.display.addBlankLine(3);
 
@@ -138,41 +143,48 @@ public class Game {
     /**
      * Show the selected characters of the players
      */
-    void showSelectedCharacters() {
+    public void showSelectedCharacters() {
         for (Player player : this.players) {
             player.getMemory().getDisplay().addCharacterChosen(player, player.getCharacter());
         }
     }
 
     /**
+     * Rotate the list in order to place the crownedPlayer at the first position
+     */
+    public void placeKingAtTheStartOfPlayers() {
+        List<Player> playersList = Arrays.asList(this.players);
+        Collections.rotate(playersList, (this.players.length - this.getCrownedPlayerIndex()));
+        int i = 0;
+        for(Player player : playersList) {
+            this.players[i] = player;
+            i++;
+        }
+    }
+
+
+    /**
      * Play the selection phase of the turn
      */
     public void playSelectionPhase() {
-        /* Reset character's attributes */
-
         this.display.addSelectionPhaseTitle();
         CharactersList characters = new CharactersList(CharactersList.allCharacterCards);
-        characters.reset();
+        characters.reset(); // Reset character's attributes
         Character[] removedCharactersFaceUp = characters.removeCharactersFaceUp();
         Character[] removedCharactersFaceDown = characters.removeCharactersFaceDown();
 
         this.display.addRemovedCharacter(removedCharactersFaceUp, removedCharactersFaceDown);
         this.display.addBlankLine(2);
 
-        int crownedPlayerIndex = this.getCrownedPlayerIndex();
         this.display.addCrownedPlayer(this.crownedPlayer);
         this.display.addBlankLine();
 
-        int length = this.players.length;
-        List<Player> playersWhoPlayed = new ArrayList<>();
-        int index;
-
-        for (int i = 0; i < length; i++) {
-            index = (i + crownedPlayerIndex) % length;
-            this.players[index].getMemory().setFaceUpcharacters(new CharactersList(removedCharactersFaceUp));
-            this.players[index].getMemory().setPlayersWhoChose(playersWhoPlayed);
-            this.players[index].chooseCharacter(characters);
-            playersWhoPlayed.add(this.players[index]);
+        for (int i = 0; i < this.players.length; i++) {
+            this.players[i].getMemory().setFaceUpCharacters(new CharactersList(removedCharactersFaceUp));
+            this.players[i].getMemory().setPossibleCharacters(characters);
+            this.players[i].getMemory().setPlayers(this.players);
+            this.players[i].getMemory().setPlayerIndex(i);
+            this.players[i].chooseCharacter(characters);
         }
         showSelectedCharacters();
         this.display.addBlankLine();
@@ -203,6 +215,7 @@ public class Game {
     public void setNextCrownedPlayerIfPossible(Character character) {
         if (character.equals(new King())) {
             this.crownedPlayer = character.getPlayer();
+            this.placeKingAtTheStartOfPlayers();
             this.display.addKingPower();
             this.display.addBlankLine();
         }
@@ -225,14 +238,18 @@ public class Game {
                 if (character.isRobbed()) {
                     character.getPlayer().getActions().getRobbed();
                 }
+
                 setNextCrownedPlayerIfPossible(character);
                 character.bringIntoPlay();
+                character.getPlayer().getMemory().setTurnNumber(this.turnNumber);
+                character.getPlayer().getMemory().setPreviousArchitect(CharactersList.allCharacterCards[6].getPlayer());
                 checkAndMarkEndOfGame(character);
             } else {
                 this.display.addNoPlayerTurn(this.crownedPlayer, character);
                 this.display.addBlankLine();
-                if (character.isDead())
+                if (character.isDead()) {
                     characterKilled = character;
+                }
             }
             this.display.addBlankLine();
         }
@@ -252,15 +269,15 @@ public class Game {
      */
     public void play() {
         this.initializeGame();
-        int round = 1;
 
         while (!this.isFinished) {
-            this.display.addTurnTitle(round++);
+            this.display.addTurnTitle(this.turnNumber);
 
             this.playSelectionPhase();
             this.playTurnPhase();
 
             this.display.printAndReset();
+            this.turnNumber++;
         }
 
         this.scoreboard.initialize(this.players);

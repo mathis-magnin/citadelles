@@ -214,7 +214,7 @@ class ThriftyTest {
         assertEquals("Manoir", player.getHand().get(3).getName());
         assertEquals(1, player.getCity().size());
         assertEquals("Château", player.getCity().get(0).getName());
-        assertEquals(1, player.getMemory().getCardsToDiscard());
+        assertEquals(1, player.getMemory().getNumberCardsToDiscard());
 
         player.playAsMagician();
         assertEquals(Power.RECYCLE, player.getMemory().getPowerToUse());
@@ -227,7 +227,7 @@ class ThriftyTest {
         assertEquals(2, player.getCity().size());
         assertEquals("Château", player.getCity().get(0).getName());
         assertEquals("Manoir", player.getCity().get(1).getName());
-        assertEquals(2, player.getMemory().getCardsToDiscard());
+        assertEquals(2, player.getMemory().getNumberCardsToDiscard());
     }
 
     @Test

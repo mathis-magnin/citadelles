@@ -43,15 +43,11 @@ public class Uncertain extends Player {
      */
     @Override
     public void chooseCharacter(CharactersList characters) {
-
         int randomIndex = -1;
-
         while (randomIndex >= characters.size() || randomIndex < 0) {
             randomIndex = RAND.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        this.getMemory().setPossibleCharacters(characters);
-
     }
 
 
@@ -150,8 +146,8 @@ public class Uncertain extends Player {
         } else { // discard cards : choose how many cards to discard
             this.getMemory().setPowerToUse(Power.RECYCLE);
             if (!this.getHand().isEmpty())
-                this.getMemory().setCardsToDiscard(RAND.nextInt(this.getHand().size()));
-            else this.getMemory().setCardsToDiscard(0);
+                this.getMemory().setNumberCardsToDiscard(RAND.nextInt(this.getHand().size()));
+            else this.getMemory().setNumberCardsToDiscard(0);
         }
         this.memory.setMomentWhenUse(Moment.values()[this.RAND.nextInt(3)]);
     }
