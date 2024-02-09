@@ -101,7 +101,7 @@ public class Richard extends Player {
         }
 
         CharactersList targets = Thief.getPossibleTargets();
-        for (int i : List.of(6, 7, 2, 3, 4)) {
+        for (int i : List.of(6, 7, 2, 3, 4)) { // Architect, Warlord, Magician, King, Bishop
             if (!quiPeutAvoir(CharactersList.allCharacterCards[i]).isEmpty() && targets.contains(CharactersList.allCharacterCards[i])) {
                 this.memory.setTarget(CharactersList.allCharacterCards[i]);
                 return;
