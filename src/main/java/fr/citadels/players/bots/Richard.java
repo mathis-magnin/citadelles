@@ -190,8 +190,32 @@ public class Richard extends Player {
     }
 
 
+    /**
+     * When the player embodies the thief, choose the character to rob from the list of possibles targets.
+     * If an opponent has 5 or more districts in his city, Richard will focus the bishop or the warlord if the player can embody them.
+     */
     @Override
     public void chooseTargetToRob() {
+        List<Player> playersAboutToWin = this.getPlayersWithMinCity(List.of(getMemory().getPlayers()), 5);
+
+        for (Player player : playersAboutToWin) {
+            if (getPossiblePlayersWhoPlay(CharactersList.allCharacterCards[4]).contains(player)) {
+                this.memory.setTarget(CharactersList.allCharacterCards[4]);
+                return;
+            } else if (getPossiblePlayersWhoPlay(CharactersList.allCharacterCards[7]).contains(player)) {
+                this.memory.setTarget(CharactersList.allCharacterCards[7]);
+                return;
+            }
+        }
+
+        CharactersList targets = Thief.getPossibleTargets();
+        for (int i : List.of(6, 7, 2, 3, 4)) { // Architect, Warlord, Magician, King, Bishop
+            if (!getPossiblePlayersWhoPlay(CharactersList.allCharacterCards[i]).isEmpty() && targets.contains(CharactersList.allCharacterCards[i])) {
+                this.memory.setTarget(CharactersList.allCharacterCards[i]);
+                return;
+            }
+        }
+
         this.memory.setTarget(Thief.getPossibleTargets().get(0));
     }
 

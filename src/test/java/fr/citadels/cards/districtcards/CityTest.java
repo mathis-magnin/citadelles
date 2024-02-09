@@ -13,10 +13,10 @@ class CityTest {
     City c1 = new City();
 
     // Cité complète avec une carte de chaque famille
-    City c2 = new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25], DistrictsPile.allDistrictCards[45], DistrictsPile.allDistrictCards[17], DistrictsPile.allDistrictCards[65], DistrictsPile.allDistrictCards[33], DistrictsPile.allDistrictCards[55]));
+    City c2 = new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25], DistrictsPile.allDistrictCards[45], DistrictsPile.allDistrictCards[17], DistrictsPile.allDistrictCards[65], DistrictsPile.allDistrictCards[33], DistrictsPile.allDistrictCards[55])); // Noble, Religieux, Marchand, Militaire, Religieux, Unique, Marchand, Militaire
 
     // Cité complète sans une carte de chaque famille
-    City c3 = new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25], DistrictsPile.allDistrictCards[45], DistrictsPile.allDistrictCards[17], DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[7]));
+    City c3 = new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25], DistrictsPile.allDistrictCards[45], DistrictsPile.allDistrictCards[17], DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[7])); // Noble, Religieux, Marchand, Militaire, Religieux, Noble, Noble
 
     // City with all except Military but with MiracleCourtyard district
     City c4 = new City(List.of(DistrictsPile.allDistrictCards[57], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25], DistrictsPile.allDistrictCards[58])); // Noble, Religious, Trade, Unique
@@ -48,6 +48,14 @@ class CityTest {
         assertEquals(2, c2.getNumberOfDistrictWithFamily(Family.RELIGIOUS));
         assertEquals(2, c2.getNumberOfDistrictWithFamily(Family.TRADE));
         assertEquals(2, c2.getNumberOfDistrictWithFamily(Family.MILITARY));
+    }
+
+    @Test
+    void getMostRepresentedFamily() {
+        assertEquals(Family.RELIGIOUS, c2.getMostRepresentedFamily());
+        assertEquals(Family.NOBLE, c3.getMostRepresentedFamily());
+        assertEquals(Family.UNIQUE, c4.getMostRepresentedFamily());
+        assertEquals(Family.NOBLE, c5.getMostRepresentedFamily());
     }
 
     @Test

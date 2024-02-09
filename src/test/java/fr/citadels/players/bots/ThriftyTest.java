@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -56,6 +57,22 @@ class ThriftyTest {
     }
 
     @Test
+    void chooseCharacter() {
+        CharactersList characters = new CharactersList(CharactersList.allCharacterCards);
+        player.setCity(new City(List.of(DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[20])));
+        player.chooseCharacter(characters);
+        assertEquals("Évêque", player.getCharacter().getName());
+
+        player.setCity(new City(new ArrayList<>()));
+        player.chooseCharacter(characters);
+        assertEquals("Marchand", player.getCharacter().getName());
+
+        when(random.nextInt(anyInt())).thenReturn(3);
+        player.chooseCharacter(characters);
+        assertEquals("Roi", player.getCharacter().getName());
+    }
+
+    @Test
     void getMostExpensiveCardInHand() {
         player.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[40], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[22])));
         int[] minCard = player.getMostExpensiveCardInHand();
@@ -89,6 +106,10 @@ class ThriftyTest {
         drawnCards = new District[]{DistrictsPile.allDistrictCards[22], DistrictsPile.allDistrictCards[0]};
         cardToPlay = player.chooseCardAmongDrawn(drawnCards);
         assertEquals("Cathédrale", cardToPlay.getName());
+
+        drawnCards = new District[]{DistrictsPile.allDistrictCards[34], DistrictsPile.allDistrictCards[60]};
+        cardToPlay = player.chooseCardAmongDrawn(drawnCards);
+        assertEquals("Laboratoire", cardToPlay.getName());
     }
 
     @Test
