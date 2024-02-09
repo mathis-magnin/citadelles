@@ -9,6 +9,7 @@ import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Richard extends Player {
@@ -98,6 +99,7 @@ public class Richard extends Player {
             this.getMemory().setTarget(assassin);
             return;
         }
+
         /* Bishop and Warlord */
         List<Player> possibleBishopPlayers = this.getPossiblePlayersWhoPlay(bishop);
         List<Player> possibleWarlordPlayers = this.getPossiblePlayersWhoPlay(warlord);
@@ -111,15 +113,29 @@ public class Richard extends Player {
                 return;
             }
         }
+
         /* Player who is about to win */
+        List<Player> playersAboutToWin = this.getPlayersAboutToWin(Arrays.asList(this.getMemory().getPlayers()));
+        List<Player> playersWhoChoseBefore = this.getPlayersWhoChoseBefore();
+        if (!(playersAboutToWin.isEmpty()) && (playersWhoChoseBefore.size() == 1) && (playersWhoChoseBefore.get(0).getCity().size() < 6) && (this.getHand().size() <= 2)) {
+            for (Character character : magicianTarget) {
+                if (playersAboutToWin.contains(character.getPlayer())) {
+                    this.getMemory().setTarget(character);
+                    return;
+                }
+            }
+        }
 
         /* Previous architect */
+        Player previousArchitect = this.getMemory().getPreviousArchitect();
+        if ((previousArchitect != null) && (4 <= previousArchitect.getHand().size())) {
+            this.getMemory().setTarget(previousArchitect.getCharacter());
+        }
 
-
-        /* Basic strategy : */
-        this.memory.setPowerToUse(Power.SWAP);
-        this.memory.setTarget(Magician.getPossibleTargets().get(0));
-        this.memory.setMomentWhenUse(Moment.BEFORE_RESSOURCES);
+        /* Basic strategy : Discard redundant cards between phases */
+        this.memory.setPowerToUse(Power.RECYCLE);
+        this.getMemory().setCardsToDiscard(this.getActions().putRedundantCardsAtTheEnd());
+        this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
     }
 
 
@@ -176,15 +192,18 @@ public class Richard extends Player {
 
 
     public List<Player> getPossiblePlayersWhoPlay(Character character) {
+        if (!character.isDead() && (character.getRank() < this.getCharacter().getRank())) { // Richard already know who is playing the character
+            return List.of(character.getPlayer());
+        }
         if (!this.getMemory().getFaceUpCharacters().contains(character)) { // A player is maybe playing the character
             if (this.getMemory().getPossibleCharacters().contains(character)) { // A player who chose his character after richard is maybe playing the character
-                return this.getPlayersWhoChose();
+                return this.getPlayersWhoChoseBefore();
             }
             else {  // A player who chose his character before richard is maybe playing Warlord
-                return this.getPlayersWhoWillChoose();
+                return this.getPlayersWhoChoseAfter();
             }
         }
-        return null;
+        return new ArrayList<>();
     }
 
 
@@ -217,22 +236,6 @@ public class Richard extends Player {
             }
         }
         return playersAboutToWin;
-    }
-
-
-    /**
-     * Get characters who played before Richard.
-     *
-     * @return the list of characters who played before.
-     */
-    public CharactersList getCharactersWhoPlayed() {
-        CharactersList charactersWhoPlayed = new CharactersList();
-        for (int i = 0; i < this.getCharacter().getRank() - 1; i++) {
-            if (CharactersList.allCharacterCards[i].isPlayed()) {
-                charactersWhoPlayed.add(CharactersList.allCharacterCards[i]);
-            }
-        }
-        return charactersWhoPlayed;
     }
 
 }
