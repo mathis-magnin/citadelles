@@ -1,14 +1,12 @@
 package fr.citadels.players;
 
+import fr.citadels.cards.charactercards.Character;
 import fr.citadels.cards.charactercards.CharactersList;
 import fr.citadels.cards.charactercards.Power;
-import fr.citadels.engine.Display;
-import fr.citadels.engine.Game;
-import fr.citadels.cards.charactercards.Character;
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.cards.districtcards.DistrictsPile;
-
-import java.util.List;
+import fr.citadels.engine.Display;
+import fr.citadels.engine.Game;
 
 public class Memory {
 
@@ -17,19 +15,18 @@ public class Memory {
     private final DistrictsPile pile;
     private final Display display;
     private Player[] players;
-
+    private int playerIndex;
     private boolean draw;
     private District districtToBuild;
     private Choices.Moment momentWhenUse;
     private Power powerToUse;
     private Character target;
-    private int cardsToDiscard;
+    private int numberCardsToDiscard;
     private District districtToDestroy;
-
     private CharactersList faceUpCharacters;
-    private List<Player> playersWhoChose;
     private CharactersList possibleCharacters;
     private Player previousArchitect;
+    private int turnNumber;
 
 
     /* Constructor */
@@ -38,17 +35,18 @@ public class Memory {
         this.pile = game.getPile();
         this.display = game.getDisplay();
         this.players = game.getPlayers();
+        this.playerIndex = 0;
         this.draw = false;
         this.districtToBuild = null;
-        this.momentWhenUse = Choices.Moment.BEFORE_RESSOURCES;
+        this.momentWhenUse = Choices.Moment.BEFORE_RESOURCES;
         this.powerToUse = Power.KILL;
         this.target = null;
-        this.cardsToDiscard = 0;
+        this.numberCardsToDiscard = 0;
         this.districtToDestroy = null;
         this.faceUpCharacters = null;
-        this.playersWhoChose = null;
-        this.possibleCharacters = null;
+        this.possibleCharacters = new CharactersList();
         this.previousArchitect = null;
+        this.turnNumber = game.getTurnNumber();
     }
 
 
@@ -77,6 +75,11 @@ public class Memory {
 
     public Player[] getPlayers() {
         return this.players;
+    }
+
+
+    public int getPlayerIndex() {
+        return this.playerIndex;
     }
 
 
@@ -109,8 +112,8 @@ public class Memory {
     /**
      * @return the number of cards to discard when the magician's power is used
      */
-    public int getCardsToDiscard() {
-        return this.cardsToDiscard;
+    public int getNumberCardsToDiscard() {
+        return this.numberCardsToDiscard;
     }
 
 
@@ -132,17 +135,25 @@ public class Memory {
     }
 
 
-    public List<Player> getPlayersWhoChose() {
-        return this.playersWhoChose;
-    }
-
-
     public Player getPreviousArchitect() {
-        return previousArchitect;
+        return this.previousArchitect;
     }
 
+    public Integer getTurnNumber() {
+        return this.turnNumber;
+    }
 
     /* Setters */
+
+    public void setPlayers(Player[] players) {
+        this.players = players;
+    }
+
+
+    public void setPlayerIndex(int playerIndex) {
+        this.playerIndex = playerIndex;
+    }
+
 
     public void setDraw(boolean draw) {
         this.draw = draw;
@@ -181,8 +192,8 @@ public class Memory {
     /**
      * @param number the number of cards to discard when the magician's power is used
      */
-    public void setCardsToDiscard(int number) {
-        this.cardsToDiscard = number;
+    public void setNumberCardsToDiscard(int number) {
+        this.numberCardsToDiscard = number;
     }
 
 
@@ -199,18 +210,19 @@ public class Memory {
     }
 
 
-    public void setPossibleCharacters(CharactersList characters) {
-        this.possibleCharacters = characters;
-    }
-
-
-    public void setPlayersWhoChose(List<Player> playersWhoChose) {
-        this.playersWhoChose = playersWhoChose;
-    }
-
-
     public void setPreviousArchitect(Player previousArchitect) {
         this.previousArchitect = previousArchitect;
+    }
+
+
+    public void setPossibleCharacters(CharactersList characters) {
+        this.possibleCharacters = new CharactersList();
+        this.possibleCharacters.addAll(characters);
+    }
+
+
+    public void setTurnNumber(int turnNumber) {
+        this.turnNumber = turnNumber;
     }
 
 }

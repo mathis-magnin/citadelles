@@ -34,6 +34,10 @@ public class Main {
     @Parameter(names = "--csv", description = "Run several games and add the statistics to the csv file")
     public static boolean csv = false;
 
+    // optional parameter
+    @Parameter(names = "--length", description = "Number of games to play")
+    private int iterationAmount = 100000;
+
     /**
      * Initialize the players for the game.
      *
@@ -48,6 +52,7 @@ public class Main {
         players[4] = new Richard("RICHARD");
         return players;
     }
+
     /* Programs */
 
     public static void main(String... argv) {
@@ -188,20 +193,23 @@ public class Main {
 
         // Initialize the hundred thousand games
         Player[] players = initPlayer();
-
-        Statisticboard statisticboard;
-        statisticboard = secureReadOrCreateStatisticboard(file, players, false);
+        Statisticboard statisticboard = new Statisticboard(Game.NB_PLAYERS);
+        statisticboard.initialize(players);
+        Statisticboard statisticboardCSV = secureReadOrCreateStatisticboard(file, players, false);
 
         // Play the hundred thousand games
-        logger.info("\nStatistiques sur 100 000 parties\n\n");
+        logger.info("\nStatistiques sur ");
+        logger.info(iterationAmount);
+        logger.info(" parties\n\n");
 
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < iterationAmount; i++) {
             Game game = new Game(players, RAND);
             game.play();
+            statisticboardCSV.update(game.getScoreboard());
             statisticboard.update(game.getScoreboard());
         }
         logger.info(statisticboard);
 
-        writeCsv(file, statisticboard, false);
+        writeCsv(file, statisticboardCSV, false);
     }
 }

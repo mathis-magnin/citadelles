@@ -101,10 +101,10 @@ public class Magician extends Character {
      * @precondition The player must have chosen which player he wants to target.
      */
     private void recycle() {
-        if (this.getPlayer().getMemory().getCardsToDiscard() != 0) {
+        if (this.getPlayer().getMemory().getNumberCardsToDiscard() != 0) {
             District card;
             List<District> discardsCards = new ArrayList<>();
-            int iterations = Math.min(this.getPlayer().getMemory().getCardsToDiscard(), this.getPlayer().getHand().size());
+            int iterations = Math.min(this.getPlayer().getMemory().getNumberCardsToDiscard(), this.getPlayer().getHand().size());
             for (int i = 0; i < iterations; i++) {
                 card = this.getPlayer().getHand().remove(this.getPlayer().getHand().size() - 1);
                 this.getPlayer().getMemory().getPile().placeBelowPile(card);

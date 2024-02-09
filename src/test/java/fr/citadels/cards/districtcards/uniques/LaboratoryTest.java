@@ -23,7 +23,7 @@ class LaboratoryTest {
         laboratory.setOwner(new Monarchist("KingBot", List.of(laboratory), game));
         players[0] = laboratory.getOwner();
         assertTrue(laboratory.isBuilt());
-        assertEquals(laboratory.getOwner().getName(), "KingBot");
+        assertEquals("KingBot", laboratory.getOwner().getName());
 
     }
 

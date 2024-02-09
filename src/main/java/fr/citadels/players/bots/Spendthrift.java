@@ -8,7 +8,6 @@ import fr.citadels.cards.charactercards.CharactersList;
 import fr.citadels.cards.charactercards.characters.Assassin;
 import fr.citadels.cards.charactercards.characters.Magician;
 import fr.citadels.cards.charactercards.characters.Thief;
-import fr.citadels.cards.charactercards.characters.Warlord;
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.players.Player;
 
@@ -22,17 +21,17 @@ import java.util.Random;
  */
 public class Spendthrift extends Player {
 
-    private final Random RAND;
+    private final Random rand;
     /* Constructor */
 
     public Spendthrift(String name, List<District> cards, Game game, Random random) {
         super(name, cards, game);
-        this.RAND = random;
+        this.rand = random;
     }
 
     public Spendthrift(String name, Random random) {
         super(name);
-        this.RAND = random;
+        this.rand = random;
     }
     /* Methods */
 
@@ -43,15 +42,11 @@ public class Spendthrift extends Player {
      */
     @Override
     public void chooseCharacter(CharactersList characters) {
-
         int randomIndex = -1;
-
         while (randomIndex >= characters.size() || randomIndex < 0) {
-            randomIndex = RAND.nextInt(characters.size());
+            randomIndex = rand.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        this.getMemory().setPossibleCharacters(characters);
-
     }
 
 
@@ -109,20 +104,6 @@ public class Spendthrift extends Player {
 
 
     /**
-     * Choose to take gold from city after he built another district from his family or before otherwise.
-     */
-    @Override
-    public void chooseMomentToTakeIncome() {
-        this.chooseDistrictToBuild();
-        if (this.memory.getDistrictToBuild() != null) {
-            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.AFTER_BUILDING : Moment.BETWEEN_PHASES);
-        } else {
-            this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
-        }
-    }
-
-
-    /**
      * Choose the cheapest card in hand that can be bought
      * set its districtToBuild attribute with the card chosen or null if no card can be chosen
      *
@@ -146,7 +127,7 @@ public class Spendthrift extends Player {
     @Override
     public void chooseTargetToKill() {
         CharactersList possibleTargets = Assassin.getPossibleTargets();
-        if (RAND.nextBoolean()) {
+        if (rand.nextBoolean()) {
             getMemory().setTarget(possibleTargets.get(4));
         } else {
             getMemory().setTarget(possibleTargets.get(5));
@@ -161,7 +142,7 @@ public class Spendthrift extends Player {
     @Override
     public void chooseTargetToRob() {
         List<Character> potentialTargets = Thief.getPossibleTargets();
-        if (RAND.nextBoolean()) {
+        if (rand.nextBoolean()) {
             if (potentialTargets.contains(CharactersList.allCharacterCards[3])) {
                 getMemory().setTarget(CharactersList.allCharacterCards[3]);
             } else {
@@ -194,28 +175,9 @@ public class Spendthrift extends Player {
             Collections.reverse(getHand());
 
             int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
-            getMemory().setCardsToDiscard(nbCardsToDiscard + 1);
+            getMemory().setNumberCardsToDiscard(nbCardsToDiscard + 1);
         }
-        this.memory.setMomentWhenUse(Moment.BEFORE_RESSOURCES);
-    }
-
-
-    /**
-     * When the player embodies the warlord, choose the character and the
-     * district in city to destroy from the list of possibles targets
-     */
-    @Override
-    public void chooseTargetToDestroy() {
-        Character target = Warlord.getOtherCharacterWithBiggestCity();
-        getMemory().setTarget(target);
-        District districtToDestroy = null;
-        if (target != null) {
-            districtToDestroy = target.getPlayer().getCity().getCheapestDistrict();
-            if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
-                districtToDestroy = null;
-            }
-        }
-        getMemory().setDistrictToDestroy(districtToDestroy);
+        this.memory.setMomentWhenUse(Moment.BEFORE_RESOURCES);
     }
 
 

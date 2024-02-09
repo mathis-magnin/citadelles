@@ -2,6 +2,7 @@ package fr.citadels.cards.charactercards;
 
 import fr.citadels.cards.Card;
 import fr.citadels.cards.Family;
+import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.players.Player;
 
 public abstract class Character extends Card implements Comparable<Character> {
@@ -105,5 +106,25 @@ public abstract class Character extends Card implements Comparable<Character> {
      * Let the player who embodies the character use the power which comes from his role.
      */
     public abstract void usePower();
+
+
+    /**
+     * The player gain one gold coin per district of is family he has in his city, if he as a family.
+     * The SchoolOfMagic district act as a Noble district.
+     */
+    public void income() {
+        if (this.getFamily() != Family.NEUTRAL) {
+            int gold = this.getPlayer().getCity().getNumberOfDistrictWithFamily(this.getFamily());
+
+            boolean activateSchoolOfMagicEffect = (DistrictsPile.allDistrictCards[63].getOwner() == this.getPlayer()); // School of magic effect
+            gold = activateSchoolOfMagicEffect ? gold + 1 : gold;
+
+            if (0 < gold) {
+                this.getPlayer().getActions().addGold(gold);
+                this.getPlayer().getMemory().getDisplay().addGoldTakenFromCity(this.getPlayer(), gold, activateSchoolOfMagicEffect);
+                this.getPlayer().getMemory().getDisplay().addBlankLine();
+            }
+        }
+    }
 
 }

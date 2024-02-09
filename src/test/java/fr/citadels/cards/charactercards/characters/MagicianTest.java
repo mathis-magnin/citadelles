@@ -102,13 +102,13 @@ class MagicianTest {
         Hand hand1 = new Hand(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[20], DistrictsPile.allDistrictCards[30]));
         player1.setHand(hand1);
 
-        player1.getMemory().setCardsToDiscard(0);
+        player1.getMemory().setNumberCardsToDiscard(0);
         Assertions.assertEquals(hand1, player1.getHand());
         player1.getCharacter().usePower();
         Assertions.assertEquals(hand1, player1.getHand());
         Assertions.assertEquals(4, player1.getHand().size());
 
-        player1.getMemory().setCardsToDiscard(2);
+        player1.getMemory().setNumberCardsToDiscard(2);
         player1.getCharacter().usePower();
         Assertions.assertEquals(4, player1.getHand().size());
         Assertions.assertTrue(player1.getHand().contains(DistrictsPile.allDistrictCards[0]));

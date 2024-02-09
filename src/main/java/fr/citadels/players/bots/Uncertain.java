@@ -19,19 +19,19 @@ public class Uncertain extends Player {
 
     /* Constant */
 
-    private final Random RAND;
+    private final Random rand;
 
 
     /* Constructor */
 
     public Uncertain(String name, List<District> cards, Game game, Random random) {
         super(name, cards, game);
-        RAND = random;
+        rand = random;
     }
 
     public Uncertain(String name, Random random) {
         super(name);
-        RAND = random;
+        rand = random;
     }
 
     /* Methods */
@@ -43,15 +43,11 @@ public class Uncertain extends Player {
      */
     @Override
     public void chooseCharacter(CharactersList characters) {
-
         int randomIndex = -1;
-
         while (randomIndex >= characters.size() || randomIndex < 0) {
-            randomIndex = RAND.nextInt(characters.size());
+            randomIndex = rand.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        this.getMemory().setPossibleCharacters(characters);
-
     }
 
 
@@ -60,7 +56,7 @@ public class Uncertain extends Player {
      */
     @Override
     public void chooseDraw() {
-        this.memory.setDraw(this.RAND.nextBoolean());
+        this.memory.setDraw(this.rand.nextBoolean());
     }
 
 
@@ -73,7 +69,7 @@ public class Uncertain extends Player {
      */
     @Override
     public District chooseCardAmongDrawn(District[] drawnCards) {
-        int randomIndex = RAND.nextInt(drawnCards.length);
+        int randomIndex = rand.nextInt(drawnCards.length);
         District cardToPlay = drawnCards[randomIndex];
         getActions().putBack(drawnCards, randomIndex);
         return cardToPlay;
@@ -100,7 +96,7 @@ public class Uncertain extends Player {
      */
     @Override
     public void chooseDistrictToBuild() {
-        if (this.RAND.nextBoolean()) {
+        if (this.rand.nextBoolean()) {
             for (int i = 0; i < getHand().size(); i++) {
                 if (getHand().get(i).getGoldCost() <= getGold() && !hasCardInCity(getHand().get(i))) {
                     this.getMemory().setDistrictToBuild(this.getHand().get(i));
@@ -119,7 +115,7 @@ public class Uncertain extends Player {
     @Override
     public void chooseTargetToKill() {
         CharactersList possibleTargets = Assassin.getPossibleTargets();
-        int randIndex = RAND.nextInt(possibleTargets.size());
+        int randIndex = rand.nextInt(possibleTargets.size());
         getMemory().setTarget(possibleTargets.get(randIndex));
     }
 
@@ -131,7 +127,7 @@ public class Uncertain extends Player {
     @Override
     public void chooseTargetToRob() {
         List<Character> potentialTargets = Thief.getPossibleTargets();
-        int randIndex = RAND.nextInt(potentialTargets.size());
+        int randIndex = rand.nextInt(potentialTargets.size());
         getMemory().setTarget(potentialTargets.get(randIndex));
     }
 
@@ -141,19 +137,22 @@ public class Uncertain extends Player {
      */
     @Override
     public void chooseMagicianPower() {
-        int randPower = RAND.nextInt(2); // choose which power to use
+        int randPower = rand.nextInt(2); // choose which power to use
 
         if (randPower == 0) { // swap hands : choose a target
             this.getMemory().setPowerToUse(Power.SWAP);
-            int randTarget = RAND.nextInt(Magician.getPossibleTargets().size());
+            int randTarget = rand.nextInt(Magician.getPossibleTargets().size());
             this.getMemory().setTarget(Magician.getPossibleTargets().get(randTarget));
         } else { // discard cards : choose how many cards to discard
             this.getMemory().setPowerToUse(Power.RECYCLE);
-            if (!this.getHand().isEmpty())
-                this.getMemory().setCardsToDiscard(RAND.nextInt(this.getHand().size()));
-            else this.getMemory().setCardsToDiscard(0);
+            if (!this.getHand().isEmpty()) {
+                this.getMemory().setNumberCardsToDiscard(rand.nextInt(this.getHand().size()));
+            }
+            else {
+                this.getMemory().setNumberCardsToDiscard(0);
+            }
         }
-        this.memory.setMomentWhenUse(Moment.values()[this.RAND.nextInt(3)]);
+        this.memory.setMomentWhenUse(Moment.values()[this.rand.nextInt(3)]);
     }
 
 
@@ -166,9 +165,9 @@ public class Uncertain extends Player {
         Character target = null;
         District districtToDestroy = null;
         if (!Warlord.getPossibleTargets().isEmpty()) {
-            target = Warlord.getPossibleTargets().get(RAND.nextInt(Warlord.getPossibleTargets().size()));
+            target = Warlord.getPossibleTargets().get(rand.nextInt(Warlord.getPossibleTargets().size()));
             if (!target.getPlayer().getCity().isEmpty()) {
-                districtToDestroy = target.getPlayer().getCity().get(RAND.nextInt(target.getPlayer().getCity().size()));
+                districtToDestroy = target.getPlayer().getCity().get(rand.nextInt(target.getPlayer().getCity().size()));
                 if (districtToDestroy.getGoldCost() - 1 > this.getGold()) {
                     districtToDestroy = null;
                 }
@@ -181,7 +180,7 @@ public class Uncertain extends Player {
 
     @Override
     public boolean chooseFactoryEffect() {
-        return RAND.nextBoolean() && (3 <= getGold());
+        return rand.nextBoolean() && (3 <= getGold());
     }
 
 
@@ -193,12 +192,12 @@ public class Uncertain extends Player {
      */
     @Override
     public boolean chooseGraveyardEffect(District removedDistrict) {
-        return RAND.nextBoolean() && (1 <= this.getGold()) && !this.hasCardInCity(removedDistrict);
+        return rand.nextBoolean() && (1 <= this.getGold()) && !this.hasCardInCity(removedDistrict);
     }
 
 
     @Override
     public boolean chooseLaboratoryEffect() {
-        return RAND.nextBoolean() && !this.getHand().isEmpty();
+        return rand.nextBoolean() && !this.getHand().isEmpty();
     }
 }
