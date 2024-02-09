@@ -46,20 +46,6 @@ public class Richard extends Player {
     }
 
 
-    /**
-     * Choose to take gold from city after he built another district from his family or before otherwise.
-     */
-    @Override
-    public void chooseMomentToTakeIncome() {
-        this.chooseDistrictToBuild();
-        if (this.memory.getDistrictToBuild() != null) {
-            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.BETWEEN_PHASES : Moment.AFTER_BUILDING);
-        } else {
-            this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
-        }
-    }
-
-
     @Override
     public void chooseDistrictToBuild() {
         if (!this.getHand().isEmpty() && (this.getHand().get(0).getGoldCost() <= this.getGold()) && !this.hasCardInCity(this.getHand().get(0))) {
