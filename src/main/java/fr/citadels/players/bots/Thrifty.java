@@ -107,6 +107,9 @@ public class Thrifty extends Player {
     public District chooseCardAmongDrawn(District[] drawnCards) {
         int maxIndex = 0;
         for (int i = 1; i < drawnCards.length; i++) {
+            if (drawnCards[i].getFamily() == Family.UNIQUE) {
+                return drawnCards[i];
+            }
             if (drawnCards[i].getGoldCost() > drawnCards[maxIndex].getGoldCost())
                 maxIndex = i;
         }

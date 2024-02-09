@@ -118,6 +118,10 @@ class SpendthriftTest {
         drawnCards = new District[]{DistrictsPile.allDistrictCards[22], DistrictsPile.allDistrictCards[0]};
         cardToPlay = player.chooseCardAmongDrawn(drawnCards);
         assertEquals("Manoir", cardToPlay.getName());
+
+        drawnCards = new District[]{DistrictsPile.allDistrictCards[34], DistrictsPile.allDistrictCards[60]};
+        cardToPlay = player.chooseCardAmongDrawn(drawnCards);
+        assertEquals("Laboratoire", cardToPlay.getName());
     }
 
     @Test
