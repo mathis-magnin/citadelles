@@ -60,9 +60,8 @@ Par exemple :
 - On considère qu'un joueur est en passe de gagner s'il a 5 quartiers ou plus
 - C'est le dernier tour si un joueur a 6 quartiers
 
-Le bot Richard est capable de gagner des parties contre les autres bots comme Monarchiste et Aléatoire mais a du mal
-contre
-les bots Econome et Depensier étant plus agressifs et plus rapides que Richard.
+Le bot Richard est devenu notre bot le plus complexe et le plus complet
+et a maintenant une stratégie plus élaborée qui lui permet de gagner plus de parties que les autres bots.
 
 ## 2. Architecture et qualité
 
