@@ -27,6 +27,7 @@ public class Statisticboard {
         this.statistics = new Statistic[playerNumber];
     }
 
+
     public Statisticboard(Statistic[] statistics) {
         this.statistics = statistics;
     }
@@ -47,18 +48,18 @@ public class Statisticboard {
     }
 
 
-    @Override
-    public String toString() {
-        StringBuilder str = new StringBuilder();
-        for (Statistic statistic: this.statistics) {
-            str.append(statistic.toString()).append("\n");
-        }
-        return str.toString();
+    public Statistic[] getStatistics() {
+        return this.statistics;
     }
 
 
-    public Statistic[] getStatistics() {
-        return this.statistics;
+    @Override
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        for (Statistic statistic : this.statistics) {
+            str.append(statistic.toString()).append("\n");
+        }
+        return str.toString();
     }
 
 
@@ -67,7 +68,7 @@ public class Statisticboard {
     /**
      * Update all the statistic within the statisticboard based on the new scoreboard.
      *
-     * @param scoreboard the scoreboard of the game
+     * @param scoreboard the scoreboard of the game.
      */
     public void update(Scoreboard scoreboard) {
         for (Score score : scoreboard.getScores()) {
@@ -83,10 +84,11 @@ public class Statisticboard {
     /**
      * If the csv option is activated, read and parse the statisticboard from a file or create a new one if the file does not exist.
      * Else, create a new statisticboard.
-     * @param file the file to read
-     * @param players an array of players
-     * @param inSecondIteration a boolean to know if we are in the second iteration of the thousand games
-     * @return a statisticboard
+     *
+     * @param file              the file to read.
+     * @param players           an array of players.
+     * @param inSecondIteration a boolean to know if we are in the second iteration of the thousand games.
+     * @return a statisticboard.
      */
     public static Statisticboard readOrCreateStatisticboard(File file, Player[] players, boolean inSecondIteration) throws CsvValidationException, IOException {
         Statisticboard statisticboard;
@@ -106,8 +108,8 @@ public class Statisticboard {
     /**
      * Write the statisticboard into a csv file.
      *
-     * @param file the file to write the statisticboard into
-     * @throws IOException if the file is not found
+     * @param file the file to write the statisticboard into.
+     * @throws IOException if the file is not found.
      */
     public void writeCsv(File file, boolean inSecondIteration) throws IOException {
         Logger logger = org.apache.logging.log4j.LogManager.getLogger(Main.class);
@@ -142,18 +144,19 @@ public class Statisticboard {
         }
     }
 
+
     /**
      * Read a statisticboard in a csv file and return it.
      * If it's not a valid file or if the number of players or the players' name are not the same as the current game, create a new statisticboard.
      *
-     * @param file the file to read
-     * @param players an array of players
-     * @param inSecondIteration a boolean to know if we are in the second iteration of the thousand games
-     * @return a statisticboard
-     * @throws IOException if the file is not found
-     * @throws CsvValidationException if the csv file is not valid
+     * @param file              the file to read.
+     * @param players           an array of players.
+     * @param inSecondIteration a boolean to know if we are in the second iteration of the thousand games.
+     * @return a statisticboard.
+     * @throws IOException            if the file is not found.
+     * @throws CsvValidationException if the csv file is not valid.
      */
-    public static Statisticboard readCsv(File file, Player[] players, boolean inSecondIteration ) throws CsvValidationException, IOException {
+    public static Statisticboard readCsv(File file, Player[] players, boolean inSecondIteration) throws CsvValidationException, IOException {
         FileReader fileReader = new FileReader(file);
         Logger logger;
         int nbPlayer;
@@ -205,4 +208,5 @@ public class Statisticboard {
 
         return new Statisticboard(statistics.toArray(new Statistic[nbPlayer]));
     }
+
 }

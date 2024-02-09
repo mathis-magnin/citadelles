@@ -2,14 +2,12 @@ package fr.citadels.engine;
 
 import fr.citadels.Main;
 import fr.citadels.cards.Card;
-import fr.citadels.cards.charactercards.Character;
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.charactercards.Power;
-import fr.citadels.cards.charactercards.characters.Merchant;
-import fr.citadels.cards.districtcards.City;
-import fr.citadels.cards.districtcards.District;
-import fr.citadels.cards.districtcards.DistrictsPile;
-import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.cards.characters.Character;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.characters.Power;
+import fr.citadels.cards.characters.Role;
+import fr.citadels.cards.characters.roles.Merchant;
+import fr.citadels.cards.districts.*;
 import fr.citadels.engine.score.Scoreboard;
 import fr.citadels.players.Player;
 import org.apache.logging.log4j.Level;
@@ -63,6 +61,7 @@ public class Display {
     public void addBlankLine() {
         this.events.append("\n");
     }
+
 
     public void addBlankLine(int number) {
         for (int i = 0; i < number; i++) {
@@ -298,7 +297,7 @@ public class Display {
 
 
     public void addBishopPower() {
-        this.events.append(CharactersList.allCharacterCards[4].getPlayer().getName()).append(" utilise son pouvoir pour ne pas être attaqué par le condottière.\n");
+        this.events.append(CharactersList.allCharacterCards[Role.BISHOP.ordinal()].getPlayer().getName()).append(" utilise son pouvoir pour ne pas être attaqué par le condottière.\n");
     }
 
 
@@ -376,8 +375,9 @@ public class Display {
         this.addBlankLine();
     }
 
+
     public void addKeepEffect() {
-        this.events.append("Grâce à son effet, le Donjon de ").append(DistrictsPile.allDistrictCards[58].getOwner().getName()).append(" ne peut pas être détruit par le condottière.\n");
+        this.events.append("Grâce à son effet, le Donjon de ").append(DistrictsPile.allDistrictCards[Unique.KEEP.toIndex()].getOwner().getName()).append(" ne peut pas être détruit par le condottière.\n");
     }
 
 

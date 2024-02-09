@@ -1,13 +1,13 @@
 package fr.citadels.players;
 
-import fr.citadels.cards.charactercards.Power;
-import fr.citadels.cards.charactercards.characters.Warlord;
-import fr.citadels.cards.districtcards.DistrictsPile;
+import fr.citadels.cards.characters.Power;
+import fr.citadels.cards.characters.roles.Warlord;
+import fr.citadels.cards.districts.DistrictsPile;
 import fr.citadels.engine.Game;
-import fr.citadels.cards.charactercards.Character;
-import fr.citadels.cards.districtcards.City;
-import fr.citadels.cards.districtcards.District;
-import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.cards.characters.Character;
+import fr.citadels.cards.districts.City;
+import fr.citadels.cards.districts.District;
+import fr.citadels.cards.districts.Hand;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public abstract class Player implements Comparable<Player>, Choices {
     protected Actions actions;
 
 
-    /* Constructor */
+    /* Constructors */
 
     protected Player(String name, List<District> cards, Game game) {
         this.name = name;
@@ -32,10 +32,10 @@ public abstract class Player implements Comparable<Player>, Choices {
         this.city = new City();
         this.character = null;
         this.gold = 0;
-
         this.memory = new Memory(game);
         actions = new Actions(this, memory);
     }
+
 
     protected Player(String name) {
         this.name = name;
@@ -48,6 +48,7 @@ public abstract class Player implements Comparable<Player>, Choices {
 
 
     /* Basic methods */
+
     public void initPlayer(List<District> cards, Game game) {
         this.hand = new Hand(cards);
         this.city = new City();
@@ -57,10 +58,11 @@ public abstract class Player implements Comparable<Player>, Choices {
         this.actions = new Actions(this, memory);
     }
 
+
     /**
-     * Get the name of the player
+     * Get the name of the player.
      *
-     * @return the name of the player
+     * @return the name of the player.
      */
     public String getName() {
         return this.name;
@@ -68,9 +70,9 @@ public abstract class Player implements Comparable<Player>, Choices {
 
 
     /**
-     * Get a copy of the player's hand
+     * Get a copy of the player's hand.
      *
-     * @return the hand
+     * @return the hand.
      */
     public Hand getHand() {
         return this.hand;
@@ -78,7 +80,7 @@ public abstract class Player implements Comparable<Player>, Choices {
 
 
     /**
-     * @return the player's actions
+     * @return the player's actions.
      */
     public Actions getActions() {
         return actions;
@@ -86,9 +88,9 @@ public abstract class Player implements Comparable<Player>, Choices {
 
 
     /**
-     * Get a copy of the player's city
+     * Get a copy of the player's city.
      *
-     * @return the city
+     * @return the city.
      */
     public City getCity() {
         return this.city;
@@ -96,9 +98,9 @@ public abstract class Player implements Comparable<Player>, Choices {
 
 
     /**
-     * get the amount of gold of the player
+     * Get the amount of gold of the player.
      *
-     * @return the amount specified
+     * @return the amount specified.
      */
     public int getGold() {
         return this.gold;
@@ -106,9 +108,9 @@ public abstract class Player implements Comparable<Player>, Choices {
 
 
     /**
-     * Get the player's character
+     * Get the player's character.
      *
-     * @return the character
+     * @return the character.
      */
     public Character getCharacter() {
         return this.character;
@@ -116,9 +118,9 @@ public abstract class Player implements Comparable<Player>, Choices {
 
 
     /**
-     * Get the player's memory
+     * Get the player's memory.
      *
-     * @return memory
+     * @return memory.
      */
     public Memory getMemory() {
         return memory;
@@ -126,9 +128,9 @@ public abstract class Player implements Comparable<Player>, Choices {
 
 
     /**
-     * Set the player's hand
+     * Set the player's hand.
      *
-     * @param hand the hand to set
+     * @param hand the hand to set.
      */
     public void setHand(Hand hand) {
         this.hand = hand;
@@ -136,9 +138,9 @@ public abstract class Player implements Comparable<Player>, Choices {
 
 
     /**
-     * Set the player's city
+     * Set the player's city.
      *
-     * @param city the hand to set
+     * @param city the hand to set.
      */
     public void setCity(City city) {
         this.city = city;
@@ -148,7 +150,7 @@ public abstract class Player implements Comparable<Player>, Choices {
     /**
      * Set the player's character and the character's player.
      *
-     * @param character the character to set
+     * @param character the character to set.
      */
     public void setCharacter(Character character) {
         this.character = character;
@@ -157,9 +159,9 @@ public abstract class Player implements Comparable<Player>, Choices {
 
 
     /**
-     * Set the player's gold
+     * Set the player's gold.
      *
-     * @param gold the amount of gold coins that the player should have
+     * @param gold the amount of gold coins that the player should have.
      */
     public void setGold(int gold) {
         this.gold = gold;
@@ -217,8 +219,8 @@ public abstract class Player implements Comparable<Player>, Choices {
     /**
      * Check if the player has the card in his city.
      *
-     * @param card the card to check
-     * @return true if the player has the card in his city
+     * @param card the card to check.
+     * @return true if the player has the card in his city.
      */
     public boolean hasCardInCity(District card) {
         return city.contains(card);
@@ -268,8 +270,7 @@ public abstract class Player implements Comparable<Player>, Choices {
 
     /**
      * Default behaviour (used by several bots) :
-     * When the player embodies the warlord, choose the character and the
-     * district in city to destroy from the list of possibles targets
+     * When the player embodies the warlord, choose the character and the district in city to destroy from the list of possibles targets.
      */
     @Override
     public void chooseTargetToDestroy() {
@@ -447,6 +448,5 @@ public abstract class Player implements Comparable<Player>, Choices {
             this.getMemory().getDisplay().addBlankLine();
         }
     }
-
 
 }

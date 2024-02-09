@@ -1,13 +1,14 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.cards.Family;
-import fr.citadels.cards.charactercards.Character;
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.charactercards.Power;
-import fr.citadels.cards.charactercards.characters.Assassin;
-import fr.citadels.cards.charactercards.characters.Magician;
-import fr.citadels.cards.charactercards.characters.Thief;
-import fr.citadels.cards.districtcards.District;
+import fr.citadels.cards.characters.Character;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.characters.Power;
+import fr.citadels.cards.characters.Role;
+import fr.citadels.cards.characters.roles.Assassin;
+import fr.citadels.cards.characters.roles.Magician;
+import fr.citadels.cards.characters.roles.Thief;
+import fr.citadels.cards.districts.District;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
 
@@ -19,6 +20,8 @@ import java.util.Random;
  */
 public class Thrifty extends Player {
 
+    /* Attribute */
+
     private final Random rand;
 
 
@@ -29,6 +32,7 @@ public class Thrifty extends Player {
         this.rand = random;
     }
 
+
     public Thrifty(String name, Random random) {
         super(name);
         this.rand = random;
@@ -38,9 +42,9 @@ public class Thrifty extends Player {
 
     /**
      * Choose a characterCard from the list of character :
-     * - The Merchant if the player has less than 3 golds
-     * - The character of the most represented family in the city if it exists
-     * - A random character otherwise
+     * - The Merchant if the player has less than 3 golds.
+     * - The character of the most represented family in the city if it exists.
+     * - A random character otherwise.
      *
      * @param characters the list of characterCard.
      */
@@ -55,9 +59,9 @@ public class Thrifty extends Player {
                     return;
                 }
             }
-        } else if ((this.getGold() < 3) && (characters.contains(CharactersList.allCharacterCards[5]))) {
-            this.setCharacter(CharactersList.allCharacterCards[5]);
-            characters.remove(CharactersList.allCharacterCards[5]);
+        } else if ((this.getGold() < 3) && (characters.contains(CharactersList.allCharacterCards[Role.MERCHANT.ordinal()]))) {
+            this.setCharacter(CharactersList.allCharacterCards[Role.MERCHANT.ordinal()]);
+            characters.remove(CharactersList.allCharacterCards[Role.MERCHANT.ordinal()]);
         } else {
             int randomIndex = rand.nextInt(characters.size());
             this.setCharacter(characters.remove(randomIndex));
@@ -75,7 +79,7 @@ public class Thrifty extends Player {
 
 
     /**
-     * Get the index and the cost of the most expensive card in the hand that can be bought
+     * Get the index and the cost of the most expensive card in the hand that can be bought.
      */
     public int[] getMostExpensiveCardInHand() {
         int[] result = new int[2];
@@ -97,11 +101,11 @@ public class Thrifty extends Player {
 
 
     /**
-     * Choose the most expensive card among the cards drawn
+     * Choose the most expensive card among the cards drawn.
      *
-     * @param drawnCards cards drawn
-     * @return the card to play
-     * @precondition drawnCards must contain at least 1 card
+     * @param drawnCards cards drawn.
+     * @return the card to play.
+     * @precondition drawnCards must contain at least 1 card.
      */
     @Override
     public District chooseCardAmongDrawn(District[] drawnCards) {
@@ -120,10 +124,10 @@ public class Thrifty extends Player {
 
 
     /**
-     * Choose the most expensive card in hand with a cost > 1 that can be bought
-     * set its districtToBuild attribute with the card chosen or null if no card can be chosen
+     * Choose the most expensive card in hand with a cost > 1 that can be bought.
+     * set its districtToBuild attribute with the card chosen or null if no card can be chosen.
      *
-     * @precondition cardsInHand must contain at least 1 card
+     * @precondition cardsInHand must contain at least 1 card.
      */
     @Override
     public void chooseDistrictToBuild() {
@@ -137,8 +141,7 @@ public class Thrifty extends Player {
 
 
     /**
-     * When the player embodies the assassin, choose the
-     * character to kill from the list of possibles targets
+     * When the player embodies the assassin, choose the character to kill from the list of possibles targets.
      */
     @Override
     public void chooseTargetToKill() {
@@ -152,30 +155,29 @@ public class Thrifty extends Player {
 
 
     /**
-     * When the player embodies the thief, choose the
-     * character to rob from the list of possibles targets
+     * When the player embodies the thief, choose the character to rob from the list of possibles targets.
      */
     @Override
     public void chooseTargetToRob() {
         List<Character> targets = Thief.getPossibleTargets();
         if (rand.nextBoolean()) {
-            if (targets.contains(CharactersList.allCharacterCards[3])) {
-                getMemory().setTarget(CharactersList.allCharacterCards[3]);
+            if (targets.contains(CharactersList.allCharacterCards[Role.KING.ordinal()])) {
+                getMemory().setTarget(CharactersList.allCharacterCards[Role.KING.ordinal()]);
             } else {
-                getMemory().setTarget(CharactersList.allCharacterCards[6]);
+                getMemory().setTarget(CharactersList.allCharacterCards[Role.ARCHITECT.ordinal()]);
             }
         } else {
-            if (targets.contains(CharactersList.allCharacterCards[6])) {
-                getMemory().setTarget(CharactersList.allCharacterCards[6]);
+            if (targets.contains(CharactersList.allCharacterCards[Role.ARCHITECT.ordinal()])) {
+                getMemory().setTarget(CharactersList.allCharacterCards[Role.ARCHITECT.ordinal()]);
             } else {
-                getMemory().setTarget(CharactersList.allCharacterCards[3]);
+                getMemory().setTarget(CharactersList.allCharacterCards[Role.KING.ordinal()]);
             }
         }
     }
 
 
     /**
-     * Choose the power to use as a magician
+     * Choose the power to use as a magician.
      */
     @Override
     public void chooseMagicianPower() {
@@ -207,10 +209,10 @@ public class Thrifty extends Player {
 
 
     /**
-     * This bot wants to activate the graveyard's effect if the removed district's is more expensive than each district of his hand
+     * This bot wants to activate the graveyard's effect if the removed district's is more expensive than each district of his hand.
      *
-     * @param removedDistrict the district removed by the Warlord
-     * @return a boolean value
+     * @param removedDistrict the district removed by the Warlord.
+     * @return a boolean value.
      */
     @Override
     public boolean chooseGraveyardEffect(District removedDistrict) {
