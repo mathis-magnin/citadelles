@@ -6,7 +6,7 @@ import fr.citadels.cards.districtcards.District;
 public interface Choices {
 
     enum Moment {
-        BEFORE_RESSOURCES,
+        BEFORE_RESOURCES,
         BETWEEN_PHASES,
         AFTER_BUILDING
     }
@@ -65,7 +65,7 @@ public interface Choices {
     /**
      * When the player embodies the magician, choose which power he should use, when he should use it,
      * and consequently either the character to exchange his hand with from the list of possibles targets
-     * or the cards from his hands he should and replace by cards from the pile
+     * or the cards from his hands he should discard and replace by cards from the pile
      */
     void chooseMagicianPower();
 

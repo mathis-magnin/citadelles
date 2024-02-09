@@ -8,7 +8,6 @@ import fr.citadels.cards.charactercards.CharactersList;
 import fr.citadels.cards.charactercards.characters.Assassin;
 import fr.citadels.cards.charactercards.characters.Magician;
 import fr.citadels.cards.charactercards.characters.Thief;
-import fr.citadels.cards.charactercards.characters.Warlord;
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.players.Player;
 
@@ -43,15 +42,21 @@ public class Spendthrift extends Player {
      */
     @Override
     public void chooseCharacter(CharactersList characters) {
-
-        int randomIndex = -1;
-
-        while (randomIndex >= characters.size() || randomIndex < 0) {
-            randomIndex = rand.nextInt(characters.size());
+        Family mostRepresentedFamily = getCity().getMostRepresentedFamily();
+        if ((getGold() > 4) && (getHand().size() > 1) && (characters.contains(CharactersList.allCharacterCards[6]))) {
+            this.setCharacter(CharactersList.allCharacterCards[6]);
+            characters.remove(CharactersList.allCharacterCards[6]);
+        } else if ((!getCity().isEmpty() && (mostRepresentedFamily != Family.UNIQUE))) {
+            for (Character character : characters) {
+                if (character.getFamily() == mostRepresentedFamily) {
+                    this.setCharacter(characters.remove(characters.indexOf(character)));
+                    return;
+                }
+            }
+        } else {
+            int randomIndex = rand.nextInt(characters.size());
+            this.setCharacter(characters.remove(randomIndex));
         }
-        this.setCharacter(characters.remove(randomIndex));
-        this.getMemory().setPossibleCharacters(characters);
-
     }
 
 
@@ -99,26 +104,15 @@ public class Spendthrift extends Player {
     public District chooseCardAmongDrawn(District[] drawnCards) {
         int minIndex = 0;
         for (int i = 1; i < drawnCards.length; i++) {
+            if (drawnCards[i].getFamily() == Family.UNIQUE) {
+                return drawnCards[i];
+            }
             if (drawnCards[i].getGoldCost() < drawnCards[minIndex].getGoldCost())
                 minIndex = i;
         }
         District cardToPlay = drawnCards[minIndex];
         getActions().putBack(drawnCards, minIndex);
         return cardToPlay;
-    }
-
-
-    /**
-     * Choose to take gold from city after he built another district from his family or before otherwise.
-     */
-    @Override
-    public void chooseMomentToTakeIncome() {
-        this.chooseDistrictToBuild();
-        if (this.memory.getDistrictToBuild() != null) {
-            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.AFTER_BUILDING : Moment.BETWEEN_PHASES);
-        } else {
-            this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
-        }
     }
 
 
@@ -160,18 +154,18 @@ public class Spendthrift extends Player {
      */
     @Override
     public void chooseTargetToRob() {
-        List<Character> potentialTargets = Thief.getPossibleTargets();
+        List<Character> targets = Thief.getPossibleTargets();
         if (rand.nextBoolean()) {
-            if (potentialTargets.contains(CharactersList.allCharacterCards[3])) {
-                getMemory().setTarget(CharactersList.allCharacterCards[3]);
+            if (targets.contains(CharactersList.allCharacterCards[7])) {
+                getMemory().setTarget(CharactersList.allCharacterCards[7]);
             } else {
                 getMemory().setTarget(CharactersList.allCharacterCards[6]);
             }
         } else {
-            if (potentialTargets.contains(CharactersList.allCharacterCards[6])) {
+            if (targets.contains(CharactersList.allCharacterCards[6])) {
                 getMemory().setTarget(CharactersList.allCharacterCards[6]);
             } else {
-                getMemory().setTarget(CharactersList.allCharacterCards[3]);
+                getMemory().setTarget(CharactersList.allCharacterCards[7]);
             }
         }
     }
@@ -194,28 +188,9 @@ public class Spendthrift extends Player {
             Collections.reverse(getHand());
 
             int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
-            getMemory().setCardsToDiscard(nbCardsToDiscard + 1);
+            getMemory().setNumberCardsToDiscard(nbCardsToDiscard + 1);
         }
-        this.memory.setMomentWhenUse(Moment.BEFORE_RESSOURCES);
-    }
-
-
-    /**
-     * When the player embodies the warlord, choose the character and the
-     * district in city to destroy from the list of possibles targets
-     */
-    @Override
-    public void chooseTargetToDestroy() {
-        Character target = Warlord.getOtherCharacterWithBiggestCity();
-        getMemory().setTarget(target);
-        District districtToDestroy = null;
-        if (target != null) {
-            districtToDestroy = target.getPlayer().getCity().getCheapestDistrict();
-            if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
-                districtToDestroy = null;
-            }
-        }
-        getMemory().setDistrictToDestroy(districtToDestroy);
+        this.memory.setMomentWhenUse(Moment.BEFORE_RESOURCES);
     }
 
 

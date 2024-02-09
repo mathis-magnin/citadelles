@@ -13,16 +13,16 @@ class CityTest {
     City c1 = new City();
 
     // Cité complète avec une carte de chaque famille
-    City c2 = new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25], DistrictsPile.allDistrictCards[45], DistrictsPile.allDistrictCards[17], DistrictsPile.allDistrictCards[65], DistrictsPile.allDistrictCards[33], DistrictsPile.allDistrictCards[55]));
+    City c2 = new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25], DistrictsPile.allDistrictCards[45], DistrictsPile.allDistrictCards[17], DistrictsPile.allDistrictCards[65], DistrictsPile.allDistrictCards[33], DistrictsPile.allDistrictCards[55])); // Noble, Religieux, Marchand, Militaire, Religieux, Unique, Marchand, Militaire
 
     // Cité complète sans une carte de chaque famille
-    City c3 = new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25], DistrictsPile.allDistrictCards[45], DistrictsPile.allDistrictCards[17], DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[7]));
+    City c3 = new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25], DistrictsPile.allDistrictCards[45], DistrictsPile.allDistrictCards[17], DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[7])); // Noble, Religieux, Marchand, Militaire, Religieux, Noble, Noble
 
     // City with all except Military but with MiracleCourtyard district
     City c4 = new City(List.of(DistrictsPile.allDistrictCards[57], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25], DistrictsPile.allDistrictCards[58])); // Noble, Religious, Trade, Unique
 
     // City with 3 family but with MiracleCourtyard district
-    City c5 = new City(List.of(DistrictsPile.allDistrictCards[57], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25]));
+    City c5 = new City(List.of(DistrictsPile.allDistrictCards[58], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25]));
 
     @Test
     void testCity() {
@@ -51,12 +51,29 @@ class CityTest {
     }
 
     @Test
+    void getMostRepresentedFamily() {
+        assertEquals(Family.RELIGIOUS, c2.getMostRepresentedFamily());
+        assertEquals(Family.NOBLE, c3.getMostRepresentedFamily());
+        assertEquals(Family.UNIQUE, c4.getMostRepresentedFamily());
+        assertEquals(Family.NOBLE, c5.getMostRepresentedFamily());
+    }
+
+    @Test
     void hasOneDistrictOfEachFamilyTest() {
-        assertFalse(c1.hasOneDistrictOfEachFamily());
-        assertTrue(c2.hasOneDistrictOfEachFamily());
-        assertFalse(c3.hasOneDistrictOfEachFamily());
-        assertTrue(c4.hasOneDistrictOfEachFamily());
-        assertFalse(c5.hasOneDistrictOfEachFamily());
+        assertFalse(c1.hasOneDistrictOfEachFamily()[0]);
+        assertFalse(c1.hasOneDistrictOfEachFamily()[1]);
+
+        assertTrue(c2.hasOneDistrictOfEachFamily()[0]);
+        assertFalse(c2.hasOneDistrictOfEachFamily()[1]);
+
+        assertFalse(c3.hasOneDistrictOfEachFamily()[0]);
+        assertFalse(c3.hasOneDistrictOfEachFamily()[1]);
+
+        assertTrue(c4.hasOneDistrictOfEachFamily()[0]);
+        assertTrue(c4.hasOneDistrictOfEachFamily()[1]);
+
+        assertFalse(c5.hasOneDistrictOfEachFamily()[0]);
+        assertTrue(c5.hasOneDistrictOfEachFamily()[1]);
     }
 
     @Test

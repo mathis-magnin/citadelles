@@ -7,7 +7,6 @@ import fr.citadels.cards.charactercards.Power;
 import fr.citadels.cards.charactercards.characters.Assassin;
 import fr.citadels.cards.charactercards.characters.Magician;
 import fr.citadels.cards.charactercards.characters.Thief;
-import fr.citadels.cards.charactercards.characters.Warlord;
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
@@ -38,20 +37,31 @@ public class Thrifty extends Player {
     /* Methods */
 
     /**
-     * Choose randomly a characterCard from the list of character.
+     * Choose a characterCard from the list of character :
+     * - The Merchant if the player has less than 3 golds
+     * - The character of the most represented family in the city if it exists
+     * - A random character otherwise
      *
      * @param characters the list of characterCard.
      */
     @Override
     public void chooseCharacter(CharactersList characters) {
+        Family mostRepresentedFamily = getCity().getMostRepresentedFamily();
 
-        int randomIndex = -1;
-
-        while (randomIndex >= characters.size() || randomIndex < 0) {
-            randomIndex = rand.nextInt(characters.size());
+        if ((!getCity().isEmpty() && (mostRepresentedFamily != Family.UNIQUE))) {
+            for (Character character : characters) {
+                if (character.getFamily() == mostRepresentedFamily) {
+                    this.setCharacter(characters.remove(characters.indexOf(character)));
+                    return;
+                }
+            }
+        } else if ((this.getGold() < 3) && (characters.contains(CharactersList.allCharacterCards[5]))) {
+            this.setCharacter(CharactersList.allCharacterCards[5]);
+            characters.remove(CharactersList.allCharacterCards[5]);
+        } else {
+            int randomIndex = rand.nextInt(characters.size());
+            this.setCharacter(characters.remove(randomIndex));
         }
-        this.setCharacter(characters.remove(randomIndex));
-        this.getMemory().setPossibleCharacters(characters);
     }
 
 
@@ -97,26 +107,15 @@ public class Thrifty extends Player {
     public District chooseCardAmongDrawn(District[] drawnCards) {
         int maxIndex = 0;
         for (int i = 1; i < drawnCards.length; i++) {
+            if (drawnCards[i].getFamily() == Family.UNIQUE) {
+                return drawnCards[i];
+            }
             if (drawnCards[i].getGoldCost() > drawnCards[maxIndex].getGoldCost())
                 maxIndex = i;
         }
         District cardToPlay = drawnCards[maxIndex];
         getActions().putBack(drawnCards, maxIndex);
         return cardToPlay;
-    }
-
-
-    /**
-     * Choose to take gold from city after he built another district from his family or before otherwise.
-     */
-    @Override
-    public void chooseMomentToTakeIncome() {
-        this.chooseDistrictToBuild();
-        if (this.memory.getDistrictToBuild() != null) {
-            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.AFTER_BUILDING : Moment.BETWEEN_PHASES);
-        } else {
-            this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
-        }
     }
 
 
@@ -158,15 +157,15 @@ public class Thrifty extends Player {
      */
     @Override
     public void chooseTargetToRob() {
-        List<Character> potentialTargets = Thief.getPossibleTargets();
+        List<Character> targets = Thief.getPossibleTargets();
         if (rand.nextBoolean()) {
-            if (potentialTargets.contains(CharactersList.allCharacterCards[3])) {
+            if (targets.contains(CharactersList.allCharacterCards[3])) {
                 getMemory().setTarget(CharactersList.allCharacterCards[3]);
             } else {
                 getMemory().setTarget(CharactersList.allCharacterCards[6]);
             }
         } else {
-            if (potentialTargets.contains(CharactersList.allCharacterCards[6])) {
+            if (targets.contains(CharactersList.allCharacterCards[6])) {
                 getMemory().setTarget(CharactersList.allCharacterCards[6]);
             } else {
                 getMemory().setTarget(CharactersList.allCharacterCards[3]);
@@ -189,28 +188,9 @@ public class Thrifty extends Player {
             getMemory().setPowerToUse(Power.RECYCLE);
             getHand().sortCards(Family.NEUTRAL);
             int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
-            getMemory().setCardsToDiscard(nbCardsToDiscard + 1);
+            getMemory().setNumberCardsToDiscard(nbCardsToDiscard + 1);
         }
-        this.memory.setMomentWhenUse(Moment.BEFORE_RESSOURCES);
-    }
-
-
-    /**
-     * When the player embodies the warlord, choose the character and the
-     * district in city to destroy from the list of possibles targets
-     */
-    @Override
-    public void chooseTargetToDestroy() {
-        Character target = Warlord.getOtherCharacterWithBiggestCity();
-        getMemory().setTarget(target);
-        District districtToDestroy = null;
-        if (target != null) {
-            districtToDestroy = target.getPlayer().getCity().getCheapestDistrict();
-            if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
-                districtToDestroy = null;
-            }
-        }
-        getMemory().setDistrictToDestroy(districtToDestroy);
+        this.memory.setMomentWhenUse(Moment.BEFORE_RESOURCES);
     }
 
 

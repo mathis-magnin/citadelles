@@ -17,7 +17,6 @@ import org.mockito.Mock;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -298,13 +297,13 @@ class UncertainTest {
         when(random.nextInt(anyInt())).thenReturn(1, 2, 1);
         player.playAsMagician();
         assertEquals(Power.RECYCLE, player.getMemory().getPowerToUse());
-        assertEquals(2, player.getMemory().getCardsToDiscard());
+        assertEquals(2, player.getMemory().getNumberCardsToDiscard());
         assertEquals(2, player.getHand().size());
 
         when(random.nextInt(anyInt())).thenReturn(1, 10, 2);
         player.playAsMagician();
         assertEquals(Power.RECYCLE, player.getMemory().getPowerToUse());
-        assertEquals(10, player.getMemory().getCardsToDiscard());
+        assertEquals(10, player.getMemory().getNumberCardsToDiscard());
         assertEquals(2, player.getHand().size());
     }
 

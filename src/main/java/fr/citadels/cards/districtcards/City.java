@@ -70,12 +70,31 @@ public class City extends ArrayList<District> {
 
 
     /**
+     * Get the family represented the most in the city.
+     * @return the family represented the most in the city
+     */
+    public Family getMostRepresentedFamily() {
+        int[] familyCount = new int[Family.values().length];
+        for (District district : this) {
+            familyCount[district.getFamily().ordinal()]++;
+        }
+        int max = 0;
+        for (int i = 0; i < familyCount.length; i++) {
+            if (familyCount[i] > familyCount[max]) {
+                max = i;
+            }
+        }
+        return Family.values()[max];
+    }
+
+
+    /**
      * Check if the player has one district of each family in his city.
      * The MiracleCourtyard district count as the missing family.
      *
      * @return A boolean value.
      */
-    public boolean hasOneDistrictOfEachFamily() {
+    public boolean[] hasOneDistrictOfEachFamily() {
         int hasNoble = 0;
         int hasReligious = 0;
         int hasTrade = 0;
@@ -109,7 +128,7 @@ public class City extends ArrayList<District> {
             }
 
         }
-        return (5 <= hasNoble + hasReligious + hasTrade + hasMilitary + hasSpecial + activateMiracleCourtyardEffect);
+        return new boolean[]{(5 <= hasNoble + hasReligious + hasTrade + hasMilitary + hasSpecial + activateMiracleCourtyardEffect), (activateMiracleCourtyardEffect == 1)};
     }
 
 
