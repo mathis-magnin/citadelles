@@ -252,41 +252,6 @@ public abstract class Player implements Comparable<Player>, Choices {
 
 
     /**
-     * Default behaviour (used by several bots) :
-     * Choose to take gold from city after he built another district from his family or before otherwise.
-     */
-    @Override
-    public void chooseMomentToTakeIncome() {
-        this.chooseDistrictToBuild();
-        if (this.memory.getDistrictToBuild() != null) {
-            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.AFTER_BUILDING : Moment.BETWEEN_PHASES);
-        } else {
-            this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
-        }
-    }
-
-
-    /**
-     * Default behaviour (used by several bots) :
-     * When the player embodies the warlord, choose the character and the
-     * district in city to destroy from the list of possibles targets
-     */
-    @Override
-    public void chooseTargetToDestroy() {
-        Character target = Warlord.getOtherCharacterWithBiggestCity();
-        getMemory().setTarget(target);
-        District districtToDestroy = null;
-        if (target != null) {
-            districtToDestroy = target.getPlayer().getCity().getCheapestDistrict();
-            if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
-                districtToDestroy = null;
-            }
-        }
-        getMemory().setDistrictToDestroy(districtToDestroy);
-    }
-
-
-    /**
      * Play a round for the linked player when he embodies the assassin.
      */
     public void playAsAssassin() {
@@ -448,5 +413,74 @@ public abstract class Player implements Comparable<Player>, Choices {
         }
     }
 
+
+    /* Useful methods */
+
+
+    /**
+     * Default behaviour (used by several bots) :
+     * Choose to take gold from city after he built another district from his family or before otherwise.
+     */
+    @Override
+    public void chooseMomentToTakeIncome() {
+        this.chooseDistrictToBuild();
+        if (this.memory.getDistrictToBuild() != null) {
+            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.AFTER_BUILDING : Moment.BETWEEN_PHASES);
+        } else {
+            this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
+        }
+    }
+
+
+    /**
+     * Default behaviour (used by several bots) :
+     * When the player embodies the warlord, choose the character and the
+     * district in city to destroy from the list of possibles targets
+     */
+    @Override
+    public void chooseTargetToDestroy() {
+        Character target = this.getOtherCharacterWithBiggestCity();
+        getMemory().setTarget(target);
+        District districtToDestroy = null;
+        if (target != null) {
+            districtToDestroy = target.getPlayer().getCity().getCheapestDistrict();
+            if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
+                districtToDestroy = null;
+            }
+        }
+        getMemory().setDistrictToDestroy(districtToDestroy);
+    }
+
+
+    /**
+     * Gives the character who has the biggest city and who is targetable by our character.
+     *
+     * @return the character with the biggest city.
+     */
+    public Character getOtherCharacterWithBiggestCity() {
+        Character characterWithBiggestCity = null;
+        for (Character character : this.character.getPossibleTargets()) {
+            if (!character.equals(new Warlord()) && ((characterWithBiggestCity == null) || (character.getPlayer().getCity().size() > characterWithBiggestCity.getPlayer().getCity().size()))) {
+                characterWithBiggestCity = character;
+            }
+        }
+        return characterWithBiggestCity;
+    }
+
+
+    /**
+     * Gives the character who has the biggest amount of cards in his hand and who is targetable by our character.
+     *
+     * @return the character with the biggest city.
+     */
+    public Character getCharacterWithMostCards() {
+        Character characterWithMostCards = null;
+        for (Character character : this.getCharacter().getPossibleTargets()) {
+            if ((characterWithMostCards == null) || (character.getPlayer().getHand().size() > characterWithMostCards.getPlayer().getHand().size())) {
+                characterWithMostCards = character;
+            }
+        }
+        return characterWithMostCards;
+    }
 
 }

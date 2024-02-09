@@ -1,6 +1,7 @@
 package fr.citadels.cards.districts.uniques;
 
 import fr.citadels.cards.Family;
+import fr.citadels.cards.characters.Role;
 import fr.citadels.cards.characters.roles.Warlord;
 import fr.citadels.cards.districts.District;
 
@@ -23,7 +24,7 @@ public class Graveyard extends District {
      */
     @Override
     public boolean useEffect() {
-        District removedDistrict = CharactersList.allCharacterCards[7].getPlayer().getMemory().getDistrictToDestroy();
+        District removedDistrict = this.getOwner().getMemory().getCharactersDeck().get(Role.WARLORD).getPlayer().getMemory().getDistrictToDestroy();
         if (this.isBuilt() && !this.getOwner().getCharacter().equals(new Warlord())) {
             if (this.getOwner().chooseGraveyardEffect(removedDistrict)) {
                 this.getOwner().getActions().removeGold(1);

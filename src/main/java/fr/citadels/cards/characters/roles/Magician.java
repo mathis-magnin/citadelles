@@ -10,22 +10,6 @@ import java.util.List;
 
 public class Magician extends Character {
 
-    /**
-     * Gives the character who has the biggest amount of cards in his hand except the magician or an unplayed character.
-     *
-     * @return the character with the biggest city.
-     */
-    public static Character getCharacterWithMostCards() {
-        Character characterWithMostCards = null;
-        for (Character character : this.getPossibleTargets()) {
-            if ((characterWithMostCards == null) || (character.getPlayer().getHand().size() > characterWithMostCards.getPlayer().getHand().size())) {
-                characterWithMostCards = character;
-            }
-        }
-        return characterWithMostCards;
-    }
-
-
     /* Constructor */
 
     public Magician() {

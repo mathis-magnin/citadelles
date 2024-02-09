@@ -1,6 +1,7 @@
 package fr.citadels.players;
 
 import fr.citadels.cards.districts.District;
+import fr.citadels.cards.characters.Character;
 
 import java.util.List;
 

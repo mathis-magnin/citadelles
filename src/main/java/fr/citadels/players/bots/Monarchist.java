@@ -4,10 +4,7 @@ import fr.citadels.cards.Family;
 import fr.citadels.cards.characters.Character;
 import fr.citadels.cards.characters.Power;
 import fr.citadels.cards.characters.Role;
-import fr.citadels.cards.characters.roles.Assassin;
-import fr.citadels.cards.characters.roles.King;
-import fr.citadels.cards.characters.roles.Magician;
-import fr.citadels.cards.characters.roles.Thief;
+import fr.citadels.cards.characters.roles.*;
 import fr.citadels.cards.districts.District;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;
@@ -108,7 +105,7 @@ public class Monarchist extends Player {
      */
     @Override
     public void chooseTargetToKill() {
-        List<Character> possibleTargets = Assassin.getPossibleTargets();
+        List<Character> possibleTargets = this.getCharacter().getPossibleTargets();
         getMemory().setTarget(possibleTargets.get(2));
     }
 
@@ -119,7 +116,7 @@ public class Monarchist extends Player {
      */
     @Override
     public void chooseTargetToRob() {
-        List<Character> potentialTargets = Thief.getPossibleTargets();
+        List<Character> potentialTargets = this.getCharacter().getPossibleTargets();
         if (potentialTargets.contains(new King())) {
             getMemory().setTarget(this.getMemory().getCharactersDeck().get(Role.KING));
         } else {
@@ -133,7 +130,7 @@ public class Monarchist extends Player {
      */
     @Override
     public void chooseMagicianPower() {
-        Character characterWithMostCards = Magician.getCharacterWithMostCards();
+        Character characterWithMostCards = this.getCharacterWithMostCards();
 
         if ((characterWithMostCards != null) && (characterWithMostCards.getPlayer().getHand().size() > this.getHand().size())) {
             getMemory().setPowerToUse(Power.SWAP);

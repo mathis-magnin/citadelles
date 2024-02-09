@@ -11,24 +11,6 @@ import java.util.List;
 
 public class Warlord extends Character {
 
-    /* Static content */
-
-    /**
-     * Gives the character who has the biggest city except the Warlord.
-     *
-     * @return the character with the biggest city.
-     */
-    public static Character getOtherCharacterWithBiggestCity() {
-        Character characterWithBiggestCity = null;
-        for (Character character : getPossibleTargets()) {
-            if (!character.equals(new Warlord()) && ((characterWithBiggestCity == null) || (character.getPlayer().getCity().size() > characterWithBiggestCity.getPlayer().getCity().size()))) {
-                characterWithBiggestCity = character;
-            }
-        }
-        return characterWithBiggestCity;
-    }
-
-
     /* Constructors */
 
     public Warlord() {
@@ -77,7 +59,7 @@ public class Warlord extends Character {
      */
     private void destroy() {
         if (this.getPlayer().getMemory().getCharactersDeck().get(Role.BISHOP).isPlayed() && !this.getPlayer().getMemory().getCharactersDeck().get(Role.BISHOP).isDead()) {
-            this.getPlayer().getMemory().getDisplay().addBishopPower();
+            this.getPlayer().getMemory().getDisplay().addBishopPower(this.getPlayer().getMemory().getCharactersDeck().get(Role.BISHOP).getPlayer());
         }
         if (DistrictsPile.allDistrictCards[58].isBuilt() && !DistrictsPile.allDistrictCards[58].getOwner().equals(this.getPlayer().getMemory().getCharactersDeck().get(Role.BISHOP).getPlayer())) { // Keep effect
             this.getPlayer().getMemory().getDisplay().addKeepEffect();

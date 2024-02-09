@@ -41,7 +41,7 @@ public class Uncertain extends Player {
      * @param characters the list of characterCard.
      */
     @Override
-    public void chooseCharacter(CharactersList characters) {
+    public void chooseCharacter(List<Character> characters) {
         int randomIndex = -1;
         while (randomIndex >= characters.size() || randomIndex < 0) {
             randomIndex = rand.nextInt(characters.size());
@@ -113,7 +113,7 @@ public class Uncertain extends Player {
      */
     @Override
     public void chooseTargetToKill() {
-        CharactersList possibleTargets = Assassin.getPossibleTargets();
+        List<Character> possibleTargets = this.getCharacter().getPossibleTargets();
         int randIndex = rand.nextInt(possibleTargets.size());
         getMemory().setTarget(possibleTargets.get(randIndex));
     }
@@ -125,7 +125,7 @@ public class Uncertain extends Player {
      */
     @Override
     public void chooseTargetToRob() {
-        List<Character> potentialTargets = Thief.getPossibleTargets();
+        List<Character> potentialTargets = this.getCharacter().getPossibleTargets();
         int randIndex = rand.nextInt(potentialTargets.size());
         getMemory().setTarget(potentialTargets.get(randIndex));
     }
@@ -140,8 +140,9 @@ public class Uncertain extends Player {
 
         if (randPower == 0) { // swap hands : choose a target
             this.getMemory().setPowerToUse(Power.SWAP);
-            int randTarget = rand.nextInt(Magician.getPossibleTargets().size());
-            this.getMemory().setTarget(Magician.getPossibleTargets().get(randTarget));
+            List<Character> magicianTargets = this.getCharacter().getPossibleTargets();
+            int randTarget = rand.nextInt(magicianTargets.size());
+            this.getMemory().setTarget(magicianTargets.get(randTarget));
         } else { // discard cards : choose how many cards to discard
             this.getMemory().setPowerToUse(Power.RECYCLE);
             if (!this.getHand().isEmpty()) {
@@ -163,8 +164,9 @@ public class Uncertain extends Player {
     public void chooseTargetToDestroy() {
         Character target = null;
         District districtToDestroy = null;
-        if (!Warlord.getPossibleTargets().isEmpty()) {
-            target = Warlord.getPossibleTargets().get(rand.nextInt(Warlord.getPossibleTargets().size()));
+        List<Character> warlordTargets = this.getCharacter().getPossibleTargets();
+        if (!warlordTargets.isEmpty()) {
+            target = warlordTargets.get(rand.nextInt(warlordTargets.size()));
             if (!target.getPlayer().getCity().isEmpty()) {
                 districtToDestroy = target.getPlayer().getCity().get(rand.nextInt(target.getPlayer().getCity().size()));
                 if (districtToDestroy.getGoldCost() - 1 > this.getGold()) {

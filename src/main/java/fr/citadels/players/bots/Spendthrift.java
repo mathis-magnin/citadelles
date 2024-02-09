@@ -1,12 +1,11 @@
 package fr.citadels.players.bots;
 
 import fr.citadels.cards.characters.Power;
+import fr.citadels.cards.characters.Role;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.Family;
 import fr.citadels.cards.characters.Character;
-import fr.citadels.cards.characters.roles.Assassin;
-import fr.citadels.cards.characters.roles.Magician;
-import fr.citadels.cards.characters.roles.Thief;
+import fr.citadels.cards.characters.roles.*;
 import fr.citadels.cards.districts.District;
 import fr.citadels.players.Player;
 
@@ -40,12 +39,22 @@ public class Spendthrift extends Player {
      * @param characters the list of characterCard.
      */
     @Override
-    public void chooseCharacter(CharactersList characters) {
-        int randomIndex = -1;
-        while (randomIndex >= characters.size() || randomIndex < 0) {
-            randomIndex = rand.nextInt(characters.size());
+    public void chooseCharacter(List<Character> characters) {
+        Family mostRepresentedFamily = getCity().getMostRepresentedFamily();
+        if ((getGold() > 4) && (getHand().size() > 1) && (characters.contains(this.getMemory().getCharactersDeck().get(Role.ARCHITECT)))) {
+            this.setCharacter(this.getMemory().getCharactersDeck().get(Role.ARCHITECT));
+            characters.remove(this.getMemory().getCharactersDeck().get(Role.ARCHITECT));
+        } else if ((!getCity().isEmpty() && (mostRepresentedFamily != Family.UNIQUE))) {
+            for (Character character : characters) {
+                if (character.getFamily() == mostRepresentedFamily) {
+                    this.setCharacter(characters.remove(characters.indexOf(character)));
+                    return;
+                }
+            }
+        } else {
+            int randomIndex = rand.nextInt(characters.size());
+            this.setCharacter(characters.remove(randomIndex));
         }
-        this.setCharacter(characters.remove(randomIndex));
     }
 
 
@@ -93,6 +102,9 @@ public class Spendthrift extends Player {
     public District chooseCardAmongDrawn(District[] drawnCards) {
         int minIndex = 0;
         for (int i = 1; i < drawnCards.length; i++) {
+            if (drawnCards[i].getFamily() == Family.UNIQUE) {
+                return drawnCards[i];
+            }
             if (drawnCards[i].getGoldCost() < drawnCards[minIndex].getGoldCost())
                 minIndex = i;
         }
@@ -125,7 +137,7 @@ public class Spendthrift extends Player {
      */
     @Override
     public void chooseTargetToKill() {
-        CharactersList possibleTargets = Assassin.getPossibleTargets();
+        List<Character> possibleTargets = this.getCharacter().getPossibleTargets();
         if (rand.nextBoolean()) {
             getMemory().setTarget(possibleTargets.get(4));
         } else {
@@ -140,18 +152,18 @@ public class Spendthrift extends Player {
      */
     @Override
     public void chooseTargetToRob() {
-        List<Character> potentialTargets = Thief.getPossibleTargets();
+        List<Character> targets = this.getCharacter().getPossibleTargets();
         if (rand.nextBoolean()) {
-            if (potentialTargets.contains(CharactersList.allCharacterCards[3])) {
-                getMemory().setTarget(CharactersList.allCharacterCards[3]);
+            if (targets.contains(this.getMemory().getCharactersDeck().get(Role.WARLORD))) {
+                getMemory().setTarget(this.getMemory().getCharactersDeck().get(Role.WARLORD));
             } else {
-                getMemory().setTarget(CharactersList.allCharacterCards[6]);
+                getMemory().setTarget(this.getMemory().getCharactersDeck().get(Role.ARCHITECT));
             }
         } else {
-            if (potentialTargets.contains(CharactersList.allCharacterCards[6])) {
-                getMemory().setTarget(CharactersList.allCharacterCards[6]);
+            if (targets.contains(this.getMemory().getCharactersDeck().get(Role.ARCHITECT))) {
+                getMemory().setTarget(this.getMemory().getCharactersDeck().get(Role.ARCHITECT));
             } else {
-                getMemory().setTarget(CharactersList.allCharacterCards[3]);
+                getMemory().setTarget(this.getMemory().getCharactersDeck().get(Role.WARLORD));
             }
         }
     }
@@ -162,7 +174,7 @@ public class Spendthrift extends Player {
      */
     @Override
     public void chooseMagicianPower() {
-        Character characterWithMostCards = Magician.getCharacterWithMostCards();
+        Character characterWithMostCards = this.getCharacterWithMostCards();
 
         // The magician will exchange his hand with the player with the most cards if this latter has more cards than the magician
         if ((characterWithMostCards != null) && (characterWithMostCards.getPlayer().getHand().size() > this.getHand().size())) {

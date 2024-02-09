@@ -296,8 +296,8 @@ public class Display {
     }
 
 
-    public void addBishopPower() {
-        this.events.append(CharactersList.allCharacterCards[4].getPlayer().getName()).append(" utilise son pouvoir pour ne pas être attaqué par le condottière.\n");
+    public void addBishopPower(Player player) {
+        this.events.append(player.getName()).append(" utilise son pouvoir pour ne pas être attaqué par le condottière.\n");
     }
 
 

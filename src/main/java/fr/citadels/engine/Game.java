@@ -313,7 +313,6 @@ public class Game {
         this.display.addBlankLine();
         this.display.addWinner(this.scoreboard.getWinner());
         this.display.printAndReset();
-
     }
 
 }

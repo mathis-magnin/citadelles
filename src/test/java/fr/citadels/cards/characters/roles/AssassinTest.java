@@ -41,7 +41,7 @@ class AssassinTest {
 
     @Test
     void getPossibleTargets() {
-        CharactersList targets = Assassin.getPossibleTargets();
-        assertEquals(new CharactersList(new Character[]{new Thief(), new Magician(), new King(), new Bishop(), new Merchant(), new Architect(), new Warlord()}), targets);
+        List<Character> targets = assassin.getPossibleTargets();
+        assertEquals(List.of(new Character[]{new Thief(), new Magician(), new King(), new Bishop(), new Merchant(), new Architect(), new Warlord()}), targets);
     }
 }

@@ -1,6 +1,7 @@
 package fr.citadels.players;
 
 import fr.citadels.cards.Family;
+import fr.citadels.cards.characters.Role;
 import fr.citadels.cards.districts.District;
 import fr.citadels.cards.districts.DistrictsPile;
 import fr.citadels.cards.districts.Hand;
@@ -152,10 +153,10 @@ public class Actions {
      */
     public void getRobbed() {
         int goldToTake = this.player.getGold();
-        CharactersList.allCharacterCards[1].getPlayer().getActions().addGold(goldToTake);
+        this.memory.getCharactersDeck().get(Role.THIEF).getPlayer().getActions().addGold(goldToTake);
         this.player.setGold(0);
         this.player.getCharacter().setRobbed(false);
-        this.player.getMemory().getDisplay().addRobbed(CharactersList.allCharacterCards[1].getPlayer(), goldToTake);
+        this.player.getMemory().getDisplay().addRobbed(this.memory.getCharactersDeck().get(Role.THIEF).getPlayer(), goldToTake);
     }
 
 
