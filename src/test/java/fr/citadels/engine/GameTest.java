@@ -1,10 +1,10 @@
 package fr.citadels.engine;
 
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.charactercards.characters.*;
-import fr.citadels.cards.districtcards.City;
-import fr.citadels.cards.districtcards.DistrictsPile;
-import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.characters.roles.*;
+import fr.citadels.cards.districts.City;
+import fr.citadels.cards.districts.DistrictsPile;
+import fr.citadels.cards.districts.Hand;
 import fr.citadels.players.Actions;
 import fr.citadels.players.Memory;
 import fr.citadels.players.Player;

@@ -95,7 +95,7 @@ public class Statisticboard {
         if (file.exists()) {
             statisticboard = Statisticboard.readCsv(file, players, inSecondIteration);
         } else {
-            statisticboard = new Statisticboard(Game.NB_PLAYERS);
+            statisticboard = new Statisticboard(Game.PLAYER_NUMBER);
             statisticboard.initialize(players);
             logger.info("Fichier csv non trouvé, création d'un nouveau fichier\n");
         }
@@ -171,7 +171,7 @@ public class Statisticboard {
             String[] nextLine = reader.readNext();
             if (nextLine == null || nextLine.length < 2) {
                 logger.info("Fichier csv non valide, réinitalisation des statistiques.\n");
-                Statisticboard statisticboard = new Statisticboard(Game.NB_PLAYERS);
+                Statisticboard statisticboard = new Statisticboard(Game.PLAYER_NUMBER);
                 statisticboard.initialize(players);
                 return statisticboard;
             }
@@ -183,8 +183,8 @@ public class Statisticboard {
 
             statistics = new ArrayList<>();
             while (((nextLine = reader.readNext()) != null) && (nextLine.length == 7)) {
-                if ((nbPlayer >= Game.NB_PLAYERS) || (!nextLine[0].equals(players[nbPlayer].getName()))) {
-                    Statisticboard statisticboard = new Statisticboard(Game.NB_PLAYERS);
+                if ((nbPlayer >= Game.PLAYER_NUMBER) || (!nextLine[0].equals(players[nbPlayer].getName()))) {
+                    Statisticboard statisticboard = new Statisticboard(Game.PLAYER_NUMBER);
                     statisticboard.initialize(players);
                     logger.info("Fichier csv non valide (trop de joueurs ou noms de joueurs différents), réinitialisation des statistiques.\n");
                     return statisticboard;
@@ -195,9 +195,9 @@ public class Statisticboard {
                 nbPlayer++;
             }
         }
-        if (nbPlayer != Game.NB_PLAYERS) {
+        if (nbPlayer != Game.PLAYER_NUMBER) {
             logger.info("Fichier non valide (pas assez de joueurs), réinitalisation des statistiques.\n");
-            Statisticboard statisticboard = new Statisticboard(Game.NB_PLAYERS);
+            Statisticboard statisticboard = new Statisticboard(Game.PLAYER_NUMBER);
             statisticboard.initialize(players);
             return statisticboard;
         }

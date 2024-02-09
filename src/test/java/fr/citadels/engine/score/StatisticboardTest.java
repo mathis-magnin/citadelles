@@ -205,7 +205,7 @@ class StatisticboardTest {
         try {
             stats = Statisticboard.readOrCreateStatisticboard(fileTestRead, players1, false);
         } catch (CsvValidationException | IOException e) {
-            stats = new Statisticboard(Game.NB_PLAYERS);
+            stats = new Statisticboard(Game.PLAYER_NUMBER);
         }
         assertEquals(5, stats.getStatistics().length);
 

@@ -1,15 +1,15 @@
 package fr.citadels.players.bots;
 
 
-import fr.citadels.cards.charactercards.Power;
+import fr.citadels.cards.characters.Power;
 import fr.citadels.engine.Game;
-import fr.citadels.cards.charactercards.Character;
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.charactercards.characters.Assassin;
-import fr.citadels.cards.charactercards.characters.Magician;
-import fr.citadels.cards.charactercards.characters.Thief;
-import fr.citadels.cards.charactercards.characters.Warlord;
-import fr.citadels.cards.districtcards.District;
+import fr.citadels.cards.characters.Character;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.characters.roles.Assassin;
+import fr.citadels.cards.characters.roles.Magician;
+import fr.citadels.cards.characters.roles.Thief;
+import fr.citadels.cards.characters.roles.Warlord;
+import fr.citadels.cards.districts.District;
 import fr.citadels.players.Player;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package fr.citadels.engine.score;
 
-import fr.citadels.cards.districtcards.District;
-import fr.citadels.cards.districtcards.DistrictsPile;
+import fr.citadels.cards.districts.District;
+import fr.citadels.cards.districts.DistrictsPile;
 
 import fr.citadels.players.Player;
 

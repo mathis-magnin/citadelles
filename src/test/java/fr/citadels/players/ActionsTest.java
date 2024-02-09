@@ -1,13 +1,13 @@
 package fr.citadels.players;
 
-import fr.citadels.cards.charactercards.characters.*;
+import fr.citadels.cards.characters.roles.*;
 import fr.citadels.engine.Game;
-import fr.citadels.cards.charactercards.Character;
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.districtcards.City;
-import fr.citadels.cards.districtcards.District;
-import fr.citadels.cards.districtcards.DistrictsPile;
-import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.cards.characters.Character;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.districts.City;
+import fr.citadels.cards.districts.District;
+import fr.citadels.cards.districts.DistrictsPile;
+import fr.citadels.cards.districts.Hand;
 import fr.citadels.players.bots.Monarchist;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class ActionsTest {
     Player player;

@@ -1,10 +1,10 @@
 package fr.citadels.players;
 
 import fr.citadels.cards.Family;
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.districtcards.District;
-import fr.citadels.cards.districtcards.DistrictsPile;
-import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.districts.District;
+import fr.citadels.cards.districts.DistrictsPile;
+import fr.citadels.cards.districts.Hand;
 
 import java.util.List;
 

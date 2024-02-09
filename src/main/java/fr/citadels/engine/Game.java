@@ -1,11 +1,12 @@
 package fr.citadels.engine;
 
+import fr.citadels.cards.characters.CharactersDeck;
 import fr.citadels.engine.score.Score;
 import fr.citadels.engine.score.Scoreboard;
-import fr.citadels.cards.charactercards.Character;
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.charactercards.characters.King;
-import fr.citadels.cards.districtcards.DistrictsPile;
+import fr.citadels.cards.characters.Character;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.characters.roles.King;
+import fr.citadels.cards.districts.DistrictsPile;
 import fr.citadels.players.*;
 
 
@@ -16,45 +17,40 @@ import java.util.Random;
 
 public class Game {
 
-
     /* Constant values */
 
-    public static final int NB_PLAYERS = 5;
+    public static final int PLAYER_NUMBER = 5;
 
 
     /* Attributes */
-    private final Player[] players;
+
     private final Random random;
     private final Display display;
+
     private final DistrictsPile pile;
+    private final CharactersDeck characters;
+    private final Player[] players;
+    private Player crownedPlayer;
     private final Scoreboard scoreboard;
     private boolean isFinished;
-    private Player crownedPlayer;
 
 
     /* Constructor */
 
     public Game(Player[] players, Random random) {
-        this.players = players;
-        this.display = new Display();
-        this.pile = new DistrictsPile();
-        this.isFinished = false;
-        this.scoreboard = new Scoreboard(NB_PLAYERS);
-        this.crownedPlayer = null;
         this.random = random;
+        this.display = new Display();
+
+        this.pile = new DistrictsPile();
+        this.characters = new CharactersDeck(random);
+        this.players = players;
+        this.crownedPlayer = null;
+        this.scoreboard = new Scoreboard(PLAYER_NUMBER);
+        this.isFinished = false;
     }
 
 
     /* Getters */
-
-    public Player[] getPlayers() {
-        return this.players;
-    }
-
-    public Scoreboard getScoreboard() {
-        return this.scoreboard;
-    }
-
 
     public Display getDisplay() {
         return this.display;
@@ -65,13 +61,26 @@ public class Game {
         return this.pile;
     }
 
+
+    public Player[] getPlayers() {
+        return this.players;
+    }
+
+
     public Player getCrownedPlayer() {
         return this.crownedPlayer;
     }
 
+
+    public Scoreboard getScoreboard() {
+        return this.scoreboard;
+    }
+
+
     public boolean isFinished() {
         return isFinished;
     }
+
 
     /* Methods */
 
@@ -83,6 +92,7 @@ public class Game {
             player.initPlayer(List.of(pile.draw(4)), this);
         }
     }
+
 
     /**
      * Initialize the game
@@ -111,7 +121,7 @@ public class Game {
         this.display.addInitialGoldGiven(2);
         this.display.addBlankLine();
 
-        this.crownedPlayer = this.players[random.nextInt(NB_PLAYERS)];
+        this.crownedPlayer = this.players[random.nextInt(PLAYER_NUMBER)];
         this.display.addFirstCrownedPlayer(this.crownedPlayer);
         this.display.addBlankLine(3);
 
@@ -135,6 +145,7 @@ public class Game {
         return -1;
     }
 
+
     /**
      * Show the selected characters of the players
      */
@@ -144,19 +155,17 @@ public class Game {
         }
     }
 
+
     /**
      * Play the selection phase of the turn
      */
     public void playSelectionPhase() {
-        /* Reset character's attributes */
-
         this.display.addSelectionPhaseTitle();
-        CharactersList characters = new CharactersList(CharactersList.allCharacterCards);
-        characters.reset();
-        Character[] removedCharactersFaceUp = characters.removeCharactersFaceUp();
-        Character[] removedCharactersFaceDown = characters.removeCharactersFaceDown();
 
-        this.display.addRemovedCharacter(removedCharactersFaceUp, removedCharactersFaceDown);
+        this.characters.determineRemovedCharacters();
+        Character[] faceUpCharacters = this.characters.getFaceUpCharacters();
+        Character[] faceDownCharacters = this.characters.getFaceDownCharacters();
+        this.display.addRemovedCharacters(faceUpCharacters, faceDownCharacters);
         this.display.addBlankLine(2);
 
         int crownedPlayerIndex = this.getCrownedPlayerIndex();
@@ -169,17 +178,18 @@ public class Game {
 
         for (int i = 0; i < length; i++) {
             index = (i + crownedPlayerIndex) % length;
-            this.players[index].getMemory().setFaceUpcharacters(new CharactersList(removedCharactersFaceUp));
+            this.players[index].getMemory().setFaceUpcharacters(new CharactersList(faceUpCharacters));
             this.players[index].getMemory().setPlayersWhoChose(playersWhoPlayed);
             this.players[index].chooseCharacter(characters);
             playersWhoPlayed.add(this.players[index]);
         }
-        showSelectedCharacters();
+        this.showSelectedCharacters();
         this.display.addBlankLine();
         this.display.addCharacterNotChosen(characters.remove(0)); // Only one character is not chosen
 
         this.display.addBlankLine();
     }
+
 
     /**
      * Check if the game is finished and mark it if it is
@@ -195,6 +205,7 @@ public class Game {
         }
     }
 
+
     /**
      * Set the crowned player to King
      *
@@ -207,6 +218,7 @@ public class Game {
             this.display.addBlankLine();
         }
     }
+
 
     /**
      * Play a turn for each player
@@ -225,9 +237,9 @@ public class Game {
                 if (character.isRobbed()) {
                     character.getPlayer().getActions().getRobbed();
                 }
-                setNextCrownedPlayerIfPossible(character);
+                this.setNextCrownedPlayerIfPossible(character);
                 character.bringIntoPlay();
-                checkAndMarkEndOfGame(character);
+                this.checkAndMarkEndOfGame(character);
             } else {
                 this.display.addNoPlayerTurn(this.crownedPlayer, character);
                 this.display.addBlankLine();
@@ -274,6 +286,5 @@ public class Game {
         this.display.printAndReset();
 
     }
-
 
 }

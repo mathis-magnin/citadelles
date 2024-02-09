@@ -44,7 +44,7 @@ public class Main {
      * @return the players for the game
      */
     public static Player[] initPlayer() {
-        Player[] players = new Player[Game.NB_PLAYERS];
+        Player[] players = new Player[Game.PLAYER_NUMBER];
         players[0] = new Uncertain("HASARDEUX", RAND);
         players[1] = new Spendthrift("DÉPENSIER", RAND);
         players[2] = new Thrifty("ÉCONOME", RAND);
@@ -96,7 +96,7 @@ public class Main {
             return readOrCreateStatisticboard(file, players, iteration);
         } catch (IOException | CsvValidationException e) {
             logger.info("Erreur lors de la lecture du fichier\n\n");
-            Statisticboard statisticboard = new Statisticboard(Game.NB_PLAYERS);
+            Statisticboard statisticboard = new Statisticboard(Game.PLAYER_NUMBER);
             statisticboard.initialize(players);
             return statisticboard;
         }
@@ -132,12 +132,12 @@ public class Main {
 
         // Initialize the first series of thousand games
 
-        Player[] players1 = new Player[Game.NB_PLAYERS];
-        for (int i = 0; i < Game.NB_PLAYERS; i++) {
+        Player[] players1 = new Player[Game.PLAYER_NUMBER];
+        for (int i = 0; i < Game.PLAYER_NUMBER; i++) {
             players1[i] = new Thrifty("ÉCONOME_" + (i + 1), RAND);
         }
 
-        Statisticboard statisticboard1 = new Statisticboard(Game.NB_PLAYERS);
+        Statisticboard statisticboard1 = new Statisticboard(Game.PLAYER_NUMBER);
         statisticboard1.initialize(players1);
 
         Statisticboard statisticboardCSV1;
@@ -147,7 +147,7 @@ public class Main {
 
         Player[] players2 = initPlayer();
 
-        Statisticboard statisticboard2 = new Statisticboard(Game.NB_PLAYERS);
+        Statisticboard statisticboard2 = new Statisticboard(Game.PLAYER_NUMBER);
         statisticboard2.initialize(players2);
 
         Statisticboard statisticboardCSV2;
@@ -192,7 +192,7 @@ public class Main {
 
         // Initialize the hundred thousand games
         Player[] players = initPlayer();
-        Statisticboard statisticboard = new Statisticboard(Game.NB_PLAYERS);
+        Statisticboard statisticboard = new Statisticboard(Game.PLAYER_NUMBER);
         statisticboard.initialize(players);
         Statisticboard statisticboardCSV = secureReadOrCreateStatisticboard(file, players, false);
 

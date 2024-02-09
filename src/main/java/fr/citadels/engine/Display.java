@@ -2,14 +2,14 @@ package fr.citadels.engine;
 
 import fr.citadels.Main;
 import fr.citadels.cards.Card;
-import fr.citadels.cards.charactercards.Character;
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.charactercards.Power;
-import fr.citadels.cards.charactercards.characters.Merchant;
-import fr.citadels.cards.districtcards.City;
-import fr.citadels.cards.districtcards.District;
-import fr.citadels.cards.districtcards.DistrictsPile;
-import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.cards.characters.Character;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.characters.Power;
+import fr.citadels.cards.characters.roles.Merchant;
+import fr.citadels.cards.districts.City;
+import fr.citadels.cards.districts.District;
+import fr.citadels.cards.districts.DistrictsPile;
+import fr.citadels.cards.districts.Hand;
 import fr.citadels.engine.score.Scoreboard;
 import fr.citadels.players.Player;
 import org.apache.logging.log4j.Level;
@@ -126,7 +126,7 @@ public class Display {
     }
 
 
-    public void addRemovedCharacter(Character[] cardsUp, Character[] cardsDown) {
+    public void addRemovedCharacters(Character[] cardsUp, Character[] cardsDown) {
         /* Cards up */
         if (cardsUp.length >= 2) {
             this.events.append("Les personnages retirés face visible sont : ");

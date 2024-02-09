@@ -1,7 +1,7 @@
 package fr.citadels.players;
 
-import fr.citadels.cards.charactercards.CharactersList;
-import fr.citadels.cards.districtcards.District;
+import fr.citadels.cards.characters.CharactersList;
+import fr.citadels.cards.districts.District;
 
 public interface Choices {
 

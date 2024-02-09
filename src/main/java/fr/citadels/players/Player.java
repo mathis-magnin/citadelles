@@ -1,12 +1,12 @@
 package fr.citadels.players;
 
-import fr.citadels.cards.charactercards.Power;
-import fr.citadels.cards.districtcards.DistrictsPile;
+import fr.citadels.cards.characters.Power;
+import fr.citadels.cards.districts.DistrictsPile;
 import fr.citadels.engine.Game;
-import fr.citadels.cards.charactercards.Character;
-import fr.citadels.cards.districtcards.City;
-import fr.citadels.cards.districtcards.District;
-import fr.citadels.cards.districtcards.Hand;
+import fr.citadels.cards.characters.Character;
+import fr.citadels.cards.districts.City;
+import fr.citadels.cards.districts.District;
+import fr.citadels.cards.districts.Hand;
 
 import java.util.List;
 
