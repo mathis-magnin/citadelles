@@ -188,7 +188,6 @@ public class Game {
 
         this.display.addCrownedPlayer(this.crownedPlayer);
         this.display.addBlankLine();
-
         for (int i = 0; i < this.players.length; i++) {
             this.players[i].getMemory().setFaceUpCharacters(new CharactersList(removedCharactersFaceUp));
             this.players[i].getMemory().setPossibleCharacters(characters);

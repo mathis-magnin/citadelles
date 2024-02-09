@@ -98,6 +98,8 @@ class RichardTest {
         richard.chooseCharacter(characters);
         assertEquals(magician, richard.getCharacter());
 
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
         richard.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[15])));
         richard.getMemory().setPreviousArchitect(bob);
         bob.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[6], DistrictsPile.allDistrictCards[11], DistrictsPile.allDistrictCards[16], DistrictsPile.allDistrictCards[19], DistrictsPile.allDistrictCards[23])));
@@ -105,93 +107,107 @@ class RichardTest {
         richard.chooseCharacter(characters);
         assertEquals(magician, richard.getCharacter());
 
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
         richard.getMemory().setPreviousArchitect(null);
         bob.setHand(new Hand(new ArrayList<>()));
 
         richard.chooseCharacter(characters);
         assertEquals(assassin, richard.getCharacter());
 
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
         bob.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[29], DistrictsPile.allDistrictCards[24])));
         richard.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[30], DistrictsPile.allDistrictCards[25])));
 
         richard.chooseCharacter(characters);
         assertEquals(thief, richard.getCharacter());
 
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
         richard.getMemory().setTurnNumber(7);
 
         richard.chooseCharacter(characters);
-        assertEquals(characters.get(0), richard.getCharacter());
+        assertEquals(assassin, richard.getCharacter());
     }
 
 
     @Test
     void richardHasSixDistricts() {
-        CharactersList characters = new CharactersList(CharactersList.allCharacterCards);
-        richard.getMemory().setPossibleCharacters(characters);
-
         dan.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[18], DistrictsPile.allDistrictCards[22])));   // Cheapest district 2 [15]
         richard.setCity(new City(List.of(DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[6], DistrictsPile.allDistrictCards[11], DistrictsPile.allDistrictCards[16], DistrictsPile.allDistrictCards[19], DistrictsPile.allDistrictCards[23])));
 
+        CharactersList characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
         Player[] players = new Player[]{richard, dan, bob, lou};
         richard.getMemory().setPlayers(players);
         richard.getMemory().setPlayerIndex(0);
 
-        assertTrue(richard.richardHasSixDistricts());
+        assertTrue(richard.richardHasSixDistricts(characters));
         assertEquals(assassin, richard.getCharacter());
 
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
         players = new Player[]{dan, richard, bob, lou};
         richard.getMemory().setPlayers(players);
         richard.getMemory().setPlayerIndex(1);
         richard.getMemory().getPossibleCharacters().remove(assassin);
 
-        assertTrue(richard.richardHasSixDistricts());
+        assertTrue(richard.richardHasSixDistricts(characters));
         assertEquals(warlord, richard.getCharacter());
 
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
         players = new Player[]{dan, bob, richard, lou};
         richard.getMemory().setPlayers(players);
         richard.getMemory().setPlayerIndex(2);
 
-        assertFalse(richard.richardHasSixDistricts());
+        assertFalse(richard.richardHasSixDistricts(characters));
     }
 
 
     @Test
     void anotherPlayerHasSixDistricts() {
-        CharactersList characters = new CharactersList(CharactersList.allCharacterCards);
-        richard.getMemory().setPossibleCharacters(characters);
-
         bob.setCity(new City());
         lou.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[15])));   // Cheapest district 1 [12]
         dan.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[18], DistrictsPile.allDistrictCards[22])));   // Cheapest district 2 [15]
 
+        CharactersList characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
         Player[] players = new Player[]{richard, dan, bob, lou};
         richard.getMemory().setPlayers(players);
         richard.getMemory().setPlayerIndex(0);
 
         List<Player> playersWithSixDistricts = richard.getPlayersWithMinCity(Arrays.asList(richard.getMemory().getPlayers()), 6);
 
-        assertTrue(richard.anotherPlayerHasSixDistricts(playersWithSixDistricts));
+        assertTrue(richard.anotherPlayerHasSixDistricts(playersWithSixDistricts, characters));
         assertEquals(assassin, richard.getCharacter());
 
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
         players = new Player[]{richard, bob, dan, lou};
         richard.getMemory().setPlayers(players);
         richard.getMemory().setPlayerIndex(0);
 
-        assertTrue(richard.anotherPlayerHasSixDistricts(playersWithSixDistricts));
+        assertTrue(richard.anotherPlayerHasSixDistricts(playersWithSixDistricts, characters));
         assertEquals(warlord, richard.getCharacter());
 
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
         players = new Player[]{bob, richard, dan, lou};
         richard.getMemory().setPlayers(players);
         richard.getMemory().setPlayerIndex(1);
 
-        assertTrue(richard.anotherPlayerHasSixDistricts(playersWithSixDistricts));
+        assertTrue(richard.anotherPlayerHasSixDistricts(playersWithSixDistricts, characters));
         assertEquals(assassin, richard.getCharacter());
 
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
         players = new Player[]{dan, richard, bob, lou};
         richard.getMemory().setPlayers(players);
         richard.getMemory().setPlayerIndex(1);
 
-        assertFalse(richard.anotherPlayerHasSixDistricts(playersWithSixDistricts));
+        assertFalse(richard.anotherPlayerHasSixDistricts(playersWithSixDistricts, characters));
     }
 
 
@@ -200,50 +216,195 @@ class RichardTest {
         CharactersList characters = new CharactersList(CharactersList.allCharacterCards);
         richard.getMemory().setPossibleCharacters(characters);
 
-        assertTrue(richard.anotherPlayerHasFiveDistricts());
+        assertTrue(richard.anotherPlayerHasFiveDistricts(characters));
         assertEquals(king, richard.getCharacter());
 
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
         richard.getMemory().getPossibleCharacters().remove(king);
-        assertTrue(richard.anotherPlayerHasFiveDistricts());
+        assertTrue(richard.anotherPlayerHasFiveDistricts(characters));
         assertEquals(assassin, richard.getCharacter());
 
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
+        richard.getMemory().getPossibleCharacters().remove(king);
         richard.getMemory().getPossibleCharacters().remove(assassin);
-        assertTrue(richard.anotherPlayerHasFiveDistricts());
+        assertTrue(richard.anotherPlayerHasFiveDistricts(characters));
         assertEquals(warlord, richard.getCharacter());
 
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
+        richard.getMemory().getPossibleCharacters().remove(king);
+        richard.getMemory().getPossibleCharacters().remove(assassin);
         richard.getMemory().getPossibleCharacters().remove(warlord);
-        assertTrue(richard.anotherPlayerHasFiveDistricts());
+        assertTrue(richard.anotherPlayerHasFiveDistricts(characters));
         assertEquals(bishop, richard.getCharacter());
 
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
+        richard.getMemory().getPossibleCharacters().remove(king);
+        richard.getMemory().getPossibleCharacters().remove(assassin);
+        richard.getMemory().getPossibleCharacters().remove(warlord);
         richard.getMemory().getPossibleCharacters().remove(bishop);
-        assertFalse(richard.anotherPlayerHasFiveDistricts());
+        assertFalse(richard.anotherPlayerHasFiveDistricts(characters));
     }
 
 
     @Test
     void aPlayerHasFourGoldsAndOneCardInHand() {
+        CharactersList characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
+
         List<Player> playersWithFourGoldsAndOneHand = new ArrayList<>(List.of(richard));
         List<Player> playersWithFourGoldsOneHandFourDistricts = new ArrayList<>();
 
-        assertTrue(richard.aPlayerHasFourGoldsAndOneCardInHand(playersWithFourGoldsAndOneHand, playersWithFourGoldsOneHandFourDistricts));
+        assertTrue(richard.aPlayerHasFourGoldsAndOneCardInHand(playersWithFourGoldsAndOneHand, playersWithFourGoldsOneHandFourDistricts, characters));
         assertEquals(architect, richard.getCharacter());
 
         richard = new Richard("Richard", new Hand(new ArrayList<>()), game);
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
 
         playersWithFourGoldsAndOneHand = new ArrayList<>();
         playersWithFourGoldsOneHandFourDistricts = new ArrayList<>();
-        assertFalse(richard.aPlayerHasFourGoldsAndOneCardInHand(playersWithFourGoldsAndOneHand, playersWithFourGoldsOneHandFourDistricts));
+        assertFalse(richard.aPlayerHasFourGoldsAndOneCardInHand(playersWithFourGoldsAndOneHand, playersWithFourGoldsOneHandFourDistricts, characters));
 
         richard = new Richard("Richard", new Hand(new ArrayList<>()), game);
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
 
         playersWithFourGoldsOneHandFourDistricts = new ArrayList<>(List.of(richard));
-        assertFalse(richard.aPlayerHasFourGoldsAndOneCardInHand(playersWithFourGoldsAndOneHand, playersWithFourGoldsOneHandFourDistricts));
+        assertFalse(richard.aPlayerHasFourGoldsAndOneCardInHand(playersWithFourGoldsAndOneHand, playersWithFourGoldsOneHandFourDistricts, characters));
 
         richard = new Richard("Richard", new Hand(new ArrayList<>()), game);
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        richard.getMemory().setPossibleCharacters(characters);
 
         playersWithFourGoldsOneHandFourDistricts = new ArrayList<>(List.of(bob));
-        assertTrue(richard.aPlayerHasFourGoldsAndOneCardInHand(playersWithFourGoldsAndOneHand, playersWithFourGoldsOneHandFourDistricts));
+        assertTrue(richard.aPlayerHasFourGoldsAndOneCardInHand(playersWithFourGoldsAndOneHand, playersWithFourGoldsOneHandFourDistricts, characters));
         assertEquals(assassin, richard.getCharacter());
+    }
+
+
+    @Test
+    void targetPlayerWithSixDistrictsAndBiggestHand() {
+        CharactersList magicianTarget = new CharactersList(CharactersList.allCharacterCards);
+
+        bob.setCity(new City());
+        lou.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[23])));   // Cheapest district 1 [12]
+        dan.setCity(new City(List.of(DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[6], DistrictsPile.allDistrictCards[11], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[18], DistrictsPile.allDistrictCards[22])));   // Cheapest district 2 [15]
+
+        bob.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[6], DistrictsPile.allDistrictCards[11], DistrictsPile.allDistrictCards[16], DistrictsPile.allDistrictCards[19], DistrictsPile.allDistrictCards[23])));
+        dan.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[6])));
+        lou.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[1])));
+
+        Player[] players = new Player[]{bob, richard, dan, lou};
+        richard.getMemory().setPlayers(players);
+        richard.getMemory().setPlayerIndex(1);
+
+        dan.setCharacter(assassin);
+        richard.setCharacter(thief);
+        bob.setCharacter(king);
+        lou.setCharacter(warlord);
+
+        assertTrue(richard.targetPlayerWithSixDistrictsAndBiggestHand(magicianTarget));
+        assertEquals(assassin, richard.getMemory().getTarget());
+
+        magicianTarget.remove(assassin);
+
+        assertTrue(richard.targetPlayerWithSixDistrictsAndBiggestHand(magicianTarget));
+        assertEquals(warlord, richard.getMemory().getTarget());
+
+        richard.setHand(new Hand(List.of(DistrictsPile.allDistrictCards[1], DistrictsPile.allDistrictCards[6], DistrictsPile.allDistrictCards[11], DistrictsPile.allDistrictCards[16], DistrictsPile.allDistrictCards[19], DistrictsPile.allDistrictCards[23])));
+
+        assertFalse(richard.targetPlayerWithSixDistrictsAndBiggestHand(magicianTarget));
+    }
+
+
+    @Test
+    void targetAssassinOrBishopOrWarlord() {
+        CharactersList magicianTarget = new CharactersList(CharactersList.allCharacterCards);
+
+        CharactersList characters = new CharactersList(CharactersList.allCharacterCards);
+        warlord.setDead(true);
+        characters.remove(assassin);
+        richard.getMemory().setPossibleCharacters(characters);
+        richard.getMemory().setFaceUpCharacters(new CharactersList(new Character[]{architect, warlord}));
+
+        Player[] players = new Player[]{dan, richard, bob, lou};
+        richard.getMemory().setPlayers(players);
+        richard.getMemory().setPlayerIndex(1);
+
+        dan.setCharacter(assassin);
+        richard.setCharacter(thief);
+        lou.setCharacter(magician);
+        bob.setCharacter(king);
+
+        bob.setCity(new City());
+        lou.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[12], DistrictsPile.allDistrictCards[15])));   // Cheapest district 1 [12]
+        dan.setCity(new City(List.of(DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[5], DistrictsPile.allDistrictCards[10], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[18], DistrictsPile.allDistrictCards[22])));   // Cheapest district 2 [15]
+
+        assertTrue(richard.targetAssassinOrBishopOrWarlord(magicianTarget));
+        assertEquals(assassin, richard.getMemory().getTarget());
+
+        warlord.setDead(false);
+        characters = new CharactersList(new Character[]{bishop});
+        richard.getMemory().setPossibleCharacters(characters);
+
+        players = new Player[]{dan, bob, richard, lou};
+        richard.getMemory().setPlayers(players);
+        richard.getMemory().setPlayerIndex(2);
+
+        king.setDead(true);
+
+        assertTrue(richard.targetAssassinOrBishopOrWarlord(magicianTarget));
+        assertEquals(bishop, richard.getMemory().getTarget());
+
+        magicianTarget.remove(bishop);
+
+        characters = new CharactersList(new Character[]{warlord});
+        richard.getMemory().setPossibleCharacters(characters);
+        richard.getMemory().setFaceUpCharacters(new CharactersList(new Character[]{merchant, architect}));
+
+        dan.setCity(new City());
+
+        players = new Player[]{dan, bob, richard, lou};
+        richard.getMemory().setPlayers(players);
+        richard.getMemory().setPlayerIndex(2);
+
+        assertTrue(richard.targetAssassinOrBishopOrWarlord(magicianTarget));
+        assertEquals(warlord, richard.getMemory().getTarget());
+    }
+
+
+    @Test
+    void searchBishopOrWarlordInTargets() {
+        bob.setCharacter(assassin);
+        lou.setCharacter(thief);
+        dan.setCharacter(magician);
+
+        CharactersList magicianTarget = new CharactersList(CharactersList.allCharacterCards);
+        List<Player> playerWithFiveDistricts = new ArrayList<>(List.of(bob, lou));
+        List<Player> possibleBishopPlayers = new ArrayList<>(List.of(dan, lou));
+        List<Player> possibleWarlordPlayers = new ArrayList<>(List.of(bob));
+
+        assertTrue(richard.searchBishopOrWarlordInTargets(magicianTarget, playerWithFiveDistricts, possibleBishopPlayers, possibleWarlordPlayers));
+        assertEquals(bob.getCharacter(), richard.getMemory().getTarget());
+
+        magicianTarget.remove(assassin);
+        playerWithFiveDistricts = new ArrayList<>(List.of(lou));
+        possibleBishopPlayers = new ArrayList<>(List.of(dan, lou));
+        possibleWarlordPlayers = new ArrayList<>(List.of(bob));
+
+        assertTrue(richard.searchBishopOrWarlordInTargets(magicianTarget, playerWithFiveDistricts, possibleBishopPlayers, possibleWarlordPlayers));
+        assertEquals(lou.getCharacter(), richard.getMemory().getTarget());
+
+        magicianTarget.remove(assassin);
+        playerWithFiveDistricts = new ArrayList<>(List.of(lou));
+        possibleBishopPlayers = new ArrayList<>(List.of(dan));
+        possibleWarlordPlayers = new ArrayList<>(List.of(bob));
+
+        assertFalse(richard.searchBishopOrWarlordInTargets(magicianTarget, playerWithFiveDistricts, possibleBishopPlayers, possibleWarlordPlayers));
     }
 
 
@@ -251,6 +412,7 @@ class RichardTest {
     void chooseTargetToDestroy1() {
         // Lou played the king
         richard.getMemory().setFaceUpCharacters(new CharactersList(new Character[]{CharactersList.allCharacterCards[2], CharactersList.allCharacterCards[4]}));     // Magician and Bishop
+
         bob.setCharacter(assassin);
         lou.setCharacter(king);
         dan.setCharacter(architect);
@@ -274,6 +436,7 @@ class RichardTest {
         richard.getMemory().setDistrictToDestroy(null);
 
         richard.getMemory().setFaceUpCharacters(new CharactersList(new Character[]{CharactersList.allCharacterCards[2], CharactersList.allCharacterCards[4]}));     // Magician and Bishop
+
         bob.setCharacter(assassin);
         lou.setCharacter(thief);
         dan.setCharacter(architect);
