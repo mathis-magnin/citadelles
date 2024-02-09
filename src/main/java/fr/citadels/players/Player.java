@@ -282,7 +282,7 @@ public abstract class Player implements Comparable<Player>, Choices {
     public void playAsMagician() {
         this.chooseMagicianPower();
 
-        if (this.memory.getMomentWhenUse().equals(Moment.BEFORE_RESSOURCES)) {
+        if (this.memory.getMomentWhenUse().equals(Moment.BEFORE_RESOURCES)) {
             this.getCharacter().usePower();
         }
 

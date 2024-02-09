@@ -22,7 +22,7 @@ class CityTest {
     City c4 = new City(List.of(DistrictsPile.allDistrictCards[57], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25], DistrictsPile.allDistrictCards[58])); // Noble, Religious, Trade, Unique
 
     // City with 3 family but with MiracleCourtyard district
-    City c5 = new City(List.of(DistrictsPile.allDistrictCards[57], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25]));
+    City c5 = new City(List.of(DistrictsPile.allDistrictCards[58], DistrictsPile.allDistrictCards[0], DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[25]));
 
     @Test
     void testCity() {
@@ -52,11 +52,20 @@ class CityTest {
 
     @Test
     void hasOneDistrictOfEachFamilyTest() {
-        assertFalse(c1.hasOneDistrictOfEachFamily());
-        assertTrue(c2.hasOneDistrictOfEachFamily());
-        assertFalse(c3.hasOneDistrictOfEachFamily());
-        assertTrue(c4.hasOneDistrictOfEachFamily());
-        assertFalse(c5.hasOneDistrictOfEachFamily());
+        assertFalse(c1.hasOneDistrictOfEachFamily()[0]);
+        assertFalse(c1.hasOneDistrictOfEachFamily()[1]);
+
+        assertTrue(c2.hasOneDistrictOfEachFamily()[0]);
+        assertFalse(c2.hasOneDistrictOfEachFamily()[1]);
+
+        assertFalse(c3.hasOneDistrictOfEachFamily()[0]);
+        assertFalse(c3.hasOneDistrictOfEachFamily()[1]);
+
+        assertTrue(c4.hasOneDistrictOfEachFamily()[0]);
+        assertTrue(c4.hasOneDistrictOfEachFamily()[1]);
+
+        assertFalse(c5.hasOneDistrictOfEachFamily()[0]);
+        assertTrue(c5.hasOneDistrictOfEachFamily()[1]);
     }
 
     @Test

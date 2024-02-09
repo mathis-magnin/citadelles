@@ -43,7 +43,7 @@ public class CharactersList extends ArrayList<Character> {
     /* Methods */
 
     /**
-     * reset la liste de player
+     * reset the characters' list
      */
     public void reset() {
         for (Character character : CharactersList.allCharacterCards) {

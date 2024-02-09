@@ -43,15 +43,11 @@ public class Spendthrift extends Player {
      */
     @Override
     public void chooseCharacter(CharactersList characters) {
-
         int randomIndex = -1;
-
         while (randomIndex >= characters.size() || randomIndex < 0) {
             randomIndex = rand.nextInt(characters.size());
         }
         this.setCharacter(characters.remove(randomIndex));
-        this.getMemory().setPossibleCharacters(characters);
-
     }
 
 
@@ -194,9 +190,9 @@ public class Spendthrift extends Player {
             Collections.reverse(getHand());
 
             int nbCardsToDiscard = this.getActions().putRedundantCardsAtTheEnd();
-            getMemory().setCardsToDiscard(nbCardsToDiscard + 1);
+            getMemory().setNumberCardsToDiscard(nbCardsToDiscard + 1);
         }
-        this.memory.setMomentWhenUse(Moment.BEFORE_RESSOURCES);
+        this.memory.setMomentWhenUse(Moment.BEFORE_RESOURCES);
     }
 
 
