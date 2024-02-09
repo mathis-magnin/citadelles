@@ -177,8 +177,32 @@ public class Richard extends Player {
     }
 
 
+    /**
+     * When the player embodies the thief, choose the character to rob from the list of possibles targets.
+     * If an opponent has 5 or more districts in his city, Richard will focus the bishop or the warlord if the player can embody them.
+     */
     @Override
     public void chooseTargetToRob() {
+        List<Player> playersAboutToWin = this.getPlayersWithMoreDistrictsThan(List.of(getMemory().getPlayers()), 5);
+
+        for (Player player : playersAboutToWin) {
+            if (getPossiblePlayersWhoPlay(CharactersList.allCharacterCards[4]).contains(player)) {
+                this.memory.setTarget(CharactersList.allCharacterCards[4]);
+                return;
+            } else if (getPossiblePlayersWhoPlay(CharactersList.allCharacterCards[7]).contains(player)) {
+                this.memory.setTarget(CharactersList.allCharacterCards[7]);
+                return;
+            }
+        }
+
+        CharactersList targets = Thief.getPossibleTargets();
+        for (int i : List.of(6, 7, 2, 3, 4)) { // Architect, Warlord, Magician, King, Bishop
+            if (!getPossiblePlayersWhoPlay(CharactersList.allCharacterCards[i]).isEmpty() && targets.contains(CharactersList.allCharacterCards[i])) {
+                this.memory.setTarget(CharactersList.allCharacterCards[i]);
+                return;
+            }
+        }
+
         this.memory.setTarget(Thief.getPossibleTargets().get(0));
     }
 
@@ -244,6 +268,24 @@ public class Richard extends Player {
 
 
     /* Usefully Methods */
+
+
+    /**
+     * Find players who have a minimum amount of districts in their city.
+     *
+     * @param players the list to check.
+     * @param minDistricts the minimum amount of districts the player should have
+     * @return a list of players who are about to win.
+     */
+    public List<Player> getPlayersWithMoreDistrictsThan(List<Player> players, int minDistricts) {
+        List<Player> playersWithMinDistricts = new ArrayList<>();
+        for (Player player : players) {
+            if (minDistricts <= player.getCity().size()) {
+                playersWithMinDistricts.add(player);
+            }
+        }
+        return playersWithMinDistricts;
+    }
 
 
     /**
@@ -368,6 +410,28 @@ public class Richard extends Player {
             playersWhoWillChoose.add(this.getMemory().getPlayers()[i]);
         }
         return playersWhoWillChoose;
+    }
+
+
+    /**
+     * Determine the list of players who possibly embody the given character
+     *
+     * @param character the character we want to find the associated player
+     * @return the list of players who possibly embody the given character
+     */
+    public List<Player> getPossiblePlayersWhoPlay(Character character) {
+        if (!character.isDead() && (character.getRank() < this.getCharacter().getRank())) { // Richard already know who is playing the character
+            return List.of(character.getPlayer());
+        }
+        if (!this.getMemory().getFaceUpCharacters().contains(character)) { // A player is maybe playing the character
+            if (!this.getMemory().getPossibleCharacters().contains(character)) { // A player who chose his character before richard is maybe playing the character
+                return this.getPlayersWhoChoseBefore();
+            }
+            else {  // A player who chose his character after richard is maybe playing Warlord
+                return this.getPlayersWhoChoseAfter();
+            }
+        }
+        return new ArrayList<>();
     }
 
 }

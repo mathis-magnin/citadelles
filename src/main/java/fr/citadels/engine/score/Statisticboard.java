@@ -158,6 +158,7 @@ public class Statisticboard {
         Logger logger;
         int nbPlayer;
         List<Statistic> statistics;
+
         try (CSVReader reader = new CSVReader(fileReader)) {
             logger = org.apache.logging.log4j.LogManager.getLogger(Main.class);
 
@@ -184,9 +185,9 @@ public class Statisticboard {
             statistics = new ArrayList<>();
             while (((nextLine = reader.readNext()) != null) && (nextLine.length == 7)) {
                 if ((nbPlayer >= Game.NB_PLAYERS) || (!nextLine[0].equals(players[nbPlayer].getName()))) {
+                    logger.info("Fichier csv non valide (trop de joueurs ou noms de joueurs différents), réinitialisation des statistiques.\n");
                     Statisticboard statisticboard = new Statisticboard(Game.NB_PLAYERS);
                     statisticboard.initialize(players);
-                    logger.info("Fichier csv non valide (trop de joueurs ou noms de joueurs différents), réinitialisation des statistiques.\n");
                     return statisticboard;
                 }
                 Player player = new Monarchist(nextLine[0]);
