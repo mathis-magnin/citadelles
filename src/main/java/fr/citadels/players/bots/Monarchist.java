@@ -7,7 +7,6 @@ import fr.citadels.cards.charactercards.Power;
 import fr.citadels.cards.charactercards.characters.Assassin;
 import fr.citadels.cards.charactercards.characters.Magician;
 import fr.citadels.cards.charactercards.characters.Thief;
-import fr.citadels.cards.charactercards.characters.Warlord;
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.engine.Game;
 import fr.citadels.players.Player;

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -57,6 +58,24 @@ class SpendthriftTest {
         assertEquals("Manoir", player.getHand().get(1).getName());
         assertEquals("Cathédrale", player.getHand().get(2).getName());
         assertEquals(0, player.getCity().size());
+    }
+
+    @Test
+    void chooseCharacter() {
+        CharactersList characters = new CharactersList(CharactersList.allCharacterCards);
+
+        when(random.nextInt(anyInt())).thenReturn(3);
+        player.chooseCharacter(characters);
+        assertEquals("Roi", player.getCharacter().getName());
+
+        characters = new CharactersList(CharactersList.allCharacterCards);
+        player.setCity(new City(List.of(DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[20])));
+        player.chooseCharacter(characters);
+        assertEquals("Évêque", player.getCharacter().getName());
+
+        player.getActions().addGold(5);
+        player.chooseCharacter(characters);
+        assertEquals("Architecte", player.getCharacter().getName());
     }
 
     @Test
@@ -99,6 +118,10 @@ class SpendthriftTest {
         drawnCards = new District[]{DistrictsPile.allDistrictCards[22], DistrictsPile.allDistrictCards[0]};
         cardToPlay = player.chooseCardAmongDrawn(drawnCards);
         assertEquals("Manoir", cardToPlay.getName());
+
+        drawnCards = new District[]{DistrictsPile.allDistrictCards[34], DistrictsPile.allDistrictCards[60]};
+        cardToPlay = player.chooseCardAmongDrawn(drawnCards);
+        assertEquals("Laboratoire", cardToPlay.getName());
     }
 
     @Test
@@ -168,25 +191,25 @@ class SpendthriftTest {
         player.setCharacter(CharactersList.allCharacterCards[1]);
         when(random.nextBoolean()).thenReturn(true, false);
         player.playAsThief();
-        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[3]);
-        assertTrue(CharactersList.allCharacterCards[3].isRobbed());
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[7]);
+        assertTrue(CharactersList.allCharacterCards[7].isRobbed());
         player.playAsThief();
         assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[6]);
-        assertTrue(CharactersList.allCharacterCards[3].isRobbed());
+        assertTrue(CharactersList.allCharacterCards[7].isRobbed());
 
-        CharactersList.allCharacterCards[3].setRobbed(false);
+        CharactersList.allCharacterCards[7].setRobbed(false);
         CharactersList.allCharacterCards[6].setRobbed(false);
-        CharactersList.allCharacterCards[3].setDead(true);
+        CharactersList.allCharacterCards[7].setDead(true);
         player.playAsThief();
         assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[6]);
         assertTrue(CharactersList.allCharacterCards[6].isRobbed());
 
         CharactersList.allCharacterCards[6].setRobbed(false);
         CharactersList.allCharacterCards[6].setDead(true);
-        CharactersList.allCharacterCards[3].setDead(false);
+        CharactersList.allCharacterCards[7].setDead(false);
         player.playAsThief();
-        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[3]);
-        assertTrue(CharactersList.allCharacterCards[3].isRobbed());
+        assertEquals(player.getMemory().getTarget(), CharactersList.allCharacterCards[7]);
+        assertTrue(CharactersList.allCharacterCards[7].isRobbed());
     }
 
     @Test

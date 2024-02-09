@@ -42,11 +42,21 @@ public class Spendthrift extends Player {
      */
     @Override
     public void chooseCharacter(CharactersList characters) {
-        int randomIndex = -1;
-        while (randomIndex >= characters.size() || randomIndex < 0) {
-            randomIndex = rand.nextInt(characters.size());
+        Family mostRepresentedFamily = getCity().getMostRepresentedFamily();
+        if ((getGold() > 4) && (getHand().size() > 1) && (characters.contains(CharactersList.allCharacterCards[6]))) {
+            this.setCharacter(CharactersList.allCharacterCards[6]);
+            characters.remove(CharactersList.allCharacterCards[6]);
+        } else if ((!getCity().isEmpty() && (mostRepresentedFamily != Family.UNIQUE))) {
+            for (Character character : characters) {
+                if (character.getFamily() == mostRepresentedFamily) {
+                    this.setCharacter(characters.remove(characters.indexOf(character)));
+                    return;
+                }
+            }
+        } else {
+            int randomIndex = rand.nextInt(characters.size());
+            this.setCharacter(characters.remove(randomIndex));
         }
-        this.setCharacter(characters.remove(randomIndex));
     }
 
 
@@ -94,6 +104,9 @@ public class Spendthrift extends Player {
     public District chooseCardAmongDrawn(District[] drawnCards) {
         int minIndex = 0;
         for (int i = 1; i < drawnCards.length; i++) {
+            if (drawnCards[i].getFamily() == Family.UNIQUE) {
+                return drawnCards[i];
+            }
             if (drawnCards[i].getGoldCost() < drawnCards[minIndex].getGoldCost())
                 minIndex = i;
         }
@@ -141,18 +154,18 @@ public class Spendthrift extends Player {
      */
     @Override
     public void chooseTargetToRob() {
-        List<Character> potentialTargets = Thief.getPossibleTargets();
+        List<Character> targets = Thief.getPossibleTargets();
         if (rand.nextBoolean()) {
-            if (potentialTargets.contains(CharactersList.allCharacterCards[3])) {
-                getMemory().setTarget(CharactersList.allCharacterCards[3]);
+            if (targets.contains(CharactersList.allCharacterCards[7])) {
+                getMemory().setTarget(CharactersList.allCharacterCards[7]);
             } else {
                 getMemory().setTarget(CharactersList.allCharacterCards[6]);
             }
         } else {
-            if (potentialTargets.contains(CharactersList.allCharacterCards[6])) {
+            if (targets.contains(CharactersList.allCharacterCards[6])) {
                 getMemory().setTarget(CharactersList.allCharacterCards[6]);
             } else {
-                getMemory().setTarget(CharactersList.allCharacterCards[3]);
+                getMemory().setTarget(CharactersList.allCharacterCards[7]);
             }
         }
     }
