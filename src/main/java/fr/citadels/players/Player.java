@@ -1,6 +1,7 @@
 package fr.citadels.players;
 
 import fr.citadels.cards.charactercards.Power;
+import fr.citadels.cards.charactercards.characters.Warlord;
 import fr.citadels.cards.districtcards.DistrictsPile;
 import fr.citadels.engine.Game;
 import fr.citadels.cards.charactercards.Character;
@@ -247,6 +248,41 @@ public abstract class Player implements Comparable<Player>, Choices {
         if (this.equals(DistrictsPile.allDistrictCards[61].getOwner())) { // Factory effect
             DistrictsPile.allDistrictCards[61].useEffect();
         }
+    }
+
+
+    /**
+     * Default behaviour (used by several bots) :
+     * Choose to take gold from city after he built another district from his family or before otherwise.
+     */
+    @Override
+    public void chooseMomentToTakeIncome() {
+        this.chooseDistrictToBuild();
+        if (this.memory.getDistrictToBuild() != null) {
+            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.AFTER_BUILDING : Moment.BETWEEN_PHASES);
+        } else {
+            this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
+        }
+    }
+
+
+    /**
+     * Default behaviour (used by several bots) :
+     * When the player embodies the warlord, choose the character and the
+     * district in city to destroy from the list of possibles targets
+     */
+    @Override
+    public void chooseTargetToDestroy() {
+        Character target = Warlord.getOtherCharacterWithBiggestCity();
+        getMemory().setTarget(target);
+        District districtToDestroy = null;
+        if (target != null) {
+            districtToDestroy = target.getPlayer().getCity().getCheapestDistrict();
+            if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
+                districtToDestroy = null;
+            }
+        }
+        getMemory().setDistrictToDestroy(districtToDestroy);
     }
 
 

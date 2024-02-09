@@ -8,7 +8,6 @@ import fr.citadels.cards.charactercards.CharactersList;
 import fr.citadels.cards.charactercards.characters.Assassin;
 import fr.citadels.cards.charactercards.characters.Magician;
 import fr.citadels.cards.charactercards.characters.Thief;
-import fr.citadels.cards.charactercards.characters.Warlord;
 import fr.citadels.cards.districtcards.District;
 import fr.citadels.players.Player;
 
@@ -105,20 +104,6 @@ public class Spendthrift extends Player {
 
 
     /**
-     * Choose to take gold from city after he built another district from his family or before otherwise.
-     */
-    @Override
-    public void chooseMomentToTakeIncome() {
-        this.chooseDistrictToBuild();
-        if (this.memory.getDistrictToBuild() != null) {
-            this.memory.setMomentWhenUse((this.memory.getDistrictToBuild().getFamily().equals(this.getCharacter().getFamily())) ? Moment.AFTER_BUILDING : Moment.BETWEEN_PHASES);
-        } else {
-            this.memory.setMomentWhenUse(Moment.BETWEEN_PHASES);
-        }
-    }
-
-
-    /**
      * Choose the cheapest card in hand that can be bought
      * set its districtToBuild attribute with the card chosen or null if no card can be chosen
      *
@@ -193,25 +178,6 @@ public class Spendthrift extends Player {
             getMemory().setNumberCardsToDiscard(nbCardsToDiscard + 1);
         }
         this.memory.setMomentWhenUse(Moment.BEFORE_RESOURCES);
-    }
-
-
-    /**
-     * When the player embodies the warlord, choose the character and the
-     * district in city to destroy from the list of possibles targets
-     */
-    @Override
-    public void chooseTargetToDestroy() {
-        Character target = Warlord.getOtherCharacterWithBiggestCity();
-        getMemory().setTarget(target);
-        District districtToDestroy = null;
-        if (target != null) {
-            districtToDestroy = target.getPlayer().getCity().getCheapestDistrict();
-            if ((districtToDestroy != null) && (districtToDestroy.getGoldCost() - 1 > this.getGold())) {
-                districtToDestroy = null;
-            }
-        }
-        getMemory().setDistrictToDestroy(districtToDestroy);
     }
 
 
