@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -53,6 +54,22 @@ class ThriftyTest {
         assertEquals("Temple", player.getHand().get(1).getName());
         assertEquals("Cathédrale", player.getHand().get(2).getName());
         assertEquals(0, player.getCity().size());
+    }
+
+    @Test
+    void chooseCharacter() {
+        CharactersList characters = new CharactersList(CharactersList.allCharacterCards);
+        player.setCity(new City(List.of(DistrictsPile.allDistrictCards[15], DistrictsPile.allDistrictCards[20])));
+        player.chooseCharacter(characters);
+        assertEquals("Évêque", player.getCharacter().getName());
+
+        player.setCity(new City(new ArrayList<>()));
+        player.chooseCharacter(characters);
+        assertEquals("Marchand", player.getCharacter().getName());
+
+        when(random.nextInt(anyInt())).thenReturn(3);
+        player.chooseCharacter(characters);
+        assertEquals("Roi", player.getCharacter().getName());
     }
 
     @Test
